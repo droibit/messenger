@@ -19,7 +19,7 @@ public class ResponseMessageReceiver implements MessageReceiver {
     /** {@inheritDoc} */
     @Override
     public void onMessageReceived(Messenger messenger, @Nullable String data) {
-        messenger.sendTo(MainActivity.PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", new MessageCallback() {
+        messenger.sendMessage(MainActivity.PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", new MessageCallback() {
             @Override
             public void onMessageResult(Status status) {
                 if (status.isSuccess()) {

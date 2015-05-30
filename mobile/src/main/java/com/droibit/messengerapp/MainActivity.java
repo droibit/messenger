@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
     }
 
     public void onSendMessage(View v) {
-        mMessenger.sendTo(PATH_DEFAULT_MESSAGE, "Hello, world", new MessageCallback() {
+        mMessenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", new MessageCallback() {
             @Override
             public void onMessageResult(Status status) {
                 if (!status.isSuccess()) {
@@ -108,19 +108,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
     }
 
     public void onSendErrorMessage(View v) {
-        mMessenger.sendTo(PATH_ERROR_MESSAGE, "Not connected to the network", null);
+        mMessenger.sendMessage(PATH_ERROR_MESSAGE, "Not connected to the network", null);
     }
 
     public void onSendErrorMessage2(View v) {
-        mMessenger.sendTo(PATH_ERROR_MESSAGE, "Oops!!", null);
+        mMessenger.sendMessage(PATH_ERROR_MESSAGE, "Oops!!", null);
     }
 
     public void onSendSuccessMessage(View v) {
-        mMessenger.sendTo(PATH_SUCCESS_MESSAGE, "Authenticated", null);
+        mMessenger.sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated", null);
     }
 
     public void onSendMessageWithReceiveMessage(View v) {
-        mMessenger.sendTo(PATH_REQUEST_MESSAGE, null, null);
+        mMessenger.sendMessage(PATH_REQUEST_MESSAGE, null, null);
     }
 
     public void onReceiveMessageWithReject(View v) {

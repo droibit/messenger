@@ -88,12 +88,12 @@ public class Messenger implements MessageListener {
      * @param data data to be associated with the path
      * @param callback callback of send message
      */
-    public void sendTo(@NonNull final String path, @Nullable final String data, @Nullable final MessageCallback callback) {
+    public void sendMessage(@NonNull final String path, @Nullable final String data, @Nullable final MessageCallback callback) {
         getConnectedNodes().setResultCallback(new ResultCallback<GetConnectedNodesResult>() {
             @Override
             public void onResult(GetConnectedNodesResult nodesResult) {
                 for (Node node : nodesResult.getNodes()) {
-                    final PendingResult<SendMessageResult> messageResult = sendTo(node.getId(), path, data);
+                    final PendingResult<SendMessageResult> messageResult = sendMessage(node.getId(), path, data);
                     if (callback == null) {
                         return;
                     }
@@ -163,7 +163,7 @@ public class Messenger implements MessageListener {
         return Wearable.NodeApi.getConnectedNodes(mGoogleApiClient);
     }
 
-    private PendingResult<SendMessageResult> sendTo(String nodeId, String path, String data) {
+    private PendingResult<SendMessageResult> sendMessage(String nodeId, String path, String data) {
         return Wearable.MessageApi.sendMessage(mGoogleApiClient,
                 nodeId,
                 path,
