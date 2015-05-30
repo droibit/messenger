@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.droibit:messenger:1.0@aar'
+    compile 'com.droibit:messenger:1.0.1@aar'
 }
 ```
 
