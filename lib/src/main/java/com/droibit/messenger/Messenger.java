@@ -114,7 +114,7 @@ public class Messenger implements MessageListener {
      * @param path specified path
      * @param receiver receiver of the message
      */
-    public void registReceiver(@NonNull String path, @NonNull MessageReceiver receiver) {
+    public void registerReceiver(@NonNull String path, @NonNull MessageReceiver receiver) {
         mReceivers.put(path, receiver);
     }
 
@@ -123,7 +123,7 @@ public class Messenger implements MessageListener {
      *
      * @param path specified path
      */
-    public void unregistReceiver(@NonNull String path) {
+    public void unregisterReceiver(@NonNull String path) {
         if (mReceivers.containsKey(path)) {
             mReceivers.remove(path);
         }

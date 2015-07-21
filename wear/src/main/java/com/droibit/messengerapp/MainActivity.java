@@ -2,9 +2,6 @@ package com.droibit.messengerapp;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
-import android.support.wearable.view.WatchViewStub;
-import android.widget.TextView;
 
 import com.droibit.messenger.Messenger;
 import com.droibit.messengerapp.model.ConfirmMessageReceiver;
@@ -12,9 +9,6 @@ import com.droibit.messengerapp.model.ResponseMessageReceiver;
 import com.droibit.messengerapp.model.StandardMessageReceiver;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import static android.support.wearable.activity.ConfirmationActivity.FAILURE_ANIMATION;
 import static android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION;
@@ -47,10 +41,10 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 return false;
             }
         });
-        mMessenger.registReceiver(PATH_DEFAULT_MESSAGE, new StandardMessageReceiver(this));
-        mMessenger.registReceiver(PATH_ERROR_MESSAGE, new ConfirmMessageReceiver(this, FAILURE_ANIMATION));
-        mMessenger.registReceiver(PATH_SUCCESS_MESSAGE, new ConfirmMessageReceiver(this, SUCCESS_ANIMATION));
-        mMessenger.registReceiver(PATH_REQUEST_MESSAGE, new ResponseMessageReceiver());
+        mMessenger.registerReceiver(PATH_DEFAULT_MESSAGE, new StandardMessageReceiver(this));
+        mMessenger.registerReceiver(PATH_ERROR_MESSAGE, new ConfirmMessageReceiver(this, FAILURE_ANIMATION));
+        mMessenger.registerReceiver(PATH_SUCCESS_MESSAGE, new ConfirmMessageReceiver(this, SUCCESS_ANIMATION));
+        mMessenger.registerReceiver(PATH_REQUEST_MESSAGE, new ResponseMessageReceiver());
     }
 
     /** {@inheritDoc} */

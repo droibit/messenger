@@ -26,9 +26,9 @@ public class MessengerTest {
     }
 
     @Test
-    public void testRegistWithClear() throws Exception {
+    public void testRegisterWithClear() throws Exception {
 
-        mMessenger.registReceiver(PATH_TEST, new MessageReceiver() {
+        mMessenger.registerReceiver(PATH_TEST, new MessageReceiver() {
             @Override
             public void onMessageReceived(Messenger messenger, @Nullable String data) {
             }
@@ -37,7 +37,7 @@ public class MessengerTest {
         assertThat(mMessenger.getReceivers().size(), is(1));
         assertNotNull(mMessenger.getReceivers().get(PATH_TEST));
 
-        mMessenger.registReceiver(PATH_MESSENGER, new MessageReceiver() {
+        mMessenger.registerReceiver(PATH_MESSENGER, new MessageReceiver() {
             @Override
             public void onMessageReceived(Messenger messenger, @Nullable String data) {
             }
@@ -53,22 +53,23 @@ public class MessengerTest {
     }
 
     @Test
-    public void testUnregist() throws Exception {
+    public void testUnregister() throws Exception {
 
-        mMessenger.registReceiver(PATH_TEST, new MessageReceiver() {
-            @Override public void onMessageReceived(Messenger messenger, @Nullable String data) {
+        mMessenger.registerReceiver(PATH_TEST, new MessageReceiver() {
+            @Override
+            public void onMessageReceived(Messenger messenger, @Nullable String data) {
             }
         });
-        mMessenger.registReceiver(PATH_MESSENGER, new MessageReceiver() {
+        mMessenger.registerReceiver(PATH_MESSENGER, new MessageReceiver() {
             @Override
             public void onMessageReceived(Messenger messenger, @Nullable String data) {
             }
         });
 
-        mMessenger.unregistReceiver(PATH_TEST);
+        mMessenger.unregisterReceiver(PATH_TEST);
         assertThat(mMessenger.getReceivers().containsKey(PATH_TEST), is(false));
 
-        mMessenger.unregistReceiver(PATH_MESSENGER);
+        mMessenger.unregisterReceiver(PATH_MESSENGER);
         assertThat(mMessenger.getReceivers().containsKey(PATH_TEST), is(false));
 
         assertThat(mMessenger.getReceivers().isEmpty(), is(true));

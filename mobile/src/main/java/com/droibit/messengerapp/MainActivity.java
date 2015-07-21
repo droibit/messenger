@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
                                     .build();
 
         mMessenger = new Messenger(mGoogleApiClient);
-        mMessenger.registReceiver(PATH_REQUEST_MESSAGE_FROM_WEAR, new WearMessageReceiver(this));
+        mMessenger.registerReceiver(PATH_REQUEST_MESSAGE_FROM_WEAR, new WearMessageReceiver(this));
     }
 
     /** {@inheritDoc} */

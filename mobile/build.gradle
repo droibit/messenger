@@ -26,6 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
-    compile 'com.google.android.gms:play-services-wearable:7.5.0'
     compile project(':lib')
+
+    compile "com.google.android.gms:play-services-wearable:$play_services_version"
 }
