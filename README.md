@@ -1,19 +1,21 @@
 ## Messenger
-Library for easy use of the Message API of Android.Especially when using multiple paths, it is freed from many of the branch.
 
-## Gradle
+![Jitpack.io](https://img.shields.io/github/release/droibit/messenger.svg?label=JitPack) [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/droibit/clippin/blob/master/LICENSE)
+
+Library for easy use of the Message API of Android. Especially when using multiple paths, it is freed from many of the branch.
+
+## Download
 Add the following code to your build.gradle.
 
 ```
 repositories {
-    maven { url 'http://droibit.github.com/messenger/repository' }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    compile 'com.droibit:messenger:1.0.1@aar'
+    compile 'com.github.droibit:messenger:1.0.0'
 }
 ```
-
 ## License
 
     Copyright 2015 droibit
