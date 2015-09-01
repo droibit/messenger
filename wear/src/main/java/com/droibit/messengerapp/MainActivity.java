@@ -10,16 +10,10 @@ import com.droibit.messengerapp.model.StandardMessageReceiver;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
 
-import static android.support.wearable.activity.ConfirmationActivity.FAILURE_ANIMATION;
-import static android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION;
+import static com.droibit.messengerapp.model.ConfirmMessageReceiver.*;
+
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
-
-    public static final String PATH_DEFAULT_MESSAGE = "/message";
-    public static final String PATH_ERROR_MESSAGE = "/error_message";
-    public static final String PATH_SUCCESS_MESSAGE = "/success_message";
-    public static final String PATH_REQUEST_MESSAGE = "/request_message";
-    public static final String PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear";
 
     private GoogleApiClient mGoogleApiClient;
     private Messenger mMessenger;
@@ -35,16 +29,18 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                             .addConnectionCallbacks(this)
                             .build();
 
-        mMessenger = new Messenger(mGoogleApiClient);
-        mMessenger.setRejectDecider(new Messenger.RejectDecider() {
-            @Override public boolean shouldReject() {
-                return false;
-            }
-        });
-        mMessenger.registerReceiver(PATH_DEFAULT_MESSAGE, new StandardMessageReceiver(this));
-        mMessenger.registerReceiver(PATH_ERROR_MESSAGE, new ConfirmMessageReceiver(this, FAILURE_ANIMATION));
-        mMessenger.registerReceiver(PATH_SUCCESS_MESSAGE, new ConfirmMessageReceiver(this, SUCCESS_ANIMATION));
-        mMessenger.registerReceiver(PATH_REQUEST_MESSAGE, new ResponseMessageReceiver());
+        mMessenger = new Messenger.Builder(mGoogleApiClient)
+                                  .register(new StandardMessageReceiver(this))
+                                  .register(new ConfirmMessageReceiver(this, PATH_SUCCESS_MESSAGE))
+                                  .register(new ConfirmMessageReceiver(this, PATH_ERROR_MESSAGE))
+                                  .register(new ResponseMessageReceiver())
+                                  .rejectDecider(new Messenger.RejectDecider() {
+                                        @Override
+                                        public boolean shouldReject() {
+                                            return false;
+                                        }
+                                    })
+                                  .get();
     }
 
     /** {@inheritDoc} */

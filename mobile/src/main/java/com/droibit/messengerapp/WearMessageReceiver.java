@@ -2,6 +2,7 @@ package com.droibit.messengerapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import com.droibit.messenger.Messenger;
  * @since 15/05/25
  */
 public class WearMessageReceiver implements MessageReceiver {
+
+    private static final String PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear";
 
     private final Activity mActivity;
 
@@ -29,5 +32,12 @@ public class WearMessageReceiver implements MessageReceiver {
                 Toast.makeText(mActivity, data, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** {@inheritDoc} */
+    @NonNull
+    @Override
+    public String getPath() {
+        return PATH_REQUEST_MESSAGE_FROM_WEAR;
     }
 }

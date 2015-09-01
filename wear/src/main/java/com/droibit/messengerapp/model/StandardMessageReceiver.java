@@ -2,6 +2,7 @@ package com.droibit.messengerapp.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import com.droibit.messenger.Messenger;
  * @since 15/05/25
  */
 public class StandardMessageReceiver implements MessageReceiver {
+
+    public static final String PATH_DEFAULT_MESSAGE = "/message";
 
     private final Activity mActivity;
 
@@ -29,5 +32,12 @@ public class StandardMessageReceiver implements MessageReceiver {
                 Toast.makeText(mActivity, data, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** {@inheritDoc} */
+    @NonNull
+    @Override
+    public String getPath() {
+        return PATH_DEFAULT_MESSAGE;
     }
 }

@@ -1,5 +1,6 @@
 package com.droibit.messengerapp.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -16,10 +17,13 @@ import com.google.android.gms.common.api.Status;
  */
 public class ResponseMessageReceiver implements MessageReceiver {
 
+    public static final String PATH_REQUEST_MESSAGE = "/request_message";
+    public static final String PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear";
+
     /** {@inheritDoc} */
     @Override
     public void onMessageReceived(Messenger messenger, @Nullable String data) {
-        messenger.sendMessage(MainActivity.PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", new MessageCallback() {
+        messenger.sendMessage(PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", new MessageCallback() {
             @Override
             public void onMessageResult(Status status) {
                 if (status.isSuccess()) {
@@ -28,5 +32,12 @@ public class ResponseMessageReceiver implements MessageReceiver {
                 Log.d(BuildConfig.BUILD_TYPE, "ERROR: " + status.getStatusCode());
             }
         });
+    }
+
+    /** {@inheritDoc} */
+    @NonNull
+    @Override
+    public String getPath() {
+        return PATH_REQUEST_MESSAGE;
     }
 }

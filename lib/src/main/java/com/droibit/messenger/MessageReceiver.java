@@ -1,5 +1,6 @@
 package com.droibit.messenger;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -9,6 +10,14 @@ import android.support.annotation.Nullable;
  * @since 2015/05/22
  */
 public interface MessageReceiver {
+
+    /**
+     * Get the path of this receiver to receive.
+     *
+     * @return
+     */
+    @NonNull
+    String getPath();
 
     /**
      * Called in the message receive.

@@ -21,7 +21,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
     private static final String PATH_ERROR_MESSAGE = "/error_message";
     private static final String PATH_SUCCESS_MESSAGE = "/success_message";
     private static final String PATH_REQUEST_MESSAGE = "/request_message";
-    private static final String PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear";
 
     private GoogleApiClient mGoogleApiClient;
     private Messenger mMessenger;
@@ -38,7 +37,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
                                     .build();
 
         mMessenger = new Messenger(mGoogleApiClient);
-        mMessenger.registerReceiver(PATH_REQUEST_MESSAGE_FROM_WEAR, new WearMessageReceiver(this));
+        mMessenger.registerReceiver(new WearMessageReceiver(this));
     }
 
     /** {@inheritDoc} */

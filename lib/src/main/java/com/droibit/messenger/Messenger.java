@@ -2,6 +2,7 @@ package com.droibit.messenger;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -32,7 +33,7 @@ public class Messenger implements MessageListener {
     /**
      * Interface for determine whether to receive a message.
      * It will use in the case of a decision related to the whole
-     * (e.g Network is not connected)
+     * (e.g. Network is not connected)
      */
     public interface RejectDecider {
 
@@ -42,6 +43,54 @@ public class Messenger implements MessageListener {
          * @return If true do not receive the messages, if false receive the messages.
          */
         boolean shouldReject();
+    }
+
+    /**
+     * The utility class that simplifies the registration of receiver.
+     */
+    public static class Builder {
+
+        private final Messenger mMessenger;
+
+        /**
+         * Create a new instance.
+         *
+         * @param googleApiClient
+         */
+        public Builder(GoogleApiClient googleApiClient) {
+            mMessenger = new Messenger(googleApiClient);
+        }
+
+        /**
+         * Register a new receiver.
+         *
+         * @param receiver
+         * @return
+         */
+        public Builder register(@NonNull MessageReceiver receiver) {
+            mMessenger.registerReceiver(receiver);
+            return this;
+        }
+
+        /**
+         * Set the {@link RejectDecider}.
+         *
+         * @param rejectDecider
+         * @return
+         */
+        public Builder rejectDecider(@NonNull RejectDecider rejectDecider) {
+            mMessenger.setRejectDecider(rejectDecider);
+            return this;
+        }
+
+        /**
+         * Get a new instance of the Messenger.
+         *
+         * @return
+         */
+        public Messenger get() {
+            return mMessenger;
+        }
     }
 
     /** The path of the reject receiver */
@@ -90,16 +139,14 @@ public class Messenger implements MessageListener {
      */
     public void sendMessage(@NonNull final String path, @Nullable final String data, @Nullable final MessageCallback callback) {
         getConnectedNodes().setResultCallback(new ResultCallback<GetConnectedNodesResult>() {
-            @Override
-            public void onResult(GetConnectedNodesResult nodesResult) {
+            @Override public void onResult(GetConnectedNodesResult nodesResult) {
                 for (Node node : nodesResult.getNodes()) {
                     final PendingResult<SendMessageResult> messageResult = sendMessage(node.getId(), path, data);
                     if (callback == null) {
                         return;
                     }
                     messageResult.setResultCallback(new ResultCallback<SendMessageResult>() {
-                        @Override
-                        public void onResult(SendMessageResult sendMessageResult) {
+                        @Override public void onResult(SendMessageResult sendMessageResult) {
                             callback.onMessageResult(sendMessageResult.getStatus());
                         }
                     });
@@ -109,13 +156,12 @@ public class Messenger implements MessageListener {
     }
 
     /**
-     * Register a receiver.
+     * Register a new receiver.
      *
-     * @param path specified path
      * @param receiver receiver of the message
      */
-    public void registerReceiver(@NonNull String path, @NonNull MessageReceiver receiver) {
-        mReceivers.put(path, receiver);
+    public void registerReceiver(@NonNull MessageReceiver receiver) {
+        mReceivers.put(receiver.getPath(), receiver);
     }
 
     /**
@@ -130,7 +176,7 @@ public class Messenger implements MessageListener {
     }
 
     /**
-     * Remove all of the receiver.
+     * Remove all of the receivers.
      */
     public void clearReceivers() {
         mReceivers.clear();
@@ -155,6 +201,7 @@ public class Messenger implements MessageListener {
         mRejectDecider = rejectDecider;
     }
 
+    @VisibleForTesting
     Map<String, MessageReceiver> getReceivers() {
         return mReceivers;
     }
