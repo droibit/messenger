@@ -5,6 +5,7 @@ buildscript {
         play_services_version = '7.8.0'
     }
     repositories {
+        mavenCentral()
         jcenter()
     }
     dependencies {
