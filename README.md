@@ -13,9 +13,10 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.droibit:messenger:1.0.0'
+    compile 'com.github.droibit:messenger:1.1.0'
 }
 ```
+
 ## License
 
     Copyright 2015 droibit
