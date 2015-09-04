@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "1.1.2"
+        versionName "1.1.3"
     }
     buildTypes {
         release {
@@ -28,7 +28,7 @@ dependencies {
     compile("com.google.android.gms:play-services-wearable:$play_services_version") {
         exclude module: 'support-v4'
     }
-    compile 'com.android.support:support-annotations:23.0.0'
+    compile "com.android.support:support-annotations:$support_version"
 
     // Testing-only dependencies
     testCompile 'junit:junit:4.12'
