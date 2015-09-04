@@ -1,13 +1,12 @@
 package com.droibit.messengerapp.model;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.droibit.messenger.MessageReceiver;
-import com.droibit.messenger.Messenger;
+import com.github.droibit.messenger.MessageReceiver;
+import com.github.droibit.messenger.Messenger;
 
 /**
  * @auther kumagai

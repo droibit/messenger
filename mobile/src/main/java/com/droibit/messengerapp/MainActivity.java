@@ -7,8 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.droibit.messenger.MessageCallback;
-import com.droibit.messenger.Messenger;
+import com.github.droibit.messenger.MessageCallback;
+import com.github.droibit.messenger.Messenger;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.Status;

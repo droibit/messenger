@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.text.TextUtils;
 
-import com.droibit.messenger.MessageReceiver;
-import com.droibit.messenger.Messenger;
+import com.github.droibit.messenger.MessageReceiver;
+import com.github.droibit.messenger.Messenger;
 
 import static android.support.wearable.activity.ConfirmationActivity.EXTRA_ANIMATION_TYPE;
 import static android.support.wearable.activity.ConfirmationActivity.EXTRA_MESSAGE;

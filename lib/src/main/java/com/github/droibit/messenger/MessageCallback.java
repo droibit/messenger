@@ -1,4 +1,4 @@
-package com.droibit.messenger;
+package com.github.droibit.messenger;
 
 import com.google.android.gms.common.api.Status;
 

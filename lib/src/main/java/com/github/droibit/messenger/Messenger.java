@@ -1,4 +1,4 @@
-package com.droibit.messenger;
+package com.github.droibit.messenger;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

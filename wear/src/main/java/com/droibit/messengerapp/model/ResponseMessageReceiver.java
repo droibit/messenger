@@ -4,11 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.droibit.messenger.MessageCallback;
-import com.droibit.messenger.MessageReceiver;
-import com.droibit.messenger.Messenger;
+import com.github.droibit.messenger.MessageCallback;
+import com.github.droibit.messenger.MessageReceiver;
+import com.github.droibit.messenger.Messenger;
 import com.droibit.messengerapp.BuildConfig;
-import com.droibit.messengerapp.MainActivity;
 import com.google.android.gms.common.api.Status;
 
 /**

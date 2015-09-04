@@ -3,7 +3,7 @@ package com.droibit.messengerapp;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.droibit.messenger.Messenger;
+import com.github.droibit.messenger.Messenger;
 import com.droibit.messengerapp.model.ConfirmMessageReceiver;
 import com.droibit.messengerapp.model.ResponseMessageReceiver;
 import com.droibit.messengerapp.model.StandardMessageReceiver;
