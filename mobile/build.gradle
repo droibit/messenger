@@ -17,16 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
-    compile project(':lib')
+    implementation project(':lib')
 
-    compile "com.google.android.gms:play-services-wearable:$play_services_version"
+    implementation "com.google.android.gms:play-services-wearable:$play_services_version"
 }
