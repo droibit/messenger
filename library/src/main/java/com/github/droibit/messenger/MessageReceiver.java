@@ -13,8 +13,6 @@ public interface MessageReceiver {
 
     /**
      * Get the path of this receiver to receive.
-     *
-     * @return
      */
     @NonNull
     String getPath();
@@ -25,5 +23,5 @@ public interface MessageReceiver {
      * @param messenger messenger object
      * @param data data to be associated with the path
      */
-    void onMessageReceived(Messenger messenger, @Nullable String data);
+    void onMessageReceived(@NonNull Messenger messenger, @Nullable String data);
 }

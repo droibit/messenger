@@ -8,23 +8,18 @@ import android.widget.Toast;
 import com.github.droibit.messenger.MessageReceiver;
 import com.github.droibit.messenger.Messenger;
 
-/**
- * @auther kumagai
- * @since 15/05/25
- */
 public class StandardMessageReceiver implements MessageReceiver {
 
     public static final String PATH_DEFAULT_MESSAGE = "/message";
 
     private final Activity mActivity;
 
-    public StandardMessageReceiver(Activity activity) {
+    public StandardMessageReceiver(@NonNull Activity activity) {
         mActivity = activity;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void onMessageReceived(Messenger messenger, @Nullable final String data) {
+    public void onMessageReceived(@NonNull Messenger messenger, @Nullable final String data) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -33,7 +28,6 @@ public class StandardMessageReceiver implements MessageReceiver {
         });
     }
 
-    /** {@inheritDoc} */
     @NonNull
     @Override
     public String getPath() {

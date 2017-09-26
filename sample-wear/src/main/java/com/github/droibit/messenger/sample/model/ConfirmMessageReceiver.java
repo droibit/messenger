@@ -16,43 +16,37 @@ import static android.support.wearable.activity.ConfirmationActivity.FAILURE_ANI
 import static android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION;
 
 
-/**
- * @auther kumagai
- * @since 15/05/25
- */
 public class ConfirmMessageReceiver implements MessageReceiver {
 
     public static final String PATH_ERROR_MESSAGE = "/error_message";
     public static final String PATH_SUCCESS_MESSAGE = "/success_message";
 
-    private final Activity mActivity;
-    private final String mPath;
+    private final Activity activity;
+    private final String path;
 
     public ConfirmMessageReceiver(Activity activity, String path) {
-        mActivity = activity;
-        mPath = path;
+        this.activity = activity;
+        this.path = path;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void onMessageReceived(Messenger messenger, @Nullable String data) {
-        final Intent intent = new Intent(mActivity, ConfirmationActivity.class)
+    public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) {
+        final Intent intent = new Intent(activity, ConfirmationActivity.class)
                 .putExtra(EXTRA_ANIMATION_TYPE, getAnimationType());
         if (!TextUtils.isEmpty(data)) {
             intent.putExtra(EXTRA_MESSAGE, data);
         }
-        mActivity.startActivity(intent);
+        activity.startActivity(intent);
     }
 
-    /** {@inheritDoc} */
     @NonNull
     @Override
     public String getPath() {
-        return mPath;
+        return path;
     }
 
     private int getAnimationType() {
-        switch (mPath) {
+        switch (path) {
             case PATH_SUCCESS_MESSAGE:
                 return SUCCESS_ANIMATION;
             case PATH_ERROR_MESSAGE:

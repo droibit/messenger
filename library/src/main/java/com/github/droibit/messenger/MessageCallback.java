@@ -1,12 +1,11 @@
 package com.github.droibit.messenger;
 
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.common.api.Status;
 
 /**
  * Callback of send message using the Message API.
- *
- * @auther kumagai
- * @since 15/05/23
  */
 public interface MessageCallback {
 
@@ -15,5 +14,5 @@ public interface MessageCallback {
      *
      * @param status send result
      */
-    void onMessageResult(Status status);
+    void onMessageResult(@NonNull Status status);
 }

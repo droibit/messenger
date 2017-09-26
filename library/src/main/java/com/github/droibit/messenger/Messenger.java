@@ -21,12 +21,9 @@ import static com.google.android.gms.wearable.MessageApi.MessageListener;
 /**
  * Class for communication between the wear and handheld using the Message API.
  * When you register a receiver, it will be automatically called back when the message is received.
- *
+ * <p>
  * Whether whether to reject the message, use the {@link RejectDecider}.
  * Receiver at the time rejected to register using the {@link #KEY_MESSAGE_REJECTED}.
- *
- * @author kumagai
- * @since 2015/5/22
  */
 public class Messenger implements MessageListener {
 
@@ -50,103 +47,94 @@ public class Messenger implements MessageListener {
      */
     public static class Builder {
 
-        private final Messenger mMessenger;
+        private final Messenger messenger;
 
         /**
          * Create a new instance.
-         *
-         * @param googleApiClient
          */
-        public Builder(GoogleApiClient googleApiClient) {
-            mMessenger = new Messenger(googleApiClient);
+        public Builder(@NonNull GoogleApiClient googleApiClient) {
+            messenger = new Messenger(googleApiClient);
         }
 
         /**
          * Register a new receiver.
-         *
-         * @param receiver
-         * @return
          */
         public Builder register(@NonNull MessageReceiver receiver) {
-            mMessenger.registerReceiver(receiver);
+            messenger.registerReceiver(receiver);
             return this;
         }
 
         /**
          * Set the {@link RejectDecider}.
-         *
-         * @param rejectDecider
-         * @return
          */
         public Builder rejectDecider(@NonNull RejectDecider rejectDecider) {
-            mMessenger.setRejectDecider(rejectDecider);
+            messenger.setRejectDecider(rejectDecider);
             return this;
         }
 
         /**
          * Get a new instance of the Messenger.
-         *
-         * @return
          */
         public Messenger get() {
-            return mMessenger;
+            return messenger;
         }
     }
 
-    /** The path of the reject receiver */
+    /**
+     * The path of the reject receiver
+     */
     public static final String KEY_MESSAGE_REJECTED = "rejected-message";
 
-    private final Map<String, MessageReceiver> mReceivers;
-    private final GoogleApiClient mGoogleApiClient;
-    private RejectDecider mRejectDecider;
+    private final Map<String, MessageReceiver> receivers;
+    private final GoogleApiClient googleApiClient;
+    private RejectDecider rejectDecider;
 
     /**
      * Create a new instance.
-     *
-     * @param googleApiClient
      */
-    public Messenger(GoogleApiClient googleApiClient) {
-        mReceivers = new HashMap<>();
-        mGoogleApiClient = googleApiClient;
+    public Messenger(@NonNull GoogleApiClient googleApiClient) {
+        receivers = new HashMap<>();
+        this.googleApiClient = googleApiClient;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        if (mRejectDecider != null && mRejectDecider.shouldReject()) {
-            if (mReceivers.containsKey(KEY_MESSAGE_REJECTED)) {
-                mReceivers.get(KEY_MESSAGE_REJECTED).onMessageReceived(this, null);
+    public void onMessageReceived(@NonNull MessageEvent messageEvent) {
+        if (rejectDecider != null && rejectDecider.shouldReject()) {
+            if (receivers.containsKey(KEY_MESSAGE_REJECTED)) {
+                receivers.get(KEY_MESSAGE_REJECTED).onMessageReceived(this, null);
             }
             return;
         }
 
         final String path = messageEvent.getPath();
-        if (!mReceivers.containsKey(path)) {
+        if (!receivers.containsKey(path)) {
             throw new IllegalStateException(String.format("The callback corresponding to the path(%s) is not registered.", path));
         }
 
         final byte[] data = messageEvent.getData();
-        final MessageReceiver receiver = mReceivers.get(path);
+        final MessageReceiver receiver = receivers.get(path);
         receiver.onMessageReceived(this, data != null ? new String(data) : null);
     }
 
     /**
      * Sends byte[] data to path.
      *
-     * @param path specified path
-     * @param data data to be associated with the path
+     * @param path     specified path
+     * @param data     data to be associated with the path
      * @param callback callback of send message
      */
     public void sendMessage(@NonNull final String path, @Nullable final String data, @Nullable final MessageCallback callback) {
         getConnectedNodes().setResultCallback(new ResultCallback<GetConnectedNodesResult>() {
-            @Override public void onResult(GetConnectedNodesResult nodesResult) {
+            @Override
+            public void onResult(@NonNull GetConnectedNodesResult nodesResult) {
                 for (Node node : nodesResult.getNodes()) {
                     final PendingResult<SendMessageResult> messageResult = sendMessage(node.getId(), path, data);
                     if (callback == null) {
                         return;
                     }
                     messageResult.setResultCallback(new ResultCallback<SendMessageResult>() {
-                        @Override public void onResult(SendMessageResult sendMessageResult) {
+                        @Override
+                        public void onResult(@NonNull SendMessageResult sendMessageResult) {
                             callback.onMessageResult(sendMessageResult.getStatus());
                         }
                     });
@@ -161,7 +149,7 @@ public class Messenger implements MessageListener {
      * @param receiver receiver of the message
      */
     public void registerReceiver(@NonNull MessageReceiver receiver) {
-        mReceivers.put(receiver.getPath(), receiver);
+        receivers.put(receiver.getPath(), receiver);
     }
 
     /**
@@ -170,8 +158,8 @@ public class Messenger implements MessageListener {
      * @param path specified path
      */
     public void unregisterReceiver(@NonNull String path) {
-        if (mReceivers.containsKey(path)) {
-            mReceivers.remove(path);
+        if (receivers.containsKey(path)) {
+            receivers.remove(path);
         }
     }
 
@@ -179,39 +167,35 @@ public class Messenger implements MessageListener {
      * Remove all of the receivers.
      */
     public void clearReceivers() {
-        mReceivers.clear();
+        receivers.clear();
     }
 
     /**
      * Get the {@link RejectDecider}.
-     *
-     * @return {@link RejectDecider} instance
      */
     public RejectDecider getRejectDecider() {
-        return mRejectDecider;
+        return rejectDecider;
     }
 
     /**
      * Set the {@link RejectDecider}.
      * Set the null when you delete an instance.
-     *
-     * @param rejectDecider
      */
     public void setRejectDecider(@Nullable RejectDecider rejectDecider) {
-        mRejectDecider = rejectDecider;
+        this.rejectDecider = rejectDecider;
     }
 
     @VisibleForTesting
     Map<String, MessageReceiver> getReceivers() {
-        return mReceivers;
+        return receivers;
     }
 
     private PendingResult<GetConnectedNodesResult> getConnectedNodes() {
-        return Wearable.NodeApi.getConnectedNodes(mGoogleApiClient);
+        return Wearable.NodeApi.getConnectedNodes(googleApiClient);
     }
 
-    private PendingResult<SendMessageResult> sendMessage(String nodeId, String path, String data) {
-        return Wearable.MessageApi.sendMessage(mGoogleApiClient,
+    private PendingResult<SendMessageResult> sendMessage(@NonNull String nodeId, @NonNull String path, @Nullable String data) {
+        return Wearable.MessageApi.sendMessage(googleApiClient,
                 nodeId,
                 path,
                 data == null ? null : data.getBytes());

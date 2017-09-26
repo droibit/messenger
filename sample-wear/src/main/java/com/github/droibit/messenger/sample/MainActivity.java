@@ -3,7 +3,6 @@ package com.github.droibit.messenger.sample;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.droibit.messengerapp.R;
 import com.github.droibit.messenger.Messenger;
 import com.github.droibit.messenger.sample.model.ConfirmMessageReceiver;
 import com.github.droibit.messenger.sample.model.ResponseMessageReceiver;
@@ -16,21 +15,20 @@ import static com.github.droibit.messenger.sample.model.ConfirmMessageReceiver.*
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
 
-    private GoogleApiClient mGoogleApiClient;
-    private Messenger mMessenger;
+    private GoogleApiClient googleApiClient;
+    private Messenger messenger;
 
-    /** {@inheritDoc} */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                             .addApi(Wearable.API)
                             .addConnectionCallbacks(this)
                             .build();
 
-        mMessenger = new Messenger.Builder(mGoogleApiClient)
+        messenger = new Messenger.Builder(googleApiClient)
                                   .register(new StandardMessageReceiver(this))
                                   .register(new ConfirmMessageReceiver(this, PATH_SUCCESS_MESSAGE))
                                   .register(new ConfirmMessageReceiver(this, PATH_ERROR_MESSAGE))
@@ -44,34 +42,30 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                                   .get();
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
+        if (!googleApiClient.isConnected()) {
+            googleApiClient.connect();
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-            Wearable.MessageApi.removeListener(mGoogleApiClient, mMessenger);
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+            Wearable.MessageApi.removeListener(googleApiClient, messenger);
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void onConnected(Bundle bundle) {
-        Wearable.MessageApi.addListener(mGoogleApiClient, mMessenger);
+        Wearable.MessageApi.addListener(googleApiClient, messenger);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void onConnectionSuspended(int i) {
         // TODO: Implement

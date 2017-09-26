@@ -36,7 +36,7 @@ public class MessengerTest {
             }
 
             @Override
-            public void onMessageReceived(Messenger messenger, @Nullable String data) { }
+            public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) { }
         });
         assertThat(mMessenger.getReceivers().keySet(), hasItem(PATH_TEST));
         assertThat(mMessenger.getReceivers().size(), is(1));
@@ -49,7 +49,7 @@ public class MessengerTest {
                 return PATH_MESSENGER;
             }
 
-            @Override public void onMessageReceived(Messenger messenger, @Nullable String data) { }
+            @Override public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) { }
         });
         assertThat(mMessenger.getReceivers().keySet(), hasItem(PATH_MESSENGER));
         assertThat(mMessenger.getReceivers().size(), is(2));
@@ -71,7 +71,7 @@ public class MessengerTest {
                 return PATH_TEST;
             }
 
-            @Override public void onMessageReceived(Messenger messenger, @Nullable String data) {
+            @Override public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) {
             }
         });
         mMessenger.registerReceiver(new MessageReceiver() {
@@ -81,7 +81,7 @@ public class MessengerTest {
                 return PATH_MESSENGER;
             }
 
-            @Override public void onMessageReceived(Messenger messenger, @Nullable String data) { }
+            @Override public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) { }
         });
 
         mMessenger.unregisterReceiver(PATH_TEST);
@@ -104,7 +104,7 @@ public class MessengerTest {
                     }
 
                     @Override
-                    public void onMessageReceived(Messenger messenger, @Nullable String data) {
+                    public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) {
                     }
                 })
                 .register(new MessageReceiver() {
@@ -115,7 +115,7 @@ public class MessengerTest {
                     }
 
                     @Override
-                    public void onMessageReceived(Messenger messenger, @Nullable String data) {
+                    public void onMessageReceived(@NonNull Messenger messenger, @Nullable String data) {
                     }
                 })
                 .rejectDecider(new Messenger.RejectDecider() {

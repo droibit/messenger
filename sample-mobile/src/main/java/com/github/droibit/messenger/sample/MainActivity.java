@@ -2,13 +2,12 @@ package com.github.droibit.messenger.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.droibit.messengerapp.BuildConfig;
-import com.droibit.messengerapp.R;
 import com.github.droibit.messenger.MessageCallback;
 import com.github.droibit.messenger.Messenger;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,46 +23,42 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
     private static final String PATH_SUCCESS_MESSAGE = "/success_message";
     private static final String PATH_REQUEST_MESSAGE = "/request_message";
 
-    private GoogleApiClient mGoogleApiClient;
-    private Messenger mMessenger;
+    private GoogleApiClient googleApiClient;
+    private Messenger messenger;
 
-    /** {@inheritDoc} */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                                     .addApi(Wearable.API)
                                     .addConnectionCallbacks(this)
                                     .build();
 
-        mMessenger = new Messenger(mGoogleApiClient);
-        mMessenger.registerReceiver(new WearMessageReceiver(this));
+        messenger = new Messenger(googleApiClient);
+        messenger.registerReceiver(new WearMessageReceiver(this));
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
+        if (!googleApiClient.isConnected()) {
+            googleApiClient.connect();
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-            Wearable.MessageApi.removeListener(mGoogleApiClient, mMessenger);
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+            Wearable.MessageApi.removeListener(googleApiClient, messenger);
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -71,7 +66,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -86,21 +80,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
         return super.onOptionsItemSelected(item);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void onConnected(Bundle bundle) {
-        Wearable.MessageApi.addListener(mGoogleApiClient, mMessenger);
+        Wearable.MessageApi.addListener(googleApiClient, messenger);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void onConnectionSuspended(int i) {
     }
 
     public void onSendMessage(View v) {
-        mMessenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", new MessageCallback() {
+        messenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", new MessageCallback() {
             @Override
-            public void onMessageResult(Status status) {
+            public void onMessageResult(@NonNull Status status) {
                 if (!status.isSuccess()) {
                     Log.d(BuildConfig.BUILD_TYPE, "Failed send message : " + status.getStatusCode());
                 }
@@ -109,19 +101,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks {
     }
 
     public void onSendErrorMessage(View v) {
-        mMessenger.sendMessage(PATH_ERROR_MESSAGE, "Not connected to the network", null);
+        messenger.sendMessage(PATH_ERROR_MESSAGE, "Not connected to the network", null);
     }
 
     public void onSendErrorMessage2(View v) {
-        mMessenger.sendMessage(PATH_ERROR_MESSAGE, "Oops!!", null);
+        messenger.sendMessage(PATH_ERROR_MESSAGE, "Oops!!", null);
     }
 
     public void onSendSuccessMessage(View v) {
-        mMessenger.sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated", null);
+        messenger.sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated", null);
     }
 
     public void onSendMessageWithReceiveMessage(View v) {
-        mMessenger.sendMessage(PATH_REQUEST_MESSAGE, null, null);
+        messenger.sendMessage(PATH_REQUEST_MESSAGE, null, null);
     }
 
     public void onReceiveMessageWithReject(View v) {
