@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile project(':lib')
+    compile project(':library')
 
     implementation 'com.google.android.support:wearable:2.0.5'
     implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
