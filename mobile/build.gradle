@@ -23,5 +23,5 @@ dependencies {
     wearApp project(':wear')
     implementation project(':lib')
 
-    implementation "com.google.android.gms:play-services-wearable:$play_services_version"
+    implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 }

@@ -2,8 +2,8 @@
 
 buildscript {
     ext {
-        play_services_version = '7.8.0'
-        support_version = '23.0.1'
+        googlePlayServicesVersion = '11.4.0'
+        supportVersion = '26.1.0'
     }
     repositories {
         mavenCentral()

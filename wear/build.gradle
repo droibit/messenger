@@ -22,6 +22,6 @@ android {
 dependencies {
     compile project(':lib')
 
-    implementation 'com.google.android.support:wearable:1.1.0'
-    implementation "com.google.android.gms:play-services-wearable:$play_services_version"
+    implementation 'com.google.android.support:wearable:2.0.5'
+    implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 }

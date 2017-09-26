@@ -20,10 +20,8 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.gms:play-services-wearable:$play_services_version") {
-        exclude module: 'support-v4'
-    }
-    implementation "com.android.support:support-annotations:$support_version"
+    implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
+    implementation "com.android.support:support-annotations:$supportVersion"
 
     testImplementation 'junit:junit:4.12'
 }
