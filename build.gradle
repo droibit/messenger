@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        googlePlayServicesVersion = '11.4.0'
+        googlePlayServicesVersion = '11.4.2'
         supportVersion = '26.1.0'
     }
     repositories {
