@@ -8,6 +8,7 @@ import com.google.android.gms.wearable.MessageApi.SendMessageResult
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult
 import com.google.android.gms.wearable.Wearable
+import java.util.concurrent.TimeUnit
 
 typealias MessageRejector = ((String?) -> Boolean)
 
@@ -19,54 +20,72 @@ typealias MessageRejector = ((String?) -> Boolean)
  * Whether whether to reject the message, use the [MessageRejector].
  * Receiver at the time rejected to register using the [KEY_MESSAGE_REJECTED].
  */
-class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener {
+class Messenger private constructor(builder: Builder) : MessageListener {
 
     /**
      * The utility class that simplifies the registration of receiver.
      */
-    class Builder(googleApiClient: GoogleApiClient) {
+    class Builder(internal val googleApiClient: GoogleApiClient) {
 
-        private val messenger = Messenger(googleApiClient)
+        internal var messageRejector: MessageRejector = { false }
+
+        internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
+
+        internal var timeout: Timeout? = null
 
         /**
          * Register a new handler.
          */
         fun register(handler: MessageHandler): Builder {
-            messenger.handlers.put(handler.path, handler)
-            return this
+            return also { it.handlers.put(handler.path, handler) }
         }
 
         /**
          * Set the [MessageRejector]. [MessageRejector] will use in the case of a decision related to the whole.
          * (e.g. Network is not connected)
          */
-        fun rejectDecider(rejectDecider: MessageRejector): Builder {
-            messenger.rejectDecider = rejectDecider
-            return this
+        fun rejectDecider(messageRejector: MessageRejector): Builder {
+            return also { it.messageRejector = messageRejector }
+        }
+
+        /**
+         * Set timeout(ms).
+         */
+        fun timeout(connectNodesMillis: Long, sendMessageMillis: Long): Builder {
+            require(connectNodesMillis > 0)
+            require(sendMessageMillis > 0)
+            return also { it.timeout = Timeout(connectNodesMillis, sendMessageMillis) }
         }
 
         /**
          * Get a new instance of the Messenger.
          */
-        fun build(): Messenger {
-            return messenger
-        }
+        fun build() = Messenger(this)
     }
 
-    private val handlers = hashMapOf<String, MessageHandler>()
+    internal class Timeout(val connectNodesMillis: Long, val sendMessageMillis: Long)
 
-    private var rejectDecider: MessageRejector? = null
+    private val googleApiClient: GoogleApiClient
+    private val handlers: MutableMap<String, MessageHandler>
+    private val messageRejector: MessageRejector
+    private var timeout: Timeout?
+
+    init {
+        googleApiClient = builder.googleApiClient
+        handlers = builder.handlers
+        messageRejector = builder.messageRejector
+        timeout = builder.timeout
+    }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
-        if (rejectDecider?.invoke(data) == true) {
-            handlers.getValue(KEY_MESSAGE_REJECTED).onMessageReceived(this, data)
+        if (messageRejector.invoke(data)) {
+            handlers[KEY_MESSAGE_REJECTED]?.onMessageReceived(this, data)
             return
         }
 
-        val receiver = handlers[messageEvent.path]
-                ?: error("Callback corresponding to the path(${messageEvent.path}) is not registered.")
-        receiver.onMessageReceived(this, data)
+        handlers.getValue(messageEvent.path)
+                .onMessageReceived(this, data)
     }
 
     /**
@@ -76,7 +95,7 @@ class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener 
      * @param data     data to be associated with the path
      * @param callback callback of send message
      */
-    fun sendMessage(path: String, data: String?, callback: MessageCallback? = null) {
+    fun sendMessage(path: String, data: String?, callback: SendMessageCallback? = null) {
         getConnectedNodes().setResultCallback { nodesResult ->
             for (node in nodesResult.nodes) {
                 val messageResult = sendMessage(node.id, path, data)
@@ -86,6 +105,25 @@ class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener 
                 messageResult.setResultCallback { sendMessageResult -> callback.onMessageResult(sendMessageResult.status) }
             }
         }
+    }
+
+    private fun sendMessageWithTimeout(
+            path: String, data: String?, callback: SendMessageCallback?, timeout: Timeout) {
+        getConnectedNodes().setResultCallback( { nodesResult ->
+            if (!nodesResult.status.isSuccess) {
+                callback?.onMessageResult(nodesResult.status)
+                return@setResultCallback
+            }
+
+            nodesResult.nodes.forEach { node ->
+                sendMessage(node.id, path, data).setResultCallback({ messageResult ->
+                    if (!messageResult.status.isSuccess) {
+
+                    }
+                }, timeout.sendMessageMillis, TimeUnit.MILLISECONDS)
+
+            }
+        }, timeout.connectNodesMillis, TimeUnit.MILLISECONDS)
     }
 
     private fun sendMessage(nodeId: String, path: String, data: String?): PendingResult<SendMessageResult> {

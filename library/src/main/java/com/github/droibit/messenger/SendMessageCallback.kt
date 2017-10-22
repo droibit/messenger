@@ -5,7 +5,7 @@ import com.google.android.gms.common.api.Status
 /**
  * Callback of send message using the Message API.
  */
-interface MessageCallback {
+interface SendMessageCallback {
 
     /**
      * Called in the message send.
