@@ -7,7 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 
-import com.github.droibit.messenger.MessageCallback
+import com.github.droibit.messenger.SendMessageCallback
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
@@ -66,16 +66,19 @@ class MainActivity : Activity(), ConnectionCallbacks {
     }
 
     override fun onConnected(bundle: Bundle?) {
+        Log.d(TAG, "#onConnected")
         Wearable.MessageApi.addListener(googleApiClient, messenger)
     }
 
     override fun onConnectionSuspended(i: Int) {}
 
     fun onSendMessage(v: View) {
-        messenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", object : MessageCallback {
+        messenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", object : SendMessageCallback {
             override fun onMessageResult(status: Status) {
-                if (!status.isSuccess) {
-                    Log.d(BuildConfig.BUILD_TYPE, "Failed send message : " + status.statusCode)
+                if (status.isSuccess) {
+                    Log.d(TAG, "Succeed to send message.")
+                } else {
+                    Log.d(TAG, "Failed send message: ${status.statusCode}" )
                 }
             }
         })
@@ -105,5 +108,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
         private val PATH_ERROR_MESSAGE = "/error_message"
         private val PATH_SUCCESS_MESSAGE = "/success_message"
         private val PATH_REQUEST_MESSAGE = "/request_message"
+
+        private val TAG = MainActivity::class.java.simpleName
     }
 }

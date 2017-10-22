@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.wearable.activity.ConfirmationActivity
 import android.support.wearable.activity.ConfirmationActivity.*
+import android.util.Log
 import com.github.droibit.messenger.MessageHandler
 import com.github.droibit.messenger.Messenger
 
@@ -22,6 +23,8 @@ class ConfirmMessageHandler(
         }
 
     override fun onMessageReceived(messenger: Messenger, data: String) {
+        Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
+
         val intent = Intent(activity, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, animationType)
         if (data.isNotEmpty()) {
@@ -34,5 +37,6 @@ class ConfirmMessageHandler(
 
         val PATH_ERROR_MESSAGE = "/error_message"
         val PATH_SUCCESS_MESSAGE = "/success_message"
+        private val TAG = ConfirmMessageHandler::class.java.simpleName
     }
 }

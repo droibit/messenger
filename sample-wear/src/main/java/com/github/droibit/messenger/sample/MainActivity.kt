@@ -2,6 +2,7 @@ package com.github.droibit.messenger.sample
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 
 import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler
@@ -55,10 +56,16 @@ class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {
     }
 
     override fun onConnected(bundle: Bundle?) {
+        Log.d(TAG, "#onConnected()")
         Wearable.MessageApi.addListener(googleApiClient, messenger)
     }
 
     override fun onConnectionSuspended(i: Int) {
         // TODO: Implement
+    }
+
+    companion object {
+
+        private val TAG = MainActivity::class.java.simpleName
     }
 }
