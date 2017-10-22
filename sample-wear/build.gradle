@@ -20,11 +20,19 @@ android {
     }
 }
 
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
 dependencies {
     compile project(':library')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
     compileOnly "com.google.android.wearable:wearable:2.0.5"
     implementation 'com.google.android.support:wearable:2.0.5'
     implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 }

@@ -126,6 +126,8 @@ class Messenger private constructor(builder: Builder) : MessageListener {
         }, timeout.connectNodesMillis, TimeUnit.MILLISECONDS)
     }
 
+
+
     private fun sendMessage(nodeId: String, path: String, data: String?): PendingResult<SendMessageResult> {
         return Wearable.MessageApi.sendMessage(googleApiClient,
                 nodeId,
