@@ -9,14 +9,14 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult
 import com.google.android.gms.wearable.Wearable
 
-typealias RejectDecider = (() -> Boolean)
+typealias MessageRejector = ((String?) -> Boolean)
 
 /**
  * Class for communication between the wear and handheld using the Message API.
  * When you register a receiver, it will be automatically called back when the message is received.
  *
  *
- * Whether whether to reject the message, use the [RejectDecider].
+ * Whether whether to reject the message, use the [MessageRejector].
  * Receiver at the time rejected to register using the [KEY_MESSAGE_REJECTED].
  */
 class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener {
@@ -37,10 +37,10 @@ class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener 
         }
 
         /**
-         * Set the [RejectDecider]. [RejectDecider] will use in the case of a decision related to the whole.
+         * Set the [MessageRejector]. [MessageRejector] will use in the case of a decision related to the whole.
          * (e.g. Network is not connected)
          */
-        fun rejectDecider(rejectDecider: RejectDecider): Builder {
+        fun rejectDecider(rejectDecider: MessageRejector): Builder {
             messenger.rejectDecider = rejectDecider
             return this
         }
@@ -55,21 +55,22 @@ class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener 
 
     private val handlers = hashMapOf<String, MessageHandler>()
 
-    private var rejectDecider: RejectDecider? = null
+    private var rejectDecider: MessageRejector? = null
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        if (rejectDecider?.invoke() == true) {
-            handlers.getValue(KEY_MESSAGE_REJECTED).onMessageReceived(this, null)
+        val data = messageEvent.data?.toString(charset = Charsets.UTF_8)
+        if (rejectDecider?.invoke(data) == true) {
+            handlers.getValue(KEY_MESSAGE_REJECTED).onMessageReceived(this, data)
             return
         }
 
         val receiver = handlers[messageEvent.path]
-                ?: error("The callback corresponding to the path(%${messageEvent.path}) is not registered.")
-        receiver.onMessageReceived(this, messageEvent.data?.toString(charset = Charsets.UTF_8))
+                ?: error("Callback corresponding to the path(${messageEvent.path}) is not registered.")
+        receiver.onMessageReceived(this, data)
     }
 
     /**
-     * Sends byte[] data to path.
+     * Sends payload to path.
      *
      * @param path     specified path
      * @param data     data to be associated with the path
