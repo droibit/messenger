@@ -10,7 +10,7 @@ class WearMessageHandler(private val activity: Activity) : MessageHandler {
 
     override val path = PATH_REQUEST_MESSAGE_FROM_WEAR
 
-    override fun onMessageReceived(messenger: Messenger, data: String?) {
+    override fun onMessageReceived(messenger: Messenger, data: String) {
         activity.runOnUiThread { Toast.makeText(activity, data, Toast.LENGTH_SHORT).show() }
     }
 

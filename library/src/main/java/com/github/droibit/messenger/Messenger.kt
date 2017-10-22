@@ -58,7 +58,7 @@ class Messenger(private val googleApiClient: GoogleApiClient) : MessageListener 
     private var rejectDecider: MessageRejector? = null
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        val data = messageEvent.data?.toString(charset = Charsets.UTF_8)
+        val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
         if (rejectDecider?.invoke(data) == true) {
             handlers.getValue(KEY_MESSAGE_REJECTED).onMessageReceived(this, data)
             return

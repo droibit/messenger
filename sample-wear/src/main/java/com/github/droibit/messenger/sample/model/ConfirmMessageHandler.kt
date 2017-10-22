@@ -21,10 +21,10 @@ class ConfirmMessageHandler(
             }
         }
 
-    override fun onMessageReceived(messenger: Messenger, data: String?) {
+    override fun onMessageReceived(messenger: Messenger, data: String) {
         val intent = Intent(activity, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, animationType)
-        if (data.isNullOrEmpty()) {
+        if (data.isNotEmpty()) {
             intent.putExtra(EXTRA_MESSAGE, data)
         }
         activity.startActivity(intent)

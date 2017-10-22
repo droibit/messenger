@@ -12,7 +12,7 @@ class ResponseMessageHandler : MessageHandler {
 
     override val path = PATH_REQUEST_MESSAGE
 
-    override fun onMessageReceived(messenger: Messenger, data: String?) {
+    override fun onMessageReceived(messenger: Messenger, data: String) {
         messenger.sendMessage(PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", object : MessageCallback {
             override fun onMessageResult(status: Status) {
                 if (status.isSuccess) {

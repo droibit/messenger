@@ -14,7 +14,7 @@ interface MessageHandler {
      * Called in the message receive.
      *
      * @param messenger messenger object
-     * @param data data to be associated with the path
+     * @param data payload to be associated with the path. If there is no payload, empty string.
      */
-    fun onMessageReceived(messenger: Messenger, data: String?)
+    fun onMessageReceived(messenger: Messenger, data: String)
 }

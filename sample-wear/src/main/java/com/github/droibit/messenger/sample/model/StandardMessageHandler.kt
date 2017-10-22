@@ -10,7 +10,7 @@ class StandardMessageHandler(private val activity: Activity) : MessageHandler {
 
     override val path = PATH_DEFAULT_MESSAGE
 
-    override fun onMessageReceived(messenger: Messenger, data: String?) {
+    override fun onMessageReceived(messenger: Messenger, data: String) {
         activity.runOnUiThread { Toast.makeText(activity, data, Toast.LENGTH_SHORT).show() }
     }
 
