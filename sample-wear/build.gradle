@@ -6,7 +6,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.droibit.messengerapp"
+        applicationId "com.github.droibit.messenger.sample"
         minSdkVersion 23
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
