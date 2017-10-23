@@ -8,6 +8,7 @@ import com.google.android.gms.wearable.MessageApi.SendMessageResult
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult
 import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.wearable.Node
 import java.util.concurrent.TimeUnit
 
 typealias MessageRejector = ((String?) -> Boolean)
@@ -32,6 +33,8 @@ class Messenger private constructor(builder: Builder) : MessageListener {
         internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
 
         internal var timeout: Timeout? = null
+
+        internal var ignoreNodes: List<String> = arrayListOf()
 
         /**
          * Register a new handler.
@@ -58,6 +61,13 @@ class Messenger private constructor(builder: Builder) : MessageListener {
         }
 
         /**
+         * Set display name([Node.getDisplayName]) of the connected node to be ignored.
+         */
+        fun ignoreNodes(vararg nodeDisplayNames: String): Builder {
+            return also { it.ignoreNodes = nodeDisplayNames.toList() }
+        }
+
+        /**
          * Get a new instance of the Messenger.
          */
         fun build() = Messenger(this)
@@ -68,6 +78,7 @@ class Messenger private constructor(builder: Builder) : MessageListener {
     private val googleApiClient: GoogleApiClient
     private val handlers: MutableMap<String, MessageHandler>
     private val messageRejector: MessageRejector
+    private val ignoreNodes: List<String>
     private var timeout: Timeout?
 
     init {
@@ -75,6 +86,7 @@ class Messenger private constructor(builder: Builder) : MessageListener {
         handlers = builder.handlers
         messageRejector = builder.messageRejector
         timeout = builder.timeout
+        ignoreNodes = builder.ignoreNodes
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
