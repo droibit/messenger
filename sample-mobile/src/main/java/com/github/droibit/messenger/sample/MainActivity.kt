@@ -6,13 +6,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
-import com.github.droibit.messenger.SendMessageCallback
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
 
 
 class MainActivity : Activity(), ConnectionCallbacks {
@@ -31,6 +30,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
 
         messenger = Messenger.Builder(googleApiClient)
                 .register(WearMessageHandler(this))
+                .timeout(5000L, 2500L)
                 .build()
     }
 
@@ -73,34 +73,38 @@ class MainActivity : Activity(), ConnectionCallbacks {
     override fun onConnectionSuspended(i: Int) {}
 
     fun onSendMessage(v: View) {
-        messenger.sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", object : SendMessageCallback {
-            override fun onMessageResult(status: Status) {
-                if (status.isSuccess) {
-                    Log.d(TAG, "Succeed to send message.")
-                } else {
-                    Log.d(TAG, "Failed send message: ${status.statusCode}" )
-                }
-            }
-        })
+        sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world")
     }
 
     fun onSendErrorMessage(v: View) {
-        messenger.sendMessage(PATH_ERROR_MESSAGE, "Not connected to the network", null)
+        sendMessage(PATH_ERROR_MESSAGE, "Not connected to the network")
     }
 
     fun onSendErrorMessage2(v: View) {
-        messenger.sendMessage(PATH_ERROR_MESSAGE, "Oops", null)
+        sendMessage(PATH_ERROR_MESSAGE, "Oops")
     }
 
     fun onSendSuccessMessage(v: View) {
-        messenger.sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated", null)
+        sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated")
     }
 
     fun onSendMessageWithReceiveMessage(v: View) {
-        messenger.sendMessage(PATH_REQUEST_MESSAGE, null, null)
+        sendMessage(PATH_REQUEST_MESSAGE, null)
     }
 
     fun onReceiveMessageWithReject(v: View) = Unit
+
+    private fun sendMessage(path: String, message: String?): Job {
+        return launch {
+            Log.d(TAG, "sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
+            val status = messenger.sendMessage(path, message)
+            if (status.isSuccess) {
+                Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
+            } else {
+                Log.d(TAG, "Failed send message(code=${status.statusCode}, msg=${status.statusMessage}) in ${Thread.currentThread().name}")
+            }
+        }
+    }
 
     companion object {
 

@@ -3,16 +3,14 @@ package com.github.droibit.messenger.sample
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-
 import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler
+import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_ERROR_MESSAGE
+import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_SUCCESS_MESSAGE
 import com.github.droibit.messenger.sample.model.ResponseMessageHandler
 import com.github.droibit.messenger.sample.model.StandardMessageHandler
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.wearable.Wearable
-
-import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_ERROR_MESSAGE
-import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_SUCCESS_MESSAGE
 
 
 class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {

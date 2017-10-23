@@ -1,15 +1,16 @@
 package com.github.droibit.messenger
 
+import android.support.annotation.VisibleForTesting
 import com.github.droibit.messenger.Messenger.Companion.KEY_MESSAGE_REJECTED
+import com.github.droibit.messenger.internal.NoneTimeoutSuspendMessageSender
+import com.github.droibit.messenger.internal.SuspendMessageSender
+import com.github.droibit.messenger.internal.TimeoutSuspendMessageSender
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.PendingResult
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.MessageApi.MessageListener
-import com.google.android.gms.wearable.MessageApi.SendMessageResult
 import com.google.android.gms.wearable.MessageEvent
-import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult
-import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.Node
-import java.util.concurrent.TimeUnit
 
 typealias MessageRejector = ((String?) -> Boolean)
 
@@ -21,20 +22,29 @@ typealias MessageRejector = ((String?) -> Boolean)
  * Whether whether to reject the message, use the [MessageRejector].
  * Receiver at the time rejected to register using the [KEY_MESSAGE_REJECTED].
  */
-class Messenger private constructor(builder: Builder) : MessageListener {
+class Messenger @VisibleForTesting internal constructor(
+        private val messageSender: SuspendMessageSender,
+        private val handlers: MutableMap<String, MessageHandler>,
+        private val messageRejector: MessageRejector,
+        private val ignoreNodes: Set<String>) : MessageListener {
 
     /**
      * The utility class that simplifies the registration of receiver.
      */
-    class Builder(internal val googleApiClient: GoogleApiClient) {
+    class Builder(private val googleApiClient: GoogleApiClient) {
 
         internal var messageRejector: MessageRejector = { false }
 
         internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
 
-        internal var timeout: Timeout? = null
+        internal var ignoreNodes: Set<String> = hashSetOf()
 
-        internal var ignoreNodes: List<String> = arrayListOf()
+        internal val suspendMessageSender: SuspendMessageSender
+            get() = newSuspendMessenger(connectNodesMillis, sendMessageMillis)
+
+        private var connectNodesMillis: Long? = null
+
+        private var sendMessageMillis: Long? = null
 
         /**
          * Register a new handler.
@@ -57,37 +67,41 @@ class Messenger private constructor(builder: Builder) : MessageListener {
         fun timeout(connectNodesMillis: Long, sendMessageMillis: Long): Builder {
             require(connectNodesMillis > 0)
             require(sendMessageMillis > 0)
-            return also { it.timeout = Timeout(connectNodesMillis, sendMessageMillis) }
+            return also {
+                it.connectNodesMillis = connectNodesMillis
+                it.sendMessageMillis = sendMessageMillis
+            }
         }
 
         /**
          * Set display name([Node.getDisplayName]) of the connected node to be ignored.
          */
         fun ignoreNodes(vararg nodeDisplayNames: String): Builder {
-            return also { it.ignoreNodes = nodeDisplayNames.toList() }
+            return also { it.ignoreNodes = nodeDisplayNames.toSet() }
         }
 
         /**
          * Get a new instance of the Messenger.
          */
         fun build() = Messenger(this)
+
+        // Private
+
+        private fun newSuspendMessenger(connectNodesMillis: Long?, sendMessageMillis: Long?): SuspendMessageSender {
+            return if (connectNodesMillis != null && sendMessageMillis != null) {
+                TimeoutSuspendMessageSender(googleApiClient, connectNodesMillis, sendMessageMillis)
+            } else {
+                NoneTimeoutSuspendMessageSender(googleApiClient)
+            }
+        }
     }
 
-    internal class Timeout(val connectNodesMillis: Long, val sendMessageMillis: Long)
-
-    private val googleApiClient: GoogleApiClient
-    private val handlers: MutableMap<String, MessageHandler>
-    private val messageRejector: MessageRejector
-    private val ignoreNodes: List<String>
-    private var timeout: Timeout?
-
-    init {
-        googleApiClient = builder.googleApiClient
-        handlers = builder.handlers
-        messageRejector = builder.messageRejector
-        timeout = builder.timeout
-        ignoreNodes = builder.ignoreNodes
-    }
+    private constructor(builder: Builder) : this(
+            messageSender = builder.suspendMessageSender,
+            handlers = builder.handlers,
+            messageRejector = builder.messageRejector,
+            ignoreNodes = builder.ignoreNodes
+    )
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
@@ -105,51 +119,23 @@ class Messenger private constructor(builder: Builder) : MessageListener {
      *
      * @param path     specified path
      * @param data     data to be associated with the path
-     * @param callback callback of send message
+     * @return result of send message.
      */
-    fun sendMessage(path: String, data: String?, callback: SendMessageCallback? = null) {
-        getConnectedNodes().setResultCallback { nodesResult ->
-            for (node in nodesResult.nodes) {
-                val messageResult = sendMessage(node.id, path, data)
-                if (callback == null) {
-                    return@setResultCallback
-                }
-                messageResult.setResultCallback { sendMessageResult -> callback.onMessageResult(sendMessageResult.status) }
-            }
+    suspend fun sendMessage(path: String, data: String?): Status {
+        val connectedNodesResult = messageSender.getConnectedNodes()
+        if (!connectedNodesResult.status.isSuccess) {
+            return connectedNodesResult.status
         }
-    }
 
-    private fun sendMessageWithTimeout(
-            path: String, data: String?, callback: SendMessageCallback?, timeout: Timeout) {
-        getConnectedNodes().setResultCallback( { nodesResult ->
-            if (!nodesResult.status.isSuccess) {
-                callback?.onMessageResult(nodesResult.status)
-                return@setResultCallback
-            }
-
-            nodesResult.nodes.forEach { node ->
-                sendMessage(node.id, path, data).setResultCallback({ messageResult ->
-                    if (!messageResult.status.isSuccess) {
-
+        connectedNodesResult.nodes
+                .filter { it.displayName !in ignoreNodes }
+                .forEach {
+                    val sendMessageResult = messageSender.sendMessage(it.id, path, data)
+                    if (!sendMessageResult.status.isSuccess) {
+                        return sendMessageResult.status
                     }
-                }, timeout.sendMessageMillis, TimeUnit.MILLISECONDS)
-
-            }
-        }, timeout.connectNodesMillis, TimeUnit.MILLISECONDS)
-    }
-
-
-
-    private fun sendMessage(nodeId: String, path: String, data: String?): PendingResult<SendMessageResult> {
-        return Wearable.MessageApi.sendMessage(googleApiClient,
-                nodeId,
-                path,
-                data?.toByteArray(charset = Charsets.UTF_8)
-        )
-    }
-
-    private fun getConnectedNodes(): PendingResult<GetConnectedNodesResult> {
-        return Wearable.NodeApi.getConnectedNodes(googleApiClient)
+                }
+        return Status(CommonStatusCodes.SUCCESS)
     }
 
     companion object {

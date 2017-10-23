@@ -1,12 +1,9 @@
 package com.github.droibit.messenger.sample.model
 
 import android.util.Log
-
-import com.github.droibit.messenger.SendMessageCallback
 import com.github.droibit.messenger.MessageHandler
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.sample.BuildConfig
-import com.google.android.gms.common.api.Status
+import kotlinx.coroutines.experimental.launch
 
 class ResponseMessageHandler : MessageHandler {
 
@@ -15,14 +12,15 @@ class ResponseMessageHandler : MessageHandler {
     override fun onMessageReceived(messenger: Messenger, data: String) {
         Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
 
-        messenger.sendMessage(PATH_REQUEST_MESSAGE_FROM_WEAR, "Message from Android Wear", object : SendMessageCallback {
-            override fun onMessageResult(status: Status) {
-                if (status.isSuccess) {
-                    return
-                }
-                Log.d(BuildConfig.BUILD_TYPE, "ERROR: " + status.statusCode)
+        launch {
+            val status = messenger.sendMessage(PATH_REQUEST_MESSAGE_FROM_WEAR,
+                    "Message from Android Wear")
+            if (status.isSuccess) {
+                Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
+            } else {
+                Log.d(TAG, "Failed send message(code=${status.statusCode}, msg=${status.statusMessage}) in ${Thread.currentThread().name}")
             }
-        })
+        }
     }
 
     companion object {
