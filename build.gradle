@@ -34,5 +34,5 @@ project.ext {
 
     targetSdkVersion = 26
     versionCode = 7
-    versionName = "2.0.0-beta1"
+    versionName = "2.0.0-beta1-2"
 }
