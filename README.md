@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.droibit:messenger:1.1.2'
+    compile 'com.github.droibit:messenger:2.0.0-beta1'
 }
 ```
 
