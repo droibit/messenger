@@ -34,6 +34,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
 }
 
 // build a jar with source files
