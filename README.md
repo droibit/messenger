@@ -1,6 +1,6 @@
 ## Messenger
 
-![Jitpack.io](https://img.shields.io/github/release/droibit/messenger.svg?label=JitPack) [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/droibit/clippin/blob/master/LICENSE)
+![Jitpack.io](https://jitpack.io/v/droibit/messenger.svg) [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/droibit/clippin/blob/master/LICENSE)
 
 Library for easy use of the Message API of Android. Especially when using multiple paths, it is freed from many of the branch.
 
@@ -8,8 +8,11 @@ Library for easy use of the Message API of Android. Especially when using multip
 Add the following code to your build.gradle.
 
 ```
-repositories {
-    maven { url "https://jitpack.io" }
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
 }
 
 dependencies {
