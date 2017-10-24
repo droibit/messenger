@@ -24,7 +24,7 @@ typealias MessageRejector = ((String?) -> Boolean)
  */
 class Messenger @VisibleForTesting internal constructor(
         private val messageSender: SuspendMessageSender,
-        private val handlers: MutableMap<String, MessageHandler>,
+        private val handlers: Map<String, MessageHandler>,
         private val messageRejector: MessageRejector,
         private val ignoreNodes: Set<String>) : MessageListener {
 
@@ -106,12 +106,13 @@ class Messenger @VisibleForTesting internal constructor(
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
         if (messageRejector.invoke(data)) {
-            handlers[KEY_MESSAGE_REJECTED]?.onMessageReceived(this, data)
+            handlers[KEY_MESSAGE_REJECTED]?.onMessageReceived(
+                    this, messageEvent.sourceNodeId, data)
             return
         }
 
         handlers.getValue(messageEvent.path)
-                .onMessageReceived(this, data)
+                .onMessageReceived(this, messageEvent.sourceNodeId, data)
     }
 
     /**
@@ -136,6 +137,19 @@ class Messenger @VisibleForTesting internal constructor(
                     }
                 }
         return Status(CommonStatusCodes.SUCCESS)
+    }
+
+    /**
+     * Sends payload to path.
+     *
+     * @param nodeId   the nodeID
+     * @param path     specified path
+     * @param data     data to be associated with the path
+     * @return result of send message.
+     */
+    suspend fun sendMessage(nodeId: String, path: String, data: String?): Status {
+        val sendMessageResult = messageSender.sendMessage(nodeId, path, data)
+        return sendMessageResult.status
     }
 
     companion object {

@@ -22,7 +22,7 @@ class ConfirmMessageHandler(
             }
         }
 
-    override fun onMessageReceived(messenger: Messenger, data: String) {
+    override fun onMessageReceived(messenger: Messenger, sourceNodeId: String, data: String) {
         Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
 
         val intent = Intent(activity, ConfirmationActivity::class.java)

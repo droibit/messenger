@@ -9,12 +9,12 @@ class ResponseMessageHandler : MessageHandler {
 
     override val path = PATH_REQUEST_MESSAGE
 
-    override fun onMessageReceived(messenger: Messenger, data: String) {
+    override fun onMessageReceived(messenger: Messenger, sourceNodeId: String, data: String) {
         Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
 
         launch {
-            val status = messenger.sendMessage(PATH_REQUEST_MESSAGE_FROM_WEAR,
-                    "Message from Android Wear")
+            val status = messenger.sendMessage(sourceNodeId, PATH_REQUEST_MESSAGE_FROM_WEAR,
+                    "Yeah!! from Android Wear")
             if (status.isSuccess) {
                 Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
             } else {
