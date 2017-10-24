@@ -12,7 +12,7 @@ import com.google.android.gms.wearable.MessageApi.MessageListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 
-typealias MessageRejector = ((String?) -> Boolean)
+typealias MessageRejector = ((String) -> Boolean)
 
 /**
  * Class for communication between the wear and handheld using the Message API.
