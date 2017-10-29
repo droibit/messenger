@@ -1,15 +1,21 @@
 package com.github.droibit.messenger
 
+import android.content.Context
 import android.support.annotation.VisibleForTesting
+import android.support.annotation.WorkerThread
 import com.github.droibit.messenger.internal.NoneTimeoutSuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.TimeoutSuspendMessageSender
+import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.MessageApi
 import com.google.android.gms.wearable.MessageApi.MessageListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.Wearable
+import java.util.concurrent.TimeUnit
 
 /**
  * Class for communication between the wear and handheld using the Message API.
@@ -20,6 +26,7 @@ import com.google.android.gms.wearable.Node
  * Receiver at the time rejected to register using the [KEY_MESSAGE_REJECTED].
  */
 class Messenger @VisibleForTesting internal constructor(
+        private val googleApiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
         private val handlers: Map<String, MessageHandler>,
         private val ignoreNodes: Set<String>) : MessageListener {
@@ -27,7 +34,7 @@ class Messenger @VisibleForTesting internal constructor(
     /**
      * The utility class that simplifies the registration of receiver.
      */
-    class Builder(private val googleApiClient: GoogleApiClient) {
+    class Builder(internal val googleApiClient: GoogleApiClient) {
 
         internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
 
@@ -39,6 +46,12 @@ class Messenger @VisibleForTesting internal constructor(
         private var connectNodesMillis: Long? = null
 
         private var sendMessageMillis: Long? = null
+
+        constructor(context: Context) : this(
+                GoogleApiClient.Builder(context)
+                        .addApi(Wearable.API)
+                        .build()
+        )
 
         /**
          * Register a new handler.
@@ -83,6 +96,7 @@ class Messenger @VisibleForTesting internal constructor(
     }
 
     private constructor(builder: Builder) : this(
+            googleApiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
             handlers = builder.handlers,
             ignoreNodes = builder.ignoreNodes
@@ -92,6 +106,17 @@ class Messenger @VisibleForTesting internal constructor(
         val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
         handlers.getValue(messageEvent.path)
                 .onMessageReceived(this, messageEvent.sourceNodeId, data)
+    }
+
+    val isConnected: Boolean get() = googleApiClient.isConnected
+
+    @WorkerThread
+    fun blockingConnect(timeoutMillis: Int): ConnectionResult {
+        return googleApiClient.blockingConnect(timeoutMillis.toLong(), TimeUnit.MILLISECONDS)
+    }
+
+    fun disconnect() {
+        googleApiClient.disconnect()
     }
 
     /**
