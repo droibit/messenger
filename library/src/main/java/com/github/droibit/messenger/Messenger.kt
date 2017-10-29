@@ -1,7 +1,6 @@
 package com.github.droibit.messenger
 
 import android.support.annotation.VisibleForTesting
-import com.github.droibit.messenger.Messenger.Companion.KEY_MESSAGE_REJECTED
 import com.github.droibit.messenger.internal.NoneTimeoutSuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.TimeoutSuspendMessageSender
@@ -11,8 +10,6 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.MessageApi.MessageListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
-
-typealias MessageRejector = ((String) -> Boolean)
 
 /**
  * Class for communication between the wear and handheld using the Message API.
@@ -25,15 +22,12 @@ typealias MessageRejector = ((String) -> Boolean)
 class Messenger @VisibleForTesting internal constructor(
         private val messageSender: SuspendMessageSender,
         private val handlers: Map<String, MessageHandler>,
-        private val messageRejector: MessageRejector,
         private val ignoreNodes: Set<String>) : MessageListener {
 
     /**
      * The utility class that simplifies the registration of receiver.
      */
     class Builder(private val googleApiClient: GoogleApiClient) {
-
-        internal var messageRejector: MessageRejector = { false }
 
         internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
 
@@ -51,14 +45,6 @@ class Messenger @VisibleForTesting internal constructor(
          */
         fun register(handler: MessageHandler): Builder {
             return also { it.handlers.put(handler.path, handler) }
-        }
-
-        /**
-         * Set the [MessageRejector]. [MessageRejector] will use in the case of a decision related to the whole.
-         * (e.g. Network is not connected)
-         */
-        fun rejectDecider(messageRejector: MessageRejector): Builder {
-            return also { it.messageRejector = messageRejector }
         }
 
         /**
@@ -99,18 +85,11 @@ class Messenger @VisibleForTesting internal constructor(
     private constructor(builder: Builder) : this(
             messageSender = builder.suspendMessageSender,
             handlers = builder.handlers,
-            messageRejector = builder.messageRejector,
             ignoreNodes = builder.ignoreNodes
     )
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
-        if (messageRejector.invoke(data)) {
-            handlers[KEY_MESSAGE_REJECTED]?.onMessageReceived(
-                    this, messageEvent.sourceNodeId, data)
-            return
-        }
-
         handlers.getValue(messageEvent.path)
                 .onMessageReceived(this, messageEvent.sourceNodeId, data)
     }
@@ -150,14 +129,5 @@ class Messenger @VisibleForTesting internal constructor(
     suspend fun sendMessage(nodeId: String, path: String, data: String?): Status {
         val sendMessageResult = messageSender.sendMessage(nodeId, path, data)
         return sendMessageResult.status
-    }
-
-    companion object {
-
-        /**
-         * The path of the reject receiver
-         */
-        @JvmField
-        val KEY_MESSAGE_REJECTED = "/${BuildConfig.APPLICATION_ID}/rejected"
     }
 }

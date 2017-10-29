@@ -32,7 +32,6 @@ class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {
                 .register(ConfirmMessageHandler(this, PATH_SUCCESS_MESSAGE))
                 .register(ConfirmMessageHandler(this, PATH_ERROR_MESSAGE))
                 .register(ResponseMessageHandler())
-                .rejectDecider { false }
                 .build()
     }
 
