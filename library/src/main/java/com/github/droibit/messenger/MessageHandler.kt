@@ -6,11 +6,6 @@ package com.github.droibit.messenger
 interface MessageHandler {
 
     /**
-     * Get the path of this receiver to receive.
-     */
-    val path: String
-
-    /**
      * Called in the message receive.
      *
      * @param messenger messenger object

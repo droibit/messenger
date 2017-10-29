@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.github.droibit.messenger.MessageHandlerRegistry
 import com.github.droibit.messenger.Messenger
+import com.github.droibit.messenger.sample.WearMessageHandler.Companion.PATH_REQUEST_MESSAGE_FROM_WEAR
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.Wearable
@@ -17,7 +19,10 @@ import kotlinx.coroutines.experimental.launch
 class MainActivity : Activity(), ConnectionCallbacks {
 
     private lateinit var googleApiClient: GoogleApiClient
+
     private lateinit var messenger: Messenger
+
+    private lateinit var handlers: MessageHandlerRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +34,11 @@ class MainActivity : Activity(), ConnectionCallbacks {
                 .build()
 
         messenger = Messenger.Builder(googleApiClient)
-                .register(WearMessageHandler(this))
                 .timeout(5000L, 2500L)
                 .build()
+        handlers = MessageHandlerRegistry(messenger, hashMapOf(
+                PATH_REQUEST_MESSAGE_FROM_WEAR to WearMessageHandler(this)
+        ))
     }
 
     override fun onResume() {
@@ -46,7 +53,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
         super.onPause()
 
         if (googleApiClient.isConnected) {
-            Wearable.MessageApi.removeListener(googleApiClient, messenger)
+            Wearable.MessageApi.removeListener(googleApiClient, handlers)
             googleApiClient.disconnect()
         }
     }
@@ -67,7 +74,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
 
     override fun onConnected(bundle: Bundle?) {
         Log.d(TAG, "#onConnected")
-        Wearable.MessageApi.addListener(googleApiClient, messenger)
+        Wearable.MessageApi.addListener(googleApiClient, handlers)
     }
 
     override fun onConnectionSuspended(i: Int) {}

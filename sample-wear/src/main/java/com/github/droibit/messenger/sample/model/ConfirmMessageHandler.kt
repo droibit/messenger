@@ -11,7 +11,7 @@ import com.github.droibit.messenger.Messenger
 
 class ConfirmMessageHandler(
         private val activity: Activity,
-        override val path: String) : MessageHandler {
+        private val path: String) : MessageHandler {
 
     private val animationType: Int
         get() {
@@ -35,8 +35,8 @@ class ConfirmMessageHandler(
 
     companion object {
 
-        val PATH_ERROR_MESSAGE = "/error_message"
-        val PATH_SUCCESS_MESSAGE = "/success_message"
+        const val PATH_ERROR_MESSAGE = "/error_message"
+        const val PATH_SUCCESS_MESSAGE = "/success_message"
         private val TAG = ConfirmMessageHandler::class.java.simpleName
     }
 }

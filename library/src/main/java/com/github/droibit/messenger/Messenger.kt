@@ -10,8 +10,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.wearable.MessageApi.MessageListener
-import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
 import java.util.concurrent.TimeUnit
@@ -25,17 +23,14 @@ typealias ExcludeNode = (Node) -> Boolean
 class Messenger @VisibleForTesting internal constructor(
         private val googleApiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
-        private val handlers: Map<String, MessageHandler>,
-        private val excludeNodePredicate: (Node) -> Boolean) : MessageListener {
+        private val excludeNode: ExcludeNode) {
 
     /**
      * The utility class that simplifies the registration of receiver.
      */
     class Builder(internal val googleApiClient: GoogleApiClient) {
 
-        internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
-
-        internal var excludeNodePredicate: (Node) -> Boolean = { false }
+        internal var excludeNode: (Node) -> Boolean = { false }
 
         internal val suspendMessageSender: SuspendMessageSender
             get() = newSuspendMessenger(connectNodesMillis, sendMessageMillis)
@@ -49,13 +44,6 @@ class Messenger @VisibleForTesting internal constructor(
                         .addApi(Wearable.API)
                         .build()
         )
-
-        /**
-         * Register a new handler.
-         */
-        fun register(handler: MessageHandler): Builder {
-            return also { it.handlers.put(handler.path, handler) }
-        }
 
         /**
          * Set timeout(ms).
@@ -73,7 +61,7 @@ class Messenger @VisibleForTesting internal constructor(
          * Set predicate to ignore the connected node.
          */
         fun excludeNode(predicate: ExcludeNode): Builder {
-            return also { it.excludeNodePredicate = predicate }
+            return also { it.excludeNode = predicate }
         }
 
         /**
@@ -95,15 +83,8 @@ class Messenger @VisibleForTesting internal constructor(
     private constructor(builder: Builder) : this(
             googleApiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
-            handlers = builder.handlers,
-            excludeNodePredicate = builder.excludeNodePredicate
+            excludeNode = builder.excludeNode
     )
-
-    override fun onMessageReceived(messageEvent: MessageEvent) {
-        val data = messageEvent.data?.toString(charset = Charsets.UTF_8) ?: ""
-        handlers.getValue(messageEvent.path)
-                .onMessageReceived(this, messageEvent.sourceNodeId, data)
-    }
 
     val isConnected: Boolean get() = googleApiClient.isConnected
 
@@ -130,7 +111,7 @@ class Messenger @VisibleForTesting internal constructor(
         }
 
         connectedNodesResult.nodes
-                .filter { !excludeNodePredicate.invoke(it) }
+                .filter { !excludeNode.invoke(it) }
                 .forEach {
                     val sendMessageResult = messageSender.sendMessage(it.id, path, data)
                     if (!sendMessageResult.status.isSuccess) {

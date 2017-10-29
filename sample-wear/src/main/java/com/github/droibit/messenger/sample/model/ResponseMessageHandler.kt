@@ -7,10 +7,8 @@ import kotlinx.coroutines.experimental.launch
 
 class ResponseMessageHandler : MessageHandler {
 
-    override val path = PATH_REQUEST_MESSAGE
-
     override fun onMessageReceived(messenger: Messenger, sourceNodeId: String, data: String) {
-        Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
+        Log.d(TAG, "#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
 
         launch {
             val status = messenger.sendMessage(sourceNodeId, PATH_REQUEST_MESSAGE_FROM_WEAR,
@@ -25,8 +23,8 @@ class ResponseMessageHandler : MessageHandler {
 
     companion object {
 
-        val PATH_REQUEST_MESSAGE = "/request_message"
-        val PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear"
+        const val PATH_REQUEST_MESSAGE = "/request_message"
+        const val PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear"
 
         private val TAG = ResponseMessageHandler::class.java.simpleName
     }

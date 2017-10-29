@@ -2,6 +2,7 @@ package com.github.droibit.messenger
 
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Node
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Rule
 import org.junit.Test
@@ -17,33 +18,13 @@ class MessengerTest {
 
     @Mock
     private lateinit var messageSender: SuspendMessageSender
-
+    
     @Mock
-    private lateinit var handlers: Map<String, MessageHandler>
-
-    @Mock
-    private lateinit var ignoreNodes: Set<String>
+    private lateinit var ignoreNodes: ExcludeNode
 
     @InjectMocks
     private lateinit var messenger: Messenger
 
-    @Test
-    fun callbackMessage() {
-        val event = mock<MessageEvent> {
-            on { path } doReturn "/path"
-            on { sourceNodeId } doReturn "nodeId"
-            on { data } doReturn "data".toByteArray(charset = Charsets.UTF_8)
-        }
-        val handler = mock<MessageHandler>()
-        whenever(handlers[event.path]).thenReturn(handler)
-        messenger.onMessageReceived(event)
-
-        verify(handler).onMessageReceived(
-                same(messenger),
-                eq("nodeId"),
-                eq("data")
-        )
-    }
 
     @Test
     fun failedToGetConnectedNodes() {
