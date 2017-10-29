@@ -10,26 +10,23 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.wearable.MessageApi
 import com.google.android.gms.wearable.MessageApi.MessageListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
 import java.util.concurrent.TimeUnit
 
+typealias ExcludeNode = (Node) -> Boolean
+
 /**
  * Class for communication between the wear and handheld using the Message API.
  * When you register a receiver, it will be automatically called back when the message is received.
- *
- *
- * Whether whether to reject the message, use the [MessageRejector].
- * Receiver at the time rejected to register using the [KEY_MESSAGE_REJECTED].
  */
 class Messenger @VisibleForTesting internal constructor(
         private val googleApiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
         private val handlers: Map<String, MessageHandler>,
-        private val ignoreNodes: Set<String>) : MessageListener {
+        private val excludeNodePredicate: (Node) -> Boolean) : MessageListener {
 
     /**
      * The utility class that simplifies the registration of receiver.
@@ -38,7 +35,7 @@ class Messenger @VisibleForTesting internal constructor(
 
         internal val handlers: MutableMap<String, MessageHandler> = hashMapOf()
 
-        internal var ignoreNodes: Set<String> = hashSetOf()
+        internal var excludeNodePredicate: (Node) -> Boolean = { false }
 
         internal val suspendMessageSender: SuspendMessageSender
             get() = newSuspendMessenger(connectNodesMillis, sendMessageMillis)
@@ -73,10 +70,10 @@ class Messenger @VisibleForTesting internal constructor(
         }
 
         /**
-         * Set display name([Node.getDisplayName]) of the connected node to be ignored.
+         * Set predicate to ignore the connected node.
          */
-        fun ignoreNodes(vararg nodeDisplayNames: String): Builder {
-            return also { it.ignoreNodes = nodeDisplayNames.toSet() }
+        fun excludeNode(predicate: ExcludeNode): Builder {
+            return also { it.excludeNodePredicate = predicate }
         }
 
         /**
@@ -99,7 +96,7 @@ class Messenger @VisibleForTesting internal constructor(
             googleApiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
             handlers = builder.handlers,
-            ignoreNodes = builder.ignoreNodes
+            excludeNodePredicate = builder.excludeNodePredicate
     )
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
@@ -133,7 +130,7 @@ class Messenger @VisibleForTesting internal constructor(
         }
 
         connectedNodesResult.nodes
-                .filter { it.displayName !in ignoreNodes }
+                .filter { !excludeNodePredicate.invoke(it) }
                 .forEach {
                     val sendMessageResult = messageSender.sendMessage(it.id, path, data)
                     if (!sendMessageResult.status.isSuccess) {
