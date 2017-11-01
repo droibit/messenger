@@ -34,7 +34,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
                 .build()
 
         messenger = Messenger.Builder(googleApiClient)
-                .timeout(5000L, 2500L)
+                .sendMessageTimeout(5000L, 2500L)
                 .build()
         handlers = MessageHandlerRegistry(messenger, hashMapOf(
                 PATH_REQUEST_MESSAGE_FROM_WEAR to WearMessageHandler(this)

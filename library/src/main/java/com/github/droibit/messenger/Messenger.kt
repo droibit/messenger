@@ -45,9 +45,9 @@ class Messenger @VisibleForTesting internal constructor(
         )
 
         /**
-         * Set timeout(ms).
+         * Set message sending timeout(ms).
          */
-        fun timeout(connectNodesMillis: Long, sendMessageMillis: Long): Builder {
+        fun sendMessageTimeout(connectNodesMillis: Long, sendMessageMillis: Long): Builder {
             require(connectNodesMillis > 0)
             require(sendMessageMillis > 0)
             return also {
@@ -59,7 +59,7 @@ class Messenger @VisibleForTesting internal constructor(
         /**
          * Set predicate to ignore the connected node.
          */
-        fun excludeNode(predicate: ExcludeNode): Builder {
+        fun excludeConnectedNode(predicate: ExcludeNode): Builder {
             return also { it.excludeNode = predicate }
         }
 
