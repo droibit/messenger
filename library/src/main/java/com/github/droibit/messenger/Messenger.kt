@@ -3,9 +3,8 @@ package com.github.droibit.messenger
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
-import com.github.droibit.messenger.internal.NoneTimeoutSuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSender
-import com.github.droibit.messenger.internal.TimeoutSuspendMessageSender
+import com.github.droibit.messenger.internal.SuspendMessageSenderImpl
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
@@ -33,11 +32,11 @@ class Messenger @VisibleForTesting internal constructor(
         internal var excludeNode: (Node) -> Boolean = { false }
 
         internal val suspendMessageSender: SuspendMessageSender
-            get() = newSuspendMessenger(connectNodesMillis, sendMessageMillis)
+            get() = SuspendMessageSenderImpl(googleApiClient, connectNodesMillis, sendMessageMillis)
 
-        private var connectNodesMillis: Long? = null
+        private var connectNodesMillis = 5000L
 
-        private var sendMessageMillis: Long? = null
+        private var sendMessageMillis = 2500L
 
         constructor(context: Context) : this(
                 GoogleApiClient.Builder(context)
@@ -68,16 +67,6 @@ class Messenger @VisibleForTesting internal constructor(
          * Get a new instance of the Messenger.
          */
         fun build() = Messenger(this)
-
-        // Private
-
-        private fun newSuspendMessenger(connectNodesMillis: Long?, sendMessageMillis: Long?): SuspendMessageSender {
-            return if (connectNodesMillis != null && sendMessageMillis != null) {
-                TimeoutSuspendMessageSender(googleApiClient, connectNodesMillis, sendMessageMillis)
-            } else {
-                NoneTimeoutSuspendMessageSender(googleApiClient)
-            }
-        }
     }
 
     private constructor(builder: Builder) : this(

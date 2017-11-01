@@ -7,7 +7,7 @@ import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import java.util.concurrent.TimeUnit
 
-internal class TimeoutSuspendMessageSender(
+internal class SuspendMessageSenderImpl(
         private val apiClient: GoogleApiClient,
         private val connectNodesTimeoutMillis: Long,
         private val sendMessageTimeoutMillis: Long) : SuspendMessageSender {
