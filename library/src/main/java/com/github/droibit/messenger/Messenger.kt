@@ -3,6 +3,8 @@ package com.github.droibit.messenger
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
+import com.github.droibit.messenger.internal.SuspendDateItemPutter
+import com.github.droibit.messenger.internal.SuspendDateItemPutterImpl
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSenderImpl
 import com.google.android.gms.common.ConnectionResult
@@ -10,6 +12,7 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
 import java.util.concurrent.TimeUnit
 
@@ -22,6 +25,7 @@ typealias ExcludeNode = (Node) -> Boolean
 class Messenger @VisibleForTesting internal constructor(
         private val googleApiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
+        private val dataItemPutter: SuspendDateItemPutter,
         private val excludeNode: ExcludeNode) {
 
     /**
@@ -34,9 +38,15 @@ class Messenger @VisibleForTesting internal constructor(
         internal val suspendMessageSender: SuspendMessageSender
             get() = SuspendMessageSenderImpl(googleApiClient, connectNodesMillis, sendMessageMillis)
 
+        internal val dataItemPutter: SuspendDateItemPutter
+            get() = SuspendDateItemPutterImpl(googleApiClient, putDataItemTimeoutMillis)
+
+        // TODO: Review timeout.
         private var connectNodesMillis = 5000L
 
         private var sendMessageMillis = 2500L
+
+        private var putDataItemTimeoutMillis = 5000L
 
         constructor(context: Context) : this(
                 GoogleApiClient.Builder(context)
@@ -57,6 +67,14 @@ class Messenger @VisibleForTesting internal constructor(
         }
 
         /**
+         * Set data item creating timeout(ms).
+         */
+        fun putDataItemTimeout(timeoutMillis: Long): Builder {
+            require(timeoutMillis > 0)
+            return also { it.putDataItemTimeoutMillis = timeoutMillis }
+        }
+
+        /**
          * Set predicate to ignore the connected node.
          */
         fun excludeConnectedNode(predicate: ExcludeNode): Builder {
@@ -72,6 +90,7 @@ class Messenger @VisibleForTesting internal constructor(
     private constructor(builder: Builder) : this(
             googleApiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
+            dataItemPutter = builder.dataItemPutter,
             excludeNode = builder.excludeNode
     )
 
@@ -121,5 +140,15 @@ class Messenger @VisibleForTesting internal constructor(
     suspend fun sendMessage(nodeId: String, path: String, data: String?): Status {
         val sendMessageResult = messageSender.sendMessage(nodeId, path, data)
         return sendMessageResult.status
+    }
+
+    /**
+     * Create new data item in Android Wear network.
+     *
+     * @param request Request to create a new data item.
+     */
+    suspend fun putDataItem(request: PutDataRequest): Status {
+        val putDataItemResult = dataItemPutter.putDataItem(request)
+        return putDataItemResult.status
     }
 }
