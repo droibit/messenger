@@ -96,6 +96,8 @@ class Messenger @VisibleForTesting internal constructor(
 
     val isConnected: Boolean get() = googleApiClient.isConnected
 
+    val isConnecting: Boolean get() = googleApiClient.isConnecting
+
     @WorkerThread
     fun blockingConnect(timeoutMillis: Int): ConnectionResult {
         return googleApiClient.blockingConnect(timeoutMillis.toLong(), TimeUnit.MILLISECONDS)
