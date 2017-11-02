@@ -114,7 +114,7 @@ class Messenger @VisibleForTesting internal constructor(
      * @param data     data to be associated with the path
      * @return result of send message.
      */
-    suspend fun sendMessage(path: String, data: String?): Status {
+    suspend fun sendMessage(path: String, data: ByteArray?): Status {
         val connectedNodesResult = messageSender.getConnectedNodes()
         if (!connectedNodesResult.status.isSuccess) {
             return connectedNodesResult.status
@@ -134,14 +134,37 @@ class Messenger @VisibleForTesting internal constructor(
     /**
      * Sends payload to path.
      *
+     * @param path     specified path
+     * @param data     data to be associated with the path
+     * @return result of send message.
+     */
+    suspend fun sendMessage(path: String, data: String): Status {
+       return sendMessage(path, data.toByteArray(Charsets.UTF_8))
+    }
+
+    /**
+     * Sends payload to path.
+     *
      * @param nodeId   the nodeID
      * @param path     specified path
      * @param data     data to be associated with the path
      * @return result of send message.
      */
-    suspend fun sendMessage(nodeId: String, path: String, data: String?): Status {
+    suspend fun sendMessage(nodeId: String, path: String, data: ByteArray?): Status {
         val sendMessageResult = messageSender.sendMessage(nodeId, path, data)
         return sendMessageResult.status
+    }
+
+    /**
+     * Sends payload to path.
+     *
+     * @param nodeId   the nodeID
+     * @param path     specified path
+     * @param data     data to be associated with the path
+     * @return result of send message.
+     */
+    suspend fun sendMessage(nodeId: String, path: String, data: String): Status {
+        return sendMessage(nodeId, path, data.toByteArray(Charsets.UTF_8))
     }
 
     /**

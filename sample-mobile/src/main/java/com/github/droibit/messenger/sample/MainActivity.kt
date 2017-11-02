@@ -104,7 +104,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
     private fun sendMessage(path: String, message: String?): Job {
         return launch {
             Log.d(TAG, "sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
-            val status = messenger.sendMessage(path, message)
+            val status = messenger.sendMessage(path, message?.toByteArray())
             if (status.isSuccess) {
                 Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
             } else {

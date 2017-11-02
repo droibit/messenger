@@ -22,9 +22,9 @@ internal class SuspendMessageSenderImpl(
         }
     }
 
-    suspend override fun sendMessage(nodeId: String, path: String, data: String?): MessageApi.SendMessageResult {
+    suspend override fun sendMessage(nodeId: String, path: String, data: ByteArray?): MessageApi.SendMessageResult {
         return suspendCancellableCoroutine { context ->
-            Wearable.MessageApi.sendMessage(apiClient, nodeId, path, data?.toByteArray(charset = Charsets.UTF_8))
+            Wearable.MessageApi.sendMessage(apiClient, nodeId, path, data)
                     .setResultCallback(
                             { context.tryResume(it) },
                             sendMessageTimeoutMillis, TimeUnit.MILLISECONDS

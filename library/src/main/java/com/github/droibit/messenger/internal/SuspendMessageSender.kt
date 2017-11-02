@@ -7,5 +7,5 @@ internal interface SuspendMessageSender {
 
     suspend fun getConnectedNodes(): NodeApi.GetConnectedNodesResult
 
-    suspend fun sendMessage(nodeId: String, path: String, data: String?): MessageApi.SendMessageResult
+    suspend fun sendMessage(nodeId: String, path: String, data: ByteArray?): MessageApi.SendMessageResult
 }
