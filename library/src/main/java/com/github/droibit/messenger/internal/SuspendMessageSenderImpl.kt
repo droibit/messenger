@@ -26,7 +26,7 @@ internal class SuspendMessageSenderImpl(
         return suspendCancellableCoroutine { context ->
             Wearable.MessageApi.sendMessage(apiClient, nodeId, path, data)
                     .setResultCallback(
-                            { context.tryResume(it) },
+                            { context.resume(it) },
                             sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
                     )
         }
