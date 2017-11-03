@@ -16,7 +16,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.droibit:messenger:2.0.0-beta2'
+    compile 'com.github.droibit:messenger:2.0.0-beta3'
 }
 ```
 
