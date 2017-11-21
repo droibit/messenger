@@ -7,6 +7,7 @@ import android.support.wearable.activity.ConfirmationActivity.*
 import android.util.Log
 import com.github.droibit.messenger.MessageHandler
 import com.github.droibit.messenger.Messenger
+import com.google.android.gms.wearable.MessageEvent
 
 
 class ConfirmMessageHandler(
@@ -14,15 +15,14 @@ class ConfirmMessageHandler(
         private val path: String) : MessageHandler {
 
     private val animationType: Int
-        get() {
-            return when (path) {
-                PATH_SUCCESS_MESSAGE -> SUCCESS_ANIMATION
-                PATH_ERROR_MESSAGE -> FAILURE_ANIMATION
-                else -> throw IllegalStateException()
-            }
+        get() = when (path) {
+            PATH_SUCCESS_MESSAGE -> SUCCESS_ANIMATION
+            PATH_ERROR_MESSAGE -> FAILURE_ANIMATION
+            else -> throw IllegalStateException()
         }
 
-    override fun onMessageReceived(messenger: Messenger, sourceNodeId: String, data: String) {
+    override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
+        val data = event.data.toString(Charsets.UTF_8)
         Log.d(TAG, "#onMessageReceived(path=$path, data=$data")
 
         val intent = Intent(activity, ConfirmationActivity::class.java)

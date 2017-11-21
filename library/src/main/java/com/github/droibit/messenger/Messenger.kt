@@ -138,9 +138,8 @@ class Messenger @VisibleForTesting internal constructor(
      * @param data     data to be associated with the path
      * @return result of send message.
      */
-    suspend fun sendMessage(path: String, data: String): Status {
-       return sendMessage(path, data.toByteArray(Charsets.UTF_8))
-    }
+    suspend fun sendMessage(path: String, data: String): Status =
+            sendMessage(path, data.toByteArray(Charsets.UTF_8))
 
     /**
      * Sends payload to path.
@@ -163,9 +162,8 @@ class Messenger @VisibleForTesting internal constructor(
      * @param data     data to be associated with the path
      * @return result of send message.
      */
-    suspend fun sendMessage(nodeId: String, path: String, data: String): Status {
-        return sendMessage(nodeId, path, data.toByteArray(Charsets.UTF_8))
-    }
+    suspend fun sendMessage(nodeId: String, path: String, data: String): Status =
+            sendMessage(nodeId, path, data.toByteArray(Charsets.UTF_8))
 
     /**
      * Create new data item in Android Wear network.

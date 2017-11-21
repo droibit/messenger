@@ -14,9 +14,6 @@ class MessageHandlerRegistry(
     
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val handler = handlers.getValue(messageEvent.path)
-        handler.onMessageReceived(messenger,
-                        messageEvent.sourceNodeId,
-                        messageEvent.data.toString(charset = Charsets.UTF_8)
-        )
+        handler.onMessageReceived(messenger, messageEvent)
     }
 }
