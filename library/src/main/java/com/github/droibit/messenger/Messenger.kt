@@ -41,10 +41,9 @@ class Messenger @VisibleForTesting internal constructor(
         internal val dataItemPutter: SuspendDateItemPutter
             get() = SuspendDateItemPutterImpl(googleApiClient, putDataItemTimeoutMillis)
 
-        // TODO: Review timeout.
         private var connectNodesMillis = 5000L
 
-        private var sendMessageMillis = 2500L
+        private var sendMessageMillis = 5000L
 
         private var putDataItemTimeoutMillis = 5000L
 
