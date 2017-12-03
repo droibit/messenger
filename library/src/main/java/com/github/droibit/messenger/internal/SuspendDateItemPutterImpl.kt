@@ -13,11 +13,16 @@ internal class SuspendDateItemPutterImpl(
 
     suspend override fun putDataItem(request: PutDataRequest): DataItemResult {
         return suspendCancellableCoroutine { context ->
-            Wearable.DataApi.putDataItem(googleApiClient, request)
-                    .setResultCallback(
-                            { context.resume(it) },
-                            putDataItemTimeoutMillis, TimeUnit.MILLISECONDS
-                    )
+            val status = Wearable.DataApi.putDataItem(googleApiClient, request).apply {
+                setResultCallback(
+                        { context.resume(it) },
+                        putDataItemTimeoutMillis, TimeUnit.MILLISECONDS
+                )
+            }
+
+            context.invokeOnCompletion(onCancelling = true) {
+                if (!status.isCanceled) status.cancel()
+            }
         }
     }
 }

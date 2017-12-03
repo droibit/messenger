@@ -14,21 +14,31 @@ internal class SuspendMessageSenderImpl(
 
     suspend override fun getConnectedNodes(): NodeApi.GetConnectedNodesResult {
         return suspendCancellableCoroutine { context ->
-            Wearable.NodeApi.getConnectedNodes(apiClient)
-                    .setResultCallback(
-                            { context.resume(it) },
-                            connectNodesTimeoutMillis, TimeUnit.MILLISECONDS
-                    )
+            val status = Wearable.NodeApi.getConnectedNodes(apiClient).apply {
+                setResultCallback(
+                        { context.resume(it) },
+                        connectNodesTimeoutMillis, TimeUnit.MILLISECONDS
+                )
+            }
+
+            context.invokeOnCompletion(onCancelling = true) {
+                if (!status.isCanceled) status.cancel()
+            }
         }
     }
 
     suspend override fun sendMessage(nodeId: String, path: String, data: ByteArray?): MessageApi.SendMessageResult {
         return suspendCancellableCoroutine { context ->
-            Wearable.MessageApi.sendMessage(apiClient, nodeId, path, data)
-                    .setResultCallback(
-                            { context.resume(it) },
-                            sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
-                    )
+            val status = Wearable.MessageApi.sendMessage(apiClient, nodeId, path, data).apply {
+                setResultCallback(
+                        { context.resume(it) },
+                        sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
+                )
+            }
+
+            context.invokeOnCompletion {
+                if (!status.isCanceled) status.cancel()
+            }
         }
     }
 }
