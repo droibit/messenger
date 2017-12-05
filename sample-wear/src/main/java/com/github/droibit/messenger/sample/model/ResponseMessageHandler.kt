@@ -14,7 +14,7 @@ class ResponseMessageHandler : MessageHandler {
 
         launch {
             val status = messenger.sendMessage(event.sourceNodeId, PATH_REQUEST_MESSAGE_FROM_WEAR,
-                    "Yeah!! from Android Wear")
+                    "Yeah!! from Android Wear".toByteArray())
             if (status.isSuccess) {
                 Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
             } else {

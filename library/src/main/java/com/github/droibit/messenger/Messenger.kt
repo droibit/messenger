@@ -3,6 +3,7 @@ package com.github.droibit.messenger
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
+import com.github.droibit.messenger.internal.MessageHandler
 import com.github.droibit.messenger.internal.SuspendDateItemPutter
 import com.github.droibit.messenger.internal.SuspendDateItemPutterImpl
 import com.github.droibit.messenger.internal.SuspendMessageSender
@@ -11,9 +12,11 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.experimental.TimeoutCancellationException
 import java.util.concurrent.TimeUnit
 
 typealias ExcludeNode = (Node) -> Boolean
@@ -26,6 +29,7 @@ class Messenger @VisibleForTesting internal constructor(
         private val googleApiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
         private val dataItemPutter: SuspendDateItemPutter,
+        private val handlerFactory: MessageHandler.Factory,
         private val excludeNode: ExcludeNode) {
 
     /**
@@ -41,11 +45,16 @@ class Messenger @VisibleForTesting internal constructor(
         internal val dataItemPutter: SuspendDateItemPutter
             get() = SuspendDateItemPutterImpl(googleApiClient, putDataItemTimeoutMillis)
 
-        private var connectNodesMillis = 5000L
+        internal val listenerFactory: MessageHandler.Factory
+            get() = MessageHandler.Factory(waitMessageMillis)
 
-        private var sendMessageMillis = 5000L
+        private var connectNodesMillis = 5_000L
 
-        private var putDataItemTimeoutMillis = 5000L
+        private var sendMessageMillis = 5_000L
+
+        private var waitMessageMillis = 10_000L
+
+        private var putDataItemTimeoutMillis = 5_000L
 
         constructor(context: Context) : this(
                 GoogleApiClient.Builder(context)
@@ -62,6 +71,21 @@ class Messenger @VisibleForTesting internal constructor(
             return also {
                 it.connectNodesMillis = connectNodesMillis
                 it.sendMessageMillis = sendMessageMillis
+            }
+        }
+
+        /**
+         * Set message obtaining timeout(ms).
+         */
+        fun obtainMessageTimeout(connectNodesMillis: Long, sendMessageMillis: Long,
+                waitMessageMillis: Long): Builder {
+            require(connectNodesMillis > 0L)
+            require(sendMessageMillis > 0L)
+            require(waitMessageMillis > 0L)
+            return also {
+                it.connectNodesMillis = connectNodesMillis
+                it.sendMessageMillis = sendMessageMillis
+                it.waitMessageMillis = waitMessageMillis
             }
         }
 
@@ -90,6 +114,7 @@ class Messenger @VisibleForTesting internal constructor(
             googleApiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
             dataItemPutter = builder.dataItemPutter,
+            handlerFactory = builder.listenerFactory,
             excludeNode = builder.excludeNode
     )
 
@@ -107,7 +132,7 @@ class Messenger @VisibleForTesting internal constructor(
     }
 
     /**
-     * Sends payload to path.
+     * Send payload to path.
      *
      * @param path     specified path
      * @param data     data to be associated with the path
@@ -131,38 +156,73 @@ class Messenger @VisibleForTesting internal constructor(
     }
 
     /**
-     * Sends payload to path.
-     *
-     * @param path     specified path
-     * @param data     data to be associated with the path
-     * @return result of send message.
-     */
-    suspend fun sendMessage(path: String, data: String): Status =
-            sendMessage(path, data.toByteArray(Charsets.UTF_8))
-
-    /**
-     * Sends payload to path.
+     * Send payload to path.
      *
      * @param nodeId   the nodeID
      * @param path     specified path
      * @param data     data to be associated with the path
      * @return result of send message.
      */
-    suspend fun sendMessage(nodeId: String, path: String, data: ByteArray?): Status {
-        val sendMessageResult = messageSender.sendMessage(nodeId, path, data)
-        return sendMessageResult.status
+    suspend fun sendMessage(nodeId: String, path: String, data: ByteArray?): Status =
+            messageSender.sendMessage(nodeId, path, data).status
+
+    /**
+     * Send payload to sendPath and obtain response message.
+     *
+     * @param nodeId   the nodeID
+     * @param sendPath     specified sendPath
+     * @param sendData     sendData to be associated with the sendPath
+     * @param expectedPaths Response message sendPath set
+     * @return response message
+     * @throws ObtainMessageException
+     */
+    @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
+    suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
+            expectedPaths: Set<String>): MessageEvent {
+        val handler = handlerFactory.create(expectedPaths)
+        try {
+            val addListenerStatus = messageSender.addListener(handler)
+            if (!addListenerStatus.isSuccess) {
+                throw ObtainMessageException(error = addListenerStatus)
+            }
+
+            val sendMessageResultStatus = sendMessage(nodeId, sendPath, sendData)
+            if (!sendMessageResultStatus.isSuccess) {
+                throw ObtainMessageException(error = sendMessageResultStatus)
+            }
+            return handler.obtain()
+        } finally {
+            messageSender.removeListener(handler)
+        }
     }
 
     /**
-     * Sends payload to path.
+     * Send payload to sendPath and obtain response message.
      *
-     * @param nodeId   the nodeID
-     * @param path     specified path
-     * @param data     data to be associated with the path
-     * @return result of send message.
+     * @param sendPath     specified sendPath
+     * @param sendData     sendData to be associated with the sendPath
+     * @param expectedPaths Response message sendPath set
+     * @return response message
      */
-    suspend fun sendMessage(nodeId: String, path: String, data: String): Status =
-            sendMessage(nodeId, path, data.toByteArray(Charsets.UTF_8))
+    @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
+    suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
+            expectedPaths: Set<String>): MessageEvent {
+        val handler = handlerFactory.create(expectedPaths)
+        try {
+            val addListenerStatus = messageSender.addListener(handler)
+            if (!addListenerStatus.isSuccess) {
+                throw ObtainMessageException(error = addListenerStatus)
+            }
+
+            val sendMessageResultStatus = sendMessage(sendPath, sendData)
+            if (!sendMessageResultStatus.isSuccess) {
+                throw ObtainMessageException(error = sendMessageResultStatus)
+            }
+            return handler.obtain()
+        } finally {
+            messageSender.removeListener(handler)
+        }
+    }
 
     /**
      * Create new data item in Android Wear network.
