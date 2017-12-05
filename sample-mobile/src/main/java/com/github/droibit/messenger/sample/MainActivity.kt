@@ -6,23 +6,21 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.github.droibit.messenger.MessageHandlerRegistry
+import android.widget.Toast
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.sample.WearMessageHandler.Companion.PATH_REQUEST_MESSAGE_FROM_WEAR
+import com.github.droibit.messenger.ObtainMessageException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
-
 
 class MainActivity : Activity(), ConnectionCallbacks {
 
     private lateinit var googleApiClient: GoogleApiClient
 
     private lateinit var messenger: Messenger
-
-    private lateinit var handlers: MessageHandlerRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +32,9 @@ class MainActivity : Activity(), ConnectionCallbacks {
                 .build()
 
         messenger = Messenger.Builder(googleApiClient)
-                .sendMessageTimeout(5000L, 2500L)
+                .obtainMessageTimeout(5_000L, 2_500L, 5_000L)
+                .excludeConnectedNode { !it.isNearby }
                 .build()
-        handlers = MessageHandlerRegistry(messenger, hashMapOf(
-                PATH_REQUEST_MESSAGE_FROM_WEAR to WearMessageHandler(this)
-        ))
     }
 
     override fun onResume() {
@@ -53,7 +49,6 @@ class MainActivity : Activity(), ConnectionCallbacks {
         super.onPause()
 
         if (googleApiClient.isConnected) {
-            Wearable.MessageApi.removeListener(googleApiClient, handlers)
             googleApiClient.disconnect()
         }
     }
@@ -74,7 +69,6 @@ class MainActivity : Activity(), ConnectionCallbacks {
 
     override fun onConnected(bundle: Bundle?) {
         Log.d(TAG, "#onConnected")
-        Wearable.MessageApi.addListener(googleApiClient, handlers)
     }
 
     override fun onConnectionSuspended(i: Int) {}
@@ -96,10 +90,22 @@ class MainActivity : Activity(), ConnectionCallbacks {
     }
 
     fun onSendMessageWithReceiveMessage(v: View) {
-        sendMessage(PATH_REQUEST_MESSAGE, null)
+        launch {
+            try {
+                val event = messenger.obtainMessage(PATH_REQUEST_MESSAGE, null,
+                        setOf(PATH_REQUEST_MESSAGE_FROM_WEAR))
+                runOnUiThread {
+                    val data = event.data.toString(Charsets.UTF_8)
+                    Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is ObtainMessageException, is CancellationException -> Log.e(TAG, "", e)
+                    else -> throw e
+                }
+            }
+        }
     }
-
-    fun onReceiveMessageWithReject(v: View) = Unit
 
     private fun sendMessage(path: String, message: String?): Job {
         return launch {
@@ -108,17 +114,19 @@ class MainActivity : Activity(), ConnectionCallbacks {
             if (status.isSuccess) {
                 Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
             } else {
-                Log.d(TAG, "Failed send message(code=${status.statusCode}, msg=${status.statusMessage}) in ${Thread.currentThread().name}")
+                Log.d(TAG,
+                        "Failed send message(code=${status.statusCode}, msg=${status.statusMessage}) in ${Thread.currentThread().name}")
             }
         }
     }
 
     companion object {
 
-        private val PATH_DEFAULT_MESSAGE = "/message"
-        private val PATH_ERROR_MESSAGE = "/error_message"
-        private val PATH_SUCCESS_MESSAGE = "/success_message"
-        private val PATH_REQUEST_MESSAGE = "/request_message"
+        private const val PATH_DEFAULT_MESSAGE = "/message"
+        private const val PATH_ERROR_MESSAGE = "/error_message"
+        private const val PATH_SUCCESS_MESSAGE = "/success_message"
+        private const val PATH_REQUEST_MESSAGE = "/request_message"
+        private const val PATH_REQUEST_MESSAGE_FROM_WEAR = "/request_message_wear"
 
         private val TAG = MainActivity::class.java.simpleName
     }
