@@ -4,11 +4,12 @@ import android.app.Activity
 import android.util.Log
 import android.widget.Toast
 
-import com.github.droibit.messenger.MessageHandler
+import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
 
-class StandardMessageHandler(private val activity: Activity) : MessageHandler {
+class StandardMessageHandler(private val activity: Activity) :
+        MessageHandler {
 
     override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
         val data = event.data.toString(Charsets.UTF_8)

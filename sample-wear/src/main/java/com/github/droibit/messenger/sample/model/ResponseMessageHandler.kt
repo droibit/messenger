@@ -1,7 +1,7 @@
 package com.github.droibit.messenger.sample.model
 
 import android.util.Log
-import com.github.droibit.messenger.MessageHandler
+import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
 import kotlinx.coroutines.experimental.launch

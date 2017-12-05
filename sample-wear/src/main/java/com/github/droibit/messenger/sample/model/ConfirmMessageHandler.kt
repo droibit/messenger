@@ -5,7 +5,7 @@ import android.content.Intent
 import android.support.wearable.activity.ConfirmationActivity
 import android.support.wearable.activity.ConfirmationActivity.*
 import android.util.Log
-import com.github.droibit.messenger.MessageHandler
+import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
 

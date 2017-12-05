@@ -3,7 +3,7 @@ package com.github.droibit.messenger.sample
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import com.github.droibit.messenger.MessageHandlerRegistry
+import com.github.droibit.messenger.sample.utils.MessageHandlerRegistry
 import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_ERROR_MESSAGE
@@ -36,12 +36,13 @@ class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {
         messenger = Messenger.Builder(googleApiClient)
                 .build()
 
-        handlers = MessageHandlerRegistry(messenger, hashMapOf(
-                PATH_DEFAULT_MESSAGE to StandardMessageHandler(this),
-                PATH_SUCCESS_MESSAGE to ConfirmMessageHandler(this, PATH_SUCCESS_MESSAGE),
-                PATH_ERROR_MESSAGE to ConfirmMessageHandler(this, PATH_ERROR_MESSAGE),
-                PATH_REQUEST_MESSAGE to ResponseMessageHandler()
-        ))
+        handlers = MessageHandlerRegistry(messenger,
+                hashMapOf(
+                        PATH_DEFAULT_MESSAGE to StandardMessageHandler(this),
+                        PATH_SUCCESS_MESSAGE to ConfirmMessageHandler(this, PATH_SUCCESS_MESSAGE),
+                        PATH_ERROR_MESSAGE to ConfirmMessageHandler(this, PATH_ERROR_MESSAGE),
+                        PATH_REQUEST_MESSAGE to ResponseMessageHandler()
+                ))
     }
 
     override fun onResume() {
