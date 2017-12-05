@@ -33,6 +33,6 @@ project.ext {
     buildToolsVersion = "26.0.2"
 
     targetSdkVersion = 26
-    versionCode = 11
-    versionName = "2.0.0-beta3"
+    versionCode = 12
+    versionName = "2.0.0-rc1"
 }
