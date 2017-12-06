@@ -3,7 +3,7 @@
 buildscript {
     ext {
         kotlinVersion = '1.2.0'
-        kotlinxCoroutinesVersion = '0.19.3'
+        kotlinxCoroutinesVersion = '0.20'
         googlePlayServicesVersion = '11.6.0'
         supportVersion = '26.1.0'
     }
