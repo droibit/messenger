@@ -6,6 +6,8 @@ import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withTimeout
 
+internal typealias MessageCallback = ((MessageEvent) -> Unit)
+
 internal class MessageHandler internal constructor(
         private val expectedPaths: Set<String>,
         private val waitMessageMillis: Long,
@@ -15,7 +17,7 @@ internal class MessageHandler internal constructor(
 
         private var messageEvent: MessageEvent? = null
 
-        var callback: ((MessageEvent) -> Unit)? = null
+        var callback: MessageCallback? = null
             set(newCallback) {
                 field = newCallback
                 messageEvent?.let { newCallback?.invoke(it) }
