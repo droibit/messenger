@@ -1,6 +1,7 @@
 package com.github.droibit.messenger
 
 import android.content.Context
+import android.support.annotation.Size
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import com.github.droibit.messenger.internal.MessageHandler
@@ -40,7 +41,12 @@ class Messenger @VisibleForTesting internal constructor(
         internal var excludeNode: (Node) -> Boolean = { false }
 
         internal val suspendMessageSender: SuspendMessageSender
-            get() = SuspendMessageSenderImpl(googleApiClient, connectNodesMillis, sendMessageMillis)
+            get() = SuspendMessageSenderImpl(
+                    googleApiClient,
+                    Wearable.NodeApi,
+                    Wearable.MessageApi,
+                    getConnectNodesMillis, sendMessageMillis
+            )
 
         internal val dataItemPutter: SuspendDateItemPutter
             get() = SuspendDateItemPutterImpl(googleApiClient, putDataItemTimeoutMillis)
@@ -48,7 +54,7 @@ class Messenger @VisibleForTesting internal constructor(
         internal val listenerFactory: MessageHandler.Factory
             get() = MessageHandler.Factory(waitMessageMillis)
 
-        private var connectNodesMillis = 5_000L
+        private var getConnectNodesMillis = 5_000L
 
         private var sendMessageMillis = 5_000L
 
@@ -65,11 +71,11 @@ class Messenger @VisibleForTesting internal constructor(
         /**
          * Set message sending timeout(ms).
          */
-        fun sendMessageTimeout(connectNodesMillis: Long, sendMessageMillis: Long): Builder {
-            require(connectNodesMillis > 0)
+        fun sendMessageTimeout(getConnectNodesMillis: Long, sendMessageMillis: Long): Builder {
+            require(getConnectNodesMillis > 0)
             require(sendMessageMillis > 0)
             return also {
-                it.connectNodesMillis = connectNodesMillis
+                it.getConnectNodesMillis = getConnectNodesMillis
                 it.sendMessageMillis = sendMessageMillis
             }
         }
@@ -77,13 +83,13 @@ class Messenger @VisibleForTesting internal constructor(
         /**
          * Set message obtaining timeout(ms).
          */
-        fun obtainMessageTimeout(connectNodesMillis: Long, sendMessageMillis: Long,
+        fun obtainMessageTimeout(getConnectNodesMillis: Long, sendMessageMillis: Long,
                 waitMessageMillis: Long): Builder {
-            require(connectNodesMillis > 0L)
+            require(getConnectNodesMillis > 0L)
             require(sendMessageMillis > 0L)
             require(waitMessageMillis > 0L)
             return also {
-                it.connectNodesMillis = connectNodesMillis
+                it.getConnectNodesMillis = getConnectNodesMillis
                 it.sendMessageMillis = sendMessageMillis
                 it.waitMessageMillis = waitMessageMillis
             }
@@ -178,7 +184,7 @@ class Messenger @VisibleForTesting internal constructor(
      */
     @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
-            expectedPaths: Set<String>): MessageEvent {
+            @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = handlerFactory.create(expectedPaths)
         try {
             val addListenerStatus = messageSender.addListener(handler)
@@ -206,7 +212,7 @@ class Messenger @VisibleForTesting internal constructor(
      */
     @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
-            expectedPaths: Set<String>): MessageEvent {
+            @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = handlerFactory.create(expectedPaths)
         try {
             val addListenerStatus = messageSender.addListener(handler)
