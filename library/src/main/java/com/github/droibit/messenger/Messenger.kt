@@ -93,24 +93,23 @@ class Messenger @VisibleForTesting internal constructor(
     }
 
     private constructor(builder: Builder) : this(
-            googleApiClient = builder.googleApiClient,
+            apiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
-            dataItemPutter = builder.dataItemPutter,
             handlerFactory = builder.listenerFactory,
             excludeNode = builder.excludeNode
     )
 
-    val isConnected: Boolean get() = googleApiClient.isConnected
+    val isConnected: Boolean get() = apiClient.isConnected
 
-    val isConnecting: Boolean get() = googleApiClient.isConnecting
+    val isConnecting: Boolean get() = apiClient.isConnecting
 
     @WorkerThread
     fun blockingConnect(timeoutMillis: Long): ConnectionResult {
-        return googleApiClient.blockingConnect(timeoutMillis, TimeUnit.MILLISECONDS)
+        return apiClient.blockingConnect(timeoutMillis, TimeUnit.MILLISECONDS)
     }
 
     fun disconnect() {
-        googleApiClient.disconnect()
+        apiClient.disconnect()
     }
 
     /**
@@ -162,8 +161,9 @@ class Messenger @VisibleForTesting internal constructor(
     suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = handlerFactory.create(expectedPaths)
+        var addListenerStatus: Status? = null
         try {
-            val addListenerStatus = messageSender.addListener(handler)
+            addListenerStatus = messageSender.addListener(handler)
             if (!addListenerStatus.isSuccess) {
                 throw ObtainMessageException(error = addListenerStatus)
             }
@@ -174,7 +174,9 @@ class Messenger @VisibleForTesting internal constructor(
             }
             return handler.obtain()
         } finally {
-            messageSender.removeListener(handler)
+            if (addListenerStatus?.isSuccess == true) {
+                messageSender.removeListener(handler)
+            }
         }
     }
 
@@ -190,8 +192,9 @@ class Messenger @VisibleForTesting internal constructor(
     suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = handlerFactory.create(expectedPaths)
+        var addListenerStatus: Status? = null
         try {
-            val addListenerStatus = messageSender.addListener(handler)
+            addListenerStatus = messageSender.addListener(handler)
             if (!addListenerStatus.isSuccess) {
                 throw ObtainMessageException(error = addListenerStatus)
             }
@@ -202,7 +205,9 @@ class Messenger @VisibleForTesting internal constructor(
             }
             return handler.obtain()
         } finally {
-            messageSender.removeListener(handler)
+            if (addListenerStatus?.isSuccess == true) {
+                messageSender.removeListener(handler)
+            }
         }
     }
 }
