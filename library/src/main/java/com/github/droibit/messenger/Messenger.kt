@@ -1,12 +1,9 @@
 package com.github.droibit.messenger
 
-import android.content.Context
 import android.support.annotation.Size
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import com.github.droibit.messenger.internal.MessageHandler
-import com.github.droibit.messenger.internal.SuspendDateItemPutter
-import com.github.droibit.messenger.internal.SuspendDateItemPutterImpl
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSenderImpl
 import com.google.android.gms.common.ConnectionResult
@@ -15,7 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
-import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.experimental.TimeoutCancellationException
 import java.util.concurrent.TimeUnit
@@ -27,9 +23,8 @@ typealias ExcludeNode = (Node) -> Boolean
  * When you register a receiver, it will be automatically called back when the message is received.
  */
 class Messenger @VisibleForTesting internal constructor(
-        private val googleApiClient: GoogleApiClient,
+        private val apiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
-        private val dataItemPutter: SuspendDateItemPutter,
         private val handlerFactory: MessageHandler.Factory,
         private val excludeNode: ExcludeNode) {
 
@@ -48,9 +43,6 @@ class Messenger @VisibleForTesting internal constructor(
                     getConnectNodesMillis, sendMessageMillis
             )
 
-        internal val dataItemPutter: SuspendDateItemPutter
-            get() = SuspendDateItemPutterImpl(googleApiClient, putDataItemTimeoutMillis)
-
         internal val listenerFactory: MessageHandler.Factory
             get() = MessageHandler.Factory(waitMessageMillis)
 
@@ -59,14 +51,6 @@ class Messenger @VisibleForTesting internal constructor(
         private var sendMessageMillis = 5_000L
 
         private var waitMessageMillis = 10_000L
-
-        private var putDataItemTimeoutMillis = 5_000L
-
-        constructor(context: Context) : this(
-                GoogleApiClient.Builder(context)
-                        .addApi(Wearable.API)
-                        .build()
-        )
 
         /**
          * Set message sending timeout(ms).
@@ -93,14 +77,6 @@ class Messenger @VisibleForTesting internal constructor(
                 it.sendMessageMillis = sendMessageMillis
                 it.waitMessageMillis = waitMessageMillis
             }
-        }
-
-        /**
-         * Set data item creating timeout(ms).
-         */
-        fun putDataItemTimeout(timeoutMillis: Long): Builder {
-            require(timeoutMillis > 0)
-            return also { it.putDataItemTimeoutMillis = timeoutMillis }
         }
 
         /**
@@ -228,15 +204,5 @@ class Messenger @VisibleForTesting internal constructor(
         } finally {
             messageSender.removeListener(handler)
         }
-    }
-
-    /**
-     * Create new data item in Android Wear network.
-     *
-     * @param request Request to create a new data item.
-     */
-    suspend fun putDataItem(request: PutDataRequest): Status {
-        val putDataItemResult = dataItemPutter.putDataItem(request)
-        return putDataItemResult.status
     }
 }
