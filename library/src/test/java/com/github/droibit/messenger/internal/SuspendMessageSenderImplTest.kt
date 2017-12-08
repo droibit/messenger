@@ -42,7 +42,7 @@ class SuspendMessageSenderImplTest {
 
     @Rule
     @JvmField
-    val rule = MockitoJUnit.rule()
+    val rule = MockitoJUnit.rule()!!
 
     @Mock
     private lateinit var apiClient: GoogleApiClient
@@ -179,7 +179,7 @@ class SuspendMessageSenderImplTest {
 
     @Test
     fun addListener_cancel() = runBlocking {
-        val expAddListenerResult= mock<PendingStatus> {
+        val expAddListenerResult = mock<PendingStatus> {
             on { isCanceled } doReturn false
         }
         whenever(messageApi.addListener(any(), any())).doReturn(expAddListenerResult)

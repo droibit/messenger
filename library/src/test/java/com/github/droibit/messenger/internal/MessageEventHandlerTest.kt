@@ -22,20 +22,20 @@ import org.junit.Test
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 
-class MessageHandlerTest {
+class MessageEventHandlerTest {
 
     @Rule
     @JvmField
-    val rule = MockitoJUnit.rule()
+    val rule = MockitoJUnit.rule()!!
 
     @Spy
-    private lateinit var dispatcher: MessageHandler.Dispatcher
+    private lateinit var dispatcher: MessageEventHandler.Dispatcher
 
     @Test
     fun onMessageReceived_messageEventIncludeExpectedPath() {
         doNothing().whenever(dispatcher).dispatchMessageEvent(any())
 
-        val handler = MessageHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
+        val handler = MessageEventHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
         val expMessageEvent = mock<MessageEvent> {
             on { path } doReturn "test1"
         }
@@ -48,7 +48,7 @@ class MessageHandlerTest {
     fun onMessageReceived_messageEventNotIncludeExpectedPath() {
         doNothing().whenever(dispatcher).dispatchMessageEvent(any())
 
-        val handler = MessageHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
+        val handler = MessageEventHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
         val expMessageEvent = mock<MessageEvent> {
             on { path } doReturn "test3"
         }
@@ -61,7 +61,7 @@ class MessageHandlerTest {
     fun obtain() = runBlocking<Unit> {
         try {
             val expMessageEvent = mock<MessageEvent>()
-            val messenger = MessageHandler(setOf(), 150L, dispatcher)
+            val messenger = MessageEventHandler(setOf(), 150L, dispatcher)
             launch {
                 delay(100L)
                 dispatcher.dispatchMessageEvent(expMessageEvent)
@@ -76,12 +76,12 @@ class MessageHandlerTest {
     @Test
     fun obtain_timeout() = runBlocking<Unit> {
         try {
-            val messenger = MessageHandler(setOf(), 100L, dispatcher)
+            val messenger = MessageEventHandler(setOf(), 100L, dispatcher)
             messenger.obtain()
             fail("error")
         } catch (e: Exception) {
             assertThat(e).isExactlyInstanceOf(TimeoutCancellationException::class.java)
         }
-        assertThat(dispatcher.callback).isNull()
+        assertThat(dispatcher.continuation).isNull()
     }
 }

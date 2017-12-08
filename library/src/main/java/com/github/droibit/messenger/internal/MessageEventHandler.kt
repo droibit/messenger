@@ -2,13 +2,11 @@ package com.github.droibit.messenger.internal
 
 import com.google.android.gms.wearable.MessageApi
 import com.google.android.gms.wearable.MessageEvent
-import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withTimeout
+import kotlin.coroutines.experimental.Continuation
 
-internal typealias MessageCallback = ((MessageEvent) -> Unit)
-
-internal class MessageHandler internal constructor(
+internal class MessageEventHandler internal constructor(
         private val expectedPaths: Set<String>,
         private val waitMessageMillis: Long,
         private val dispatcher: Dispatcher) : MessageApi.MessageListener {
@@ -17,22 +15,22 @@ internal class MessageHandler internal constructor(
 
         private var messageEvent: MessageEvent? = null
 
-        var callback: MessageCallback? = null
-            set(newCallback) {
-                field = newCallback
-                messageEvent?.let { newCallback?.invoke(it) }
+        var continuation: Continuation<MessageEvent>? = null
+            set(value) {
+                field = value
+                messageEvent?.let { value?.resume(it) }
             }
 
         fun dispatchMessageEvent(messageEvent: MessageEvent) {
             this.messageEvent = messageEvent
-            this.callback?.invoke(messageEvent)
+            this.continuation?.resume(messageEvent)
         }
     }
 
-    class Factory(private val waitMessageMillis: Long) {
+    internal class Factory(private val waitMessageMillis: Long) {
 
-        internal fun create(expectedPaths: Set<String>): MessageHandler {
-            return MessageHandler(expectedPaths, waitMessageMillis, Dispatcher())
+        fun create(expectedPaths: Set<String>): MessageEventHandler {
+            return MessageEventHandler(expectedPaths, waitMessageMillis, Dispatcher())
         }
     }
 
@@ -43,13 +41,12 @@ internal class MessageHandler internal constructor(
         dispatcher.dispatchMessageEvent(messageEvent)
     }
 
-    @Throws(CancellationException::class)
     suspend fun obtain(): MessageEvent {
         return withTimeout(waitMessageMillis) {
-            suspendCancellableCoroutine<MessageEvent> { context ->
-                dispatcher.callback = { context.resume(it) }
-                context.invokeOnCompletion(onCancelling = true) {
-                    dispatcher.callback = null
+            suspendCancellableCoroutine<MessageEvent> { cont ->
+                dispatcher.continuation = cont
+                cont.invokeOnCompletion {
+                    dispatcher.continuation = null
                 }
             }
         }

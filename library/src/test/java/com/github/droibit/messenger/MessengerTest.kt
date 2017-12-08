@@ -2,7 +2,7 @@
 
 package com.github.droibit.messenger
 
-import com.github.droibit.messenger.internal.MessageHandler
+import com.github.droibit.messenger.internal.MessageEventHandler
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -36,7 +36,7 @@ class MessengerTest {
 
     @JvmField
     @Rule
-    val rule = MockitoJUnit.rule()
+    val rule = MockitoJUnit.rule()!!
 
     @Mock
     private lateinit var apiClient: GoogleApiClient
@@ -45,7 +45,7 @@ class MessengerTest {
     private lateinit var messageSender: SuspendMessageSender
 
     @Mock
-    private lateinit var handlerFactory: MessageHandler.Factory
+    private lateinit var eventHandlerFactory: MessageEventHandler.Factory
 
     @Mock
     private lateinit var excludeNode: ExcludeNode
@@ -164,9 +164,9 @@ class MessengerTest {
     @Test
     fun obtainMessage_success() = runBlocking<Unit> {
         val expMessageEvent = mock<MessageEvent>()
-        val expMessageHandler = whenever(mock<MessageHandler>().obtain()).thenReturn(
-                expMessageEvent).getMock() as MessageHandler
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
+                expMessageEvent).getMock() as MessageEventHandler
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
         whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
 
         // FIXME: Can not spy messenger.
@@ -189,7 +189,7 @@ class MessengerTest {
         val actualMessageEvent = messenger.obtainMessage("/path", expData, expPaths)
         assertThat(actualMessageEvent).isSameAs(expMessageEvent)
 
-        verify(handlerFactory).create(same(expPaths))
+        verify(eventHandlerFactory).create(same(expPaths))
         verify(messageSender).addListener(expMessageHandler)
         verify(messageSender).sendMessage(eq("node"), eq("/path"), same(expData))
         verify(messageSender).removeListener(expMessageHandler)
@@ -197,8 +197,8 @@ class MessengerTest {
 
     @Test
     fun obtainMessage_failedToAddListener() = runBlocking<Unit> {
-        val expMessageHandler = mock<MessageHandler>()
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = mock<MessageEventHandler>()
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
 
         val expErrorStatus = Status(CommonStatusCodes.ERROR)
         whenever(messageSender.addListener(any())).thenReturn(expErrorStatus)
@@ -219,9 +219,9 @@ class MessengerTest {
     @Test
     fun obtainMessage_failedToSendMessage() = runBlocking<Unit> {
         val expMessageEvent = mock<MessageEvent>()
-        val expMessageHandler = whenever(mock<MessageHandler>().obtain()).thenReturn(
-                expMessageEvent).getMock() as MessageHandler
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
+                expMessageEvent).getMock() as MessageEventHandler
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
         whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
 
         // FIXME: Can not spy messenger.
@@ -248,9 +248,9 @@ class MessengerTest {
     @Test
     fun obtainMessage_specifyNodeId_success() = runBlocking<Unit> {
         val expMessageEvent = mock<MessageEvent>()
-        val expMessageHandler = whenever(mock<MessageHandler>().obtain()).thenReturn(
-                expMessageEvent).getMock() as MessageHandler
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
+                expMessageEvent).getMock() as MessageEventHandler
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
         whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
 
         // FIXME: Can not spy messenger.
@@ -265,7 +265,7 @@ class MessengerTest {
         val actualMessageEvent = messenger.obtainMessage("node", "/path", expData, expPaths)
         assertThat(actualMessageEvent).isSameAs(expMessageEvent)
 
-        verify(handlerFactory).create(same(expPaths))
+        verify(eventHandlerFactory).create(same(expPaths))
         verify(messageSender).addListener(expMessageHandler)
         verify(messageSender).sendMessage(eq("node"), eq("/path"), same(expData))
         verify(messageSender).removeListener(expMessageHandler)
@@ -273,8 +273,8 @@ class MessengerTest {
 
     @Test
     fun obtainMessage_specifyNodeId_failedToAddListener() = runBlocking<Unit> {
-        val expMessageHandler = mock<MessageHandler>()
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = mock<MessageEventHandler>()
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
 
         val expErrorStatus = Status(CommonStatusCodes.ERROR)
         whenever(messageSender.addListener(any())).thenReturn(expErrorStatus)
@@ -294,8 +294,8 @@ class MessengerTest {
 
     @Test
     fun obtainMessage_specifyNodeId_failedToSendMessage() = runBlocking<Unit> {
-        val expMessageHandler = mock<MessageHandler>()
-        whenever(handlerFactory.create(any())).thenReturn(expMessageHandler)
+        val expMessageHandler = mock<MessageEventHandler>()
+        whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
         whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
 
         // FIXME: Can not spy messenger.

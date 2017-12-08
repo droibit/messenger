@@ -21,15 +21,15 @@ internal class SuspendMessageSenderImpl(
         private val sendMessageTimeoutMillis: Long) : SuspendMessageSender {
 
     suspend override fun getConnectedNodes(): NodeApi.GetConnectedNodesResult {
-        return suspendCancellableCoroutine { context ->
+        return suspendCancellableCoroutine { cont ->
             val getConnectedNodesResult = nodeApi.getConnectedNodes(apiClient).also {
                 it.setResultCallback(
-                        { context.resume(it) },
+                        { cont.resume(it) },
                         getConnectNodesTimeoutMillis, TimeUnit.MILLISECONDS
                 )
             }
 
-            context.invokeOnCompletion(onCancelling = true) {
+            cont.invokeOnCompletion(onCancelling = true) {
                 if (!getConnectedNodesResult.isCanceled) getConnectedNodesResult.cancel()
             }
         }
@@ -37,39 +37,39 @@ internal class SuspendMessageSenderImpl(
 
     suspend override fun sendMessage(nodeId: String, path: String,
             data: ByteArray?): MessageApi.SendMessageResult {
-        return suspendCancellableCoroutine { context ->
+        return suspendCancellableCoroutine { cont ->
             val sendMessageResult = messageApi.sendMessage(apiClient, nodeId, path, data).also {
                 it.setResultCallback(
-                        { context.resume(it) },
+                        { cont.resume(it) },
                         sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
                 )
             }
 
-            context.invokeOnCompletion(onCancelling = true) {
+            cont.invokeOnCompletion(onCancelling = true) {
                 if (!sendMessageResult.isCanceled) sendMessageResult.cancel()
             }
         }
     }
 
     suspend override fun addListener(listener: MessageListener): Status {
-        return suspendCancellableCoroutine { context ->
+        return suspendCancellableCoroutine { cont ->
             val addListenerResult = messageApi.addListener(apiClient, listener).apply {
                 setResultCallback(
-                        { context.resume(it) },
+                        { cont.resume(it) },
                         ADD_LISTENER_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS
                 )
             }
 
-            context.invokeOnCompletion(onCancelling = true) {
+            cont.invokeOnCompletion(onCancelling = true) {
                 if (!addListenerResult.isCanceled) addListenerResult.cancel()
             }
         }
     }
 
     suspend override fun removeListener(listener: MessageListener): Status {
-        return suspendCoroutine { context ->
+        return suspendCoroutine { cont ->
             messageApi.removeListener(apiClient, listener).apply {
-                setResultCallback { context.resume(it) }
+                setResultCallback { cont.resume(it) }
             }
         }
     }

@@ -6,7 +6,7 @@ import android.support.annotation.Size
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import com.github.droibit.messenger.internal.GoogleApiConnectionHandler
-import com.github.droibit.messenger.internal.MessageHandler
+import com.github.droibit.messenger.internal.MessageEventHandler
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSenderImpl
 import com.google.android.gms.common.ConnectionResult
@@ -30,12 +30,12 @@ typealias ExcludeNode = (Node) -> Boolean
 class Messenger @VisibleForTesting internal constructor(
         private val apiClient: GoogleApiClient,
         private val messageSender: SuspendMessageSender,
-        private val handlerFactory: MessageHandler.Factory,
+        private val eventHandlerFactory: MessageEventHandler.Factory,
         private val excludeNode: ExcludeNode) {
 
     /**
      * The utility class that simplifies the registration of receiver.
-     */
+      */
     class Builder(internal val googleApiClient: GoogleApiClient) {
 
         internal var excludeNode: (Node) -> Boolean = { false }
@@ -48,8 +48,8 @@ class Messenger @VisibleForTesting internal constructor(
                     getConnectNodesMillis, sendMessageMillis
             )
 
-        internal val listenerFactory: MessageHandler.Factory
-            get() = MessageHandler.Factory(waitMessageMillis)
+        internal val listenerFactory: MessageEventHandler.Factory
+            get() = MessageEventHandler.Factory(waitMessageMillis)
 
         private var getConnectNodesMillis = 5_000L
 
@@ -106,7 +106,7 @@ class Messenger @VisibleForTesting internal constructor(
     private constructor(builder: Builder) : this(
             apiClient = builder.googleApiClient,
             messageSender = builder.suspendMessageSender,
-            handlerFactory = builder.listenerFactory,
+            eventHandlerFactory = builder.listenerFactory,
             excludeNode = builder.excludeNode
     )
 
@@ -199,7 +199,7 @@ class Messenger @VisibleForTesting internal constructor(
     @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
-        val handler = handlerFactory.create(expectedPaths)
+        val handler = eventHandlerFactory.create(expectedPaths)
         var addListenerStatus: Status? = null
         try {
             addListenerStatus = messageSender.addListener(handler)
@@ -230,7 +230,7 @@ class Messenger @VisibleForTesting internal constructor(
     @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
-        val handler = handlerFactory.create(expectedPaths)
+        val handler = eventHandlerFactory.create(expectedPaths)
         var addListenerStatus: Status? = null
         try {
             addListenerStatus = messageSender.addListener(handler)
