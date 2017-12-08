@@ -1,5 +1,6 @@
 package com.github.droibit.messenger
 
+import android.content.Context
 import android.support.annotation.Size
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
@@ -51,6 +52,12 @@ class Messenger @VisibleForTesting internal constructor(
         private var sendMessageMillis = 5_000L
 
         private var waitMessageMillis = 10_000L
+
+        constructor(context: Context) : this(
+                GoogleApiClient.Builder(context)
+                        .addApi(Wearable.API)
+                        .build()
+        )
 
         /**
          * Set message sending timeout(ms).
