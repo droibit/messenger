@@ -1,9 +1,11 @@
 package com.github.droibit.messenger
 
 import android.content.Context
+import android.os.Bundle
 import android.support.annotation.Size
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
+import com.github.droibit.messenger.internal.GoogleApiConnectionHandler
 import com.github.droibit.messenger.internal.MessageHandler
 import com.github.droibit.messenger.internal.SuspendMessageSender
 import com.github.droibit.messenger.internal.SuspendMessageSenderImpl
@@ -15,6 +17,8 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.experimental.TimeoutCancellationException
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.experimental.withTimeout
 import java.util.concurrent.TimeUnit
 
 typealias ExcludeNode = (Node) -> Boolean
@@ -113,6 +117,34 @@ class Messenger @VisibleForTesting internal constructor(
     @WorkerThread
     fun blockingConnect(timeoutMillis: Long): ConnectionResult {
         return apiClient.blockingConnect(timeoutMillis, TimeUnit.MILLISECONDS)
+    }
+
+    suspend fun connect(timeoutMillis: Long): ConnectionResult {
+        if (apiClient.isConnected) {
+            return ConnectionResult(CommonStatusCodes.SUCCESS)
+        }
+
+        return withTimeout(timeoutMillis) {
+            suspendCancellableCoroutine<ConnectionResult> { cont ->
+                val handler = object : GoogleApiConnectionHandler() {
+                    override fun onConnected(connectionHint: Bundle?)
+                            = cont.resume(ConnectionResult(CommonStatusCodes.SUCCESS))
+
+                    override fun onConnectionFailed(result: ConnectionResult)
+                            = cont.resume(result)
+                }.apply {
+                    apiClient.registerConnectionCallbacks(this)
+                    apiClient.registerConnectionFailedListener(this)
+                }
+                apiClient.connect()
+
+                cont.invokeOnCompletion {
+                    apiClient.unregisterConnectionCallbacks(handler)
+                    apiClient.unregisterConnectionFailedListener(handler)
+                    if (cont.isCancelled) apiClient.disconnect()
+                }
+            }
+        }
     }
 
     fun disconnect() {
