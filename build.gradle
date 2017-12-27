@@ -4,7 +4,7 @@ buildscript {
     ext {
         kotlinVersion = '1.2.10'
         kotlinxCoroutinesVersion = '0.20'
-        googlePlayServicesVersion = '11.6.0'
+        googlePlayServicesVersion = '11.6.2'
         supportVersion = '26.1.0'
     }
     repositories {
