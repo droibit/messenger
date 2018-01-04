@@ -51,7 +51,7 @@ class Messenger @VisibleForTesting internal constructor(
         internal val listenerFactory: MessageEventHandler.Factory
             get() = MessageEventHandler.Factory(waitMessageMillis)
 
-        private var getConnectNodesMillis = 5_000L
+        private var getNodesMillis = 2_500L
 
         private var sendMessageMillis = 5_000L
 
