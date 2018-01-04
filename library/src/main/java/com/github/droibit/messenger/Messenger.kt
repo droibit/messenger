@@ -91,9 +91,9 @@ class Messenger @VisibleForTesting internal constructor(
         }
 
         /**
-         * Set predicate to ignore the connected node.
+         * Set predicate to ignore message sending target node.
          */
-        fun excludeConnectedNode(predicate: ExcludeNode): Builder {
+        fun excludeNode(predicate: ExcludeNode): Builder {
             return also { it.excludeNode = predicate }
         }
 
