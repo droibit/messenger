@@ -34,6 +34,8 @@ class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {
                 .build()
 
         messenger = Messenger.Builder(googleApiClient)
+                .getNodesTimeout(2_000L)
+                .sendMessageTimeout(2_500L)
                 .build()
 
         handlers = MessageHandlerRegistry(messenger,

@@ -68,7 +68,7 @@ class Messenger @VisibleForTesting internal constructor(
         /**
          * Set timeout(ms) for getting message sending target node.
          */
-        fun getNodesMillis(getNodesMillis: Long): Builder {
+        fun getNodesTimeout(getNodesMillis: Long): Builder {
             require(getNodesMillis > 0L)
             return also {
                 it.getNodesMillis = getNodesMillis
