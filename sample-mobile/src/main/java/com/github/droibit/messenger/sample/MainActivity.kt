@@ -11,6 +11,7 @@ import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.MessengerException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
+import com.google.android.gms.wearable.CapabilityApi
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.Job
@@ -103,6 +104,31 @@ class MainActivity : Activity(), ConnectionCallbacks {
                     is MessengerException, is CancellationException -> Log.e(TAG, "", e)
                     else -> throw e
                 }
+            }
+        }
+    }
+
+    fun onSendMessageWithCapability(v: View) {
+        launch {
+            Log.d(TAG, "#onSendMessageWithCapability()")
+            val capabilityInfo = messenger.getCapability("verify_remote_sample_wear_app",
+                    CapabilityApi.FILTER_REACHABLE)
+            Log.d(TAG, "name: ${capabilityInfo.name}, nodes: ${capabilityInfo.nodes.size}")
+
+            val node = capabilityInfo.nodes.firstOrNull { it.isNearby }
+            if (node == null) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Not found node.", Toast.LENGTH_SHORT).show()
+                }
+                return@launch
+            }
+            val sendMessageStatus = messenger.sendMessage(node.id, PATH_DEFAULT_MESSAGE,
+                    "Hello, World with Capability".toByteArray())
+            if (sendMessageStatus.isSuccess) {
+                Log.d(TAG, "Succeed to send message in ${Thread.currentThread().name}.")
+            } else {
+                Log.d(TAG,
+                        "Failed send message(code=${sendMessageStatus.statusCode}, msg=${sendMessageStatus.statusMessage})")
             }
         }
     }

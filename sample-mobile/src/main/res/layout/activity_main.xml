@@ -10,33 +10,39 @@
                 tools:context="com.github.droibit.messenger.sample.MainActivity">
 
     <Button
-        android:text="SEND MESSAGE"
+        android:text="Send Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendMessage" />
 
     <Button
-        android:text="SEND ERROR MESSAGE"
+        android:text="Send Error Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendErrorMessage" />
 
     <Button
-        android:text="SEND ERROR MESSAGE2"
+        android:text="Send Error Message2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendErrorMessage2" />
 
     <Button
-        android:text="SEND SUCCESS MESSAGE"
+        android:text="Send Success Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendSuccessMessage" />
 
     <Button
-        android:text="SEND MESSAGE WITH RECEIVE MESSAGE"
+        android:text="Send Message And Receive Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendMessageWithReceiveMessage" />
+
+    <Button
+        android:text="Send message with Capability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSendMessageWithCapability" />
 
 </LinearLayout>
