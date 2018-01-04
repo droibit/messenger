@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.ObtainMessageException
+import com.github.droibit.messenger.MessengerException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.Wearable
@@ -100,7 +100,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
                 }
             } catch (e: Exception) {
                 when (e) {
-                    is ObtainMessageException, is CancellationException -> Log.e(TAG, "", e)
+                    is MessengerException, is CancellationException -> Log.e(TAG, "", e)
                     else -> throw e
                 }
             }

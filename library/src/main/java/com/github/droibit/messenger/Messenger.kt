@@ -200,9 +200,9 @@ class Messenger @VisibleForTesting internal constructor(
      * @param sendData     sendData to be associated with the sendPath
      * @param expectedPaths Response message sendPath set
      * @return response message
-     * @throws ObtainMessageException
+     * @throws MessengerException
      */
-    @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
+    @Throws(MessengerException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = eventHandlerFactory.create(expectedPaths)
@@ -210,12 +210,12 @@ class Messenger @VisibleForTesting internal constructor(
         try {
             addListenerStatus = messageSender.addListener(handler)
             if (!addListenerStatus.isSuccess) {
-                throw ObtainMessageException(error = addListenerStatus)
+                throw MessengerException(error = addListenerStatus)
             }
 
             val sendMessageResultStatus = sendMessage(nodeId, sendPath, sendData)
             if (!sendMessageResultStatus.isSuccess) {
-                throw ObtainMessageException(error = sendMessageResultStatus)
+                throw MessengerException(error = sendMessageResultStatus)
             }
             return handler.obtain()
         } finally {
@@ -233,7 +233,7 @@ class Messenger @VisibleForTesting internal constructor(
      * @param expectedPaths Response message sendPath set
      * @return response message
      */
-    @Throws(ObtainMessageException::class, TimeoutCancellationException::class)
+    @Throws(MessengerException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
             @Size(min = 1L) expectedPaths: Set<String>): MessageEvent {
         val handler = eventHandlerFactory.create(expectedPaths)
@@ -241,12 +241,12 @@ class Messenger @VisibleForTesting internal constructor(
         try {
             addListenerStatus = messageSender.addListener(handler)
             if (!addListenerStatus.isSuccess) {
-                throw ObtainMessageException(error = addListenerStatus)
+                throw MessengerException(error = addListenerStatus)
             }
 
             val sendMessageResultStatus = sendMessage(sendPath, sendData)
             if (!sendMessageResultStatus.isSuccess) {
-                throw ObtainMessageException(error = sendMessageResultStatus)
+                throw MessengerException(error = sendMessageResultStatus)
             }
             return handler.obtain()
         } finally {

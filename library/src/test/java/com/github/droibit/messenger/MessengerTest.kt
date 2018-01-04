@@ -206,7 +206,7 @@ class MessengerTest {
         try {
             messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
             fail("error!")
-        } catch (e: ObtainMessageException) {
+        } catch (e: MessengerException) {
             assertThat(e.error).isSameAs(expErrorStatus)
         }
 
@@ -236,7 +236,7 @@ class MessengerTest {
         try {
             messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
             fail("error!")
-        } catch (e: ObtainMessageException) {
+        } catch (e: MessengerException) {
             assertThat(e.error).isSameAs(expErrorStatus)
         }
         verify(messageSender).addListener(expMessageHandler)
@@ -282,7 +282,7 @@ class MessengerTest {
         try {
             messenger.obtainMessage("nodeId", "/path", byteArrayOf(), setOf("/path"))
             fail("error!")
-        } catch (e: ObtainMessageException) {
+        } catch (e: MessengerException) {
             assertThat(e.error).isSameAs(expErrorStatus)
         }
 
@@ -310,7 +310,7 @@ class MessengerTest {
         try {
             messenger.obtainMessage("node", "/path", expData, setOf("/path"))
             fail("error!")
-        } catch (e: ObtainMessageException) {
+        } catch (e: MessengerException) {
             assertThat(e.error).isSameAs(expErrorStatus)
         }
 
