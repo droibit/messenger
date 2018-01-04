@@ -3,6 +3,8 @@ package com.github.droibit.messenger.internal
 import android.support.annotation.VisibleForTesting
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.CapabilityApi
+import com.google.android.gms.wearable.CapabilityApi.GetCapabilityResult
 import com.google.android.gms.wearable.MessageApi
 import com.google.android.gms.wearable.MessageApi.MessageListener
 import com.google.android.gms.wearable.NodeApi
@@ -17,7 +19,8 @@ internal class SuspendMessageSenderImpl(
         private val apiClient: GoogleApiClient,
         private val nodeApi: NodeApi,
         private val messageApi: MessageApi,
-        private val getConnectNodesTimeoutMillis: Long,
+        private val capabilityApi: CapabilityApi,
+        private val getNodesTimeoutMillis: Long,
         private val sendMessageTimeoutMillis: Long) : SuspendMessageSender {
 
     suspend override fun getConnectedNodes(): NodeApi.GetConnectedNodesResult {
@@ -25,12 +28,23 @@ internal class SuspendMessageSenderImpl(
             val getConnectedNodesResult = nodeApi.getConnectedNodes(apiClient).also {
                 it.setResultCallback(
                         { cont.resume(it) },
-                        getConnectNodesTimeoutMillis, TimeUnit.MILLISECONDS
+                        getNodesTimeoutMillis, TimeUnit.MILLISECONDS
                 )
             }
 
             cont.invokeOnCompletion(onCancelling = true) {
                 if (!getConnectedNodesResult.isCanceled) getConnectedNodesResult.cancel()
+            }
+        }
+    }
+
+    suspend override fun getCapability(capability: String, nodeFilter: Int): GetCapabilityResult {
+        return suspendCancellableCoroutine { cont ->
+            capabilityApi.getCapability(apiClient, capability, nodeFilter).also {
+                it.setResultCallback(
+                        { cont.resume(it) },
+                        getNodesTimeoutMillis, TimeUnit.MILLISECONDS
+                )
             }
         }
     }

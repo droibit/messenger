@@ -7,6 +7,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.CapabilityApi
 import com.google.android.gms.wearable.MessageApi
 import com.google.android.gms.wearable.MessageApi.SendMessageResult
 import com.google.android.gms.wearable.NodeApi
@@ -53,6 +54,9 @@ class SuspendMessageSenderImplTest {
     @Mock
     private lateinit var messageApi: MessageApi
 
+    @Mock
+    private lateinit var capabilityApi: CapabilityApi
+
     @Suppress("UNCHECKED_CAST")
     @Test
     fun getConnectedNodes() = runBlocking {
@@ -66,7 +70,7 @@ class SuspendMessageSenderImplTest {
             }
             whenever(nodeApi.getConnectedNodes(any())).doReturn(expConnectedNodesResult)
 
-            val sender = newSender(getConnectNodesTimeout = 100L)
+            val sender = newSender(getNodesTimeout = 100L)
             val actualConnectedNodes = sender.getConnectedNodes()
             assertThat(actualConnectedNodes).isSameAs(expConnectedNodes)
 
@@ -86,7 +90,7 @@ class SuspendMessageSenderImplTest {
 
         val job = launch {
             try {
-                val sender = newSender(getConnectNodesTimeout = 100L)
+                val sender = newSender(getNodesTimeout = 100L)
                 sender.getConnectedNodes()
                 fail("error")
             } catch (e: Exception) {
@@ -137,7 +141,7 @@ class SuspendMessageSenderImplTest {
 
         val job = launch {
             try {
-                val sender = newSender(getConnectNodesTimeout = 100L)
+                val sender = newSender(getNodesTimeout = 100L)
                 sender.sendMessage("nodeId", "/path", byteArrayOf())
                 fail("error")
             } catch (e: Exception) {
@@ -225,7 +229,7 @@ class SuspendMessageSenderImplTest {
         }
     }
 
-    private fun newSender(getConnectNodesTimeout: Long = 0L, sendMessageTimeout: Long = 0L)
-            : SuspendMessageSenderImpl = SuspendMessageSenderImpl(apiClient, nodeApi, messageApi,
-            getConnectNodesTimeout, sendMessageTimeout)
+    private fun newSender(getNodesTimeout: Long = 0L, sendMessageTimeout: Long = 0L)
+            : SuspendMessageSenderImpl = SuspendMessageSenderImpl(
+            apiClient, nodeApi, messageApi, capabilityApi, getNodesTimeout, sendMessageTimeout)
 }

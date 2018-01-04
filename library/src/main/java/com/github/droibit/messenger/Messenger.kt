@@ -13,6 +13,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
@@ -201,6 +202,7 @@ class Messenger @VisibleForTesting internal constructor(
      * @param expectedPaths Response message sendPath set
      * @return response message
      * @throws MessengerException
+     * @throws TimeoutCancellationException
      */
     @Throws(MessengerException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(nodeId: String, sendPath: String, sendData: ByteArray?,
@@ -232,6 +234,8 @@ class Messenger @VisibleForTesting internal constructor(
      * @param sendData     sendData to be associated with the sendPath
      * @param expectedPaths Response message sendPath set
      * @return response message
+     * @throws MessengerException
+     * @throws TimeoutCancellationException
      */
     @Throws(MessengerException::class, TimeoutCancellationException::class)
     suspend fun obtainMessage(sendPath: String, sendData: ByteArray?,
@@ -254,5 +258,17 @@ class Messenger @VisibleForTesting internal constructor(
                 messageSender.removeListener(handler)
             }
         }
+    }
+
+    /**
+     * Get nodes with specified capability.
+     */
+    @Throws(MessengerException::class)
+    suspend fun getCapability(capability: String, nodeFilter: Int): CapabilityInfo {
+        val getCapabilityResult = messageSender.getCapability(capability, nodeFilter)
+        if (!getCapabilityResult.status.isSuccess) {
+            throw MessengerException(error = getCapabilityResult.status)
+        }
+        return getCapabilityResult.capability
     }
 }
