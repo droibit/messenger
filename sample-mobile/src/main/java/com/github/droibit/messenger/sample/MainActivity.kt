@@ -32,7 +32,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
                 .build()
 
         messenger = Messenger.Builder(googleApiClient)
-                .obtainMessageTimeout(5_000L, 2_500L, 5_000L)
+                .obtainMessageTimeout(2_500L, 5_000L)
                 .excludeNode { !it.isNearby }
                 .build()
     }

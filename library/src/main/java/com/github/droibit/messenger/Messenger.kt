@@ -45,7 +45,8 @@ class Messenger @VisibleForTesting internal constructor(
                     googleApiClient,
                     Wearable.NodeApi,
                     Wearable.MessageApi,
-                    getConnectNodesMillis, sendMessageMillis
+                    Wearable.CapabilityApi,
+                    getNodesMillis, sendMessageMillis
             )
 
         internal val listenerFactory: MessageEventHandler.Factory
@@ -64,27 +65,32 @@ class Messenger @VisibleForTesting internal constructor(
         )
 
         /**
-         * Set message sending timeout(ms).
+         * Set timeout(ms) for getting message sending target node.
          */
-        fun sendMessageTimeout(getConnectNodesMillis: Long, sendMessageMillis: Long): Builder {
-            require(getConnectNodesMillis > 0)
-            require(sendMessageMillis > 0)
+        fun getNodesMillis(getNodesMillis: Long): Builder {
+            require(getNodesMillis > 0L)
             return also {
-                it.getConnectNodesMillis = getConnectNodesMillis
+                it.getNodesMillis = getNodesMillis
+            }
+        }
+
+        /**
+         * Set timeout(ms) for message sending.
+         */
+        fun sendMessageTimeout(sendMessageMillis: Long): Builder {
+            require(sendMessageMillis > 0L)
+            return also {
                 it.sendMessageMillis = sendMessageMillis
             }
         }
 
         /**
-         * Set message obtaining timeout(ms).
+         * Set timeout for message(ms) obtaining.
          */
-        fun obtainMessageTimeout(getConnectNodesMillis: Long, sendMessageMillis: Long,
-                waitMessageMillis: Long): Builder {
-            require(getConnectNodesMillis > 0L)
+        fun obtainMessageTimeout(sendMessageMillis: Long, waitMessageMillis: Long): Builder {
             require(sendMessageMillis > 0L)
             require(waitMessageMillis > 0L)
             return also {
-                it.getConnectNodesMillis = getConnectNodesMillis
                 it.sendMessageMillis = sendMessageMillis
                 it.waitMessageMillis = waitMessageMillis
             }
