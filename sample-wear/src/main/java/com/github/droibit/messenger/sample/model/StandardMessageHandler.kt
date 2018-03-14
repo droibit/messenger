@@ -1,25 +1,26 @@
 package com.github.droibit.messenger.sample.model
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
-
-import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.github.droibit.messenger.Messenger
+import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.google.android.gms.wearable.MessageEvent
+import timber.log.Timber
 
 class StandardMessageHandler(private val activity: Activity) :
-        MessageHandler {
+    MessageHandler {
 
-    override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
-        val data = event.data.toString(Charsets.UTF_8)
-        Log.d(TAG, "#onMessageReceived(path=$PATH_DEFAULT_MESSAGE, data=$data")
-        activity.runOnUiThread { Toast.makeText(activity, data, Toast.LENGTH_SHORT).show() }
+  override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
+    val data = event.data.toString(Charsets.UTF_8)
+    Timber.d("#onMessageReceived(path=$PATH_DEFAULT_MESSAGE, data=$data")
+    activity.runOnUiThread {
+      Toast.makeText(activity, data, Toast.LENGTH_SHORT)
+          .show()
     }
+  }
 
-    companion object {
+  companion object {
 
-        const val PATH_DEFAULT_MESSAGE = "/message"
-        private val TAG = StandardMessageHandler::class.java.simpleName
-    }
+    const val PATH_DEFAULT_MESSAGE = "/message"
+  }
 }

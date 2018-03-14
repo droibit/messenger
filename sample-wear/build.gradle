@@ -29,11 +29,11 @@ kotlin {
 dependencies {
     compile project(':library')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-    compileOnly "com.google.android.wearable:wearable:2.1.0"
-    implementation 'com.google.android.support:wearable:2.1.0'
+    compileOnly "com.google.android.wearable:wearable:2.2.0"
+    implementation 'com.google.android.support:wearable:2.2.0'
     implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 }
