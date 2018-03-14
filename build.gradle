@@ -6,6 +6,7 @@ buildscript {
         kotlinxCoroutinesVersion = '0.21'
         googlePlayServicesVersion = '11.6.2'
         supportVersion = '26.1.0'
+        timberVersion = '4.6.1'
     }
     repositories {
         google()
