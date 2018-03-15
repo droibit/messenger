@@ -7,13 +7,17 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
+import com.github.droibit.messenger.Messenger2
 import com.github.droibit.messenger.MessengerException
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.CapabilityApi
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
@@ -22,6 +26,8 @@ class MainActivity : Activity(), ConnectionCallbacks {
   private lateinit var googleApiClient: GoogleApiClient
 
   private lateinit var messenger: Messenger
+
+  private lateinit var messenger2: Messenger2
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -35,6 +41,11 @@ class MainActivity : Activity(), ConnectionCallbacks {
     messenger = Messenger.Builder(googleApiClient)
         .getNodesTimeout(2_000L)
         .obtainMessageTimeout(2_500L, 5_000L)
+        .excludeNode { !it.isNearby }
+        .build()
+
+    messenger2 = Messenger2.Builder(this)
+        .getNodesTimeout(2_000L)
         .excludeNode { !it.isNearby }
         .build()
   }
@@ -149,15 +160,17 @@ class MainActivity : Activity(), ConnectionCallbacks {
     path: String,
     message: String?
   ): Job {
-    return launch {
-      Timber.d("sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
-      val status = messenger.sendMessage(path, message?.toByteArray())
-      if (status.isSuccess) {
-        Timber.d("Succeed to send message in ${Thread.currentThread().name}.")
-      } else {
-        Timber.d(
-            "Failed send message(code=${status.statusCode}, msg=${status.statusMessage}) in ${Thread.currentThread().name}"
-        )
+    return launch(UI) {
+      Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
+      try {
+        messenger2.sendMessage(path, message?.toByteArray())
+
+        Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
+            .show()
+      } catch (e: Exception) {
+        Timber.w(e)
+        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
+            .show()
       }
     }
   }

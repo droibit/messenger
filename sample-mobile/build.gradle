@@ -32,6 +32,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxCoroutinesVersion"
     implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 }
