@@ -8,11 +8,14 @@ import com.google.android.gms.wearable.MessageEvent
  */
 interface MessageHandler {
 
-    /**
-     * Called in the message receive.
-     *
-     * @param messenger messenger object
-     * @param event message event
-     */
-    fun onMessageReceived(messenger: Messenger, event: MessageEvent)
+  /**
+   * Called in the message receive.
+   *
+   * @param messenger messenger object
+   * @param event message event
+   */
+  fun onMessageReceived(
+    messenger: Messenger,
+    event: MessageEvent
+  )
 }

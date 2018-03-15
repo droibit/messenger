@@ -14,39 +14,39 @@ import kotlin.coroutines.experimental.Continuation
 
 class DispatcherTest {
 
-    private lateinit var dispatcher: Dispatcher
+  private lateinit var dispatcher: Dispatcher
 
-    @Before
-    fun setUp() {
-        dispatcher = Dispatcher()
-    }
+  @Before
+  fun setUp() {
+    dispatcher = Dispatcher()
+  }
 
-    @Test
-    fun dispatchMessageEvent() {
-        val expContinuation = mock<Continuation<MessageEvent>>()
-        dispatcher.continuation = expContinuation
+  @Test
+  fun dispatchMessageEvent() {
+    val expContinuation = mock<Continuation<MessageEvent>>()
+    dispatcher.continuation = expContinuation
 
-        val expMessageEvent = mock<MessageEvent>()
-        dispatcher.dispatchMessageEvent(expMessageEvent)
+    val expMessageEvent = mock<MessageEvent>()
+    dispatcher.dispatchMessageEvent(expMessageEvent)
 
-        verify(expContinuation).resume(expMessageEvent)
-    }
+    verify(expContinuation).resume(expMessageEvent)
+  }
 
-    @Test
-    fun setCallback_alreadyHasMessageEvent() {
-        val expMessageEvent = mock<MessageEvent>()
-        dispatcher.dispatchMessageEvent(expMessageEvent)
+  @Test
+  fun setCallback_alreadyHasMessageEvent() {
+    val expMessageEvent = mock<MessageEvent>()
+    dispatcher.dispatchMessageEvent(expMessageEvent)
 
-        val expContinuation = mock<Continuation<MessageEvent>>()
-        dispatcher.continuation = expContinuation
-        verify(expContinuation).resume(expMessageEvent)
-    }
+    val expContinuation = mock<Continuation<MessageEvent>>()
+    dispatcher.continuation = expContinuation
+    verify(expContinuation).resume(expMessageEvent)
+  }
 
-    @Test
-    fun setCallback_hasNotMessageEvent() {
-        val expContinuation = mock<Continuation<MessageEvent>>()
-        dispatcher.continuation = expContinuation
+  @Test
+  fun setCallback_hasNotMessageEvent() {
+    val expContinuation = mock<Continuation<MessageEvent>>()
+    dispatcher.continuation = expContinuation
 
-        verify(expContinuation, never()).resume(any())
-    }
+    verify(expContinuation, never()).resume(any())
+  }
 }

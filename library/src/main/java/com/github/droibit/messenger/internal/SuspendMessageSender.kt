@@ -8,13 +8,20 @@ import com.google.android.gms.wearable.NodeApi
 
 internal interface SuspendMessageSender {
 
-    suspend fun getConnectedNodes(): NodeApi.GetConnectedNodesResult
+  suspend fun getConnectedNodes(): NodeApi.GetConnectedNodesResult
 
-    suspend fun getCapability(capability: String, nodeFilter: Int): CapabilityApi.GetCapabilityResult
+  suspend fun getCapability(
+    capability: String,
+    nodeFilter: Int
+  ): CapabilityApi.GetCapabilityResult
 
-    suspend fun sendMessage(nodeId: String, path: String, data: ByteArray?): MessageApi.SendMessageResult
+  suspend fun sendMessage(
+    nodeId: String,
+    path: String,
+    data: ByteArray?
+  ): MessageApi.SendMessageResult
 
-    suspend fun addListener(listener: MessageListener): Status
+  suspend fun addListener(listener: MessageListener): Status
 
-    suspend fun removeListener(listener: MessageListener): Status
+  suspend fun removeListener(listener: MessageListener): Status
 }

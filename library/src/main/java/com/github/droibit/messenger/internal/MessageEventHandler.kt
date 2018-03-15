@@ -7,48 +7,49 @@ import kotlinx.coroutines.experimental.withTimeout
 import kotlin.coroutines.experimental.Continuation
 
 internal class MessageEventHandler internal constructor(
-        private val expectedPaths: Set<String>,
-        private val waitMessageMillis: Long,
-        private val dispatcher: Dispatcher) : MessageApi.MessageListener {
+  private val expectedPaths: Set<String>,
+  private val waitMessageMillis: Long,
+  private val dispatcher: Dispatcher
+) : MessageApi.MessageListener {
 
-    internal class Dispatcher {
+  internal class Dispatcher {
 
-        private var messageEvent: MessageEvent? = null
+    private var messageEvent: MessageEvent? = null
 
-        var continuation: Continuation<MessageEvent>? = null
-            set(value) {
-                field = value
-                messageEvent?.let { value?.resume(it) }
-            }
+    var continuation: Continuation<MessageEvent>? = null
+      set(value) {
+        field = value
+        messageEvent?.let { value?.resume(it) }
+      }
 
-        fun dispatchMessageEvent(messageEvent: MessageEvent) {
-            this.messageEvent = messageEvent
-            this.continuation?.resume(messageEvent)
-        }
+    fun dispatchMessageEvent(messageEvent: MessageEvent) {
+      this.messageEvent = messageEvent
+      this.continuation?.resume(messageEvent)
     }
+  }
 
-    internal class Factory(private val waitMessageMillis: Long) {
+  internal class Factory(private val waitMessageMillis: Long) {
 
-        fun create(expectedPaths: Set<String>): MessageEventHandler {
-            return MessageEventHandler(expectedPaths, waitMessageMillis, Dispatcher())
-        }
+    fun create(expectedPaths: Set<String>): MessageEventHandler {
+      return MessageEventHandler(expectedPaths, waitMessageMillis, Dispatcher())
     }
+  }
 
-    override fun onMessageReceived(messageEvent: MessageEvent) {
-        if (messageEvent.path !in expectedPaths) {
-            return
-        }
-        dispatcher.dispatchMessageEvent(messageEvent)
+  override fun onMessageReceived(messageEvent: MessageEvent) {
+    if (messageEvent.path !in expectedPaths) {
+      return
     }
+    dispatcher.dispatchMessageEvent(messageEvent)
+  }
 
-    suspend fun obtain(): MessageEvent {
-        return withTimeout(waitMessageMillis) {
-            suspendCancellableCoroutine<MessageEvent> { cont ->
-                dispatcher.continuation = cont
-                cont.invokeOnCompletion {
-                    dispatcher.continuation = null
-                }
-            }
+  suspend fun obtain(): MessageEvent {
+    return withTimeout(waitMessageMillis) {
+      suspendCancellableCoroutine<MessageEvent> { cont ->
+        dispatcher.continuation = cont
+        cont.invokeOnCompletion {
+          dispatcher.continuation = null
         }
+      }
     }
+  }
 }

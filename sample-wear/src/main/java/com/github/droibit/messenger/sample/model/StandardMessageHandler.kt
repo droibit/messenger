@@ -10,7 +10,10 @@ import timber.log.Timber
 class StandardMessageHandler(private val activity: Activity) :
     MessageHandler {
 
-  override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
+  override fun onMessageReceived(
+    messenger: Messenger,
+    event: MessageEvent
+  ) {
     val data = event.data.toString(Charsets.UTF_8)
     Timber.d("#onMessageReceived(path=$PATH_DEFAULT_MESSAGE, data=$data")
     activity.runOnUiThread {

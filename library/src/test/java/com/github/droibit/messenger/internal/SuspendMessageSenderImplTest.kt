@@ -41,195 +41,207 @@ private typealias PendingStatus = PendingResult<Status>
 
 class SuspendMessageSenderImplTest {
 
-    @Rule
-    @JvmField
-    val rule = MockitoJUnit.rule()!!
+  @Rule
+  @JvmField
+  val rule = MockitoJUnit.rule()!!
 
-    @Mock
-    private lateinit var apiClient: GoogleApiClient
+  @Mock
+  private lateinit var apiClient: GoogleApiClient
 
-    @Mock
-    private lateinit var nodeApi: NodeApi
+  @Mock
+  private lateinit var nodeApi: NodeApi
 
-    @Mock
-    private lateinit var messageApi: MessageApi
+  @Mock
+  private lateinit var messageApi: MessageApi
 
-    @Mock
-    private lateinit var capabilityApi: CapabilityApi
+  @Mock
+  private lateinit var capabilityApi: CapabilityApi
 
-    @Suppress("UNCHECKED_CAST")
-    @Test
-    fun getConnectedNodes() = runBlocking {
-        try {
-            val expConnectedNodes = mock<GetConnectedNodesResult>()
-            val expConnectedNodesResult = mock<PendingGetConnectedNodesResult> {
-                on { setResultCallback(any(), anyLong(), any()) } doAnswer {
-                    val resultCallback = it.arguments[0] as ResultCallback<GetConnectedNodesResult>
-                    resultCallback.onResult(expConnectedNodes)
-                }
-            }
-            whenever(nodeApi.getConnectedNodes(any())).doReturn(expConnectedNodesResult)
-
-            val sender = newSender(getNodesTimeout = 100L)
-            val actualConnectedNodes = sender.getConnectedNodes()
-            assertThat(actualConnectedNodes).isSameAs(expConnectedNodes)
-
-            verify(expConnectedNodesResult).setResultCallback(any(), eq(100L),
-                    eq(TimeUnit.MILLISECONDS))
-        } catch (e: CancellationException) {
-            fail(e.message)
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getConnectedNodes() = runBlocking {
+    try {
+      val expConnectedNodes = mock<GetConnectedNodesResult>()
+      val expConnectedNodesResult = mock<PendingGetConnectedNodesResult> {
+        on { setResultCallback(any(), anyLong(), any()) } doAnswer {
+          val resultCallback = it.arguments[0] as ResultCallback<GetConnectedNodesResult>
+          resultCallback.onResult(expConnectedNodes)
         }
+      }
+      whenever(nodeApi.getConnectedNodes(any())).doReturn(expConnectedNodesResult)
+
+      val sender = newSender(getNodesTimeout = 100L)
+      val actualConnectedNodes = sender.getConnectedNodes()
+      assertThat(actualConnectedNodes).isSameAs(expConnectedNodes)
+
+      verify(expConnectedNodesResult).setResultCallback(
+          any(), eq(100L),
+          eq(TimeUnit.MILLISECONDS)
+      )
+    } catch (e: CancellationException) {
+      fail(e.message)
+    }
+  }
+
+  @Test
+  fun getConnectedNodes_cancel() = runBlocking {
+    val expConnectedNodesResult = mock<PendingGetConnectedNodesResult> {
+      on { isCanceled } doReturn false
+    }
+    whenever(nodeApi.getConnectedNodes(any())).doReturn(expConnectedNodesResult)
+
+    val job = launch {
+      try {
+        val sender = newSender(getNodesTimeout = 100L)
+        sender.getConnectedNodes()
+        fail("error")
+      } catch (e: Exception) {
+        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+      }
     }
 
-    @Test
-    fun getConnectedNodes_cancel() = runBlocking {
-        val expConnectedNodesResult = mock<PendingGetConnectedNodesResult> {
-            on { isCanceled } doReturn false
+    delay(50L)
+    job.cancel()
+
+    verify(expConnectedNodesResult).cancel()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun sendMessage() = runBlocking {
+    try {
+      val expSendMessage = mock<SendMessageResult>()
+      val expSendMessageResult = mock<PendingSendMessageResult> {
+        on { setResultCallback(any(), anyLong(), any()) } doAnswer {
+          val resultCallback = it.arguments[0] as ResultCallback<SendMessageResult>
+          resultCallback.onResult(expSendMessage)
         }
-        whenever(nodeApi.getConnectedNodes(any())).doReturn(expConnectedNodesResult)
+      }
+      whenever(messageApi.sendMessage(any(), anyString(), anyString(), anyVararg())).doReturn(
+          expSendMessageResult
+      )
 
-        val job = launch {
-            try {
-                val sender = newSender(getNodesTimeout = 100L)
-                sender.getConnectedNodes()
-                fail("error")
-            } catch (e: Exception) {
-                assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
-            }
-        }
+      val sender = newSender(sendMessageTimeout = 100L)
+      val expData = byteArrayOf()
+      val actualSendMessage = sender.sendMessage("nodeId", "/path", expData)
+      assertThat(actualSendMessage).isSameAs(expSendMessage)
 
-        delay(50L)
-        job.cancel()
+      verify(messageApi).sendMessage(any(), eq("nodeId"), eq("/path"), same(expData))
+      verify(expSendMessageResult).setResultCallback(
+          any(), eq(100L),
+          eq(TimeUnit.MILLISECONDS)
+      )
+    } catch (e: CancellationException) {
+      fail(e.message)
+    }
+  }
 
-        verify(expConnectedNodesResult).cancel()
+  @Test
+  fun sendMessage_cancel() = runBlocking {
+    val expSendMessageResult = mock<PendingSendMessageResult> {
+      on { isCanceled } doReturn false
+    }
+    whenever(messageApi.sendMessage(any(), anyString(), anyString(), anyVararg())).doReturn(
+        expSendMessageResult
+    )
+
+    val job = launch {
+      try {
+        val sender = newSender(getNodesTimeout = 100L)
+        sender.sendMessage("nodeId", "/path", byteArrayOf())
+        fail("error")
+      } catch (e: Exception) {
+        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+      }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    @Test
-    fun sendMessage() = runBlocking {
-        try {
-            val expSendMessage = mock<SendMessageResult>()
-            val expSendMessageResult = mock<PendingSendMessageResult> {
-                on { setResultCallback(any(), anyLong(), any()) } doAnswer {
-                    val resultCallback = it.arguments[0] as ResultCallback<SendMessageResult>
-                    resultCallback.onResult(expSendMessage)
-                }
-            }
-            whenever(messageApi.sendMessage(any(), anyString(), anyString(), anyVararg())).doReturn(
-                    expSendMessageResult)
+    delay(50L)
+    job.cancel()
 
-            val sender = newSender(sendMessageTimeout = 100L)
-            val expData = byteArrayOf()
-            val actualSendMessage = sender.sendMessage("nodeId", "/path", expData)
-            assertThat(actualSendMessage).isSameAs(expSendMessage)
+    verify(expSendMessageResult).cancel()
+  }
 
-            verify(messageApi).sendMessage(any(), eq("nodeId"), eq("/path"), same(expData))
-            verify(expSendMessageResult).setResultCallback(any(), eq(100L),
-                    eq(TimeUnit.MILLISECONDS))
-        } catch (e: CancellationException) {
-            fail(e.message)
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun addListener() = runBlocking {
+    try {
+      val expAddListener = Status(CommonStatusCodes.SUCCESS)
+      val expAddListenerResult = mock<PendingStatus> {
+        on { setResultCallback(any(), anyLong(), any()) } doAnswer {
+          val resultCallback = it.arguments[0] as ResultCallback<Status>
+          resultCallback.onResult(expAddListener)
         }
+      }
+      whenever(messageApi.addListener(any(), any())).doReturn(expAddListenerResult)
+
+      val expMessageListener = mock<MessageApi.MessageListener>()
+      val sender = newSender()
+      val actualAddListener = sender.addListener(expMessageListener)
+      assertThat(actualAddListener).isSameAs(expAddListener)
+
+      verify(messageApi).addListener(any(), same(expMessageListener))
+      verify(expAddListenerResult).setResultCallback(
+          any(), eq(ADD_LISTENER_TIMEOUT_MILLIS),
+          eq(TimeUnit.MILLISECONDS)
+      )
+    } catch (e: CancellationException) {
+      fail(e.message)
+    }
+  }
+
+  @Test
+  fun addListener_cancel() = runBlocking {
+    val expAddListenerResult = mock<PendingStatus> {
+      on { isCanceled } doReturn false
+    }
+    whenever(messageApi.addListener(any(), any())).doReturn(expAddListenerResult)
+
+    val job = launch {
+      try {
+        val sender = newSender()
+        sender.addListener(mock())
+        fail("error")
+      } catch (e: Exception) {
+        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+      }
     }
 
-    @Test
-    fun sendMessage_cancel() = runBlocking {
-        val expSendMessageResult = mock<PendingSendMessageResult> {
-            on { isCanceled } doReturn false
+    delay(50L)
+    job.cancel()
+
+    verify(expAddListenerResult).cancel()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun removeListener() = runBlocking {
+    try {
+      val expRemoveListener = Status(CommonStatusCodes.SUCCESS)
+      val expRemoveListenerResult = mock<PendingStatus> {
+        on { setResultCallback(any()) } doAnswer {
+          val resultCallback = it.arguments[0] as ResultCallback<Status>
+          resultCallback.onResult(expRemoveListener)
         }
-        whenever(messageApi.sendMessage(any(), anyString(), anyString(), anyVararg())).doReturn(
-                expSendMessageResult)
+      }
+      whenever(messageApi.removeListener(any(), any())).doReturn(expRemoveListenerResult)
 
-        val job = launch {
-            try {
-                val sender = newSender(getNodesTimeout = 100L)
-                sender.sendMessage("nodeId", "/path", byteArrayOf())
-                fail("error")
-            } catch (e: Exception) {
-                assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
-            }
-        }
+      val expMessageListener = mock<MessageApi.MessageListener>()
+      val sender = newSender()
+      val actualRemoveListener = sender.removeListener(expMessageListener)
+      assertThat(actualRemoveListener).isSameAs(expRemoveListener)
 
-        delay(50L)
-        job.cancel()
-
-        verify(expSendMessageResult).cancel()
+      verify(messageApi).removeListener(any(), same(expMessageListener))
+      verify(expRemoveListenerResult).setResultCallback(any())
+    } catch (e: CancellationException) {
+      fail(e.message)
     }
+  }
 
-    @Suppress("UNCHECKED_CAST")
-    @Test
-    fun addListener() = runBlocking {
-        try {
-            val expAddListener = Status(CommonStatusCodes.SUCCESS)
-            val expAddListenerResult = mock<PendingStatus> {
-                on { setResultCallback(any(), anyLong(), any()) } doAnswer {
-                    val resultCallback = it.arguments[0] as ResultCallback<Status>
-                    resultCallback.onResult(expAddListener)
-                }
-            }
-            whenever(messageApi.addListener(any(), any())).doReturn(expAddListenerResult)
-
-            val expMessageListener = mock<MessageApi.MessageListener>()
-            val sender = newSender()
-            val actualAddListener = sender.addListener(expMessageListener)
-            assertThat(actualAddListener).isSameAs(expAddListener)
-
-            verify(messageApi).addListener(any(), same(expMessageListener))
-            verify(expAddListenerResult).setResultCallback(any(), eq(ADD_LISTENER_TIMEOUT_MILLIS),
-                    eq(TimeUnit.MILLISECONDS))
-        } catch (e: CancellationException) {
-            fail(e.message)
-        }
-    }
-
-    @Test
-    fun addListener_cancel() = runBlocking {
-        val expAddListenerResult = mock<PendingStatus> {
-            on { isCanceled } doReturn false
-        }
-        whenever(messageApi.addListener(any(), any())).doReturn(expAddListenerResult)
-
-        val job = launch {
-            try {
-                val sender = newSender()
-                sender.addListener(mock())
-                fail("error")
-            } catch (e: Exception) {
-                assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
-            }
-        }
-
-        delay(50L)
-        job.cancel()
-
-        verify(expAddListenerResult).cancel()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @Test
-    fun removeListener() = runBlocking {
-        try {
-            val expRemoveListener = Status(CommonStatusCodes.SUCCESS)
-            val expRemoveListenerResult = mock<PendingStatus> {
-                on { setResultCallback(any()) } doAnswer {
-                    val resultCallback = it.arguments[0] as ResultCallback<Status>
-                    resultCallback.onResult(expRemoveListener)
-                }
-            }
-            whenever(messageApi.removeListener(any(), any())).doReturn(expRemoveListenerResult)
-
-            val expMessageListener = mock<MessageApi.MessageListener>()
-            val sender = newSender()
-            val actualRemoveListener = sender.removeListener(expMessageListener)
-            assertThat(actualRemoveListener).isSameAs(expRemoveListener)
-
-            verify(messageApi).removeListener(any(), same(expMessageListener))
-            verify(expRemoveListenerResult).setResultCallback(any())
-        } catch (e: CancellationException) {
-            fail(e.message)
-        }
-    }
-
-    private fun newSender(getNodesTimeout: Long = 0L, sendMessageTimeout: Long = 0L)
-            : SuspendMessageSenderImpl = SuspendMessageSenderImpl(
-            apiClient, nodeApi, messageApi, capabilityApi, getNodesTimeout, sendMessageTimeout)
+  private fun newSender(
+    getNodesTimeout: Long = 0L,
+    sendMessageTimeout: Long = 0L
+  )
+      : SuspendMessageSenderImpl = SuspendMessageSenderImpl(
+      apiClient, nodeApi, messageApi, capabilityApi, getNodesTimeout, sendMessageTimeout
+  )
 }

@@ -16,75 +16,87 @@ import kotlin.coroutines.experimental.suspendCoroutine
 internal const val ADD_LISTENER_TIMEOUT_MILLIS = 1_000L
 
 internal class SuspendMessageSenderImpl(
-        private val apiClient: GoogleApiClient,
-        private val nodeApi: NodeApi,
-        private val messageApi: MessageApi,
-        private val capabilityApi: CapabilityApi,
-        private val getNodesTimeoutMillis: Long,
-        private val sendMessageTimeoutMillis: Long) : SuspendMessageSender {
+  private val apiClient: GoogleApiClient,
+  private val nodeApi: NodeApi,
+  private val messageApi: MessageApi,
+  private val capabilityApi: CapabilityApi,
+  private val getNodesTimeoutMillis: Long,
+  private val sendMessageTimeoutMillis: Long
+) : SuspendMessageSender {
 
-    suspend override fun getConnectedNodes(): NodeApi.GetConnectedNodesResult {
-        return suspendCancellableCoroutine { cont ->
-            val getConnectedNodesResult = nodeApi.getConnectedNodes(apiClient).also {
-                it.setResultCallback(
-                        { cont.resume(it) },
-                        getNodesTimeoutMillis, TimeUnit.MILLISECONDS
-                )
-            }
+  override suspend fun getConnectedNodes(): NodeApi.GetConnectedNodesResult {
+    return suspendCancellableCoroutine { cont ->
+      val getConnectedNodesResult = nodeApi.getConnectedNodes(apiClient)
+          .also {
+            it.setResultCallback(
+                { cont.resume(it) },
+                getNodesTimeoutMillis, TimeUnit.MILLISECONDS
+            )
+          }
 
-            cont.invokeOnCompletion(onCancelling = true) {
-                if (!getConnectedNodesResult.isCanceled) getConnectedNodesResult.cancel()
-            }
-        }
+      cont.invokeOnCompletion(onCancelling = true) {
+        if (!getConnectedNodesResult.isCanceled) getConnectedNodesResult.cancel()
+      }
     }
+  }
 
-    suspend override fun getCapability(capability: String, nodeFilter: Int): GetCapabilityResult {
-        return suspendCancellableCoroutine { cont ->
-            capabilityApi.getCapability(apiClient, capability, nodeFilter).also {
-                it.setResultCallback(
-                        { cont.resume(it) },
-                        getNodesTimeoutMillis, TimeUnit.MILLISECONDS
-                )
-            }
-        }
+  override suspend fun getCapability(
+    capability: String,
+    nodeFilter: Int
+  ): GetCapabilityResult {
+    return suspendCancellableCoroutine { cont ->
+      capabilityApi.getCapability(apiClient, capability, nodeFilter)
+          .also {
+            it.setResultCallback(
+                { cont.resume(it) },
+                getNodesTimeoutMillis, TimeUnit.MILLISECONDS
+            )
+          }
     }
+  }
 
-    suspend override fun sendMessage(nodeId: String, path: String,
-            data: ByteArray?): MessageApi.SendMessageResult {
-        return suspendCancellableCoroutine { cont ->
-            val sendMessageResult = messageApi.sendMessage(apiClient, nodeId, path, data).also {
-                it.setResultCallback(
-                        { cont.resume(it) },
-                        sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
-                )
-            }
+  override suspend fun sendMessage(
+    nodeId: String,
+    path: String,
+    data: ByteArray?
+  ): MessageApi.SendMessageResult {
+    return suspendCancellableCoroutine { cont ->
+      val sendMessageResult = messageApi.sendMessage(apiClient, nodeId, path, data)
+          .also {
+            it.setResultCallback(
+                { cont.resume(it) },
+                sendMessageTimeoutMillis, TimeUnit.MILLISECONDS
+            )
+          }
 
-            cont.invokeOnCompletion(onCancelling = true) {
-                if (!sendMessageResult.isCanceled) sendMessageResult.cancel()
-            }
-        }
+      cont.invokeOnCompletion(onCancelling = true) {
+        if (!sendMessageResult.isCanceled) sendMessageResult.cancel()
+      }
     }
+  }
 
-    suspend override fun addListener(listener: MessageListener): Status {
-        return suspendCancellableCoroutine { cont ->
-            val addListenerResult = messageApi.addListener(apiClient, listener).apply {
-                setResultCallback(
-                        { cont.resume(it) },
-                        ADD_LISTENER_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS
-                )
-            }
+  override suspend fun addListener(listener: MessageListener): Status {
+    return suspendCancellableCoroutine { cont ->
+      val addListenerResult = messageApi.addListener(apiClient, listener)
+          .apply {
+            setResultCallback(
+                { cont.resume(it) },
+                ADD_LISTENER_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS
+            )
+          }
 
-            cont.invokeOnCompletion(onCancelling = true) {
-                if (!addListenerResult.isCanceled) addListenerResult.cancel()
-            }
-        }
+      cont.invokeOnCompletion(onCancelling = true) {
+        if (!addListenerResult.isCanceled) addListenerResult.cancel()
+      }
     }
+  }
 
-    suspend override fun removeListener(listener: MessageListener): Status {
-        return suspendCoroutine { cont ->
-            messageApi.removeListener(apiClient, listener).apply {
-                setResultCallback { cont.resume(it) }
-            }
-        }
+  override suspend fun removeListener(listener: MessageListener): Status {
+    return suspendCoroutine { cont ->
+      messageApi.removeListener(apiClient, listener)
+          .apply {
+            setResultCallback { cont.resume(it) }
+          }
     }
+  }
 }

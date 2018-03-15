@@ -24,7 +24,10 @@ class ConfirmMessageHandler(
       else -> throw IllegalStateException()
     }
 
-  override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
+  override fun onMessageReceived(
+    messenger: Messenger,
+    event: MessageEvent
+  ) {
     val data = event.data.toString(Charsets.UTF_8)
     Timber.d("#onMessageReceived(path=$path, data=$data")
 

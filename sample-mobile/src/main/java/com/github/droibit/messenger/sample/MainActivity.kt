@@ -145,7 +145,10 @@ class MainActivity : Activity(), ConnectionCallbacks {
     }
   }
 
-  private fun sendMessage(path: String, message: String?): Job {
+  private fun sendMessage(
+    path: String,
+    message: String?
+  ): Job {
     return launch {
       Timber.d("sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
       val status = messenger.sendMessage(path, message?.toByteArray())

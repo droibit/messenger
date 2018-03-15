@@ -8,7 +8,10 @@ import timber.log.Timber
 
 class ResponseMessageHandler : MessageHandler {
 
-  override fun onMessageReceived(messenger: Messenger, event: MessageEvent) {
+  override fun onMessageReceived(
+    messenger: Messenger,
+    event: MessageEvent
+  ) {
     val data = event.data.toString(Charsets.UTF_8)
     Timber.d("#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
 
