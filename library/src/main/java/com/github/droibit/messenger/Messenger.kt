@@ -134,6 +134,19 @@ class Messenger @VisibleForTesting internal constructor(
     nodeFilter: Int
   ) = client.getCapability(capability, nodeFilter)
 
+  /**
+   * Gets a list of nodes to which this device is currently connected,
+   * either directly or indirectly via a directly connected node.
+   */
+  @Throws(ApiException::class, CancellationException::class)
+  suspend fun getConnectedNodes(useExcludeNode: Boolean = false): List<Node> {
+    val connectedNodes = client.getConnectedNodes()
+    if (useExcludeNode) {
+      return connectedNodes.filter { !excludeNode.invoke(it) }
+    }
+    return connectedNodes
+  }
+
   class Builder(internal val context: Context) {
 
     internal var excludeNode: (Node) -> Boolean = { false }
@@ -142,7 +155,7 @@ class Messenger @VisibleForTesting internal constructor(
 
     internal var sendMessageMillis = 5_000L
 
-    internal var waitMessageMillis = 10_000L
+    private var waitMessageMillis = 10_000L
 
     internal val listenerFactory: MessageEventHandler.Factory
       get() = MessageEventHandler.Factory(waitMessageMillis)

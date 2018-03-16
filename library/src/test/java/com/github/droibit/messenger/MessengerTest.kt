@@ -236,4 +236,46 @@ class MessengerTest {
 
     messenger.getCapability("test", CapabilityClient.FILTER_REACHABLE)
   }
+
+  @Test
+  fun getConnectedNodes_excludeNode() = runBlocking<Unit> {
+    whenever(excludeNode.invoke(any()))
+        .thenReturn(true)
+        .thenReturn(false)
+
+    val node1 = mock<Node>()
+    val node2 = mock<Node>()
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
+
+    val actualConnectedNodes = messenger.getConnectedNodes(useExcludeNode = true)
+    assertThat(actualConnectedNodes).containsExactly(node2)
+  }
+
+  @Test
+  fun getConnectedNodes_allNodes() = runBlocking<Unit> {
+    whenever(excludeNode.invoke(any())).thenReturn(true)
+
+    val node1 = mock<Node>()
+    val node2 = mock<Node>()
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
+
+    val actualConnectedNodes = messenger.getConnectedNodes(useExcludeNode = false)
+    assertThat(actualConnectedNodes).containsExactlyInAnyOrder(node1, node2)
+  }
+
+  @Test(expected = ApiException::class)
+  fun getConnectedNodes_error() = runBlocking<Unit> {
+    whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
+
+    messenger.getConnectedNodes()
+    fail("error")
+  }
+
+  @Test(expected = CancellationException::class)
+  fun getConnectedNodes_cancel() = runBlocking<Unit> {
+    whenever(wearableClient.getConnectedNodes()).thenThrow(CancellationException::class.java)
+
+    messenger.getConnectedNodes()
+    fail("error")
+  }
 }

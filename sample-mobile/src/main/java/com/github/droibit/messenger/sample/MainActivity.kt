@@ -9,23 +9,22 @@ import android.widget.Toast
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.CapabilityClient
-import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
 class MainActivity : Activity(), ConnectionCallbacks {
 
-  private lateinit var messenger: Messenger
+  private val messenger: Messenger by lazy {
+    Messenger.Builder(this)
+        .getNodesTimeout(2_000L)
+        .excludeNode { !it.isNearby }
+        .build()
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
-    messenger = Messenger.Builder(this)
-        .getNodesTimeout(2_000L)
-        .excludeNode { !it.isNearby }
-        .build()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,72 +63,85 @@ class MainActivity : Activity(), ConnectionCallbacks {
     sendMessage(PATH_SUCCESS_MESSAGE, "Authenticated")
   }
 
-  fun onSendMessageWithReceiveMessage(v: View) {
+  fun onObtainMessage(v: View) {
     launch(UI) {
-      try {
+      val message = try {
         val event = messenger.obtainMessage(
             PATH_REQUEST_MESSAGE, null,
             setOf(PATH_REQUEST_MESSAGE_FROM_WEAR)
         )
-        val data = event.data.toString(Charsets.UTF_8)
-        Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT)
-            .show()
+        event.data.toString(Charsets.UTF_8)
       } catch (e: Exception) {
-        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
-            .show()
+        Timber.w(e)
+        "Error: ${e.message}"
       }
+      Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+          .show()
     }
   }
 
-  fun onSendMessageWithCapability(v: View) {
-    launch(UI) {
-      Timber.d("#onSendMessageWithCapability()")
-      val capabilityInfo = messenger.getCapability(
-          "verify_remote_sample_wear_app",
-          CapabilityClient.FILTER_REACHABLE
-      )
-      Timber.d(
-          "name: ${capabilityInfo.name}, nodes: ${capabilityInfo.nodes.map { "${it.displayName}, nearBy=${it.isNearby}" }}"
-      )
+  fun onSendMessageWithCapability(v: View) = launch(UI) {
+    Timber.d("#onSendMessageWithCapability()")
+    val capabilityInfo = messenger.getCapability(
+        "verify_remote_sample_wear_app",
+        CapabilityClient.FILTER_REACHABLE
+    )
+    Timber.d(
+        "name: ${capabilityInfo.name}, nodes: ${capabilityInfo.nodes.map { "${it.displayName}, nearBy=${it.isNearby}" }}"
+    )
 
-      val node = capabilityInfo.nodes.firstOrNull { it.isNearby }
-      if (node == null) {
-        Toast.makeText(this@MainActivity, "Not found node.", Toast.LENGTH_SHORT)
-            .show()
-        return@launch
-      }
-
-      try {
-        messenger.sendMessage(
-            node.id, PATH_DEFAULT_MESSAGE,
-            "Hello, World with Capability".toByteArray()
-        )
-        Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
-            .show()
-      } catch (e: Exception) {
-        Timber.w(e)
-        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
-            .show()
-      }
+    val node = capabilityInfo.nodes.firstOrNull { it.isNearby }
+    if (node == null) {
+      Toast.makeText(this@MainActivity, "Not found node.", Toast.LENGTH_SHORT)
+          .show()
+      return@launch
     }
+
+    val message = try {
+      messenger.sendMessage(
+          node.id, PATH_DEFAULT_MESSAGE,
+          "Hello, World with Capability".toByteArray()
+      )
+      "Successful send of message."
+    } catch (e: Exception) {
+      Timber.w(e)
+      e.message
+    }
+    Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+        .show()
+  }
+
+  fun onGetConnectedNodes(v: View) = launch(UI) {
+    val message = try {
+      val connectedNodes = messenger.getConnectedNodes()
+      if (connectedNodes.isEmpty()) {
+        "Not connected."
+      } else {
+        val displayNames = connectedNodes.joinToString(",") { it.displayName }
+        "Connected $displayNames."
+      }
+    } catch (e: Exception) {
+      Timber.w(e)
+      e.message
+    }
+    Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+        .show()
   }
 
   private fun sendMessage(
     path: String,
     message: String?
-  ): Job {
-    return launch(UI) {
-      Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
-      try {
-        messenger.sendMessage(path, message?.toByteArray())
+  ) = launch(UI) {
+    Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
+    try {
+      messenger.sendMessage(path, message?.toByteArray())
 
-        Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
-            .show()
-      } catch (e: Exception) {
-        Timber.w(e)
-        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
-            .show()
-      }
+      Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
+          .show()
+    } catch (e: Exception) {
+      Timber.w(e)
+      Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
+          .show()
     }
   }
 

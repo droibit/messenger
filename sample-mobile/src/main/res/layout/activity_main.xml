@@ -34,15 +34,22 @@
         android:onClick="onSendSuccessMessage" />
 
     <Button
-        android:text="Send Message And Receive Message"
+        android:text="Obtain Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSendMessageWithReceiveMessage" />
+        android:onClick="onObtainMessage" />
 
     <Button
         android:text="Send message with Capability"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onSendMessageWithCapability" />
+
+    <Button
+        android:text="Get connected nodes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onGetConnectedNodes"
+        />
 
 </LinearLayout>
