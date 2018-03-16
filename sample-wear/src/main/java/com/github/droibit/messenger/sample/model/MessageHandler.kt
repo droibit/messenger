@@ -1,4 +1,4 @@
-package com.github.droibit.messenger.sample.utils
+package com.github.droibit.messenger.sample.model
 
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent

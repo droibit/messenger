@@ -1,51 +1,44 @@
-@file:Suppress("FunctionName")
-
 package com.github.droibit.messenger
 
 import com.github.droibit.messenger.internal.MessageEventHandler
-import com.github.droibit.messenger.internal.SuspendMessageSender
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.wearable.MessageApi.SendMessageResult
+import com.github.droibit.messenger.internal.WearableClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
-import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult
+import com.google.android.gms.wearable.WearableStatusCodes
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.doThrow
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.same
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.runBlocking
-import org.assertj.core.api.Java6Assertions.assertThat
-import org.assertj.core.api.Java6Assertions.fail
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.nullable
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
-import java.util.concurrent.TimeUnit
 
 class MessengerTest {
 
-  @JvmField
-  @Rule
-  val rule = MockitoJUnit.rule()!!
+  @get:Rule
+  val rule = MockitoJUnit.rule()
 
   @Mock
-  private lateinit var apiClient: GoogleApiClient
+  private lateinit var wearableClient: WearableClient
 
   @Mock
-  private lateinit var messageSender: SuspendMessageSender
-
-  @Mock
-  private lateinit var eventHandlerFactory: MessageEventHandler.Factory
+  private lateinit var messageHandlerFactory: MessageEventHandler.Factory
 
   @Mock
   private lateinit var excludeNode: ExcludeNode
@@ -53,273 +46,194 @@ class MessengerTest {
   @InjectMocks
   private lateinit var messenger: Messenger
 
-  @Test
-  fun isConnected() {
-    whenever(apiClient.isConnected).thenReturn(true)
-
-    assertThat(messenger.isConnected).isTrue()
-    verify(apiClient).isConnected
-    verify(apiClient, never()).isConnecting
-  }
-
-  @Test
-  fun isConnecting() {
-    whenever(apiClient.isConnecting).thenReturn(true)
-
-    assertThat(messenger.isConnecting).isTrue()
-    verify(apiClient).isConnecting
-    verify(apiClient, never()).isConnected
-  }
-
-  @Test
-  fun blockingConnect() {
-    val expResult = ConnectionResult(CommonStatusCodes.SUCCESS)
-    whenever(apiClient.blockingConnect(anyLong(), any())).thenReturn(expResult)
-
-    val actualResult = messenger.blockingConnect(100L)
-    assertThat(actualResult).isSameAs(expResult)
-
-    verify(apiClient).blockingConnect(eq(100L), eq(TimeUnit.MILLISECONDS))
-  }
-
-  @Test
-  fun disconnect() {
-    messenger.disconnect()
-
-    verify(apiClient).disconnect()
-  }
-
-  @Test
-  fun sendMessage_success() = runBlocking<Unit> {
+  @Test fun sendMessage_success() = runBlocking<Unit> {
     whenever(excludeNode.invoke(any()))
         .thenReturn(true)
         .thenReturn(false)
 
     val node1 = mock<Node>()
     val node2 = mock<Node> { on { id } doReturn "node2" }
-    val expGetConnectedNodeResult = mock<GetConnectedNodesResult> {
-      on { nodes } doReturn listOf(node1, node2)
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.getConnectedNodes()).thenReturn(expGetConnectedNodeResult)
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
 
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
+    messenger.sendMessage("/path", byteArrayOf())
 
-    val expData = byteArrayOf()
-    val actualSendMessageResult = messenger.sendMessage("/path", expData)
-    assertThat(actualSendMessageResult.status.isSuccess).isTrue()
-    verify(messageSender).sendMessage(eq("node2"), eq("/path"), same(expData))
+    verify(wearableClient).sendMessage(eq(node2.id), any(), any())
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun sendMessage_failedToGetConnectedNodes() = runBlocking<Unit> {
-    val expGetConnectedNodeResult = mock<GetConnectedNodesResult> {
-      on { status } doReturn Status(CommonStatusCodes.ERROR)
-    }
-    whenever(messageSender.getConnectedNodes()).thenReturn(expGetConnectedNodeResult)
+    whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
 
-    val actualSendMessageResult = messenger.sendMessage("/path", null)
-    assertThat(actualSendMessageResult.statusCode).isEqualTo(CommonStatusCodes.ERROR)
+    messenger.sendMessage("/path", byteArrayOf())
+    fail("error")
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun sendMessage_failedToSendMessage() = runBlocking<Unit> {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
-    val node = mock<Node> { on { id } doReturn "node" }
-    val expGetConnectedNodeResult = mock<GetConnectedNodesResult> {
-      on { nodes } doReturn listOf(node)
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.getConnectedNodes()).thenReturn(expGetConnectedNodeResult)
+    val node1 = mock<Node> { on { id } doReturn "id" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1))
+    whenever(wearableClient.sendMessage(anyString(), anyString(), nullable(ByteArray::class.java)))
+        .thenThrow(ApiException::class.java)
 
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn Status(CommonStatusCodes.ERROR)
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
+    messenger.sendMessage("/path", byteArrayOf())
+    fail("error")
+  }
 
-    val actualSendMessageResult = messenger.sendMessage("/path", byteArrayOf())
-    assertThat(actualSendMessageResult.statusCode).isEqualTo(CommonStatusCodes.ERROR)
+  @Test(expected = CancellationException::class)
+  fun sendMessage_canceled() = runBlocking<Unit> {
+    whenever(excludeNode.invoke(any())).thenReturn(false)
+
+    val node1 = mock<Node> { on { id } doReturn "id" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1))
+    whenever(wearableClient.sendMessage(anyString(), anyString(), nullable(ByteArray::class.java)))
+        .thenThrow(CancellationException::class.java)
+
+    messenger.sendMessage("/path", byteArrayOf())
+    fail("error")
   }
 
   @Test
-  fun sendMessage_specifyNodeId() = runBlocking<Unit> {
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
+  fun sendMessage_hasNodeId() = runBlocking<Unit> {
+    val expectedNodeId = "nodeId"
+    val expectedPath = "/path"
+    val expectedData = byteArrayOf()
+    messenger.sendMessage(expectedNodeId, expectedPath, expectedData)
 
-    val expData = byteArrayOf()
-    val actualSendMessageResult = messenger.sendMessage("nodeId", "/path", expData)
-    assertThat(actualSendMessageResult.status.isSuccess).isTrue()
-    verify(messageSender).sendMessage(eq("nodeId"), eq("/path"), same(expData))
+    verify(wearableClient).sendMessage(eq(expectedNodeId), eq(expectedPath), same(expectedData))
   }
 
   @Test
   fun obtainMessage_success() = runBlocking<Unit> {
-    val expMessageEvent = mock<MessageEvent>()
-    val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
-        expMessageEvent
-    ).getMock() as MessageEventHandler
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
-    whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
+    whenever(excludeNode.invoke(any()))
+        .thenReturn(true)
+        .thenReturn(false)
 
-    // FIXME: Can not spy messenger.
-    val node = mock<Node> { on { id } doReturn "node" }
-    val expGetConnectedNodeResult = mock<GetConnectedNodesResult> {
-      on { nodes } doReturn listOf(node)
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
+    val node1 = mock<Node>()
+    val node2 = mock<Node> { on { id } doReturn "node2" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
+
+    val expectedMessageEvent = mock<MessageEvent>()
+    val expectedMessageHandler = whenever(mock<MessageEventHandler>().obtain())
+        .thenReturn(expectedMessageEvent)
+        .getMock() as MessageEventHandler
+    whenever(messageHandlerFactory.create(any())).thenReturn(expectedMessageHandler)
+
+    val expectedPaths = setOf("/exp_path")
+    val expectedData = byteArrayOf()
+    val actualMessageEvent = messenger.obtainMessage("/path", expectedData, expectedPaths)
+    assertThat(actualMessageEvent).isSameAs(expectedMessageEvent)
+
+    verify(messageHandlerFactory).create(same(expectedPaths))
+    verify(wearableClient).addListener(expectedMessageHandler)
+    verify(wearableClient).sendMessage(eq(node2.id), eq("/path"), same(expectedData))
+    verify(wearableClient).removeListener(expectedMessageHandler)
+  }
+
+  @Test
+  fun obtainMessage_hasNodeId_success() = runBlocking<Unit> {
+    val expectedMessageEvent = mock<MessageEvent>()
+    val expectedMessageHandler = whenever(mock<MessageEventHandler>().obtain())
+        .thenReturn(expectedMessageEvent)
+        .getMock() as MessageEventHandler
+    whenever(messageHandlerFactory.create(any())).thenReturn(expectedMessageHandler)
+
+    val expectedNodeId = "node"
+    val expectedPaths = setOf("/exp_path")
+    val expectedData = byteArrayOf()
+    val actualMessageEvent =
+      messenger.obtainMessage(expectedNodeId, "/path", expectedData, expectedPaths)
+    assertThat(actualMessageEvent).isSameAs(expectedMessageEvent)
+
+    verify(messageHandlerFactory).create(same(expectedPaths))
+    verify(wearableClient).addListener(expectedMessageHandler)
+    verify(wearableClient).sendMessage(eq(expectedNodeId), eq("/path"), same(expectedData))
+    verify(wearableClient).removeListener(expectedMessageHandler)
+  }
+
+  @Test(expected = ApiException::class)
+  fun obtainMessage_failedToGetConnectedNodes() = runBlocking<Unit> {
+    whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
+
+    messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
+    fail("error")
+  }
+
+  @Test
+  fun obtainMessage_excludeNode() = runBlocking<Unit> {
+    whenever(excludeNode.invoke(any())).thenReturn(true)
+
+    val node1 = mock<Node>()
+    val node2 = mock<Node>()
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
+
+    try {
+      messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
+    } catch (e: ApiException) {
+      assertThat(e.statusCode).isEqualTo(WearableStatusCodes.TARGET_NODE_NOT_CONNECTED)
     }
-    whenever(messageSender.getConnectedNodes()).thenReturn(expGetConnectedNodeResult)
+  }
+
+  @Test(expected = ApiException::class)
+  fun obtainMessage_failedToAddListener() = runBlocking<Unit> {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
+    val node1 = mock<Node> { on { id } doReturn "id" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1))
 
-    val expPaths = setOf("/exp_path")
-    val expData = byteArrayOf()
-    val actualMessageEvent = messenger.obtainMessage("/path", expData, expPaths)
-    assertThat(actualMessageEvent).isSameAs(expMessageEvent)
+    val expectedMessageHandler = mock<MessageEventHandler>()
+    whenever(messageHandlerFactory.create(any())).thenReturn(expectedMessageHandler)
 
-    verify(eventHandlerFactory).create(same(expPaths))
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender).sendMessage(eq("node"), eq("/path"), same(expData))
-    verify(messageSender).removeListener(expMessageHandler)
+    doThrow(ApiException::class).whenever(wearableClient)
+        .addListener(any())
+
+    messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
+    fail("error")
   }
 
-  @Test
-  fun obtainMessage_failedToAddListener() = runBlocking<Unit> {
-    val expMessageHandler = mock<MessageEventHandler>()
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
-
-    val expErrorStatus = Status(CommonStatusCodes.ERROR)
-    whenever(messageSender.addListener(any())).thenReturn(expErrorStatus)
-
-    try {
-      messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
-      fail("error!")
-    } catch (e: MessengerException) {
-      assertThat(e.error).isSameAs(expErrorStatus)
-    }
-
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender, never()).sendMessage(anyString(), anyString(), any())
-    verify(expMessageHandler, never()).obtain()
-    verify(messageSender, never()).removeListener(expMessageHandler)
-  }
-
-  @Test
+  @Test(expected = ApiException::class)
   fun obtainMessage_failedToSendMessage() = runBlocking<Unit> {
-    val expMessageEvent = mock<MessageEvent>()
-    val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
-        expMessageEvent
-    ).getMock() as MessageEventHandler
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
-    whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
+    whenever(excludeNode.invoke(any())).thenReturn(false)
 
-    // FIXME: Can not spy messenger.
-    val expErrorStatus = Status(CommonStatusCodes.ERROR)
-    val node = mock<Node> { on { id } doReturn "node" }
-    val expGetConnectedNodeResult = mock<GetConnectedNodesResult> {
-      on { nodes } doReturn listOf(node)
-      on { status } doReturn expErrorStatus
-    }
-    whenever(messageSender.getConnectedNodes()).thenReturn(expGetConnectedNodeResult)
+    val node1 = mock<Node>() { on { id } doReturn "node" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1))
 
-    try {
-      messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
-      fail("error!")
-    } catch (e: MessengerException) {
-      assertThat(e.error).isSameAs(expErrorStatus)
-    }
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender, never()).sendMessage(anyString(), anyString(), any())
-    verify(expMessageHandler, never()).obtain()
-    verify(messageSender).removeListener(expMessageHandler)
+    val expectedMessageEvent = mock<MessageEvent>()
+    val expectedMessageHandler = whenever(mock<MessageEventHandler>().obtain())
+        .thenReturn(expectedMessageEvent)
+        .getMock() as MessageEventHandler
+    whenever(messageHandlerFactory.create(any())).thenReturn(expectedMessageHandler)
+
+    whenever(wearableClient.sendMessage(anyString(), anyString(), nullable(ByteArray::class.java)))
+        .thenThrow(ApiException::class.java)
+
+    messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
+    fail("error")
   }
 
   @Test
-  fun obtainMessage_specifyNodeId_success() = runBlocking<Unit> {
-    val expMessageEvent = mock<MessageEvent>()
-    val expMessageHandler = whenever(mock<MessageEventHandler>().obtain()).thenReturn(
-        expMessageEvent
-    ).getMock() as MessageEventHandler
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
-    whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
+  fun getCapability_success() = runBlocking<Unit> {
+    val expectedCapabilityInfo = mock<CapabilityInfo>()
+    whenever(wearableClient.getCapability(anyString(), anyInt())).thenReturn(expectedCapabilityInfo)
 
-    // FIXME: Can not spy messenger.
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn Status(CommonStatusCodes.SUCCESS)
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
-
-    val expPaths = setOf("/exp_path")
-    val expData = byteArrayOf()
-    val actualMessageEvent = messenger.obtainMessage("node", "/path", expData, expPaths)
-    assertThat(actualMessageEvent).isSameAs(expMessageEvent)
-
-    verify(eventHandlerFactory).create(same(expPaths))
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender).sendMessage(eq("node"), eq("/path"), same(expData))
-    verify(messageSender).removeListener(expMessageHandler)
+    val actualCapabilityInfo = messenger.getCapability("test", CapabilityClient.FILTER_REACHABLE)
+    assertThat(actualCapabilityInfo).isSameAs(expectedCapabilityInfo)
   }
 
-  @Test
-  fun obtainMessage_specifyNodeId_failedToAddListener() = runBlocking<Unit> {
-    val expMessageHandler = mock<MessageEventHandler>()
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
+  @Test(expected = ApiException::class)
+  fun getCapability_error() = runBlocking<Unit> {
+    whenever(wearableClient.getCapability(anyString(), anyInt()))
+        .thenThrow(ApiException::class.java)
 
-    val expErrorStatus = Status(CommonStatusCodes.ERROR)
-    whenever(messageSender.addListener(any())).thenReturn(expErrorStatus)
-
-    try {
-      messenger.obtainMessage("nodeId", "/path", byteArrayOf(), setOf("/path"))
-      fail("error!")
-    } catch (e: MessengerException) {
-      assertThat(e.error).isSameAs(expErrorStatus)
-    }
-
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender, never()).sendMessage(anyString(), anyString(), any())
-    verify(expMessageHandler, never()).obtain()
-    verify(messageSender, never()).removeListener(expMessageHandler)
+    messenger.getCapability("test", CapabilityClient.FILTER_REACHABLE)
   }
 
-  @Test
-  fun obtainMessage_specifyNodeId_failedToSendMessage() = runBlocking<Unit> {
-    val expMessageHandler = mock<MessageEventHandler>()
-    whenever(eventHandlerFactory.create(any())).thenReturn(expMessageHandler)
-    whenever(messageSender.addListener(any())).thenReturn(Status(CommonStatusCodes.SUCCESS))
+  @Test(expected = CancellationException::class)
+  fun getCapability_cancel() = runBlocking<Unit> {
+    whenever(wearableClient.getCapability(anyString(), anyInt()))
+        .thenThrow(CancellationException::class.java)
 
-    // FIXME: Can not spy messenger.
-    val expErrorStatus = Status(CommonStatusCodes.ERROR)
-    val expSendMessageResult = mock<SendMessageResult> {
-      on { status } doReturn expErrorStatus
-    }
-    whenever(messageSender.sendMessage(anyString(), anyString(), any()))
-        .thenReturn(expSendMessageResult)
-
-    val expData = byteArrayOf()
-    try {
-      messenger.obtainMessage("node", "/path", expData, setOf("/path"))
-      fail("error!")
-    } catch (e: MessengerException) {
-      assertThat(e.error).isSameAs(expErrorStatus)
-    }
-
-    verify(messageSender).addListener(expMessageHandler)
-    verify(messageSender).sendMessage(eq("node"), eq("/path"), same(expData))
-    verify(expMessageHandler, never()).obtain()
-    verify(messageSender).removeListener(expMessageHandler)
+    messenger.getCapability("test", CapabilityClient.FILTER_REACHABLE)
   }
 }

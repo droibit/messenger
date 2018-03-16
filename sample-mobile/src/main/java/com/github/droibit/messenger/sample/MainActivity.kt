@@ -7,63 +7,25 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.Messenger2
-import com.github.droibit.messenger.MessengerException
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.wearable.CapabilityApi
-import com.google.android.gms.wearable.Wearable
-import kotlinx.coroutines.experimental.CancellationException
+import com.google.android.gms.wearable.CapabilityClient
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
 class MainActivity : Activity(), ConnectionCallbacks {
 
-  private lateinit var googleApiClient: GoogleApiClient
-
   private lateinit var messenger: Messenger
-
-  private lateinit var messenger2: Messenger2
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    googleApiClient = GoogleApiClient.Builder(this)
-        .addApi(Wearable.API)
-        .addConnectionCallbacks(this)
-        .build()
-
-    messenger = Messenger.Builder(googleApiClient)
-        .getNodesTimeout(2_000L)
-        .obtainMessageTimeout(2_500L, 5_000L)
-        .excludeNode { !it.isNearby }
-        .build()
-
-    messenger2 = Messenger2.Builder(this)
+    messenger = Messenger.Builder(this)
         .getNodesTimeout(2_000L)
         .excludeNode { !it.isNearby }
         .build()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
-    if (!googleApiClient.isConnected) {
-      googleApiClient.connect()
-    }
-  }
-
-  override fun onPause() {
-    super.onPause()
-
-    if (googleApiClient.isConnected) {
-      googleApiClient.disconnect()
-    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,32 +65,28 @@ class MainActivity : Activity(), ConnectionCallbacks {
   }
 
   fun onSendMessageWithReceiveMessage(v: View) {
-    launch {
+    launch(UI) {
       try {
         val event = messenger.obtainMessage(
             PATH_REQUEST_MESSAGE, null,
             setOf(PATH_REQUEST_MESSAGE_FROM_WEAR)
         )
-        runOnUiThread {
-          val data = event.data.toString(Charsets.UTF_8)
-          Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT)
-              .show()
-        }
+        val data = event.data.toString(Charsets.UTF_8)
+        Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT)
+            .show()
       } catch (e: Exception) {
-        when (e) {
-          is MessengerException, is CancellationException -> Timber.e(e)
-          else -> throw e
-        }
+        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
+            .show()
       }
     }
   }
 
   fun onSendMessageWithCapability(v: View) {
-    launch {
+    launch(UI) {
       Timber.d("#onSendMessageWithCapability()")
       val capabilityInfo = messenger.getCapability(
           "verify_remote_sample_wear_app",
-          CapabilityApi.FILTER_REACHABLE
+          CapabilityClient.FILTER_REACHABLE
       )
       Timber.d(
           "name: ${capabilityInfo.name}, nodes: ${capabilityInfo.nodes.map { "${it.displayName}, nearBy=${it.isNearby}" }}"
@@ -136,22 +94,22 @@ class MainActivity : Activity(), ConnectionCallbacks {
 
       val node = capabilityInfo.nodes.firstOrNull { it.isNearby }
       if (node == null) {
-        runOnUiThread {
-          Toast.makeText(this@MainActivity, "Not found node.", Toast.LENGTH_SHORT)
-              .show()
-        }
+        Toast.makeText(this@MainActivity, "Not found node.", Toast.LENGTH_SHORT)
+            .show()
         return@launch
       }
-      val sendMessageStatus = messenger.sendMessage(
-          node.id, PATH_DEFAULT_MESSAGE,
-          "Hello, World with Capability".toByteArray()
-      )
-      if (sendMessageStatus.isSuccess) {
-        Timber.d("Succeed to send message in ${Thread.currentThread().name}.")
-      } else {
-        Timber.d(
-            "Failed send message(code=${sendMessageStatus.statusCode}, msg=${sendMessageStatus.statusMessage})"
+
+      try {
+        messenger.sendMessage(
+            node.id, PATH_DEFAULT_MESSAGE,
+            "Hello, World with Capability".toByteArray()
         )
+        Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
+            .show()
+      } catch (e: Exception) {
+        Timber.w(e)
+        Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
+            .show()
       }
     }
   }
@@ -163,7 +121,7 @@ class MainActivity : Activity(), ConnectionCallbacks {
     return launch(UI) {
       Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
       try {
-        messenger2.sendMessage(path, message?.toByteArray())
+        messenger.sendMessage(path, message?.toByteArray())
 
         Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
             .show()

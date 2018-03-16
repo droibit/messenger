@@ -10,67 +10,47 @@ import com.github.droibit.messenger.sample.model.ResponseMessageHandler
 import com.github.droibit.messenger.sample.model.ResponseMessageHandler.Companion.PATH_REQUEST_MESSAGE
 import com.github.droibit.messenger.sample.model.StandardMessageHandler
 import com.github.droibit.messenger.sample.model.StandardMessageHandler.Companion.PATH_DEFAULT_MESSAGE
-import com.github.droibit.messenger.sample.utils.MessageHandlerRegistry
-import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
-import timber.log.Timber
 
-class MainActivity : Activity(), GoogleApiClient.ConnectionCallbacks {
+class MainActivity : Activity(), MessageClient.OnMessageReceivedListener {
 
-  private lateinit var googleApiClient: GoogleApiClient
+  private val messageClient: MessageClient by lazy {
+    Wearable.getMessageClient(this)
+  }
 
-  private lateinit var messenger: Messenger
+  private val messenger: Messenger by lazy {
+    Messenger.Builder(this)
+        .getNodesTimeout(2_000L)
+        .sendMessageTimeout(2_500L)
+        .build()
+  }
 
-  private lateinit var handlers: MessageHandlerRegistry
+  private val handlers = hashMapOf(
+      PATH_DEFAULT_MESSAGE to StandardMessageHandler(this),
+      PATH_SUCCESS_MESSAGE to ConfirmMessageHandler(this, PATH_SUCCESS_MESSAGE),
+      PATH_ERROR_MESSAGE to ConfirmMessageHandler(this, PATH_ERROR_MESSAGE),
+      PATH_REQUEST_MESSAGE to ResponseMessageHandler()
+  )
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
-    googleApiClient = GoogleApiClient.Builder(this)
-        .addApi(Wearable.API)
-        .addConnectionCallbacks(this)
-        .build()
-
-    messenger = Messenger.Builder(googleApiClient)
-        .getNodesTimeout(2_000L)
-        .sendMessageTimeout(2_500L)
-        .build()
-
-    handlers = MessageHandlerRegistry(
-        messenger,
-        hashMapOf(
-            PATH_DEFAULT_MESSAGE to StandardMessageHandler(this),
-            PATH_SUCCESS_MESSAGE to ConfirmMessageHandler(this, PATH_SUCCESS_MESSAGE),
-            PATH_ERROR_MESSAGE to ConfirmMessageHandler(this, PATH_ERROR_MESSAGE),
-            PATH_REQUEST_MESSAGE to ResponseMessageHandler()
-        )
-    )
   }
 
   override fun onResume() {
     super.onResume()
-
-    if (!googleApiClient.isConnected) {
-      googleApiClient.connect()
-    }
+    messageClient.addListener(this)
   }
 
   override fun onPause() {
+    messageClient.removeListener(this)
     super.onPause()
-
-    if (googleApiClient.isConnected) {
-      Wearable.MessageApi.removeListener(googleApiClient, handlers)
-      googleApiClient.disconnect()
-    }
   }
 
-  override fun onConnected(bundle: Bundle?) {
-    Timber.d("#onConnected()")
-    Wearable.MessageApi.addListener(googleApiClient, handlers)
-  }
-
-  override fun onConnectionSuspended(i: Int) {
-    // TODO: Implement
+  override fun onMessageReceived(messageEvent: MessageEvent) {
+    val handler = handlers.getValue(messageEvent.path)
+    handler.onMessageReceived(messenger, messageEvent)
   }
 }

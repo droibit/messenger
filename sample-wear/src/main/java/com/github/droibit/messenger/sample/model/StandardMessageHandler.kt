@@ -3,7 +3,6 @@ package com.github.droibit.messenger.sample.model
 import android.app.Activity
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.google.android.gms.wearable.MessageEvent
 import timber.log.Timber
 

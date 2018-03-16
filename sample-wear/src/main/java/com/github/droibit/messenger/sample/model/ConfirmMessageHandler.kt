@@ -8,7 +8,6 @@ import android.support.wearable.activity.ConfirmationActivity.EXTRA_MESSAGE
 import android.support.wearable.activity.ConfirmationActivity.FAILURE_ANIMATION
 import android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION
 import com.github.droibit.messenger.Messenger
-import com.github.droibit.messenger.sample.utils.MessageHandler
 import com.google.android.gms.wearable.MessageEvent
 import timber.log.Timber
 

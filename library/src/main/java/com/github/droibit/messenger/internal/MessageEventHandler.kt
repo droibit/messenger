@@ -1,6 +1,6 @@
 package com.github.droibit.messenger.internal
 
-import com.google.android.gms.wearable.MessageApi
+import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withTimeout
@@ -10,7 +10,7 @@ internal class MessageEventHandler internal constructor(
   private val expectedPaths: Set<String>,
   private val waitMessageMillis: Long,
   private val dispatcher: Dispatcher
-) : MessageApi.MessageListener {
+) : MessageClient.OnMessageReceivedListener {
 
   internal class Dispatcher {
 
