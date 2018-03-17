@@ -11,10 +11,10 @@ class ResponseMessageHandler : MessageHandler {
     messenger: Messenger,
     event: MessageEvent
   ) {
-    val data = event.data.toString(Charsets.UTF_8)
-    Timber.d("#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
-
     launch {
+      val data = event.data.toString(Charsets.UTF_8)
+      Timber.d("#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
+
       try {
         messenger.sendMessage(
             event.sourceNodeId, PATH_REQUEST_MESSAGE_FROM_WEAR,

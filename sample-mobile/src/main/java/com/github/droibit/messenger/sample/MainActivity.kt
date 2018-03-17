@@ -13,7 +13,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
-class MainActivity : Activity(), ConnectionCallbacks {
+class MainActivity : Activity() {
 
   private val messenger: Messenger by lazy {
     Messenger.Builder(this)
@@ -26,26 +26,6 @@ class MainActivity : Activity(), ConnectionCallbacks {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
   }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    menuInflater.inflate(R.menu.menu_main, menu)
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    val id = item.itemId
-    return if (id == R.id.action_settings) true else super.onOptionsItemSelected(item)
-  }
-
-  override fun onConnected(bundle: Bundle?) {
-    Timber.d("#onConnected")
-  }
-
-  override fun onConnectionSuspended(i: Int) {}
 
   fun onSendMessage(v: View) {
     sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world")
@@ -133,16 +113,14 @@ class MainActivity : Activity(), ConnectionCallbacks {
     message: String?
   ) = launch(UI) {
     Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
-    try {
+    val resultMessage = try {
       messenger.sendMessage(path, message?.toByteArray())
-
-      Toast.makeText(this@MainActivity, "Successful send of message.", Toast.LENGTH_SHORT)
-          .show()
+      "Successful send of message."
     } catch (e: Exception) {
       Timber.w(e)
-      Toast.makeText(this@MainActivity, "${e.message}", Toast.LENGTH_SHORT)
-          .show()
+      e.message
     }
+    Toast.makeText(this@MainActivity, resultMessage, Toast.LENGTH_SHORT).show()
   }
 
   companion object {

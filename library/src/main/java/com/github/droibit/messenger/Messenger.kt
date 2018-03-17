@@ -139,7 +139,7 @@ class Messenger @VisibleForTesting internal constructor(
    * either directly or indirectly via a directly connected node.
    */
   @Throws(ApiException::class, CancellationException::class)
-  suspend fun getConnectedNodes(useExcludeNode: Boolean = false): List<Node> {
+  suspend fun getConnectedNodes(useExcludeNode: Boolean = true): List<Node> {
     val connectedNodes = client.getConnectedNodes()
     if (useExcludeNode) {
       return connectedNodes.filter { !excludeNode.invoke(it) }

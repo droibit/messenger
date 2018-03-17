@@ -16,8 +16,7 @@ class StandardMessageHandler(private val activity: Activity) :
     val data = event.data.toString(Charsets.UTF_8)
     Timber.d("#onMessageReceived(path=$PATH_DEFAULT_MESSAGE, data=$data")
     activity.runOnUiThread {
-      Toast.makeText(activity, data, Toast.LENGTH_SHORT)
-          .show()
+      Toast.makeText(activity, data, Toast.LENGTH_SHORT).show()
     }
   }
 
