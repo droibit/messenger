@@ -2,38 +2,38 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
 
-    defaultConfig {
-        applicationId "com.github.droibit.messenger.sample"
-        minSdkVersion 23
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+  defaultConfig {
+    applicationId "com.github.droibit.messenger.sample"
+    minSdkVersion 23
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode rootProject.ext.versionCode
+    versionName rootProject.ext.versionName
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 kotlin {
-    experimental {
-        coroutines 'enable'
-    }
+  experimental {
+    coroutines 'enable'
+  }
 }
 
 dependencies {
-    compile project(':library')
+  compile project(':library')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-    compileOnly "com.google.android.wearable:wearable:2.2.0"
-    implementation 'com.google.android.support:wearable:2.2.0'
-    implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+  compileOnly "com.google.android.wearable:wearable:2.2.0"
+  implementation 'com.google.android.support:wearable:2.2.0'
+  implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
+  implementation "com.jakewharton.timber:timber:$timberVersion"
 }
