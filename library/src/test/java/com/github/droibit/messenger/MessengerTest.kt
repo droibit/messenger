@@ -94,6 +94,18 @@ class MessengerTest {
     fail("error")
   }
 
+  @Test(expected = ApiException::class)
+  fun sendMessage_strictSend() = runBlocking<Unit> {
+    whenever(excludeNode.invoke(any())).thenReturn(true)
+
+    val node1 = mock<Node> { on { id } doReturn "id1" }
+    val node2 = mock<Node> { on { id } doReturn "id2" }
+    whenever(wearableClient.getConnectedNodes()).thenReturn(listOf(node1, node2))
+
+    messenger.sendMessage("/path", byteArrayOf(), strictSend = true)
+    fail("error")
+  }
+
   @Test
   fun sendMessage_hasNodeId() = runBlocking<Unit> {
     val expectedNodeId = "nodeId"

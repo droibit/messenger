@@ -39,19 +39,22 @@ class Messenger @VisibleForTesting internal constructor(
    *
    * @param path     specified path
    * @param data     data to be associated with the path
+   * @param strictSend If true, [ApiException] is thrown if node (filtered) is not connected.
    * @throws ApiException
    * @throws CancellationException
    */
   @Throws(ApiException::class, CancellationException::class)
   suspend fun sendMessage(
     path: String,
-    data: ByteArray?
+    data: ByteArray? = null,
+    strictSend: Boolean = false
   ) {
-    client.getConnectedNodes()
+    val filteredNodes = client.getConnectedNodes()
         .filter { !excludeNode.invoke(it) }
-        .forEach {
-          client.sendMessage(it.id, path, data)
-        }
+    if (strictSend && filteredNodes.isEmpty()) {
+      throw ApiException(Status(WearableStatusCodes.TARGET_NODE_NOT_CONNECTED))
+    }
+    filteredNodes.forEach { client.sendMessage(it.id, path, data) }
   }
 
   /**
@@ -67,7 +70,7 @@ class Messenger @VisibleForTesting internal constructor(
   suspend fun sendMessage(
     nodeId: String,
     path: String,
-    data: ByteArray?
+    data: ByteArray? = null
   ) = client.sendMessage(nodeId, path, data)
 
   /**
@@ -83,7 +86,7 @@ class Messenger @VisibleForTesting internal constructor(
   @Throws(ApiException::class, CancellationException::class)
   suspend fun obtainMessage(
     sendPath: String,
-    sendData: ByteArray?,
+    sendData: ByteArray? = null,
     @Size(min = 1L) expectedPaths: Set<String>
   ): MessageEvent {
     val nodes = client.getConnectedNodes()
@@ -109,7 +112,7 @@ class Messenger @VisibleForTesting internal constructor(
   suspend fun obtainMessage(
     nodeId: String,
     sendPath: String,
-    sendData: ByteArray?,
+    sendData: ByteArray? = null,
     @Size(min = 1L) expectedPaths: Set<String>
   ): MessageEvent {
     val handler = messageHandlerFactory.create(expectedPaths)

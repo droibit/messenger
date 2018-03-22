@@ -16,6 +16,12 @@
         android:onClick="onSendMessage" />
 
     <Button
+        android:text="Send Message(Strict)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onStrictSendMessage" />
+
+    <Button
         android:text="Send Error Message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

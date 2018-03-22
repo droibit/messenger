@@ -2,12 +2,9 @@ package com.github.droibit.messenger.sample
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.wearable.CapabilityClient
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -29,6 +26,10 @@ class MainActivity : Activity() {
 
   fun onSendMessage(v: View) {
     sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world")
+  }
+
+  fun onStrictSendMessage(v: View) {
+    sendMessage(PATH_DEFAULT_MESSAGE, "Hello, world", strictSend = true)
   }
 
   fun onSendErrorMessage(v: View) {
@@ -110,17 +111,19 @@ class MainActivity : Activity() {
 
   private fun sendMessage(
     path: String,
-    message: String?
+    message: String?,
+    strictSend: Boolean = false
   ) = launch(UI) {
     Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
     val resultMessage = try {
-      messenger.sendMessage(path, message?.toByteArray())
+      messenger.sendMessage(path, message?.toByteArray(), strictSend)
       "Successful send of message."
     } catch (e: Exception) {
       Timber.w(e)
       e.message
     }
-    Toast.makeText(this@MainActivity, resultMessage, Toast.LENGTH_SHORT).show()
+    Toast.makeText(this@MainActivity, resultMessage, Toast.LENGTH_SHORT)
+        .show()
   }
 
   companion object {
