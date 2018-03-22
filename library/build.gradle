@@ -35,7 +35,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-  implementation "com.android.support:support-annotations:$supportVersion"
+  implementation "com.android.support:support-annotations:$supportLibraryVersion"
   implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 
   testImplementation 'junit:junit:4.12'
