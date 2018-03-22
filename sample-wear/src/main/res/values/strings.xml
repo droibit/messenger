@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Messenger</string>
+
+    <string name="text_wait_message">Waiting for message…</string>
 </resources>

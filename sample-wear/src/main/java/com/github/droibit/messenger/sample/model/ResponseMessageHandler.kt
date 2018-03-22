@@ -18,7 +18,7 @@ class ResponseMessageHandler : MessageHandler {
       try {
         messenger.sendMessage(
             event.sourceNodeId, PATH_REQUEST_MESSAGE_FROM_WEAR,
-            "Yeah!! from Android Wear".toByteArray()
+            "Yeah!! from watch".toByteArray()
         )
         Timber.d("Succeed to send message in ${Thread.currentThread().name}.")
       } catch (e: Exception) {
