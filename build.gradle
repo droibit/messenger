@@ -2,10 +2,10 @@
 
 buildscript {
   ext {
-    kotlinVersion = '1.2.30'
+    kotlinVersion = '1.2.40'
     kotlinxCoroutinesVersion = '0.22.5'
     googlePlayServicesVersion = '12.0.0'
-    supportLibraryVersion = '27.1.0'
+    supportLibraryVersion = '27.1.1'
     timberVersion = '4.6.1'
   }
   repositories {
@@ -13,7 +13,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.1'
+    classpath 'com.android.tools.build:gradle:3.1.1'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
 
