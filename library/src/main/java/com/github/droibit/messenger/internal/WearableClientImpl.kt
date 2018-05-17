@@ -27,8 +27,8 @@ internal class WearableClientImpl(
     return withTimeout(getNodesTimeoutMillis) {
       suspendCancellableCoroutine<List<Node>> { cont ->
         val listener = CompleteEventHandler(cont)
-            .apply {
-              nodeClient.connectedNodes.addOnCompleteListener(this)
+            .also {
+              nodeClient.connectedNodes.addOnCompleteListener(it)
             }
         cont.invokeOnCompletion(onCancelling = true) {
           listener.cancel()
