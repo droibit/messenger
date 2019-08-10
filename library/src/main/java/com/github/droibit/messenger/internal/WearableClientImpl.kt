@@ -5,9 +5,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
 import com.google.android.gms.wearable.Node
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
-import kotlinx.coroutines.experimental.withTimeout
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
+import kotlin.coroutines.suspendCoroutine
 
 internal class WearableClientImpl(
   private val clientProvider: ClientProvider,
@@ -30,7 +30,7 @@ internal class WearableClientImpl(
             .also {
               nodeClient.connectedNodes.addOnCompleteListener(it)
             }
-        cont.invokeOnCompletion(onCancelling = true) {
+        cont.invokeOnCancellation {
           listener.cancel()
         }
       }
@@ -49,7 +49,7 @@ internal class WearableClientImpl(
               capabilityClient.getCapability(capability, nodeFilter)
                   .addOnCompleteListener(this)
             }
-        cont.invokeOnCompletion(onCancelling = true) {
+        cont.invokeOnCancellation {
           listener.cancel()
         }
       }
@@ -69,7 +69,7 @@ internal class WearableClientImpl(
               messageClient.sendMessage(nodeId, path, data)
                   .addOnCompleteListener(this)
             }
-        cont.invokeOnCompletion(onCancelling = true) {
+        cont.invokeOnCancellation {
           listener.cancel()
         }
       }
@@ -85,7 +85,7 @@ internal class WearableClientImpl(
               messageClient.addListener(listener)
                   .addOnCompleteListener(this)
             }
-        cont.invokeOnCompletion(onCancelling = true) {
+        cont.invokeOnCancellation {
           l.cancel()
         }
       }

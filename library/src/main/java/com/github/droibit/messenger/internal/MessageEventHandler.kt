@@ -2,9 +2,10 @@ package com.github.droibit.messenger.internal
 
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
-import kotlinx.coroutines.experimental.withTimeout
-import kotlin.coroutines.experimental.Continuation
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 internal class MessageEventHandler internal constructor(
   private val expectedPaths: Set<String>,
@@ -46,7 +47,7 @@ internal class MessageEventHandler internal constructor(
     return withTimeout(waitMessageMillis) {
       suspendCancellableCoroutine<MessageEvent> { cont ->
         dispatcher.continuation = cont
-        cont.invokeOnCompletion {
+        cont.invokeOnCancellation {
           dispatcher.continuation = null
         }
       }

@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.Toast
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.CapabilityClient
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class MainActivity : Activity() {
+class MainActivity : Activity(), CoroutineScope by MainScope() {
 
   private val messenger: Messenger by lazy {
     Messenger.Builder(this)
@@ -22,6 +24,11 @@ class MainActivity : Activity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+  }
+
+  override fun onDestroy() {
+    cancel()
+    super.onDestroy()
   }
 
   fun onSendMessage(v: View) {
@@ -45,11 +52,12 @@ class MainActivity : Activity() {
   }
 
   fun onObtainMessage(v: View) {
-    launch(UI) {
+    launch {
       val message = try {
         val event = messenger.obtainMessage(
-            PATH_REQUEST_MESSAGE, null,
-            setOf(PATH_REQUEST_MESSAGE_FROM_WEAR)
+            PATH_REQUEST_MESSAGE,
+            sendData = null,
+            expectedPaths = setOf(PATH_REQUEST_MESSAGE_FROM_WEAR)
         )
         event.data.toString(Charsets.UTF_8)
       } catch (e: Exception) {
@@ -61,7 +69,7 @@ class MainActivity : Activity() {
     }
   }
 
-  fun onSendMessageWithCapability(v: View) = launch(UI) {
+  fun onSendMessageWithCapability(v: View) = launch {
     Timber.d("#onSendMessageWithCapability()")
     val capabilityInfo = messenger.getCapability(
         "verify_remote_sample_wear_app",
@@ -92,7 +100,7 @@ class MainActivity : Activity() {
         .show()
   }
 
-  fun onGetConnectedNodes(v: View) = launch(UI) {
+  fun onGetConnectedNodes(v: View) = launch {
     val message = try {
       val connectedNodes = messenger.getConnectedNodes()
       if (connectedNodes.isEmpty()) {
@@ -113,7 +121,7 @@ class MainActivity : Activity() {
     path: String,
     message: String?,
     strictSend: Boolean = false
-  ) = launch(UI) {
+  ) = launch {
     Timber.d("#sendMessage($message, to=$path) in ${Thread.currentThread().name}.")
     val resultMessage = try {
       messenger.sendMessage(path, message?.toByteArray(), strictSend)

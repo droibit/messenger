@@ -2,7 +2,8 @@ package com.github.droibit.messenger.sample.model
 
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ResponseMessageHandler : MessageHandler {
@@ -11,7 +12,7 @@ class ResponseMessageHandler : MessageHandler {
     messenger: Messenger,
     event: MessageEvent
   ) {
-    launch {
+    GlobalScope.launch {
       val data = event.data.toString(Charsets.UTF_8)
       Timber.d("#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
 

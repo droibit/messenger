@@ -20,12 +20,6 @@ android {
   }
 }
 
-kotlin {
-  experimental {
-    coroutines 'enable'
-  }
-}
-
 dependencies {
   wearApp project(':sample-wear')
   implementation project(':library')

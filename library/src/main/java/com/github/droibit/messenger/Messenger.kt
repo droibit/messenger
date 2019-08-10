@@ -13,7 +13,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.WearableStatusCodes
-import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.CancellationException
 
 typealias ExcludeNode = (Node) -> Boolean
 
