@@ -14,16 +14,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.fail
 import org.assertj.core.api.Java6Assertions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 
 class MessageEventHandlerTest {
 
   @get:Rule
-  val rule = MockitoJUnit.rule()
+  val rule: MockitoRule = MockitoJUnit.rule()
 
   @Spy
   private lateinit var dispatcher: MessageEventHandler.Dispatcher
@@ -78,7 +80,7 @@ class MessageEventHandlerTest {
     try {
       val messenger = MessageEventHandler(setOf(), 100L, dispatcher)
       messenger.obtain()
-      Assertions.fail("error")
+      fail<Unit>("error")
     } catch (e: Exception) {
       Java6Assertions.assertThat(e)
           .isExactlyInstanceOf(TimeoutCancellationException::class.java)

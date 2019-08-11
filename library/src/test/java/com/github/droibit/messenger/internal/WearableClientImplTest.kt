@@ -104,7 +104,7 @@ class WearableClientImplTest {
         newClient(getNodesTimeout = 100L).getConnectedNodes()
         fail("error!")
       } catch (e: Exception) {
-        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+        assertThat(e).isInstanceOf(CancellationException::class.java)
       }
     }
     delay(50L)
@@ -179,7 +179,7 @@ class WearableClientImplTest {
             .getCapability("test", CapabilityClient.FILTER_REACHABLE)
         fail("error!")
       } catch (e: Exception) {
-        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+        assertThat(e).isInstanceOf(CancellationException::class.java)
       }
     }
     delay(50L)
@@ -263,7 +263,7 @@ class WearableClientImplTest {
         newClient(sendMessageTimeout = 100L).sendMessage("node1", "/path", null)
         fail("error!")
       } catch (e: Exception) {
-        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+        assertThat(e).isInstanceOf(CancellationException::class.java)
       }
     }
     delay(50L)
@@ -335,13 +335,13 @@ class WearableClientImplTest {
         newClient(addListenerTimeout = 100L).addListener(MessageClient.OnMessageReceivedListener {})
         fail("error!")
       } catch (e: Exception) {
-        assertThat(e).isExactlyInstanceOf(CancellationException::class.java)
+        assertThat(e).isInstanceOf(CancellationException::class.java)
       }
     }
     delay(50L)
     job.cancelAndJoin()
 
-    val captor = argumentCaptor<CompleteEventHandler<Void>>()
+    val captor = argumentCaptor<VoidCompleteEventHandler>()
     verify(mockTask).addOnCompleteListener(captor.capture())
     assertThat(captor.firstValue.callback.get()).isNull()
   }
