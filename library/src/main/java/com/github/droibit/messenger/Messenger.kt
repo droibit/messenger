@@ -1,8 +1,8 @@
 package com.github.droibit.messenger
 
 import android.content.Context
-import android.support.annotation.Size
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.Size
+import androidx.annotation.VisibleForTesting
 import com.github.droibit.messenger.Messenger.Builder.Companion.ADD_LISTENER_TIMEOUT_MILLIS
 import com.github.droibit.messenger.internal.MessageEventHandler
 import com.github.droibit.messenger.internal.WearableClient

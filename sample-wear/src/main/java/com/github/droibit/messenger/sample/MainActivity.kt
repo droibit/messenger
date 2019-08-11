@@ -1,7 +1,7 @@
 package com.github.droibit.messenger.sample
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_ERROR_MESSAGE
@@ -14,7 +14,7 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 
-class MainActivity : Activity(), MessageClient.OnMessageReceivedListener {
+class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
 
   private val messageClient: MessageClient by lazy {
     Wearable.getMessageClient(this)

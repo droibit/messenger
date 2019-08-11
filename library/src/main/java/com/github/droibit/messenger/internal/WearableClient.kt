@@ -38,7 +38,7 @@ internal interface WearableClient {
   ): Int
 
   @Throws(ApiException::class)
-  suspend fun addListener(listener: OnMessageReceivedListener): Void
+  suspend fun addListener(listener: OnMessageReceivedListener)
 
   @Throws(ApiException::class)
   suspend fun removeListener(listener: OnMessageReceivedListener): Boolean

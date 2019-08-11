@@ -25,6 +25,7 @@ internal class WearableClientImpl(
   @Throws(ApiException::class)
   override suspend fun getConnectedNodes(): List<Node> {
     return withTimeout(getNodesTimeoutMillis) {
+      @Suppress("RemoveExplicitTypeArguments")
       suspendCancellableCoroutine<List<Node>> { cont ->
         val listener = CompleteEventHandler(cont)
             .also {
@@ -43,6 +44,7 @@ internal class WearableClientImpl(
     nodeFilter: Int
   ): CapabilityInfo {
     return withTimeout(getNodesTimeoutMillis) {
+      @Suppress("RemoveExplicitTypeArguments")
       suspendCancellableCoroutine<CapabilityInfo> { cont ->
         val listener = CompleteEventHandler(cont)
             .apply {
@@ -63,6 +65,7 @@ internal class WearableClientImpl(
     data: ByteArray?
   ): Int {
     return withTimeout(sendMessageTimeoutMillis) {
+      @Suppress("RemoveExplicitTypeArguments")
       suspendCancellableCoroutine<Int> { cont ->
         val listener = CompleteEventHandler(cont)
             .apply {
@@ -77,10 +80,10 @@ internal class WearableClientImpl(
   }
 
   @Throws(ApiException::class)
-  override suspend fun addListener(listener: OnMessageReceivedListener): Void {
+  override suspend fun addListener(listener: OnMessageReceivedListener) {
     return withTimeout(addListenerTimeoutMills) {
-      suspendCancellableCoroutine<Void> { cont ->
-        val l = CompleteEventHandler(cont)
+      suspendCancellableCoroutine<Unit> { cont ->
+        val l = VoidCompleteEventHandler(cont)
             .apply {
               messageClient.addListener(listener)
                   .addOnCompleteListener(this)

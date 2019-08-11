@@ -4,13 +4,14 @@ package com.github.droibit.messenger.internal
 
 import com.github.droibit.messenger.internal.MessageEventHandler.Dispatcher
 import com.google.android.gms.wearable.MessageEvent
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
-import kotlin.coroutines.experimental.Continuation
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 class DispatcherTest {
 

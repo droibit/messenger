@@ -26,12 +26,12 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-  implementation "com.android.support:support-v4:$supportLibraryVersion"
-  implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
-  implementation "com.android.support:percent:$supportLibraryVersion"
+  implementation 'androidx.activity:activity:1.1.0-alpha02'
+  implementation 'androidx.recyclerview:recyclerview:1.0.0'
+  implementation 'androidx.percentlayout:percentlayout:1.0.0'
 
-  compileOnly "com.google.android.wearable:wearable:2.2.0"
-  implementation 'com.google.android.support:wearable:2.2.0'
+  compileOnly "com.google.android.wearable:wearable:2.4.0"
+  implementation 'com.google.android.support:wearable:2.4.0'
   implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
   implementation "com.jakewharton.timber:timber:$timberVersion"
 }

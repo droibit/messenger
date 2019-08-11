@@ -1,9 +1,9 @@
 package com.github.droibit.messenger.sample
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.CapabilityClient
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class MainActivity : Activity(), CoroutineScope by MainScope() {
+class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
 
   private val messenger: Messenger by lazy {
     Messenger.Builder(this)

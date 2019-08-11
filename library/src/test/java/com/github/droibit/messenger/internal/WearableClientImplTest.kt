@@ -9,17 +9,17 @@ import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.NodeClient
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.cancelAndJoin
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.Rule
@@ -112,7 +112,7 @@ class WearableClientImplTest {
 
     val captor = argumentCaptor<CompleteEventHandler<Nodes>>()
     verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.raw.get()).isNull()
+    assertThat(captor.firstValue.callback.get()).isNull()
   }
 
   @Test
@@ -187,7 +187,7 @@ class WearableClientImplTest {
 
     val captor = argumentCaptor<CompleteEventHandler<CapabilityInfo>>()
     verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.raw.get()).isNull()
+    assertThat(captor.firstValue.callback.get()).isNull()
   }
 
   @Test
@@ -271,7 +271,7 @@ class WearableClientImplTest {
 
     val captor = argumentCaptor<CompleteEventHandler<Int>>()
     verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.raw.get()).isNull()
+    assertThat(captor.firstValue.callback.get()).isNull()
   }
 
   @Test
@@ -343,7 +343,7 @@ class WearableClientImplTest {
 
     val captor = argumentCaptor<CompleteEventHandler<Void>>()
     verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.raw.get()).isNull()
+    assertThat(captor.firstValue.callback.get()).isNull()
   }
 
   @Test
