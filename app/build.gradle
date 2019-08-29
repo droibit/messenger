@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -138,4 +138,4 @@ kapt {
 }
 
 // Must be applied after dependencies. See https://stackoverflow.com/a/38018985
-// apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
