@@ -6,13 +6,14 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion buildConfig.compileSdk
-    buildToolsVersion buildConfig.buildTools
+
     defaultConfig {
         applicationId "com.droibit.looking2"
-        minSdkVersion 24
+        minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 1
-        versionName "1.0"
+        versionCode buildConfig.version.code
+        versionName buildConfig.version.name
+        resConfigs "en", "ja"
         vectorDrawables.useSupportLibrary = true
         // ref. https://developer.android.com/training/wearables/apps/packaging.html#migrating
         wearAppUnbundled true
@@ -27,24 +28,48 @@ android {
         }
         release {
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     signingConfigs {
         debug {
             storeFile rootProject.file('keystore/debug.keystore')
         }
     }
 
+    packagingOptions {
+        exclude 'kotlin/**'
+        exclude '**/*.kotlin_metadata'
+        exclude 'META-INF/*.kotlin_module'
+        exclude 'META-INF/*.version'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+        lintConfig rootProject.file('lint.xml')
+
+        checkDependencies true
+        checkTestSources true
+        explainIssues false
+
+        // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
+        checkReleaseBuilds false
     }
 }
 
 repositories {
     maven { url "https://jitpack.io" }
+}
+
+configurations.all {
+    exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
 dependencies {
@@ -59,8 +84,8 @@ dependencies {
     implementation deps.androidx.lifecycle.livedata
     implementation deps.androidx.lifecycle.viewmodel
     kapt deps.androidx.lifecycle.compiler
+    implementation deps.androidx.navigation.runtime
     implementation deps.androidx.navigation.fragment
-    implementation deps.androidx.navigation.ui
 
     implementation(deps.crashlytics) {
         transitive = true
@@ -70,7 +95,7 @@ dependencies {
     implementation deps.androidx.wear
     implementation deps.playServices.wearable
     implementation deps.wearable.support
-    implementation deps.wearable.wearable
+    compileOnly deps.wearable.wearable
 
     implementation deps.dagger.runtime
     implementation deps.dagger.androidSupport
@@ -81,14 +106,24 @@ dependencies {
     implementation(deps.twitter.kit) {
         transitive = true
     }
+    implementation(deps.twitter.text) {
+        exclude module: 'snakeyaml'
+    }
     implementation deps.okhttp.client
     implementation deps.okhttp.logging
     implementation deps.retrofit.core
     implementation deps.retrofit.converterGson
     implementation deps.gson
+    implementation(deps.picasso.runtime) {
+        exclude module: 'okhttp'
+    }
+    implementation(deps.picasso.okhttp3Downloader)
 
     implementation deps.timber
-    implementation deps.chopstick.preference
+    implementation deps.chopstick.resource
+    implementation(deps.chopstick.preference) {
+        exclude module: 'preference'
+    }
 
     debugImplementation deps.stetho
 

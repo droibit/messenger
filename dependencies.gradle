@@ -29,8 +29,8 @@ ext {
                             compiler : "androidx.lifecycle:lifecycle-compiler:${versions.androidx.lifecycle}",
                     ],
                     navigation      : [
+                            runtime: "androidx.navigation:navigation-runtime-ktx:${versions.androidx.navigation}",
                             fragment: "androidx.navigation:navigation-fragment-ktx:${versions.androidx.navigation}",
-                            ui: "androidx.navigation:navigation-ui-ktx:${versions.androidx.navigation}",
                     ],
                     core : 'androidx.core:core-ktx:1.2.0-alpha03',
                     wear            : 'androidx.wear:wear:1.0.0',
