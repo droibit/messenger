@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+//apply plugin: 'io.fabric'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildTools
+    defaultConfig {
+        applicationId "com.droibit.looking2"
+        minSdkVersion 24
+        targetSdkVersion buildConfig.targetSdk
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        // ref. https://developer.android.com/training/wearables/apps/packaging.html#migrating
+        wearAppUnbundled true
+    }
+
+    buildTypes {
+        debug {
+            // ref. https://developer.android.com/studio/build/optimize-your-build.html#disable_crashlytics
+            ext.alwaysUpdateBuildId = false
+            applicationIdSuffix '.debug'
+            versionNameSuffix '.debug'
+        }
+        release {
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('keystore/debug.keystore')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation deps.kotlin.jdk7
+    implementation deps.kotlin.coroutines
+
+    implementation(deps.crashlytics) {
+        transitive = true
+    }
+    implementation deps.firebase.core
+
+    implementation deps.androidx.wear
+    implementation deps.playServices.wearable
+    implementation deps.wearable.support
+    implementation deps.wearable.wearable
+
+    implementation deps.dagger.runtime
+    implementation deps.dagger.androidSupport
+    kapt deps.dagger.compiler
+    kapt deps.dagger.androidProcessor
+    compileOnly deps.javax.inject
+
+    implementation(deps.twitter.kit) {
+        transitive = true
+    }
+    implementation deps.okhttp.client
+    implementation deps.okhttp.logging
+    implementation deps.retrofit.core
+    implementation deps.retrofit.converterGson
+    implementation deps.gson
+
+    implementation deps.timber
+    implementation deps.chopstick.preference
+
+    debugImplementation deps.stetho
+
+    testImplementation deps.junit
+    testImplementation deps.robolectric
+    testImplementation deps.assertj
+    testImplementation deps.mockito
+}
+
+kapt {
+    useBuildCache = true
+}
+
+// Must be applied after dependencies. See https://stackoverflow.com/a/38018985
+// apply plugin: 'com.google.gms.google-services'

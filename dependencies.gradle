@@ -1,0 +1,95 @@
+ext {
+    versions = [
+            kotlin   : '1.3.50',
+            wearable : '2.5.0',
+            okhttp   : '4.1.0',
+            retrofit : '2.6.1',
+            dagger   : '2.24',
+            chopstick: '1.0.0-beta01',
+    ]
+    deps = [
+            plugin         : [
+                    buildTools    : 'com.android.tools.build:gradle:3.5.0',
+                    kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+                    googleServices: 'com.google.gms:google-services:4.3.1',
+                    fabric        : 'io.fabric.tools:gradle:1.31.0'
+            ],
+            kotlin         : [
+                    jdk7      : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                    coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0"
+            ],
+            androidx       : [
+                    wear: 'androidx.wear:wear:1.0.0',
+
+
+//                    arch   : [
+//                            lifecycle: [
+//                                    extensions: "android.arch.lifecycle:extensions:${versions.arch.lifecycle}",
+//                                    compiler  : "android.arch.lifecycle:compiler:${versions.arch.lifecycle}"
+//                            ]
+//                    ],
+//                    support: [
+//                            annotations     : "com.android.support:support-annotations:${versions.supportLibrary}",
+//                            v4              : "com.android.support:support-v4:${versions.supportLibrary}",
+//                            appCompat       : "com.android.support:appcompat-v7:${versions.supportLibrary}",
+//                            recyclerView    : "com.android.support:recyclerview-v7:${versions.supportLibrary}",
+//                            preferenceV14   : "com.android.support:preference-v14:${versions.supportLibrary}",
+//                            design          : "com.android.support:design:${versions.supportLibrary}",
+//                            customTabs      : "com.android.support:customtabs:${versions.supportLibrary}",
+//                            constraintLayout: "com.android.support.constraint:constraint-layout:1.1.0",
+//                            wear            : "com.android.support:wear:${versions.supportLibrary}",
+//                    ]
+            ],
+            wearable       : [
+                    support : "com.google.android.support:wearable:${versions.wearable}",
+                    wearable: "com.google.android.wearable:wearable:${versions.wearable}"
+            ],
+            playServices   : [
+                    base    : "com.google.android.gms:play-services-base:18.1.1",
+                    wearable: "com.google.android.gms:play-services-wearable:17.0.0"
+            ],
+            firebase       : [
+                    core: "com.google.firebase:firebase-core:17.2.0"
+            ],
+            okhttp         : [
+                    client : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
+                    logging: "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
+            ],
+            retrofit       : [
+                    core         : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+                    converterGson: "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+            ],
+            dagger         : [
+                    runtime         : "com.google.dagger:dagger:${versions.dagger}",
+                    compiler        : "com.google.dagger:dagger-compiler:${versions.dagger}",
+                    androidSupport  : "com.google.dagger:dagger-android-support:${versions.dagger}",
+                    androidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}"
+            ],
+            twitter        : [
+                    kit : 'com.twitter.sdk.android:twitter-core:3.3.0',
+                    text: 'com.twitter:twitter-text:1.6.1'
+            ],
+            chopstick      : [
+                    preference: "com.github.droibit.chopsticks:chopstick-preference:${versions.chopstick}",
+                    resource  : "com.github.droibit.chopsticks:chopstick-resource:${versions.chopstick}"
+            ],
+            javax          : [
+                    inject: 'javax.inject:javax.inject:1'
+            ],
+            picasso        : [
+                    runtime          : 'com.squareup.picasso:picasso:2.5.2',
+                    okhttp3Downloader: 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+            ],
+            crashlytics    : "com.crashlytics.sdk.android:crashlytics:2.10.1",
+            gson           : 'com.google.code.gson:gson:2.8.5',
+            okio           : 'com.squareup.okio:okio:2.4.0',
+            timber         : 'com.jakewharton.timber:timber:4.7.1',
+            circleImageView: 'de.hdodenhof:circleimageview:3.0.1',
+            stetho         : 'com.facebook.stetho:stetho:1.5.1',
+
+            junit          : 'junit:junit:4.12',
+            robolectric    : 'org.robolectric:robolectric:4.3',
+            assertj        : 'org.assertj:assertj-core:3.13.2',
+            mockito        : 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+    ]
+}
