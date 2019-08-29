@@ -51,6 +51,17 @@ dependencies {
     implementation deps.kotlin.jdk7
     implementation deps.kotlin.coroutines
 
+    implementation deps.androidx.core
+    implementation deps.androidx.activity
+    implementation deps.androidx.fragment
+    implementation deps.androidx.constraintlayout
+    implementation deps.androidx.recyclerview
+    implementation deps.androidx.lifecycle.livedata
+    implementation deps.androidx.lifecycle.viewmodel
+    kapt deps.androidx.lifecycle.compiler
+    implementation deps.androidx.navigation.fragment
+    implementation deps.androidx.navigation.ui
+
     implementation(deps.crashlytics) {
         transitive = true
     }
