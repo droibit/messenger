@@ -5,6 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
+apply from: rootProject.file('dependencies_shared.gradle')
+
 android {
     compileSdkVersion buildConfig.compileSdk
 
@@ -45,24 +47,6 @@ android {
         exclude 'META-INF/*.kotlin_module'
         exclude 'META-INF/*.version'
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    lintOptions {
-        textReport true
-        textOutput 'stdout'
-        lintConfig rootProject.file('lint.xml')
-
-        checkDependencies true
-        checkTestSources true
-        explainIssues false
-
-        // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
-        checkReleaseBuilds false
-    }
 }
 
 repositories {
@@ -74,35 +58,18 @@ configurations.all {
 }
 
 dependencies {
-    implementation deps.kotlin.jdk7
-    implementation deps.kotlin.coroutines
-
-    implementation deps.androidx.core
-    implementation deps.androidx.activity
-    implementation deps.androidx.fragment
-    implementation deps.androidx.constraintlayout
     implementation deps.androidx.recyclerview
-    implementation deps.androidx.lifecycle.livedata
-    implementation deps.androidx.lifecycle.viewmodel
     kapt deps.androidx.lifecycle.compiler
     implementation deps.androidx.navigation.runtime
     implementation deps.androidx.navigation.fragment
+
+    kapt deps.dagger.compiler
+    kapt deps.dagger.androidProcessor
 
     implementation(deps.crashlytics) {
         transitive = true
     }
     implementation deps.firebase.core
-
-    implementation deps.androidx.wear
-    implementation deps.playServices.wearable
-    implementation deps.wearable.support
-    compileOnly deps.wearable.wearable
-
-    implementation deps.dagger.runtime
-    implementation deps.dagger.androidSupport
-    kapt deps.dagger.compiler
-    kapt deps.dagger.androidProcessor
-    compileOnly deps.javax.inject
 
     implementation(deps.twitter.kit) {
         transitive = true
@@ -120,7 +87,6 @@ dependencies {
     }
     implementation(deps.picasso.okhttp3Downloader)
 
-    implementation deps.timber
     implementation deps.chopstick.resource
     implementation(deps.chopstick.preference) {
         exclude module: 'preference'
@@ -129,10 +95,7 @@ dependencies {
 
     debugImplementation deps.stetho
 
-    testImplementation deps.junit
     testImplementation deps.robolectric
-    testImplementation deps.assertj
-    testImplementation deps.mockito
 }
 
 kapt {

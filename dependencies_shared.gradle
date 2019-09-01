@@ -1,0 +1,29 @@
+dependencies {
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutines.core
+    implementation deps.kotlin.coroutines.android
+
+    implementation deps.androidx.core
+    implementation deps.androidx.activity
+    implementation deps.androidx.fragment
+    implementation deps.androidx.constraintlayout
+    implementation deps.androidx.lifecycle.livedata
+    implementation deps.androidx.lifecycle.viewmodel
+
+    implementation deps.androidx.wear
+    implementation deps.playServices.wearable
+    implementation deps.wearable.support
+    compileOnly deps.wearable.wearable
+
+    implementation deps.dagger.runtime
+    implementation deps.dagger.androidSupport
+    compileOnly deps.javax.inject
+
+    implementation deps.timber
+
+    testImplementation deps.junit
+    testImplementation deps.assertj
+    testImplementation deps.mockito
+    testImplementation deps.androidx.archTesting
+    testImplementation deps.kotlin.coroutines.test
+}
