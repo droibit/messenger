@@ -7,6 +7,8 @@ local.properties
 *.iws
 .idea/*
 !.idea/runConfigurations/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
 
 # Android Studio files
 /captures

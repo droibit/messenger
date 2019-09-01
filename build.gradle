@@ -22,6 +22,7 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -29,10 +30,13 @@ buildscript {
         classpath deps.plugin.kotlin
         classpath deps.plugin.googleServices
         classpath deps.plugin.fabric
+        classpath deps.plugin.ktlint
     }
 }
 
 allprojects {
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
     repositories {
         google()
         jcenter()
