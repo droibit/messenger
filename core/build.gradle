@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+    }
+
+    buildTypes {
+        release {
+            consumerProguardFiles 'consumer-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/core_debug.kotlin_module'
+    }
+}
+
+dependencies {
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutines.core
+
+    api(deps.twitter.kit) {
+        transitive = true
+    }
+    api(deps.twitter.text) {
+        exclude module: 'snakeyaml'
+    }
+    api deps.okhttp.client
+    api deps.okhttp.logging
+    api deps.retrofit.core
+    api deps.retrofit.converterGson
+    api deps.gson
+    api(deps.picasso.runtime) {
+        exclude module: 'okhttp'
+    }
+    api(deps.picasso.okhttp3Downloader)
+}

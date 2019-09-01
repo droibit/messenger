@@ -16,6 +16,7 @@ android {
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.version.code
         versionName buildConfig.version.name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "en", "ja"
         vectorDrawables.useSupportLibrary = true
         // ref. https://developer.android.com/training/wearables/apps/packaging.html#migrating
@@ -58,6 +59,8 @@ configurations.all {
 }
 
 dependencies {
+    implementation project(':core')
+
     implementation deps.androidx.recyclerview
     kapt deps.androidx.lifecycle.compiler
     implementation deps.androidx.navigation.runtime
@@ -70,22 +73,6 @@ dependencies {
         transitive = true
     }
     implementation deps.firebase.core
-
-    implementation(deps.twitter.kit) {
-        transitive = true
-    }
-    implementation(deps.twitter.text) {
-        exclude module: 'snakeyaml'
-    }
-    implementation deps.okhttp.client
-    implementation deps.okhttp.logging
-    implementation deps.retrofit.core
-    implementation deps.retrofit.converterGson
-    implementation deps.gson
-    implementation(deps.picasso.runtime) {
-        exclude module: 'okhttp'
-    }
-    implementation(deps.picasso.okhttp3Downloader)
 
     implementation deps.chopstick.resource
     implementation(deps.chopstick.preference) {
