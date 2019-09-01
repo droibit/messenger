@@ -7,7 +7,7 @@ ext {
             dagger   : '2.24',
             androidx : [
                     navigation: '2.2.0-alpha01',
-                    lifecycle: '2.2.0-alpha03'
+                    lifecycle : '2.2.0-alpha03'
             ],
             chopstick: '1.0.0-beta01',
     ]
@@ -17,7 +17,8 @@ ext {
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                     googleServices: 'com.google.gms:google-services:4.3.1',
                     fabric        : 'io.fabric.tools:gradle:1.31.0',
-                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:8.2.0'
+                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:8.2.0',
+                    ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.9.5'
             ],
             kotlin         : [
                     jdk7      : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
@@ -30,10 +31,10 @@ ext {
                             compiler : "androidx.lifecycle:lifecycle-compiler:${versions.androidx.lifecycle}",
                     ],
                     navigation      : [
-                            runtime: "androidx.navigation:navigation-runtime-ktx:${versions.androidx.navigation}",
+                            runtime : "androidx.navigation:navigation-runtime-ktx:${versions.androidx.navigation}",
                             fragment: "androidx.navigation:navigation-fragment-ktx:${versions.androidx.navigation}",
                     ],
-                    core : 'androidx.core:core-ktx:1.2.0-alpha03',
+                    core            : 'androidx.core:core-ktx:1.2.0-alpha03',
                     wear            : 'androidx.wear:wear:1.0.0',
                     activity        : 'androidx.activity:activity-ktx:1.1.0-alpha02',
                     fragment        : 'androidx.fragment:fragment-ktx:1.2.0-alpha02',
@@ -81,6 +82,7 @@ ext {
                     okhttp3Downloader: 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
             ],
             crashlytics    : "com.crashlytics.sdk.android:crashlytics:2.10.1",
+            ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.3",
             gson           : 'com.google.code.gson:gson:2.8.5',
             okio           : 'com.squareup.okio:okio:2.4.0',
             timber         : 'com.jakewharton.timber:timber:4.7.1',

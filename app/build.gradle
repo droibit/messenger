@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -124,6 +125,7 @@ dependencies {
     implementation(deps.chopstick.preference) {
         exclude module: 'preference'
     }
+    implementation deps.ossLicenseUi
 
     debugImplementation deps.stetho
 
