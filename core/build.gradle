@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -25,6 +26,11 @@ dependencies {
     implementation deps.kotlin.coroutines.core
 
     implementation deps.androidx.lifecycle.livedata
+
+    implementation deps.dagger.runtime
+    kapt deps.dagger.compiler
+    compileOnly deps.javax.inject
+
     api(deps.twitter.kit) {
         transitive = true
     }
@@ -40,4 +46,6 @@ dependencies {
         exclude module: 'okhttp'
     }
     api(deps.picasso.okhttp3Downloader)
+
+    implementation deps.timber
 }
