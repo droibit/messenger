@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:appCategory="social"
         android:theme="@android:style/Theme.DeviceDefault"
+        android:name=".LookingApplication"
         tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library
