@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.droibit.looking2.core.util
+package com.droibit.looking2.core.util.ext
 
 /**
  * Helper to force a when statement to assert all options are matched in a when statement.

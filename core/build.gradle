@@ -24,6 +24,7 @@ dependencies {
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
 
+    implementation deps.androidx.lifecycle.livedata
     api(deps.twitter.kit) {
         transitive = true
     }
