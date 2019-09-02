@@ -1,0 +1,68 @@
+repositories {
+    maven {
+        url "https://maven.google.com"
+        content {
+            includeGroupByRegex "com\\.android.*"
+            includeGroupByRegex "androidx.*"
+            includeGroup "android.arch.lifecycle"
+            includeGroup "android.arch.core"
+            includeGroup "com.google.firebase"
+            includeGroup "com.google.gms"
+            includeGroup "com.google.android.gms"
+            includeGroup "com.google.android.support"
+            includeGroup "com.google.android.wearable"
+        }
+    }
+
+    maven {
+        url 'https://jcenter.bintray.com'
+        content {
+            includeGroupByRegex "com\\.google.*"
+            includeGroupByRegex "com\\.squareup.*"
+            includeGroupByRegex "com\\.jakewharton.*"
+            includeGroupByRegex "com\\.googlecode.*"
+            includeGroupByRegex "org\\.jetbrains.*"
+            includeGroupByRegex "org\\.codehaus.*"
+            includeGroupByRegex "org\\.apache.*"
+            includeGroupByRegex "javax.*"
+            includeGroupByRegex "com\\.twitter.*"
+            includeGroupByRegex "com\\.facebook.*"
+            includeGroup "backport-util-concurrent"
+            includeGroup "classworlds"
+            includeGroup "com.almworks.sqlite4java"
+            includeGroup "com.ibm.icu"
+            includeGroup "com.nhaarman.mockitokotlin2"
+            includeGroup "commons-cli"
+            includeGroup "de.hdodenhof"
+            includeGroup "junit"
+            includeGroup "nekohtml"
+            includeGroup "net.bytebuddy"
+            includeGroup "org.assertj"
+            includeGroup "org.bouncycastle"
+            includeGroup "org.checkerframework"
+            includeGroup "org.hamcrest"
+            includeGroup "org.mockito"
+            includeGroup "org.objenesis"
+            includeGroup "org.ow2.asm"
+            includeGroup "org.robolectric"
+
+            excludeGroup "com.google.firebase"
+            excludeGroup "com.google.android.gms"
+        }
+    }
+
+    maven {
+        url 'https://maven.fabric.io/public'
+        content {
+            includeGroupByRegex "io\\.fabric.*"
+            includeGroupByRegex "com\\.crashlytics.*"
+        }
+    }
+
+    maven {
+        url "https://jitpack.io"
+        content {
+            includeGroupByRegex "com\\.github\\.droibit.*"
+        }
+    }
+}

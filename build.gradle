@@ -1,7 +1,10 @@
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryPlugin
 
-buildscript {
+buildscript { scriptHandler ->
+    apply from: 'repositories.gradle',
+            to: scriptHandler
+
     ext.buildConfig = [
             compileSdk: 29,
             targetSdk : 29,
@@ -44,6 +47,10 @@ allprojects {
 }
 
 subprojects {
+    buildscript {
+        apply from: rootProject.file('repositories.gradle')
+    }
+
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
     plugins.whenPluginAdded { plugin ->

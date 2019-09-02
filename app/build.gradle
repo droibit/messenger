@@ -50,10 +50,6 @@ android {
     }
 }
 
-repositories {
-    maven { url "https://jitpack.io" }
-}
-
 configurations.all {
     exclude group: 'androidx.appcompat', module: 'appcompat'
 }
