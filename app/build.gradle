@@ -23,6 +23,10 @@ android {
         wearAppUnbundled true
     }
 
+    dataBinding {
+        enabled true
+    }
+
     buildTypes {
         debug {
             // ref. https://developer.android.com/studio/build/optimize-your-build.html#disable_crashlytics

@@ -17,6 +17,10 @@ android {
         resConfigs "en", "ja"
         vectorDrawables.useSupportLibrary = true
     }
+
+    dataBinding {
+        enabled true
+    }
 }
 
 configurations.all {
