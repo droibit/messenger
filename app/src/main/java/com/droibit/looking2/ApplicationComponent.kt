@@ -16,9 +16,6 @@ interface ApplicationComponent {
         @BindsInstance
         fun application(application: Application): Builder
 
-        @BindsInstance
-        fun debuggable(@Named("debuggable") debuggable: Boolean): Builder
-
         fun core(component: CoreComponent): Builder
 
         fun build(): ApplicationComponent

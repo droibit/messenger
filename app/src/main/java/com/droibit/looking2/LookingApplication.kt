@@ -12,7 +12,7 @@ class LookingApplication: Application() {
 
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
         DaggerCoreComponent.builder()
-            // .coreModule()
+            .debuggable(BuildConfig.DEBUG)
             .build()
     }
 
@@ -20,7 +20,6 @@ class LookingApplication: Application() {
         super.onCreate()
         DaggerApplicationComponent.builder()
             .application(this)
-            .debuggable(BuildConfig.DEBUG)
             .core(coreComponent)
             .build()
             .inject(this)
