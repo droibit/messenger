@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.droibit.looking2.account">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/feature_name_account">
+        <dist:delivery>
+            <dist:install-time />
+        </dist:delivery>
+
+        <dist:fusing dist:include="true" />
+    </dist:module>
+
+    <application
+        android:name="com.droibit.looking2.LookingApplication"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".AccountActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
