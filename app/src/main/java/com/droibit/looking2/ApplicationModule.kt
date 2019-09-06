@@ -1,19 +1,12 @@
 package com.droibit.looking2
 
-import android.app.Application
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import timber.log.Timber
 import javax.inject.Named
 
 @Module
-object ApplicationModule  {
-
-    @JvmStatic
-    @Named("appContext")
-    @Provides
-    fun provideContext(application: Application): Context = application
+object ApplicationModule {
 
     @JvmStatic
     @Provides

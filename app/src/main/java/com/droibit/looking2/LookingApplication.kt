@@ -13,13 +13,13 @@ class LookingApplication: Application() {
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
         DaggerCoreComponent.builder()
             .debuggable(BuildConfig.DEBUG)
+            .application(this)
             .build()
     }
 
     override fun onCreate() {
         super.onCreate()
         DaggerApplicationComponent.builder()
-            .application(this)
             .core(coreComponent)
             .build()
             .inject(this)

@@ -1,5 +1,6 @@
 package com.droibit.looking2.core.di
 
+import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Named
@@ -11,6 +12,9 @@ interface CoreComponent : CoreModule.Provider {
 
     @Component.Builder
     interface Builder {
+
+        @BindsInstance
+        fun application(application: Application): Builder
 
         @BindsInstance
         fun debuggable(@Named("debuggable") debuggable: Boolean): Builder
