@@ -5,7 +5,6 @@ import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.scope.ApplicationScope
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Named
 
 @ApplicationScope
 @Component(dependencies = [CoreComponent::class], modules = [ApplicationModule::class])

@@ -26,6 +26,7 @@ dependencies {
     implementation deps.kotlin.coroutines.core
 
     implementation deps.androidx.lifecycle.livedata
+    implementation deps.androidx.lifecycle.viewmodel
 
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
