@@ -52,7 +52,7 @@ ext {
                     wearable: "com.google.android.wearable:wearable:${versions.wearable}"
             ],
             playServices   : [
-                    base    : "com.google.android.gms:play-services-base:18.1.1",
+                    base    : "com.google.android.gms:play-services-base:17.1.0",
                     wearable: "com.google.android.gms:play-services-wearable:17.0.0"
             ],
             firebase       : [

@@ -11,6 +11,7 @@ dependencies {
     implementation deps.androidx.lifecycle.viewmodel
 
     implementation deps.androidx.wear
+    implementation deps.playServices.base
     implementation deps.playServices.wearable
     implementation deps.wearable.support
     compileOnly deps.wearable.wearable
