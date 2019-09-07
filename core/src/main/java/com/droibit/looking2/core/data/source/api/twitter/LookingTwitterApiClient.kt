@@ -1,20 +1,15 @@
 package com.droibit.looking2.core.data.source.api.twitter
 
 import com.droibit.looking2.core.data.source.api.twitter.list.UserList
-import com.twitter.sdk.android.core.Callback
-import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterApiClient
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User
-import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class LookingTwitterApiClient(
     session: TwitterSession,
@@ -147,23 +142,5 @@ class LookingTwitterApiClient(
             null
         )
             .executeInternal()
-    }
-
-    private suspend fun <T> Call<T>.executeInternal(): T {
-        return suspendCancellableCoroutine { context ->
-            enqueue(object : Callback<T>() {
-                override fun success(result: Result<T>) {
-                    context.resume(result.data)
-                }
-
-                override fun failure(exception: TwitterException) {
-                    if (context.isActive) context.resumeWithException(exception)
-                }
-            })
-
-            context.invokeOnCancellation {
-                if (!isCanceled) cancel()
-            }
-        }
     }
 }
