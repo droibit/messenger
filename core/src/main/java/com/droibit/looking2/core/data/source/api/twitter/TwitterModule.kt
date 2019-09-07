@@ -8,12 +8,20 @@ import com.twitter.sdk.android.core.SessionManager
 import com.twitter.sdk.android.core.TwitterConfig
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession
+import com.twitter.sdk.android.core.internal.TwitterApi
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 object TwitterModule {
+
+    @Singleton
+    @Provides
+    @JvmStatic
+    fun provideTwitterApi(): TwitterApi = TwitterApi()
 
     @Provides
     @JvmStatic
@@ -40,4 +48,17 @@ object TwitterModule {
     @JvmStatic
     fun provideSessionManager(twitterCore: TwitterCore): SessionManager<TwitterSession> =
         twitterCore.sessionManager
+
+    @Singleton
+    @Provides
+    @JvmStatic
+    fun provideLookingClientFactory(
+        okHttpClient: OkHttpClient
+    ): LookingTwitterApiClient.Factory {
+        return object : LookingTwitterApiClient.Factory {
+            override fun create(session: TwitterSession): LookingTwitterApiClient {
+                return LookingTwitterApiClient(session, okHttpClient)
+            }
+        }
+    }
 }

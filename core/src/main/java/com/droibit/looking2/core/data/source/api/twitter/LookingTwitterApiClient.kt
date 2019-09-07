@@ -16,6 +16,10 @@ class LookingTwitterApiClient(
     client: OkHttpClient
 ) : TwitterApiClient(session, client) {
 
+    interface Factory {
+        fun create(session: TwitterSession): LookingTwitterApiClient
+    }
+
     interface UserListService {
 
         @GET("/1.1/lists/list.json")
