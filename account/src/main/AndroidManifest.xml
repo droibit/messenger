@@ -18,7 +18,7 @@
         android:name="com.droibit.looking2.LookingApplication"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".AccountActivity"
+            android:name=".ui.AccountActivity"
             android:exported="false" />
     </application>
 

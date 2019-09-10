@@ -1,7 +1,8 @@
-package com.droibit.looking2.account
+package com.droibit.looking2.account.ui
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.droibit.looking2.account.R
 
 class AccountActivity : FragmentActivity() {
 

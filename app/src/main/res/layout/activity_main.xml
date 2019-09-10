@@ -5,7 +5,7 @@
     android:background="@color/dark_grey"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ui.launch.LaunchActivity"
     tools:deviceIds="wear"
     android:padding="@dimen/box_inset_layout_padding">
 

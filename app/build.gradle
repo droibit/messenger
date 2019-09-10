@@ -11,7 +11,7 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.droibit.looking2"
+        applicationId buildConfig.applicationId
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.version.code
@@ -21,6 +21,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         // ref. https://developer.android.com/training/wearables/apps/packaging.html#migrating
         wearAppUnbundled true
+
+        buildConfigField("String", "PACKAGE_NAME", "\"${buildConfig.applicationId}\"")
     }
 
     dataBinding {
