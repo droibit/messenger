@@ -8,6 +8,8 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -15,11 +17,27 @@ import javax.inject.Inject
 import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
 import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
 
-internal class AccountRepositoryImpl @Inject constructor(
+internal class AccountRepositoryImpl(
     private val twitterService: TwitterAccountService,
     private val localStore: TwitterLocalStore,
-    private val dispatcherProvider: CoroutinesDispatcherProvider
+    private val dispatcherProvider: CoroutinesDispatcherProvider,
+    private val twitterAccountsChannel: BroadcastChannel<List<TwitterAccount>>
 ) : AccountRepository {
+
+    @Inject
+    constructor(
+        twitterService: TwitterAccountService,
+        localStore: TwitterLocalStore,
+        dispatcherProvider: CoroutinesDispatcherProvider
+    ) : this(
+        twitterService,
+        localStore,
+        dispatcherProvider,
+        ConflatedBroadcastChannel<List<TwitterAccount>>()
+    )
+
+    override val twitterAccounts: BroadcastChannel<List<TwitterAccount>>
+        get() = twitterAccountsChannel
 
     override suspend fun activeAccount(): TwitterAccount? {
         return localStore.activeSession()?.toAccount()
@@ -34,10 +52,16 @@ internal class AccountRepositoryImpl @Inject constructor(
             }
             val session = twitterService.createNewSession(requestToken, responseUrl)
             localStore.add(session)
+            emitTwitterAccounts()
+
             emit(AuthenticationSuccess)
         } catch (e: AuthenticationError) {
             emit(AuthenticationFailure(error = e))
         }
+    }
 
+    private suspend fun emitTwitterAccounts() {
+        val accounts = localStore.sessions().map { it.toAccount() }
+        twitterAccountsChannel.offer(accounts)
     }
 }
