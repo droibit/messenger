@@ -1,11 +1,13 @@
 package com.droibit.looking2.core.data.source
 
 import com.droibit.looking2.core.data.source.api.ApiModule
+import com.droibit.looking2.core.data.source.local.LocalStoreModule
 import dagger.Module
 
 @Module(
     includes = [
-        ApiModule::class
+        ApiModule::class,
+        LocalStoreModule::class
     ]
 )
-interface SourceModule 
+interface SourceModule

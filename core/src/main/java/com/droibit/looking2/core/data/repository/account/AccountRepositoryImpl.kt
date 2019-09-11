@@ -2,6 +2,7 @@ package com.droibit.looking2.core.data.repository.account
 
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.repository.account.service.TwitterAccountService
+import com.droibit.looking2.core.data.source.local.twitter.TwitterLocalStore
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
@@ -14,20 +15,19 @@ import com.droibit.looking2.core.model.account.AuthenticationResult.Success as A
 
 internal class AccountRepositoryImpl @Inject constructor(
     private val twitterService: TwitterAccountService,
+    private val localStore: TwitterLocalStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : AccountRepository {
 
     override suspend fun authenticateTwitter(): Flow<AuthenticationResult> = flow {
         try {
             val requestToken = twitterService.requestTempToken()
-
             val responseUrl = withContext(dispatcherProvider.main) {
                 emit(WillAuthenticateOnPhone)
                 twitterService.sendAuthorizationRequest(requestToken)
             }
-
             val session = twitterService.createNewSession(requestToken, responseUrl)
-            // TODO: Store new session
+            localStore.add(session)
             emit(AuthenticationSuccess)
         } catch (e: AuthenticationError) {
             emit(AuthenticationFailure(error = e))
