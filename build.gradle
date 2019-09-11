@@ -1,6 +1,4 @@
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.DynamicFeaturePlugin
-import com.android.build.gradle.LibraryPlugin
+import com.android.build.gradle.BasePlugin
 
 buildscript { scriptHandler ->
     apply from: 'repositories.gradle',
@@ -56,8 +54,7 @@ subprojects {
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
     plugins.whenPluginAdded { plugin ->
-        if (plugin instanceof AppPlugin || plugin instanceof LibraryPlugin ||
-                plugin instanceof DynamicFeaturePlugin) {
+        if (plugin instanceof BasePlugin) {
             android {
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_1_8
@@ -77,6 +74,16 @@ subprojects {
                     checkReleaseBuilds false
                 }
             }
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach { task ->
+        task.kotlinOptions {
+            freeCompilerArgs += [
+                    '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                    '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi',
+                    '-Xuse-experimental=kotlin.time.ExperimentalTime',
+            ]
         }
     }
 }
