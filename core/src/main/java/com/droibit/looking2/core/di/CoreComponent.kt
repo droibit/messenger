@@ -14,7 +14,7 @@ import javax.inject.Singleton
         RepositoryModule::class
     ]
 )
-interface CoreComponent : CoreModule.Provider {
+interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
 
     @Component.Builder
     interface Builder {
