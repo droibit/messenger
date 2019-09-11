@@ -51,18 +51,20 @@ class WearTwitterOAuthService @Inject constructor(
     ): String =
         suspendCancellableCoroutine { cont ->
             val authorizeUrl = getAuthorizeUrl(requestToken)
-            client.sendAuthorizationRequest(Uri.parse(authorizeUrl), object : OAuthClient.Callback() {
-                override fun onAuthorizationError(errorCode: Int) {
-                    if (cont.isActive) cont.resumeWithException(ApiException(Status(errorCode)))
-                }
+            client.sendAuthorizationRequest(
+                Uri.parse(authorizeUrl),
+                object : OAuthClient.Callback() {
+                    override fun onAuthorizationError(errorCode: Int) {
+                        if (cont.isActive) cont.resumeWithException(ApiException(Status(errorCode)))
+                    }
 
-                override fun onAuthorizationResponse(
-                    requestUrl: Uri,
-                    responseUrl: Uri
-                ) {
-                    if (cont.isActive) cont.resume(responseUrl.toString())
-                }
-            })
+                    override fun onAuthorizationResponse(
+                        requestUrl: Uri,
+                        responseUrl: Uri
+                    ) {
+                        if (cont.isActive) cont.resume(responseUrl.toString())
+                    }
+                })
         }
 
     @Throws(TwitterException::class)

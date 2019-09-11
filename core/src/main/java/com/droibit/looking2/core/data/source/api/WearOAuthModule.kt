@@ -8,13 +8,11 @@ import javax.inject.Named
 
 @Module
 object WearOAuthModule {
-
     @Provides
     @JvmStatic
     fun provideOAuthClient(@Named("appContext") context: Context): OAuthClient {
         return OAuthClient.create(context)
     }
-
 
     @Named("wearCallbackUrl")
     @Provides

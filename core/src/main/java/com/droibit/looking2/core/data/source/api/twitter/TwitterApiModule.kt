@@ -16,7 +16,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-object TwitterModule {
+object TwitterApiModule {
 
     @Singleton
     @Provides
