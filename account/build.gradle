@@ -31,6 +31,9 @@ dependencies {
     implementation project(':app')
     implementation project(':core')
 
+    implementation deps.androidx.navigation.runtime
+    implementation deps.androidx.navigation.fragment
+
     kapt deps.dagger.compiler
     kapt deps.dagger.androidProcessor
 }
