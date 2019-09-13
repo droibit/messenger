@@ -44,19 +44,19 @@ internal class AccountRepositoryImpl(
     }
 
     override suspend fun authenticateTwitter(): Flow<AuthenticationResult> = flow {
-        try {
-            val requestToken = twitterService.requestTempToken()
-            val responseUrl = withContext(dispatcherProvider.main) {
+        withContext(dispatcherProvider.io) {
+            try {
+                val requestToken = twitterService.requestTempToken()
                 emit(WillAuthenticateOnPhone)
-                twitterService.sendAuthorizationRequest(requestToken)
+                val responseUrl = twitterService.sendAuthorizationRequest(requestToken)
+                twitterService.createNewSession(requestToken, responseUrl).also {
+                    localStore.add(session = it)
+                    emitTwitterAccounts()
+                }
+                emit(AuthenticationSuccess)
+            } catch (e: AuthenticationError) {
+                emit(AuthenticationFailure(error = e))
             }
-            val session = twitterService.createNewSession(requestToken, responseUrl)
-            localStore.add(session)
-            emitTwitterAccounts()
-
-            emit(AuthenticationSuccess)
-        } catch (e: AuthenticationError) {
-            emit(AuthenticationFailure(error = e))
         }
     }
 

@@ -1,13 +1,14 @@
 package com.droibit.looking2.core.data.repository.account.service
 
 import android.support.wearable.authentication.OAuthClient
-import androidx.annotation.UiThread
+import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.source.api.twitter.oauth.WearTwitterOAuthService
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.google.android.gms.common.api.ApiException
 import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -15,6 +16,7 @@ import javax.inject.Provider
 
 class TwitterAccountService @Inject constructor(
     private val oauthClientProvider: Provider<OAuthClient>,
+    private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val api: WearTwitterOAuthService
 ) {
 
@@ -33,16 +35,17 @@ class TwitterAccountService @Inject constructor(
         }
     }
 
-    @UiThread
     @Throws(AuthenticationError::class)
     suspend fun sendAuthorizationRequest(requestToken: TwitterAuthToken): String {
-        val client = oauthClientProvider.get()
-        try {
-            return api.sendAuthorizationRequest(client, requestToken)
-        } catch (e: ApiException) {
-            throw AuthenticationError.PlayServices(statusCode = e.statusCode)
-        } finally {
-            client.destroy()
+        return withContext(dispatcherProvider.main) {
+            val client = oauthClientProvider.get()
+            try {
+                api.sendAuthorizationRequest(client, requestToken)
+            } catch (e: ApiException) {
+                throw AuthenticationError.PlayServices(statusCode = e.statusCode)
+            } finally {
+                client.destroy()
+            }
         }
     }
 
