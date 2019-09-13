@@ -79,6 +79,7 @@ subprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach { task ->
         task.kotlinOptions {
+            jvmTarget = "1.8"
             freeCompilerArgs += [
                     '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
                     '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi',
