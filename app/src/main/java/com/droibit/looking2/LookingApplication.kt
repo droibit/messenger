@@ -3,6 +3,7 @@ package com.droibit.looking2
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.DaggerCoreComponent
 import timber.log.Timber
@@ -26,8 +27,9 @@ class LookingApplication: Application() {
     }
 
     @Inject
-    fun bootstrap(timberTree: Timber.Tree) {
+    fun bootstrap(timberTree: Timber.Tree, twitterBootstrap: TwitterBootstrap) {
         Timber.plant(timberTree)
+        twitterBootstrap.initialize()
 
         Timber.d("Bootstrapped")
     }

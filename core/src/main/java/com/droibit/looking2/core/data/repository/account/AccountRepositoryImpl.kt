@@ -39,6 +39,11 @@ internal class AccountRepositoryImpl(
     override val twitterAccounts: BroadcastChannel<List<TwitterAccount>>
         get() = twitterAccountsChannel
 
+    override suspend fun initialize() {
+        localStore.sessions().forEach { twitterService.ensureApiClient(session = it) }
+        emitTwitterAccounts()
+    }
+
     override suspend fun activeAccount(): TwitterAccount? {
         return localStore.activeSession()?.toAccount()
     }

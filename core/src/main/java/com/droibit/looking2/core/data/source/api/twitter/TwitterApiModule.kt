@@ -37,7 +37,7 @@ object TwitterApiModule {
 
     @Provides
     @JvmStatic
-    fun provideLogger(@Named("debug") debug: Boolean): Logger =
+    fun provideLogger(@Named("debuggable") debug: Boolean): Logger =
         DefaultLogger(if (debug) Int.MAX_VALUE else Log.VERBOSE)
 
     @Provides

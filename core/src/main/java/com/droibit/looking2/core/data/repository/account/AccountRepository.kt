@@ -9,6 +9,8 @@ interface AccountRepository {
 
     val twitterAccounts: BroadcastChannel<List<TwitterAccount>>
 
+    suspend fun initialize()
+
     suspend fun activeAccount(): TwitterAccount?
 
     suspend fun authenticateTwitter(): Flow<AuthenticationResult>

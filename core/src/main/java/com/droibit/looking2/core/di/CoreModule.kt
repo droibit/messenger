@@ -2,6 +2,7 @@ package com.droibit.looking2.core.di
 
 import android.app.Application
 import android.content.Context
+import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.Module
@@ -31,5 +32,7 @@ object CoreModule {
         fun provideDebuggable(): Boolean
 
         fun providePlayServicesChecker(): PlayServicesChecker
+
+        fun provideTwitterBootstrap(): TwitterBootstrap
     }
 }
