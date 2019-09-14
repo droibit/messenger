@@ -52,11 +52,11 @@ object Activities {
     object Account : AddressableActivity {
         override val className = "${BuildConfig.PACKAGE_NAME}.account.ui.AccountActivity"
 
-        const val EXTRA_LOGIN_TWITTER = "EXTRA_SHOT_ID"
+        const val EXTRA_SIGN_IN_TWITTER = "EXTRA_SIGN_IN_TWITTER"
 
-        fun createIntent(loginTwitter: Boolean): Intent {
+        fun createIntent(signInTwitter: Boolean): Intent {
             return intentTo(Account).apply {
-                putExtra(EXTRA_LOGIN_TWITTER, loginTwitter)
+                putExtra(EXTRA_SIGN_IN_TWITTER, signInTwitter)
             }
         }
     }

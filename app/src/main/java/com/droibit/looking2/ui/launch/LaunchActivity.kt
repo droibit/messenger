@@ -4,10 +4,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.droibit.looking2.R
-import com.droibit.looking2.coreComponent
 import com.droibit.looking2.ui.Activities
 import javax.inject.Inject
 
@@ -24,8 +22,9 @@ class LaunchActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel.launchDestination.observe(this) {
-            val intent = Activities.Account.createIntent(loginTwitter = false)
+            val intent = Activities.Account.createIntent(signInTwitter = false)
             startActivity(intent)
+            finish()
         }
     }
 }
