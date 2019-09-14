@@ -84,8 +84,6 @@ dependencies {
     }
     implementation deps.ossLicenseUi
 
-    debugImplementation deps.stetho
-
     testImplementation deps.robolectric
 }
 

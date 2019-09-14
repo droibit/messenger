@@ -52,4 +52,6 @@ dependencies {
     api(deps.picasso.okhttp3Downloader)
 
     implementation deps.timber
+
+    debugImplementation deps.stetho
 }
