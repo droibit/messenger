@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_sign_in_label_twitter">Twitterでログイン</string>
+    <string name="account_sign_in_title">ログイン</string>
+    <string name="account_sign_in_description_twitter">ウォッチでTwitterをはじめましょう</string>
+</resources>
