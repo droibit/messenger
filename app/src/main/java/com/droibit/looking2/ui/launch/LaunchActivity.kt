@@ -22,8 +22,13 @@ class LaunchActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel.launchDestination.observe(this) {
-            val intent = Activities.Account.createIntent(signInTwitter = false)
-            startActivity(intent)
+            when(it) {
+                LaunchDestination.HOME -> TODO()
+                LaunchDestination.LOGIN_TWITTER -> {
+                    val intent = Activities.Account.createIntent(signInTwitter = true)
+                    startActivity(intent)
+                }
+            }
             finish()
         }
     }
