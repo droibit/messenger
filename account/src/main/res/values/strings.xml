@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="account_sign_in_title">Sign in</string>
     <string name="account_sign_in_description_twitter">Let\'s start Twitter on your watch.</string>
     <string name="account_sign_in_label_twitter">Sign in with Twitter</string>
+    <string name="account_sign_in_message_phone_preparation">To sign in with your account, you need a device paired with this watch. Are you ready?</string>
 </resources>

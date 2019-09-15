@@ -34,6 +34,8 @@ dependencies {
     implementation deps.androidx.navigation.runtime
     implementation deps.androidx.navigation.fragment
 
+    implementation deps.chopstick.resource
+
     kapt deps.dagger.compiler
     kapt deps.dagger.androidProcessor
 }

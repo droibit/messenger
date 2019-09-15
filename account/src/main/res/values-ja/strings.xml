@@ -3,4 +3,5 @@
     <string name="account_sign_in_label_twitter">Twitterでログイン</string>
     <string name="account_sign_in_title">ログイン</string>
     <string name="account_sign_in_description_twitter">ウォッチでTwitterをはじめましょう</string>
+    <string name="account_sign_in_message_phone_preparation">Twitterアカウントでログインするためにウォッチとペアリングしたデバイスが必要です。</string>
 </resources>
