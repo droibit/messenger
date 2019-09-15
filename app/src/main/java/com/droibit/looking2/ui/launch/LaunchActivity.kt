@@ -25,7 +25,7 @@ class LaunchActivity : FragmentActivity() {
             when(it) {
                 LaunchDestination.HOME -> TODO()
                 LaunchDestination.LOGIN_TWITTER -> {
-                    val intent = Activities.Account.createIntent(signInTwitter = true)
+                    val intent = Activities.Account.createIntent(needTwitterSignIn = true)
                     startActivity(intent)
                 }
             }

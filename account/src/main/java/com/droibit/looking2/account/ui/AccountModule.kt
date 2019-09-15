@@ -3,8 +3,7 @@ package com.droibit.looking2.account.ui
 import android.app.Activity
 import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment
 import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInModule
-import com.droibit.looking2.ui.Activities
-import com.droibit.looking2.ui.Activities.Account.EXTRA_SIGN_IN_TWITTER
+import com.droibit.looking2.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
@@ -21,12 +20,12 @@ object AccountModule {
     @JvmStatic
     fun provideActivity(activity: AccountActivity): Activity = activity
 
-    @Named("signInTwitterOnly")
+    @Named("needTwitterSignIn")
     @Provides
     @JvmStatic
-    fun provideSignInTwitterOnly(activity: Activity): Boolean {
+    fun provideNeedTwitterSignIn(activity: Activity): Boolean {
         val intent = requireNotNull(activity.intent)
-        return intent.getBooleanExtra(EXTRA_SIGN_IN_TWITTER, false)
+        return intent.getBooleanExtra(EXTRA_NEED_TWITTER_SIGN_IN, false)
     }
 
     @Module

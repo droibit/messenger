@@ -15,9 +15,9 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
-    @field:[Inject Named("signInTwitterOnly")]
+    @field:[Inject Named("needTwitterSignIn")]
     @JvmField
-    var signInTwitterOnly: Boolean = false
+    var needTwitterSignIn: Boolean = false
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
@@ -27,7 +27,7 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
 
         val navController = findNavController(R.id.accountNavHostFragment)
         val navInflater = navController.navInflater
-        navController.graph = if (signInTwitterOnly) {
+        navController.graph = if (needTwitterSignIn) {
             navInflater.inflate(R.navigation.nav_graph_account).apply {
                 startDestination = R.id.twitterSignInFragment
             }
