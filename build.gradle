@@ -36,6 +36,7 @@ buildscript { scriptHandler ->
         classpath deps.plugin.fabric
         classpath deps.plugin.ktlint
         classpath deps.plugin.ossLicense
+        classpath deps.plugin.navSafeArgs
     }
 }
 
