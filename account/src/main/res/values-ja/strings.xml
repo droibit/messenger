@@ -4,4 +4,6 @@
     <string name="account_sign_in_title">ログイン</string>
     <string name="account_sign_in_description_twitter">ウォッチでTwitterをはじめましょう</string>
     <string name="account_sign_in_message_phone_preparation">Twitterアカウントでログインするためにウォッチとペアリングしたデバイスが必要です。</string>
+    <string name="error_message_network_disconnected">ネットワークの接続状況の確認してから再度お試しください。</string>
+    <string name="account_sign_in_error_message_unexpected">サインインできませんでした。</string>
 </resources>

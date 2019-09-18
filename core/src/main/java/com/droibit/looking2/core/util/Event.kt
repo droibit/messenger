@@ -62,3 +62,5 @@ open class Event<out T>(private val content: T) {
         return result
     }
 }
+
+fun<T> T.toEvent(): Event<T>  = Event(this)
