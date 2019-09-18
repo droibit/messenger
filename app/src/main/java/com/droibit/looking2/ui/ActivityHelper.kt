@@ -17,7 +17,15 @@
 @file:JvmName("ActivityHelper")
 package com.droibit.looking2.ui
 
+import android.content.Context
 import android.content.Intent
+import androidx.annotation.StringRes
+import androidx.wear.activity.ConfirmationActivity
+import androidx.wear.activity.ConfirmationActivity.EXTRA_ANIMATION_TYPE
+import androidx.wear.activity.ConfirmationActivity.EXTRA_MESSAGE
+import androidx.wear.activity.ConfirmationActivity.FAILURE_ANIMATION
+import androidx.wear.activity.ConfirmationActivity.OPEN_ON_PHONE_ANIMATION
+import androidx.wear.activity.ConfirmationActivity.SUCCESS_ANIMATION
 import com.droibit.looking2.BuildConfig
 
 /**
@@ -45,6 +53,27 @@ interface AddressableActivity {
  * Can contain intent extra names or functions associated with the activity creation.
  */
 object Activities {
+
+    object Confirmation {
+
+        fun createSuccessIntent(context: Context, @StringRes messageResId: Int): Intent {
+            return Intent(context, ConfirmationActivity::class.java)
+                .putExtra(EXTRA_ANIMATION_TYPE, SUCCESS_ANIMATION)
+                .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+        }
+
+        fun createFailureIntent(context: Context, @StringRes messageResId: Int): Intent {
+            return Intent(context, ConfirmationActivity::class.java)
+                .putExtra(EXTRA_ANIMATION_TYPE, FAILURE_ANIMATION)
+                .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+        }
+
+        fun createOpenOnPhoneIntent(context: Context, @StringRes messageResId: Int): Intent {
+            return Intent(context, ConfirmationActivity::class.java)
+                .putExtra(EXTRA_ANIMATION_TYPE, OPEN_ON_PHONE_ANIMATION)
+                .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+        }
+    }
 
     /**
      * AccountActivity
