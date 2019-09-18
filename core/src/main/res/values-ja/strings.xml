@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_message_network_disconnected">接続状況の確認してから再度お試しください。</string>
+</resources>

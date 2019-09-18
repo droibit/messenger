@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_message_network_disconnected">Please check the network connection status and try again.</string>
+</resources>
