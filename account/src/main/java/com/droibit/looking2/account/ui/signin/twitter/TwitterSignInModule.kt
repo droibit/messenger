@@ -21,6 +21,11 @@ object TwitterSignInModule {
         fun bindDialogViewModel(viewModel: DialogViewModel): ViewModel
 
         @Binds
+        @IntoMap
+        @ViewModelKey(TwitterSignInViewModel::class)
+        fun bindTwitterSignInViewModel(viewModel: TwitterSignInViewModel): ViewModel
+
+        @Binds
         fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
     }
 }
