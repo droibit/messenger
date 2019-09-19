@@ -24,17 +24,21 @@ import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error a
 class TwitterSignInViewModel(
     private val accountRepository: AccountRepository,
     private val playServicesChecker: PlayServicesChecker,
-    private val authenticationResultSink: MutableLiveData<Event<TwitterAuthenticationResult>>
+    private val authenticationResultSink: MutableLiveData<Event<TwitterAuthenticationResult>>,
+    private val authenticateOnPhoneTimingSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
 
     val authenticationResult: LiveData<Event<TwitterAuthenticationResult>>
         get() = authenticationResultSink
 
+    val authenticateOnPhoneTiming: LiveData<Event<Unit>>
+        get() = authenticateOnPhoneTimingSink
+
     @Inject
     constructor(
         accountRepository: AccountRepository,
         playServicesChecker: PlayServicesChecker
-    ) : this(accountRepository, playServicesChecker, MutableLiveData())
+    ) : this(accountRepository, playServicesChecker, MutableLiveData(), MutableLiveData())
 
     @UiThread
     fun onPlayServicesErrorResolutionResult(canceled: Boolean = false) {
@@ -52,14 +56,15 @@ class TwitterSignInViewModel(
         if (authenticationResultSink.value?.peek() is InProgress) {
             return
         }
-        authenticationResultSink.value = InProgress(authenticatingOnPhone = false).toEvent()
+        authenticationResultSink.value = InProgress.toEvent()
 
         viewModelScope.launch {
             accountRepository.authenticateTwitter()
                 .collect {
                     val result: TwitterAuthenticationResult = when (it) {
                         is AuthenticationResult.WillAuthenticateOnPhone -> {
-                            InProgress(authenticatingOnPhone = true)
+                            authenticateOnPhoneTimingSink.value = Unit.toEvent()
+                            InProgress
                         }
                         is AuthenticationResult.Success -> Success
                         is AuthenticationResult.Failure -> Failure(it.error.toErrorType())

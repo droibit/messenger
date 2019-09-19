@@ -9,9 +9,7 @@ sealed class TwitterAuthenticationResult {
         class UnExpected(@StringRes val messageResId: Int) : FailureType()
     }
 
-    class InProgress(val authenticatingOnPhone: Boolean) : TwitterAuthenticationResult()
+    object InProgress : TwitterAuthenticationResult()
     object Success : TwitterAuthenticationResult()
     class Failure(val type: FailureType) : TwitterAuthenticationResult()
-
-    val isInProgress: Boolean get() = this is InProgress
 }

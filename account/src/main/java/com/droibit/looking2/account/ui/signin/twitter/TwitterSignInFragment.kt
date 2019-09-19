@@ -100,17 +100,17 @@ class TwitterSignInFragment : Fragment() {
             }
         }
 
+        signInViewModel.authenticateOnPhoneTiming.observeIfNotConsumed(viewLifecycleOwner) {
+            val intent = createOpenOnPhoneIntent(
+                requireContext(),
+                messageResId = R.string.account_sign_in_message_open_on_phone
+            )
+            startActivity(intent)
+        }
+
         signInViewModel.authenticationResult.observeIfNotConsumed(viewLifecycleOwner) {
             when (it) {
-                is TwitterAuthenticationResult.InProgress -> {
-                    if (it.authenticatingOnPhone) {
-                        val intent = createOpenOnPhoneIntent(
-                            requireContext(),
-                            messageResId = R.string.account_sign_in_message_open_on_phone
-                        )
-                        startActivity(intent)
-                    }
-                }
+                is TwitterAuthenticationResult.InProgress -> Unit
                 is TwitterAuthenticationResult.Success -> {
                     Timber.d("Twitter sign in successed")
                 }
