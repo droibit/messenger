@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -67,6 +68,7 @@ class TwitterSignInFragment : Fragment() {
     ): View? {
         binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
             it.fragment = this
+            it.visibleContent = true
         }
 
         val backStackEntryCount = requireFragmentManager().backStackEntryCount
@@ -109,6 +111,8 @@ class TwitterSignInFragment : Fragment() {
         }
 
         signInViewModel.authenticationResult.observeIfNotConsumed(viewLifecycleOwner) {
+            binding.visibleContent = it !is TwitterAuthenticationResult.InProgress
+
             when (it) {
                 is TwitterAuthenticationResult.InProgress -> Unit
                 is TwitterAuthenticationResult.Success -> {
@@ -136,7 +140,7 @@ class TwitterSignInFragment : Fragment() {
             is AuthenticationFailureType.UnExpected -> {
                 val intent = createFailureIntent(
                     requireContext(),
-                    messageResId = R.string.account_sign_in_error_message_unexpected
+                    messageResId = failureType.messageResId
                 )
                 startActivity(intent)
             }
@@ -148,6 +152,7 @@ class TwitterSignInFragment : Fragment() {
         super.onDestroyView()
     }
 
+    @UiThread
     fun showConfirmDialog() {
         val directions = TwitterSignInFragmentDirections.confirmTwitterSignIn(confirmationMessage)
         findNavController().navigate(directions)

@@ -4,9 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable
             name="fragment"
             type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment" />
+
+        <variable
+            name="visibleContent"
+            type="java.lang.Boolean"
+            />
     </data>
 
     <androidx.wear.widget.BoxInsetLayout
@@ -93,6 +100,7 @@
                 android:id="@+id/group_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
                 app:constraint_referenced_ids="description,signInButtonContainer"
                 tools:visibility="visible" />
 
@@ -101,7 +109,8 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
+                tools:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
