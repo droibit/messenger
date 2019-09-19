@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.droibit.looking2.core.util.Event
 
-inline fun <T> LiveData<Event<T>>.observeIfNotHandled(
+inline fun <T> LiveData<Event<T>>.observeIfNotConsumed(
     owner: LifecycleOwner,
     crossinline onEventUnhandledContent: (T) -> Unit
 ) {
     this.observe(owner, Observer {
-        it?.peek()?.let { value ->
+        it?.consume()?.let { value ->
             onEventUnhandledContent(value)
         }
     })
