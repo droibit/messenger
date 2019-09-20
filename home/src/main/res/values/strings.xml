@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_title_tweet">Tweet</string>
+    <string name="navigation_title_timeline">Timeline</string>
+    <string name="navigation_title_mentions">Mentions</string>
+    <string name="navigation_title_lists">Lists</string>
+    <string name="navigation_title_accounts">Accounts</string>
+    <string name="navigation_title_settings">Settings</string>
+
+</resources>

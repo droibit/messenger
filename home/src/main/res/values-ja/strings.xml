@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_title_tweet">ツイート</string>
+    <string name="navigation_title_timeline">タイムライン</string>
+    <string name="navigation_title_mentions">メンション</string>
+    <string name="navigation_title_lists">リスト</string>
+    <string name="navigation_title_accounts">アカウント</string>
+    <string name="navigation_title_settings">設定</string>
+</resources>

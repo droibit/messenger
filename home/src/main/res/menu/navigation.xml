@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:id="@+id/action_tweet"
+      android:icon="@drawable/ic_navigation_tweet"
+      android:title="@string/navigation_title_tweet"/>
+
+  <item
+      android:id="@+id/action_timeline"
+      android:icon="@drawable/ic_navigation_timeline"
+      android:title="@string/navigation_title_timeline"/>
+
+  <item
+      android:id="@+id/action_mentions"
+      android:icon="@drawable/ic_navigation_mentions"
+      android:title="@string/navigation_title_mentions"/>
+
+  <item
+      android:id="@+id/action_list"
+      android:icon="@drawable/ic_navigation_list"
+      android:title="@string/navigation_title_lists"/>
+
+  <item
+      android:id="@+id/action_accounts"
+      android:icon="@drawable/ic_navigation_accounts"
+      android:title="@string/navigation_title_accounts"/>
+
+  <item
+      android:id="@+id/action_settings"
+      android:icon="@drawable/ic_navigation_settings"
+      android:title="@string/navigation_title_settings"/>
+
+</menu>
