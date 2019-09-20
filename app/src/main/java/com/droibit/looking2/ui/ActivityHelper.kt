@@ -89,4 +89,13 @@ object Activities {
             }
         }
     }
+
+    /**
+     * HomeActivity
+     */
+    object Home : AddressableActivity {
+        override val className = "${BuildConfig.PACKAGE_NAME}.home.ui.HomeActivity"
+
+        fun createIntent(): Intent = intentTo(Home)
+    }
 }

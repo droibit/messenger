@@ -5,9 +5,9 @@ import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import com.droibit.looking2.R
-import com.droibit.looking2.ui.Activities
 import javax.inject.Inject
+import com.droibit.looking2.ui.Activities.Account as AccountActivity
+import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 class LaunchActivity : FragmentActivity() {
 
@@ -22,13 +22,11 @@ class LaunchActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel.launchDestination.observe(this) {
-            when(it) {
-                LaunchDestination.HOME -> TODO()
-                LaunchDestination.LOGIN_TWITTER -> {
-                    val intent = Activities.Account.createIntent(needTwitterSignIn = true)
-                    startActivity(intent)
-                }
+            val intent = when (it) {
+                LaunchDestination.HOME -> HomeActivity.createIntent()
+                LaunchDestination.LOGIN_TWITTER -> AccountActivity.createIntent(needTwitterSignIn = true)
             }
+            startActivity(intent)
             finish()
         }
     }
