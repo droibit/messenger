@@ -50,6 +50,7 @@ class TwitterAccountService @Inject constructor(
             try {
                 oAuthService.sendAuthorizationRequest(client, requestToken)
             } catch (e: ApiException) {
+                Timber.e(e)
                 throw AuthenticationError.PlayServices(statusCode = e.statusCode)
             } finally {
                 client.destroy()
