@@ -97,7 +97,7 @@ class TwitterSignInFragment : Fragment() {
             when (event.id.value) {
                 R.id.signInConfirmationDialogFragment -> {
                     Timber.d("isok=${event.isOk}")
-                    signInViewModel.authenticate()
+                    if (event.isOk) signInViewModel.authenticate()
                 }
             }
         }

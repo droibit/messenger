@@ -54,6 +54,7 @@
                 android:textAppearance="@style/TextAppearance.WearDiag.Message"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
+                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/signInButtonContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -72,6 +73,7 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
                 android:onClick="@{() -> fragment.showConfirmDialog()}"
+                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -96,13 +98,14 @@
 
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
-                app:constraint_referenced_ids="description,signInButtonContainer"
-                tools:visibility="visible" />
+            <!-- TODO: Changing visibility of constraint.Group is not working. -->
+<!--            <androidx.constraintlayout.widget.Group-->
+<!--                android:id="@+id/group_content"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"-->
+<!--                app:constraint_referenced_ids="description,signInButtonContainer"-->
+<!--                tools:visibility="visible" />-->
 
             <ProgressBar
                 android:id="@+id/progressBar"
