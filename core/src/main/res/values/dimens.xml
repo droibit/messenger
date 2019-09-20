@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- For round shaped screen. -->
+    <item name="action_item_first_item_top_padding" type="fraction">15%</item>
+    <item name="action_item_last_item_bottom_padding" type="fraction">15%</item>
+    <item name="action_item_left_padding" type="fraction">15%</item>
+    <item name="action_item_right_padding" type="fraction">10%</item>
+
+    <dimen name="square_action_item_first_item_top_padding">8dp</dimen>
+    <dimen name="square_action_item_last_item_bottom_padding">8dp</dimen>
+    <dimen name="square_action_item_left_padding">8dp</dimen>
+    <dimen name="square_action_item_right_padding">8dp</dimen>
+</resources>

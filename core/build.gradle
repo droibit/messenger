@@ -16,6 +16,10 @@ android {
         }
     }
 
+    dataBinding {
+        enabled true
+    }
+
     packagingOptions {
         exclude 'META-INF/core_debug.kotlin_module'
     }
@@ -25,6 +29,8 @@ dependencies {
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
 
+    implementation deps.androidx.core
+    implementation deps.androidx.recyclerview
     implementation deps.androidx.lifecycle.livedata
     implementation deps.androidx.lifecycle.viewmodel
 
