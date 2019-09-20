@@ -19,7 +19,6 @@ class LaunchActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         viewModel.launchDestination.observe(this) {
             val intent = when (it) {

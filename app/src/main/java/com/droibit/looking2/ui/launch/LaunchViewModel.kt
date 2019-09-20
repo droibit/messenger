@@ -6,8 +6,6 @@ import androidx.lifecycle.liveData
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import javax.inject.Inject
 
-
-
 internal class LaunchViewModel @Inject constructor(
     private val accountRepository: AccountRepository
 ) : ViewModel() {
