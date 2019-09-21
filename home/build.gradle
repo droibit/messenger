@@ -32,10 +32,7 @@ dependencies {
     implementation project(':app')
     implementation project(':core')
 
-    implementation deps.androidx.navigation.runtime
-    implementation deps.androidx.navigation.fragment
-
-    implementation deps.chopstick.resource
+    kapt deps.androidx.lifecycle.compiler
 
     kapt deps.dagger.compiler
     kapt deps.dagger.androidProcessor
