@@ -11,7 +11,7 @@ internal class LaunchViewModel @Inject constructor(
 ) : ViewModel() {
 
     val launchDestination: LiveData<LaunchDestination> = liveData {
-        if (accountRepository.activeAccount() == null) {
+        if (accountRepository.activeTwitterAccount() == null) {
             emit(LaunchDestination.LOGIN_TWITTER)
         } else {
             emit(LaunchDestination.HOME)

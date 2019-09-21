@@ -11,7 +11,7 @@ interface AccountRepository {
 
     suspend fun initialize()
 
-    suspend fun activeAccount(): TwitterAccount?
+    suspend fun activeTwitterAccount(): TwitterAccount?
 
     suspend fun authenticateTwitter(): Flow<AuthenticationResult>
 }

@@ -45,7 +45,7 @@ internal class AccountRepositoryImpl(
         emitTwitterAccounts()
     }
 
-    override suspend fun activeAccount(): TwitterAccount? {
+    override suspend fun activeTwitterAccount(): TwitterAccount? {
         return localStore.activeSession()?.toAccount()
     }
 
