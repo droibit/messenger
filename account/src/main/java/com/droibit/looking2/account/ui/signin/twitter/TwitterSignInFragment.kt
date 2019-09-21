@@ -19,6 +19,7 @@ import com.droibit.looking2.core.ui.dialog.DialogViewModel
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
+import com.droibit.looking2.ui.Activities.Home as HomeActivity
 import com.droibit.looking2.ui.Activities.Confirmation.createFailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.createOpenOnPhoneIntent
 import com.github.droibit.chopstick.resource.bindString
@@ -116,7 +117,8 @@ class TwitterSignInFragment : Fragment() {
             when (it) {
                 is TwitterAuthenticationResult.InProgress -> Unit
                 is TwitterAuthenticationResult.Success -> {
-                    Timber.d("Twitter sign in successed")
+                    startActivity(HomeActivity.createIntent())
+                    requireActivity().finish()
                 }
                 is TwitterAuthenticationResult.Failure -> {
                     showSignInFailureResult(failureType = it.type)
