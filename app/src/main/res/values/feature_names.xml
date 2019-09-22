@@ -3,4 +3,5 @@
     <string name="feature_name_app" translatable="false">app</string>
     <string name="feature_name_home" translatable="false">home</string>
     <string name="feature_name_account" translatable="false">account</string>
+    <string name="feature_name_timeline" translatable="false">timeline</string>
 </resources>
