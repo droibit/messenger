@@ -8,7 +8,7 @@ import retrofit2.Call
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal suspend fun <T> Call<T>.executeInternal(): T {
+internal suspend fun <T> Call<T>.await(): T {
     return suspendCancellableCoroutine { context ->
         enqueue(object : Callback<T>() {
             override fun success(result: Result<T>) {
@@ -21,7 +21,7 @@ internal suspend fun <T> Call<T>.executeInternal(): T {
         })
 
         context.invokeOnCancellation {
-            if (!isCanceled) cancel()
+            cancel()
         }
     }
 }

@@ -76,19 +76,19 @@ class LookingTwitterApiClient(
             null,
             null
         )
-            .executeInternal()
+            .await()
     }
 
     @Throws(TwitterException::class)
     suspend fun retweet(tweetId: Long): Tweet = statusesService.retweet(
         tweetId,
         null
-    ).executeInternal()
+    ).await()
 
     @Throws(TwitterException::class)
     suspend fun likeTweet(tweetId: Long): Tweet {
         return favoriteService.create(tweetId, null)
-            .executeInternal()
+            .await()
     }
 
     @Throws(TwitterException::class)
@@ -105,13 +105,13 @@ class LookingTwitterApiClient(
             null,
             null
         )
-            .executeInternal()
+            .await()
     }
 
     @Throws(TwitterException::class)
     suspend fun fetchUserLists(): List<UserList> {
         return userListService.list(null, null, null)
-            .executeInternal()
+            .await()
     }
 
     @Throws(TwitterException::class)
@@ -129,7 +129,7 @@ class LookingTwitterApiClient(
             null,
             null
         )
-            .executeInternal()
+            .await()
     }
 
     @Throws(TwitterException::class)
@@ -145,6 +145,6 @@ class LookingTwitterApiClient(
             null,
             null
         )
-            .executeInternal()
+            .await()
     }
 }
