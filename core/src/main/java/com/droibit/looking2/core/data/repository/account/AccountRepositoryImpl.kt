@@ -13,7 +13,6 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
 import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
