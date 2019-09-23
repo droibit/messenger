@@ -10,6 +10,7 @@ import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.ActivityHomeBinding
+import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
 import javax.inject.Inject
 
 class HomeActivity : FragmentActivity() {
@@ -40,6 +41,8 @@ class HomeActivity : FragmentActivity() {
     }
 
     fun onActionItemClick(item: ActionItem) {
-
+        when (item.id) {
+            R.id.action_timeline -> startActivity(TimelineActivity.createHomeIntent())
+        }
     }
 }

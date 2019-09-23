@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timeline_nav_graph"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/timelineFragment"
+        android:name="com.droibit.looking2.timeline.ui.content.TimelineFragment"
+        android:label="Timeline"
+        tools:layout="@layout/fragment_timeline"
+        >
+        <argument
+            android:name="source"
+            app:argType="com.droibit.looking2.timeline.ui.content.TimelineSource" />
+    </fragment>
+</navigation>
