@@ -1,0 +1,16 @@
+{
+  "navigations": [
+    {
+      "name": "Tweet",
+      "icons": "@sample/icons[ic_action_timeline.xml]"
+    },
+    {
+      "name": "Timeline",
+      "icons": "@sample/icons[ic_action_timeline.xml]"
+    },
+    {
+      "name": "Mentions",
+      "icons": "@sample/icons[ic_action_timeline.xml]"
+    }
+  ]
+}

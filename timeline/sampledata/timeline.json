@@ -1,0 +1,18 @@
+{
+  "timeline": [
+    {
+      "user_icon": "@sample/icons[user_profile_1.png]",
+      "screen_name": "Kumagai",
+      "text": "Looking can easily watch Twitter in Android Wear.",
+      "retweeted_user": "Retweet by Kumagai",
+      "created_at": "2017/11/29"
+    },
+    {
+      "user_icon": "@sample/icons[user_profile_1.png]",
+      "screen_name": "droibit",
+      "text": "Hello, world",
+      "retweeted_user": "Retweet by Kumagai",
+      "created_at": "3 minutes ago"
+    }
+  ]
+}
