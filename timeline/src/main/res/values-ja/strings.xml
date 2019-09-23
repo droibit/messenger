@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="progress_loading_content">読み込み中…</string>
+    <string name="timeline_error_obtain_timeline">タイムラインの取得に失敗</string>
+    <string name="timeline_empty_timeline">ツイートなし</string>
+    <string name="timeline_tweet_retweet_by">Retweeted by %1$s</string>
+    <string name="timeline_tweet_action_retweet">リツイート</string>
+    <string name="timeline_tweet_action_retweet_in_progress">リツイート…</string>
+    <string name="timeline_tweet_action_retweet_failed">リツイートに失敗</string>
+    <string name="timeline_tweet_action_likes">いいね</string>
+    <string name="timeline_tweet_action_likes_in_progress">いいね…</string>
+    <string name="timeline_tweet_action_likes_failed">いいねに失敗</string>
+    <string name="timeline_tweet_action_reply">リプライ</string>
+    <string name="timeline_tweet_action_show_photo">写真</string>
+    <string name="timeline_tweet_action_add_pocket">Pocketへ追加</string>
+    <string name="timeline_tweet_action_add_pocket_in_progress">Pocketに追加…</string>
+    <string name="timeline_tweet_action_add_pocket_failed">Pocketへの追加に失敗</string>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.wear.widget.drawer.WearableDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".ui.TimelineActivity"
+    tools:deviceIds="wear"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:listitem="@layout/list_item_tweet"
+            tools:visibility="gone"
+            />
+
+        <include layout="@layout/view_alt_content"/>
+
+    </FrameLayout>
+
+    <androidx.wear.widget.drawer.WearableActionDrawerView
+        android:id="@+id/tweetActionDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLighterPrimary"
+        app:actionMenu="@menu/tweet_action"
+        app:enableAutoPeek="false"
+        app:showOverflowInPeek="false"
+        app:peekView="@+id/action_peek_view"
+        >
+
+        <!-- For disable peek -->
+        <View
+            android:id="@+id/action_peek_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            />
+    </androidx.wear.widget.drawer.WearableActionDrawerView>
+
+</androidx.wear.widget.drawer.WearableDrawerLayout>
