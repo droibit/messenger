@@ -26,14 +26,16 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
         inject()
         super.onCreate(savedInstanceState)
 
-        val navController = findNavController(R.id.accountNavHostFragment)
-        val navInflater = navController.navInflater
-        navController.graph = if (needTwitterSignIn) {
-            navInflater.inflate(R.navigation.nav_graph_account).apply {
-                startDestination = R.id.twitterSignInFragment
+        if (savedInstanceState == null) {
+            val navController = findNavController(R.id.accountNavHostFragment)
+            val navInflater = navController.navInflater
+            navController.graph = if (needTwitterSignIn) {
+                navInflater.inflate(R.navigation.nav_graph_account).apply {
+                    startDestination = R.id.twitterSignInFragment
+                }
+            } else {
+                TODO()
             }
-        } else {
-            TODO()
         }
     }
 

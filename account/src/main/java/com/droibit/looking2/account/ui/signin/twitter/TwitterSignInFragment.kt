@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -51,7 +52,7 @@ class TwitterSignInFragment : Fragment() {
         object : SwipeDismissFrameLayout.Callback() {
             override fun onDismissed(layout: SwipeDismissFrameLayout) {
                 // Prevent flicker on screen.
-                layout.visibility = View.INVISIBLE
+                layout.isInvisible = true
                 findNavController().popBackStack()
             }
         }
