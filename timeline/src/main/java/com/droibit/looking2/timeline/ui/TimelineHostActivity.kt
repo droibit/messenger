@@ -10,16 +10,26 @@ import com.droibit.looking2.ui.Activities.Timeline.EXTRA_TIMELINE_SOURCE
 import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_HOME
 import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_LISTS
 import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline) {
+class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAndroidInjector {
+
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     private val startDestination: StartDestination by lazy(NONE) {
         val source = requireNotNull(intent).getIntExtra(EXTRA_TIMELINE_SOURCE, -1)
         StartDestination.valueOf(id = source)
     }
 
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        inject()
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {

@@ -1,5 +1,6 @@
 package com.droibit.looking2.timeline.ui.content
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
+import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -27,6 +29,11 @@ class TimelineFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
