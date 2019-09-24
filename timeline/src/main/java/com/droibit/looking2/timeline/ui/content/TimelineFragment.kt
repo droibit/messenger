@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -26,6 +29,11 @@ class TimelineFragment : Fragment() {
 
     @Inject
     lateinit var tweetListAdapter: TweetListAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val timelineViewModel: TimelineViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentTimelineBinding
 
@@ -73,6 +81,16 @@ class TimelineFragment : Fragment() {
             )
             this.adapter = tweetListAdapter
         }
+    }
+    
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
+            TODO()
+        }
+
+        lifecycle.addObserver(timelineViewModel)
     }
 
     override fun onDestroyView() {
