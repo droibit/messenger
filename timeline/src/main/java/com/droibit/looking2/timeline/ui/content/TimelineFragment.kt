@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import timber.log.Timber
 import kotlin.LazyThreadSafetyMode.NONE
 
 class TimelineFragment : Fragment() {
+
+    val args: TimelineFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentTimelineBinding
 

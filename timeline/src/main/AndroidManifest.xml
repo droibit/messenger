@@ -16,7 +16,7 @@
 
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.TimelineActivity"
+            android:name=".ui.TimelineHostActivity"
             android:exported="false" />
     </application>
 

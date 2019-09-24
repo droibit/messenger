@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:context=".ui.TimelineActivity">
+    tools:context=".ui.TimelineHostActivity">
 
     <fragment
         android:id="@+id/timelineNavHostFragment"

@@ -12,7 +12,7 @@ import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_LISTS
 import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
 import kotlin.LazyThreadSafetyMode.NONE
 
-class TimelineActivity : FragmentActivity(R.layout.activity_timeline) {
+class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline) {
 
     private val startDestination: StartDestination by lazy(NONE) {
         val source = requireNotNull(intent).getIntExtra(EXTRA_TIMELINE_SOURCE, -1)
