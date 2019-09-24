@@ -23,7 +23,7 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
 
     private val startDestination: StartDestination by lazy(NONE) {
         val source = requireNotNull(intent).getIntExtra(EXTRA_TIMELINE_SOURCE, -1)
-        StartDestination.valueOf(id = source)
+        StartDestination.valueOf(sourceId = source)
     }
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
@@ -49,14 +49,14 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
 
         fun toArgs(): Bundle? {
             return when (this) {
-                HOME -> TimelineFragmentArgs(source = TimelineSource.Home).toBundle()
-                MENTIONS -> TimelineFragmentArgs(source = TimelineSource.Mentions).toBundle()
+                HOME -> TimelineFragmentArgs(source = TimelineSource.Home)
+                MENTIONS -> TimelineFragmentArgs(source = TimelineSource.Mentions)
                 LISTS -> null
-            }
+            }?.toBundle()
         }
 
         companion object {
-            fun valueOf(id: Int): StartDestination = values().first { it.id == id }
+            fun valueOf(sourceId: Int): StartDestination = values().first { it.id == sourceId }
         }
     }
 }

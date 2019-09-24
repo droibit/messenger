@@ -70,6 +70,7 @@ class TwitterSignInFragment : Fragment() {
     ): View? {
         binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
             it.fragment = this
+            // TODO:
             it.visibleContent = true
         }
 

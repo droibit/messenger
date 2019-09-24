@@ -16,6 +16,7 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.toEvent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +28,8 @@ class TwitterSignInViewModel(
     private val authenticationResultSink: MutableLiveData<Event<TwitterAuthenticationResult>>,
     private val authenticateOnPhoneTimingSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
+
+    private var signInJob: Job? = null
 
     val authenticationResult: LiveData<Event<TwitterAuthenticationResult>>
         get() = authenticationResultSink
@@ -53,12 +56,12 @@ class TwitterSignInViewModel(
 
     @UiThread
     fun authenticate() {
-        if (authenticationResultSink.value?.peek() is InProgress) {
+        if (signInJob?.isActive == true) {
             return
         }
         authenticationResultSink.value = InProgress.toEvent()
 
-        viewModelScope.launch {
+        signInJob = viewModelScope.launch {
             accountRepository.authenticateTwitter()
                 .collect {
                     val result: TwitterAuthenticationResult = when (it) {
