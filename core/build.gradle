@@ -52,10 +52,6 @@ dependencies {
     api deps.retrofit.core
     api deps.retrofit.converterGson
     api deps.gson
-    api(deps.picasso.runtime) {
-        exclude module: 'okhttp'
-    }
-    api(deps.picasso.okhttp3Downloader)
 
     implementation deps.timber
 
