@@ -9,15 +9,23 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.wear.widget.SwipeDismissFrameLayout
+import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
+import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_PHOTO
+import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class TimelineFragment : Fragment() {
 
     val args: TimelineFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var tweetListAdapter: TweetListAdapter
 
     private lateinit var binding: FragmentTimelineBinding
 
@@ -53,8 +61,27 @@ class TimelineFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.list.apply {
+            this.addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+            this.adapter = tweetListAdapter
+        }
+    }
+
     override fun onDestroyView() {
         (view as? SwipeDismissFrameLayout)?.removeCallback(swipeDismissCallback)
+        Picasso.get().cancelTag(TAG_TWEET_PHOTO)
         super.onDestroyView()
+    }
+
+    fun onTweetClick(tweet: Tweet) {
+        Timber.d("onTweetClick(${tweet.url})")
     }
 }
