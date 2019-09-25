@@ -103,7 +103,7 @@ object Activities {
      * TimelineActivity
      */
     object Timeline : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.timeline.ui.TimelineActivity"
+        override val className = "${BuildConfig.PACKAGE_NAME}.timeline.ui.TimelineHostActivity"
 
         const val EXTRA_TIMELINE_SOURCE = "EXTRA_TIMELINE_SOURCE"
 
