@@ -15,3 +15,12 @@ inline fun <T> LiveData<Event<T>>.observeIfNotConsumed(
         }
     })
 }
+
+inline fun <T> LiveData<T>.observeNonNull(
+    owner: LifecycleOwner,
+    crossinline observer: (T) -> Unit
+) {
+    this.observe(owner, Observer {
+        if (it != null) observer(it)
+    })
+}

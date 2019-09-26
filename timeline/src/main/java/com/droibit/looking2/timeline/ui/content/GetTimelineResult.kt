@@ -10,6 +10,6 @@ sealed class GetTimelineResult {
     }
 
     object InProgress : GetTimelineResult()
-    class Success(timeline: List<Tweet>) : GetTimelineResult()
+    class Success(val timeline: List<Tweet>) : GetTimelineResult()
     class Failure(val type: FailureType) : GetTimelineResult()
 }

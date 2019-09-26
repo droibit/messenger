@@ -5,6 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="loadingInProgress"
+            type="Boolean" />
     </data>
 
     <androidx.wear.widget.drawer.WearableDrawerLayout
@@ -24,10 +29,60 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:visibility="gone"
                 tools:listitem="@layout/list_item_tweet"
                 tools:visibility="gone" />
 
-            <include layout="@layout/view_alt_content" />
+            <LinearLayout
+                android:id="@+id/error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_full_sad"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/errorMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                    android:textColor="@color/white"
+                    tools:text="@string/timeline_error_obtain_timeline" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/progressMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                    android:textColor="@color/white"
+                    android:text="@string/progress_loading_content"
+                    tools:text="@string/progress_loading_content" />
+
+            </LinearLayout>
 
         </FrameLayout>
 
@@ -38,8 +93,8 @@
             android:background="@color/colorLighterPrimary"
             app:actionMenu="@menu/tweet_action"
             app:enableAutoPeek="false"
-            app:showOverflowInPeek="false"
-            app:peekView="@+id/action_peek_view">
+            app:peekView="@+id/action_peek_view"
+            app:showOverflowInPeek="false">
 
             <!-- For disable peek -->
             <View

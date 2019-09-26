@@ -6,17 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.wear.widget.SwipeDismissFrameLayout
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.util.ext.observeNonNull
+import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_PHOTO
+import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
@@ -82,15 +86,37 @@ class TimelineFragment : Fragment() {
             this.adapter = tweetListAdapter
         }
     }
-    
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
-            TODO()
+        timelineViewModel.getTimelineResult.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                is GetTimelineResult.Success -> updateTimeline(it.timeline)
+                is GetTimelineResult.Failure -> showGetTimelineFailureResult(it.type)
+            }
+            binding.loadingInProgress = it is GetTimelineResult.InProgress
         }
 
         lifecycle.addObserver(timelineViewModel)
+    }
+
+    private fun updateTimeline(timeline: List<Tweet>) {
+        tweetListAdapter.add(timeline)
+        binding.list.isVisible = true
+    }
+
+    private fun showGetTimelineFailureResult(failureType: GetTimelineFailureType) {
+        val errorMessageResId = when (failureType) {
+            is GetTimelineFailureType.Network -> {
+                showNetworkErrorToast()
+                requireActivity().finish()
+            }
+            is GetTimelineFailureType.UnExpected -> {
+                binding.errorMessage.text = getString(failureType.messageResId)
+                binding.error.isVisible = true
+            }
+        }
     }
 
     override fun onDestroyView() {

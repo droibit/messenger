@@ -8,8 +8,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.core.model.tweet.GetTimelineError
-import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.toEvent
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType
 import kotlinx.coroutines.Job
@@ -20,25 +18,25 @@ import com.droibit.looking2.timeline.ui.content.GetTimelineResult.Success as Suc
 
 class TimelineViewModel(
     private val getTimelineCall: GetTimelineCall,
-    private val getTimelineResultSink: MutableLiveData<Event<GetTimelineResult>>
+    private val getTimelineResultSink: MutableLiveData<GetTimelineResult>
 ) : ViewModel(), LifecycleObserver {
 
     private var getTimelineJob: Job? = null
 
-    val getTimelineResult: LiveData<Event<GetTimelineResult>> get() = getTimelineResultSink
+    val getTimelineResult: LiveData<GetTimelineResult> get() = getTimelineResultSink
 
     @Inject
     constructor(getTimelineCall: GetTimelineCall) : this(getTimelineCall, MutableLiveData())
 
     @OnLifecycleEvent(ON_CREATE)
     fun onCreate() {
-        if (getTimelineJob?.isActive == true) {
+        if (getTimelineResultSink.value != null) {
             return
         }
 
-        getTimelineResultSink.value = GetTimelineResult.InProgress.toEvent()
+        getTimelineResultSink.value = GetTimelineResult.InProgress
         getTimelineJob = viewModelScope.launch {
-            val result = try {
+            getTimelineResultSink.value = try {
                 val timeline = getTimelineCall.execute(sinceId = null)
                 SuccessResult(timeline)
             } catch (e: GetTimelineError) {
@@ -49,7 +47,6 @@ class TimelineViewModel(
                     )
                 }
             }
-            getTimelineResultSink.value = result.toEvent()
         }
     }
 }
