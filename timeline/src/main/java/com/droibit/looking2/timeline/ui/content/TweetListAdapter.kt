@@ -55,7 +55,7 @@ class TweetListAdapter(
             itemPadding.rightPx,
             if (position == itemCount - 1) itemPadding.lastItemBottomPx else 0
         )
-        holder.bind(tweetTextProcessor, tweets[position], position)
+        holder.bind(tweetTextProcessor, tweets[position])
     }
 
     fun add(tweets: List<Tweet>) {
@@ -67,22 +67,11 @@ class TweetListAdapter(
     class ViewHolder(private val binding: ListItemTweetBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        // @get:ColorInt
-        // private val darkBackgroundColor by bindColor(R.color.colorDarkerBackground)
-        //
-        // @get:ColorInt
-        // private val lighterBackgroundColor by bindColor(R.color.colorLighterBackground)
-
         fun bind(
             tweetTextProcessor: TweetTextProcessor,
-            srcTweet: Tweet,
-            position: Int
+            srcTweet: Tweet
         ) {
-            val tweet = srcTweet.retweetedTweet?.let { it } ?: srcTweet
-            // itemView.setBackgroundColor(
-            //     if (position % 2 == 0) darkBackgroundColor else lighterBackgroundColor
-            // )
-
+            val tweet = srcTweet.retweetedTweet ?: srcTweet
             Picasso.get()
                 .load(tweet.user.profileUrl)
                 .error(R.drawable.ic_account_circle)
