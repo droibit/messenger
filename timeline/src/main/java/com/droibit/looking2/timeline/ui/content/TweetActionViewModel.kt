@@ -42,10 +42,14 @@ class TweetActionViewModel(
         Timber.d("Clicked item: $actionItem")
         val targetTweet = requireNotNull(tweetActionSink.value).peek().target
         when (actionItem) {
-            TweetAction.Item.REPLY -> { }
-            TweetAction.Item.RETWEET -> {}
-            TweetAction.Item.LIKES -> {}
-            TweetAction.Item.PHOTO -> { }
+            TweetAction.Item.REPLY -> {
+            }
+            TweetAction.Item.RETWEET -> {
+            }
+            TweetAction.Item.LIKES -> {
+            }
+            TweetAction.Item.PHOTO -> {
+            }
             TweetAction.Item.ADD_TO_POCKET -> TODO()
         }
     }

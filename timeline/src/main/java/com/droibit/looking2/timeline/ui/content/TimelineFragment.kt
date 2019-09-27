@@ -3,6 +3,8 @@ package com.droibit.looking2.timeline.ui.content
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
@@ -14,8 +16,11 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
@@ -27,7 +32,7 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 
-class TimelineFragment : Fragment() {
+class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
 
     val args: TimelineFragmentArgs by navArgs()
 
@@ -37,9 +42,16 @@ class TimelineFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    internal lateinit var tweetActionMenu: Menu
+
     private val timelineViewModel: TimelineViewModel by viewModels { viewModelFactory }
 
+    private val tweetActionViewModel: TweetActionViewModel by viewModels { viewModelFactory }
+
     private lateinit var binding: FragmentTimelineBinding
+
+    private lateinit var tweetActionList: RecyclerView
 
     private val swipeDismissCallback: SwipeDismissFrameLayout.Callback by lazy(NONE) {
         object : SwipeDismissFrameLayout.Callback() {
@@ -85,11 +97,23 @@ class TimelineFragment : Fragment() {
             )
             this.adapter = tweetListAdapter
         }
+
+        binding.tweetActionDrawer.also {
+            it.setOnMenuItemClickListener(this)
+            // When displaying action list,
+            // use RecyclerView to change the scroll position to top.
+            this.tweetActionList = it.getChildAt(0) as RecyclerView
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        observeTweetAction()
+        observeGetTimelineResult()
+    }
+
+    private fun observeGetTimelineResult() {
         timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
             when (it) {
                 is GetTimelineResult.Success -> showTimeline(it.timeline)
@@ -97,7 +121,6 @@ class TimelineFragment : Fragment() {
             }
             binding.loadingInProgress = it is GetTimelineResult.InProgress
         }
-
         lifecycle.addObserver(timelineViewModel)
     }
 
@@ -114,6 +137,36 @@ class TimelineFragment : Fragment() {
         requireActivity().finish()
     }
 
+    private fun observeTweetAction() {
+        tweetActionViewModel.tweetAction.observeIfNotConsumed(viewLifecycleOwner) { tweetAction ->
+            val actionDrawerMenu = binding.tweetActionDrawer.menu
+            actionDrawerMenu.clear()
+            tweetAction.items
+                .map { tweetActionMenu.findItem(it.id) }
+                .forEach { actionMenuItem ->
+                    actionDrawerMenu.add(
+                        actionMenuItem.groupId,
+                        actionMenuItem.itemId,
+                        actionMenuItem.order,
+                        actionMenuItem.title
+                    ).also { it.icon = actionMenuItem.icon }
+                }
+
+            @Suppress("CAST_NEVER_SUCCEEDS")
+            (tweetActionList.layoutManager as LinearLayoutManager)
+                .scrollToPositionWithOffset(0, 0)
+            binding.tweetActionDrawer.controller.openDrawer()
+        }
+    }
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        tweetActionViewModel.onTweetActionItemClick(
+            actionItem = TweetAction.Item.valueOf(item.itemId)
+        )
+        binding.tweetActionDrawer.controller.closeDrawer()
+        return true
+    }
+
     override fun onDestroyView() {
         (view as? SwipeDismissFrameLayout)?.removeCallback(swipeDismissCallback)
         Picasso.get().cancelTag(TAG_TWEET_PHOTO)
@@ -122,5 +175,6 @@ class TimelineFragment : Fragment() {
 
     fun onTweetClick(tweet: Tweet) {
         Timber.d("onTweetClick(${tweet.url})")
+        tweetActionViewModel.onTweetClick(tweet)
     }
 }

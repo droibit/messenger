@@ -24,6 +24,8 @@
     <item
         android:id="@+id/tweet_action_add_pocket"
         android:icon="@drawable/ic_tweet_action_add_pocket"
-        android:title="@string/timeline_tweet_action_add_pocket"/>
+        android:title="@string/timeline_tweet_action_add_pocket"
+        android:visible="false"
+        />
 
 </menu>
