@@ -58,10 +58,10 @@ class TweetListAdapter(
         holder.bind(tweetTextProcessor, tweets[position])
     }
 
-    fun add(tweets: List<Tweet>) {
-        val positionStart = this.tweets.size
+    fun setTweets(tweets: List<Tweet>) {
+        this.tweets.clear()
         this.tweets.addAll(tweets)
-        this.notifyItemRangeInserted(positionStart, tweets.size)
+        this.notifyDataSetChanged()
     }
 
     class ViewHolder(private val binding: ListItemTweetBinding) :

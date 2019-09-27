@@ -29,34 +29,9 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:visibility="gone"
+                android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}"
                 tools:listitem="@layout/list_item_tweet"
-                tools:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_full_sad"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/errorMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@android:style/TextAppearance.Material.Body1"
-                    android:textColor="@color/white"
-                    tools:text="@string/timeline_error_obtain_timeline" />
-
-            </LinearLayout>
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/progress"

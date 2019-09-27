@@ -10,22 +10,22 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.wear.widget.SwipeDismissFrameLayout
-import com.droibit.looking2.timeline.R
 import com.droibit.looking2.core.model.tweet.Tweet
-import com.droibit.looking2.core.util.ext.observeNonNull
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
+import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_PHOTO
-import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
+import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 
 class TimelineFragment : Fragment() {
 
@@ -66,7 +66,7 @@ class TimelineFragment : Fragment() {
         val backStackEntryCount = requireFragmentManager().backStackEntryCount
         return if (backStackEntryCount == 0) binding.root else {
             Timber.d("Wrapped SwipeDismissFrameLayout(backStackEntryCount=$backStackEntryCount)")
-            SwipeDismissFrameLayout(context).apply {
+            SwipeDismissFrameLayout(requireContext()).apply {
                 addView(binding.root)
                 addCallback(swipeDismissCallback)
             }
@@ -90,9 +90,9 @@ class TimelineFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        timelineViewModel.getTimelineResult.observeNonNull(viewLifecycleOwner) {
+        timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
             when (it) {
-                is GetTimelineResult.Success -> updateTimeline(it.timeline)
+                is GetTimelineResult.Success -> showTimeline(it.timeline)
                 is GetTimelineResult.Failure -> showGetTimelineFailureResult(it.type)
             }
             binding.loadingInProgress = it is GetTimelineResult.InProgress
@@ -101,22 +101,17 @@ class TimelineFragment : Fragment() {
         lifecycle.addObserver(timelineViewModel)
     }
 
-    private fun updateTimeline(timeline: List<Tweet>) {
-        tweetListAdapter.add(timeline)
+    private fun showTimeline(timeline: List<Tweet>) {
+        tweetListAdapter.setTweets(timeline)
         binding.list.isVisible = true
     }
 
     private fun showGetTimelineFailureResult(failureType: GetTimelineFailureType) {
-        val errorMessageResId = when (failureType) {
-            is GetTimelineFailureType.Network -> {
-                showNetworkErrorToast()
-                requireActivity().finish()
-            }
-            is GetTimelineFailureType.UnExpected -> {
-                binding.errorMessage.text = getString(failureType.messageResId)
-                binding.error.isVisible = true
-            }
+        when (failureType) {
+            is GetTimelineFailureType.Network -> showNetworkErrorToast()
+            is GetTimelineFailureType.UnExpected -> showShortToast(failureType.messageResId)
         }
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {
