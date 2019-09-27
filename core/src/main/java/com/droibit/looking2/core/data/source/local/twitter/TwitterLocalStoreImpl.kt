@@ -27,7 +27,7 @@ internal class TwitterLocalStoreImpl @Inject constructor(
         suspendCoroutine<Unit> { cont ->
             Timber.d("Add: $session")
             sessionManager.setSession(session.id, session)
-            twitterCore.addApiClient(session, apiClientFactory.create(session))
+            twitterCore.addApiClient(session, apiClientFactory.get(session))
             cont.resume(Unit)
         }
 

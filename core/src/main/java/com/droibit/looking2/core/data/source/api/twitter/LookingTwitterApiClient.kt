@@ -17,7 +17,7 @@ class LookingTwitterApiClient(
 ) : TwitterApiClient(session, client) {
 
     interface Factory {
-        fun create(session: TwitterSession): LookingTwitterApiClient
+        fun get(session: TwitterSession): LookingTwitterApiClient
     }
 
     interface UserListService {

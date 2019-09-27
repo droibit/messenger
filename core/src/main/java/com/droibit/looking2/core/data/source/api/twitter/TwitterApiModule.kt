@@ -56,7 +56,7 @@ object TwitterApiModule {
         okHttpClient: OkHttpClient
     ): LookingTwitterApiClient.Factory {
         return object : LookingTwitterApiClient.Factory {
-            override fun create(session: TwitterSession): LookingTwitterApiClient {
+            override fun get(session: TwitterSession): LookingTwitterApiClient {
                 return LookingTwitterApiClient(session, okHttpClient)
             }
         }

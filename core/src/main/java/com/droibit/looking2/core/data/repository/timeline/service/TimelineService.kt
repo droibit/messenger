@@ -1,6 +1,7 @@
 package com.droibit.looking2.core.data.repository.timeline.service
 
 import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClient
+import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClientFactoryDelegate
 import com.droibit.looking2.core.data.source.api.twitter.await
 import com.droibit.looking2.core.model.tweet.GetTimelineError
 import com.droibit.looking2.core.model.tweet.Tweet
@@ -11,13 +12,13 @@ import java.io.IOException
 import javax.inject.Inject
 
 class TimelineService @Inject constructor(
-    private val twitterCore: TwitterCore,
+    twitterCore: TwitterCore,
     private val mapper: TimelineMapper
-) {
+):  LookingTwitterApiClient.Factory by LookingTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(GetTimelineError::class)
     suspend fun getHomeTimeline(session: TwitterSession, count: Int, sinceId: Long?): List<Tweet> {
-        val apiClient = session.toApiClient()
+        val apiClient = get(session)
         try {
             val timelineResponse = apiClient.statusesService.homeTimeline(
                 count,
@@ -37,11 +38,5 @@ class TimelineService @Inject constructor(
                 GetTimelineError.UnExpected()
             }
         }
-    }
-
-    private fun TwitterSession.toApiClient(): LookingTwitterApiClient {
-        val apiClient = twitterCore.getApiClient(this)
-            ?: error("There is no api client corresponding to session($this).")
-        return apiClient as LookingTwitterApiClient
     }
 }
