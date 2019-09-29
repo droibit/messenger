@@ -42,4 +42,4 @@ class LookingApplication: Application() {
     }
 }
 
-fun Activity.coreComponent() = LookingApplication.coreComponent(this)
+fun Context.coreComponent() = LookingApplication.coreComponent(this)

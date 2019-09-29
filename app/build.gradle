@@ -65,25 +65,13 @@ configurations.all {
 dependencies {
     implementation project(':core')
 
-    implementation deps.androidx.recyclerview
-    kapt deps.androidx.lifecycle.compiler
-    implementation deps.androidx.navigation.runtime
-    implementation deps.androidx.navigation.fragment
     implementation deps.androidx.work
-
     kapt deps.dagger.compiler
-    kapt deps.dagger.androidProcessor
 
     implementation(deps.crashlytics) {
         transitive = true
     }
     implementation deps.firebase.core
-
-    implementation deps.chopstick.resource
-    implementation(deps.chopstick.preference) {
-        exclude module: 'preference'
-    }
-    implementation deps.ossLicenseUi
 
     testImplementation deps.robolectric
 }

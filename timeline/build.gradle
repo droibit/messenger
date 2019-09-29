@@ -31,8 +31,6 @@ dependencies {
     implementation project(':app')
     implementation project(':core')
 
-    implementation deps.androidx.navigation.runtime
-    implementation deps.androidx.navigation.fragment
     implementation deps.androidx.work
     kapt deps.androidx.lifecycle.compiler
 
