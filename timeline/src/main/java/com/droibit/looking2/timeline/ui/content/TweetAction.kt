@@ -3,12 +3,18 @@ package com.droibit.looking2.timeline.ui.content
 import android.content.Context
 import androidx.annotation.IdRes
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy.KEEP
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.model.tweet.RetweetError
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.coreComponent
 import com.droibit.looking2.timeline.R
+import com.droibit.looking2.timeline.ui.content.TweetActionCall.Companion.KEY_TWEET_ID
+import javax.inject.Inject
 
 data class TweetAction(val target: Tweet, val items: List<Item>) {
 
@@ -26,6 +32,23 @@ data class TweetAction(val target: Tweet, val items: List<Item>) {
     }
 }
 
+class TweetActionCall @Inject constructor(
+    private val workManager: WorkManager
+) {
+    fun enqueueRetweetWork(tweetId: Long) {
+        val work = OneTimeWorkRequestBuilder<RetweetActionWorker>()
+            .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+            .build()
+        val workName = WORK_NAME_PREFIX_RETWEET + "$tweetId"
+        workManager.enqueueUniqueWork(workName, KEEP, work)
+    }
+
+    companion object {
+        const val KEY_TWEET_ID = "KEY_TWEET_ID"
+        const val WORK_NAME_PREFIX_RETWEET = "retweet."
+    }
+}
+
 class RetweetActionWorker(
     context: Context,
     workerParams: WorkerParameters,
@@ -40,8 +63,8 @@ class RetweetActionWorker(
     )
 
     override suspend fun doWork(): Result {
-        val tweetId = inputData.getLong(KEY_TWEET_ID, -1L)
-        check(tweetId != 1L)
+        val tweetId = inputData.getLong(KEY_TWEET_ID, Long.MIN_VALUE)
+        check(tweetId != Long.MIN_VALUE)
 
         return try {
             tweetRepository.retweet(tweetId)
@@ -50,9 +73,5 @@ class RetweetActionWorker(
             // TODO: retry
             Result.failure()
         }
-    }
-
-    companion object {
-        const val KEY_TWEET_ID = "KEY_TWEET_ID"
     }
 }

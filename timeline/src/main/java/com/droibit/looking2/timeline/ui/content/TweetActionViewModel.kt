@@ -12,7 +12,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class TweetActionViewModel(
-    private val tweetRepository: TweetRepository,
+    private val tweetActionCall: TweetActionCall,
     private val tweetActionSink: MutableLiveData<Event<TweetAction>>
 ) : ViewModel() {
 
@@ -20,7 +20,7 @@ class TweetActionViewModel(
         get() = tweetActionSink
 
     @Inject
-    constructor(tweetRepository: TweetRepository) : this(tweetRepository, MutableLiveData())
+    constructor(tweetActionCall: TweetActionCall) : this(tweetActionCall, MutableLiveData())
 
     @UiThread
     fun onTweetClick(tweet: Tweet) {
@@ -43,6 +43,8 @@ class TweetActionViewModel(
         val targetTweet = requireNotNull(tweetActionSink.value).peek().target
         when (actionItem) {
             TweetAction.Item.REPLY -> {
+                tweetActionCall.enqueueRetweetWork(targetTweet.id)
+                // TODO: show in progress message.
             }
             TweetAction.Item.RETWEET -> {
             }
