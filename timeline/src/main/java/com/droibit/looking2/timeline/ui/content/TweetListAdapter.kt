@@ -24,9 +24,6 @@ class TweetListAdapter(
 
     private val tweets = mutableListOf<Tweet>()
 
-    var lastClickPosition: Int = RecyclerView.NO_POSITION
-        private set
-
     operator fun get(index: Int) = tweets[index]
 
     override fun onCreateViewHolder(
@@ -37,7 +34,6 @@ class TweetListAdapter(
             binding = ListItemTweetBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnLongClickListener {
-                lastClickPosition = adapterPosition
                 itemClickListener.invoke(tweets[adapterPosition]); true
             }
         }
@@ -77,7 +73,7 @@ class TweetListAdapter(
                 .error(R.drawable.ic_account_circle)
                 .placeholder(R.drawable.ic_account_circle)
                 .fit()
-                .tag(TAG_TWEET_PHOTO)
+                .tag(TAG_TWEET_USER_ICON)
                 .into(binding.userIcon)
 
             binding.userName.text = tweet.user.name
@@ -112,6 +108,6 @@ class TweetListAdapter(
 
     companion object {
 
-        const val TAG_TWEET_PHOTO = "TAG_TWEET_PHOTO"
+        const val TAG_TWEET_USER_ICON = "TAG_TWEET_USER_ICON"
     }
 }

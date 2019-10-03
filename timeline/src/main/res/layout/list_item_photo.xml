@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -12,8 +13,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/black">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/photo"
@@ -25,11 +25,11 @@
 
         <ProgressBar
             android:id="@+id/progress"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}"
-            style="?android:attr/progressBarStyleLarge"
+            android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
             tools:visibility="visible" />
 
     </FrameLayout>
