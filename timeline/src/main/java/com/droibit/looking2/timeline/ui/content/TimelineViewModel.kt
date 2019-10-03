@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.core.model.tweet.GetTimelineError
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.Failure as FailureResult
@@ -20,8 +19,6 @@ class TimelineViewModel(
     private val getTimelineCall: GetTimelineCall,
     private val getTimelineResultSink: MutableLiveData<GetTimelineResult>
 ) : ViewModel(), LifecycleObserver {
-
-    private var getTimelineJob: Job? = null
 
     val getTimelineResult: LiveData<GetTimelineResult> get() = getTimelineResultSink
 
@@ -35,7 +32,7 @@ class TimelineViewModel(
         }
 
         getTimelineResultSink.value = GetTimelineResult.InProgress
-        getTimelineJob = viewModelScope.launch {
+        viewModelScope.launch {
             getTimelineResultSink.value = try {
                 val timeline = getTimelineCall.execute(sinceId = null)
                 SuccessResult(timeline)
