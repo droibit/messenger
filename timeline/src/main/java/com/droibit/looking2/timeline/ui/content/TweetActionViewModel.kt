@@ -12,14 +12,22 @@ import javax.inject.Inject
 
 class TweetActionViewModel(
     private val tweetActionCall: TweetActionCall,
-    private val tweetActionSink: MutableLiveData<Event<TweetAction>>
+    private val tweetActionSink: MutableLiveData<Event<TweetAction>>,
+    private val photoListSink: MutableLiveData<Event<List<String>>>
 ) : ViewModel() {
 
     val tweetAction: LiveData<Event<TweetAction>>
         get() = tweetActionSink
 
+    val photos: LiveData<Event<List<String>>>
+        get() = photoListSink
+
     @Inject
-    constructor(tweetActionCall: TweetActionCall) : this(tweetActionCall, MutableLiveData())
+    constructor(tweetActionCall: TweetActionCall) : this(
+        tweetActionCall,
+        MutableLiveData(),
+        MutableLiveData()
+    )
 
     @UiThread
     fun onTweetClick(tweet: Tweet) {
@@ -37,6 +45,7 @@ class TweetActionViewModel(
         tweetActionSink.value = TweetAction(target = tweet, items = items).toEvent()
     }
 
+    @UiThread
     fun onTweetActionItemClick(actionItem: TweetAction.Item) {
         Timber.d("Clicked item: $actionItem")
         val targetTweet = requireNotNull(tweetActionSink.value).peek().target
@@ -51,6 +60,8 @@ class TweetActionViewModel(
                 tweetActionCall.enqueueLikesWork(targetTweet.id)
             }
             TweetAction.Item.PHOTO -> {
+                val urls = targetTweet.photoUrls.map { it.expandedUrl }
+                photoListSink.value = urls.toEvent()
             }
             TweetAction.Item.ADD_TO_POCKET -> TODO()
         }

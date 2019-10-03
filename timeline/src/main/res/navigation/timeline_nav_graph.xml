@@ -14,5 +14,17 @@
         <argument
             android:name="source"
             app:argType="com.droibit.looking2.timeline.ui.content.TimelineSource" />
+        <action
+            android:id="@+id/showPhotos"
+            app:destination="@id/photoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.droibit.looking2.timeline.ui.content.photo.PhotoFragment"
+        android:label="Photo"
+        tools:layout="@layout/fragment_photo" >
+        <argument
+            android:name="urls"
+            app:argType="string[]" />
     </fragment>
 </navigation>

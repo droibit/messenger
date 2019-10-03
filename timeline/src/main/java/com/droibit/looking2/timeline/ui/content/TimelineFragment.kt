@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -26,13 +24,13 @@ import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_PHOTO
 import com.squareup.picasso.Picasso
-import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 
-class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
+class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     val args: TimelineFragmentArgs by navArgs()
 
@@ -61,11 +59,6 @@ class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
                 findNavController().popBackStack()
             }
         }
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -109,6 +102,7 @@ class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        observePhotoList()
         observeTweetAction()
         observeGetTimelineResult()
     }
@@ -156,6 +150,13 @@ class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
             (tweetActionList.layoutManager as LinearLayoutManager)
                 .scrollToPositionWithOffset(0, 0)
             binding.tweetActionDrawer.controller.openDrawer()
+        }
+    }
+
+    private fun observePhotoList() {
+        tweetActionViewModel.photos.observeIfNotConsumed(viewLifecycleOwner) {
+            val directions = TimelineFragmentDirections.showPhotos(it.toTypedArray())
+            findNavController().navigate(directions)
         }
     }
 
