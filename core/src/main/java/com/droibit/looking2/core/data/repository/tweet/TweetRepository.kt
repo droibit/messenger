@@ -6,4 +6,7 @@ interface TweetRepository {
 
     @Throws(TweetActionError::class)
     suspend fun retweet(tweetId: Long)
+
+    @Throws(TweetActionError::class)
+    suspend fun likeTweet(tweetId: Long)
 }

@@ -26,6 +26,17 @@ class TweetService @Inject constructor(
         }
     }
 
+    @Throws(TweetActionError::class)
+    suspend fun likeTweet(session: TwitterSession, tweetId: Long) {
+        val apiClient = get(session)
+        try {
+            apiClient.favoriteService.create(tweetId, null).await()
+        } catch (e: Exception) {
+            Timber.e(e)
+            throw e.toTweetActionError()
+        }
+    }
+
     private fun Exception.toTweetActionError(): TweetActionError {
         return if (this.cause is IOException) {
             TweetActionError.Network()

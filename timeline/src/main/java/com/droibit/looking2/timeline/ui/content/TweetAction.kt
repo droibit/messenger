@@ -43,9 +43,18 @@ class TweetActionCall @Inject constructor(
         workManager.enqueueUniqueWork(workName, KEEP, work)
     }
 
+    fun enqueueLikesWork(tweetId: Long) {
+        val work = OneTimeWorkRequestBuilder<LikeTweetActionWorker>()
+            .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+            .build()
+        val workName = WORK_NAME_PREFIX_LIKES + "$tweetId"
+        workManager.enqueueUniqueWork(workName, KEEP, work)
+    }
+
     companion object {
         const val KEY_TWEET_ID = "KEY_TWEET_ID"
         const val WORK_NAME_PREFIX_RETWEET = "retweet."
+        const val WORK_NAME_PREFIX_LIKES = "like_tweet."
     }
 }
 
@@ -70,6 +79,35 @@ class RetweetActionWorker(
 
         return try {
             tweetRepository.retweet(tweetId)
+            Result.success()
+        } catch (e: TweetActionError) {
+            // TODO: retry
+            Result.failure()
+        }
+    }
+}
+
+class LikeTweetActionWorker(
+    context: Context,
+    workerParams: WorkerParameters,
+    private val tweetRepository: TweetRepository
+) : CoroutineWorker(context, workerParams) {
+
+    @Suppress("unused")
+    constructor(context: Context, workerParams: WorkerParameters) : this(
+        context,
+        workerParams,
+        context.coreComponent().provideTweetRepository()
+    )
+
+    override suspend fun doWork(): Result {
+        val tweetId = inputData.getLong(KEY_TWEET_ID, Long.MIN_VALUE).also {
+            Timber.d("Do work: like tweet:$it")
+        }
+        check(tweetId != Long.MIN_VALUE)
+
+        return try {
+            tweetRepository.likeTweet(tweetId)
             Result.success()
         } catch (e: TweetActionError) {
             // TODO: retry

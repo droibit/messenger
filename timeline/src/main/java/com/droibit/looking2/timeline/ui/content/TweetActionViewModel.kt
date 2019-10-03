@@ -4,7 +4,6 @@ import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.toEvent
@@ -43,12 +42,13 @@ class TweetActionViewModel(
         val targetTweet = requireNotNull(tweetActionSink.value).peek().target
         when (actionItem) {
             TweetAction.Item.REPLY -> {
+            }
+            TweetAction.Item.RETWEET -> {
                 tweetActionCall.enqueueRetweetWork(targetTweet.id)
                 // TODO: show in progress message.
             }
-            TweetAction.Item.RETWEET -> {
-            }
             TweetAction.Item.LIKES -> {
+                tweetActionCall.enqueueLikesWork(targetTweet.id)
             }
             TweetAction.Item.PHOTO -> {
             }

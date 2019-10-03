@@ -18,4 +18,11 @@ class TweetRepositoryImpl @Inject constructor(
             tweetService.retweet(activeSession, tweetId)
         }
     }
+
+    override suspend fun likeTweet(tweetId: Long) {
+        withContext(dispatcherProvider.io) {
+            val activeSession = requireNotNull(localStore.activeSession())
+            tweetService.likeTweet(activeSession, tweetId)
+        }
+    }
 }
