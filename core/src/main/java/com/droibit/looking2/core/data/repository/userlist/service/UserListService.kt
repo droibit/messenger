@@ -17,10 +17,10 @@ class UserListService @Inject constructor(
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
-    suspend fun getUserLists(session: TwitterSession): List<UserList> {
+    suspend fun getUserLists(session: TwitterSession, userId: Long?): List<UserList> {
         val apiClient = get(session)
         try {
-            val userListsResponse = apiClient.userListService.list(null, null, null).await()
+            val userListsResponse = apiClient.userListService.list(userId, null, null).await()
             return mapper.toUserLists(source = userListsResponse)
         } catch (e: Exception) {
             Timber.e(e)

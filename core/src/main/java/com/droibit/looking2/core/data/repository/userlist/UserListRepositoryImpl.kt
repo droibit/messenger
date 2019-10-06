@@ -14,10 +14,10 @@ internal class UserListRepositoryImpl @Inject constructor(
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : UserListRepository {
 
-    override suspend fun getUserLists(): List<UserList> {
+    override suspend fun getMyLists(): List<UserList> {
         return withContext(dispatcherProvider.io) {
             val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
-            userListService.getUserLists(session)
+            userListService.getUserLists(session, userId = null)
         }
     }
 }
