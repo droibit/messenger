@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
+import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
@@ -127,7 +129,8 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         when (failureType) {
             is GetTimelineFailureType.Network -> showNetworkErrorToast()
             is GetTimelineFailureType.UnExpected -> showShortToast(failureType.messageResId)
-        }
+            is GetTimelineFailureType.Limited -> showRateLimitingErrorToast()
+        }.exhaustive
         requireActivity().finish()
     }
 

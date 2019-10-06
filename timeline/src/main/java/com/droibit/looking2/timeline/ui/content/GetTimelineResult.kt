@@ -6,6 +6,7 @@ import com.droibit.looking2.core.model.tweet.Tweet
 sealed class GetTimelineResult {
     sealed class FailureType {
         object Network : FailureType()
+        object Limited : FailureType()
         class UnExpected(@StringRes val messageResId: Int) : FailureType()
     }
 

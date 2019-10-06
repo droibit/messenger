@@ -16,3 +16,7 @@ fun Fragment.showLongToast(@StringRes resId: Int) {
 fun Fragment.showNetworkErrorToast() {
     showShortToast(R.string.error_message_network_disconnected)
 }
+
+fun Fragment.showRateLimitingErrorToast() {
+    showLongToast(R.string.error_message_rate_limiting)
+}

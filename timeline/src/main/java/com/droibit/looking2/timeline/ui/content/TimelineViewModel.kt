@@ -42,6 +42,8 @@ class TimelineViewModel(
                     is TwitterError.UnExpected -> FailureResult(
                         FailureType.UnExpected(messageResId = R.string.timeline_error_obtain_timeline)
                     )
+                    is TwitterError.Limited -> FailureResult(FailureType.Limited)
+                    is TwitterError.Unauthorized -> TODO("Not implemented.")
                 }
             }
         }
