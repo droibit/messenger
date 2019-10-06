@@ -8,6 +8,7 @@ import retrofit2.Call
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@Throws(TwitterException::class)
 internal suspend fun <T> Call<T>.await(): T {
     return suspendCancellableCoroutine { context ->
         enqueue(object : Callback<T>() {

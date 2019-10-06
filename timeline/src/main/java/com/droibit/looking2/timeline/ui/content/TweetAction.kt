@@ -9,8 +9,8 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
-import com.droibit.looking2.core.model.tweet.TweetActionError
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.coreComponent
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.TweetActionCall.Companion.KEY_TWEET_ID
@@ -80,7 +80,7 @@ class RetweetActionWorker(
         return try {
             tweetRepository.retweet(tweetId)
             Result.success()
-        } catch (e: TweetActionError) {
+        } catch (e: TwitterError) {
             // TODO: retry
             Result.failure()
         }
@@ -109,7 +109,7 @@ class LikeTweetActionWorker(
         return try {
             tweetRepository.likeTweet(tweetId)
             Result.success()
-        } catch (e: TweetActionError) {
+        } catch (e: TwitterError) {
             // TODO: retry
             Result.failure()
         }

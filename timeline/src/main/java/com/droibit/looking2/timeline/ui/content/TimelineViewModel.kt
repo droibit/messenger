@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.droibit.looking2.core.model.tweet.GetTimelineError
+import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType
 import kotlinx.coroutines.launch
@@ -36,10 +36,10 @@ class TimelineViewModel(
             getTimelineResultSink.value = try {
                 val timeline = getTimelineCall.execute(sinceId = null)
                 SuccessResult(timeline)
-            } catch (e: GetTimelineError) {
+            } catch (e: TwitterError) {
                 when (e) {
-                    is GetTimelineError.Network -> FailureResult(FailureType.Network)
-                    is GetTimelineError.UnExpected -> FailureResult(
+                    is TwitterError.Network -> FailureResult(FailureType.Network)
+                    is TwitterError.UnExpected -> FailureResult(
                         FailureType.UnExpected(messageResId = R.string.timeline_error_obtain_timeline)
                     )
                 }

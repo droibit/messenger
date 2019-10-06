@@ -41,7 +41,7 @@ internal class AccountRepositoryImpl(
 
     override suspend fun initialize() {
         localStore.sessions().forEach { twitterService.ensureApiClient(session = it) }
-        emitTwitterAccounts()
+        dispatchTwitterAccountsUpdated()
     }
 
     override suspend fun activeTwitterAccount(): TwitterAccount? {
@@ -55,7 +55,7 @@ internal class AccountRepositoryImpl(
             val responseUrl = twitterService.sendAuthorizationRequest(requestToken)
             twitterService.createNewSession(requestToken, responseUrl).also {
                 localStore.add(session = it)
-                emitTwitterAccounts()
+                dispatchTwitterAccountsUpdated()
             }
             emit(AuthenticationSuccess)
         } catch (e: AuthenticationError) {
@@ -63,7 +63,7 @@ internal class AccountRepositoryImpl(
         }
     }.flowOn(dispatcherProvider.io)
 
-    private suspend fun emitTwitterAccounts() {
+    private suspend fun dispatchTwitterAccountsUpdated() {
         val accounts = localStore.sessions().map { it.toAccount() }
         twitterAccountsChannel.offer(accounts)
     }

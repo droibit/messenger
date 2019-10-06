@@ -1,8 +1,8 @@
 package com.droibit.looking2.timeline.ui.content
 
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
-import com.droibit.looking2.core.model.tweet.GetTimelineError
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.model.tweet.TwitterError
 import java.io.Serializable
 
 sealed class TimelineSource : Serializable {
@@ -13,7 +13,7 @@ sealed class TimelineSource : Serializable {
 
 interface GetTimelineCall {
 
-    @Throws(GetTimelineError::class)
+    @Throws(TwitterError::class)
     suspend fun execute(sinceId: Long?): List<Tweet>
 
     class Factory(
