@@ -47,18 +47,4 @@ data class Tweet(
             }
             return quotedTweet?.urls?.firstOrNull() ?: error("Not found share url.")
         }
-
-    data class User(
-        val id: Long,
-        val name: String,
-        val screenName: String,
-        val profileUrl: String
-    )
-
-    sealed class Media {
-
-        abstract val url: ShorteningUrl
-
-        data class Photo(override val url: ShorteningUrl) : Media()
-    }
 }

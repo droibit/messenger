@@ -1,7 +1,9 @@
 package com.droibit.looking2.core.data.repository.timeline.service
 
+import com.droibit.looking2.core.model.tweet.Media
 import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.util.ext.unescapeHtml
 import com.twitter.sdk.android.core.models.MediaEntity
 import com.twitter.sdk.android.core.models.UrlEntity
@@ -10,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Collections
 import java.util.Locale
 import javax.inject.Inject
-import com.droibit.looking2.core.model.tweet.Tweet.Media.Photo as PhotoMedia
+import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
 import com.twitter.sdk.android.core.models.Tweet as TweetResponse
 import com.twitter.sdk.android.core.models.User as UserResponse
 
@@ -69,7 +71,7 @@ private fun UrlEntity.toShortUrl(): ShorteningUrl {
     return ShorteningUrl(url, displayUrl, expandedUrl)
 }
 
-private fun MediaEntity.toMedia(): Tweet.Media? {
+private fun MediaEntity.toMedia(): Media? {
     return when (type) {
         MEDIA_TYPE_PHOTO -> {
             PhotoMedia(url = ShorteningUrl(url, displayUrl, "$mediaUrlHttps:small"))
@@ -78,7 +80,7 @@ private fun MediaEntity.toMedia(): Tweet.Media? {
     }
 }
 
-private fun UserResponse.toUser() = Tweet.User(
+private fun UserResponse.toUser() = User(
     id, name, screenName,
     profileUrl = profileImageUrlHttps.replaceFirst(
         PROFILE_ICON_SIZE_NORMAL,

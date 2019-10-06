@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.ext.unescapeRegex
 import javax.inject.Inject
-import com.droibit.looking2.core.model.tweet.Tweet.Media.Photo as PhotoMedia
+import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
 import com.twitter.Regex as TwitterRegex
 
 private val highlightPatterns = listOf(
