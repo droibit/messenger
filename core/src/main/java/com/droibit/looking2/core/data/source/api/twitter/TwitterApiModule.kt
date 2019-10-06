@@ -12,6 +12,9 @@ import com.twitter.sdk.android.core.internal.TwitterApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -60,5 +63,12 @@ object TwitterApiModule {
                 return AppTwitterApiClient(session, okHttpClient)
             }
         }
+    }
+
+    @Named("twitterApi")
+    @Provides
+    @JvmStatic
+    fun provideTwitterApiDateFormat(): DateFormat {
+        return SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH)
     }
 }

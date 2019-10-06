@@ -6,6 +6,8 @@ import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepositoryImpl
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.data.repository.tweet.TweetRepositoryImpl
+import com.droibit.looking2.core.data.repository.userlist.UserListRepository
+import com.droibit.looking2.core.data.repository.userlist.UserListRepositoryImpl
 import com.droibit.looking2.core.data.source.SourceModule
 import dagger.Binds
 import dagger.Module
@@ -31,6 +33,10 @@ object RepositoryModule {
         @Singleton
         @Binds
         fun bindTweetRepository(repository: TweetRepositoryImpl): TweetRepository
+
+        @Singleton
+        @Binds
+        fun bindUserListRepository(repository: UserListRepositoryImpl): UserListRepository
     }
 
     interface Provider {
@@ -40,5 +46,7 @@ object RepositoryModule {
         fun provideTimelineRepository(): TimelineRepository
 
         fun provideTweetRepository(): TweetRepository
+
+        fun provideUserListRepository(): UserListRepository
     }
 }
