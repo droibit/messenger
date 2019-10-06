@@ -1,6 +1,6 @@
 package com.droibit.looking2.core.data.source.local.twitter
 
-import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClient
+import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
 import com.twitter.sdk.android.core.SessionManager
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession
@@ -12,7 +12,7 @@ import kotlin.coroutines.suspendCoroutine
 internal class TwitterLocalStoreImpl @Inject constructor(
     private val twitterCore: TwitterCore,
     private val sessionManager: SessionManager<TwitterSession>,
-    private val apiClientFactory: LookingTwitterApiClient.Factory
+    private val apiClientFactory: AppTwitterApiClient.Factory
 ) : TwitterLocalStore {
 
     override suspend fun activeSession(): TwitterSession? = suspendCoroutine { cont ->

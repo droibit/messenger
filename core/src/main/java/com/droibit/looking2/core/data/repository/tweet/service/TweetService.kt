@@ -1,7 +1,7 @@
 package com.droibit.looking2.core.data.repository.tweet.service
 
-import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClient
-import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClientFactoryDelegate
+import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFactoryDelegate
 import com.droibit.looking2.core.data.source.api.twitter.await
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.toTwitterError
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class TweetService @Inject constructor(
     private val twitterCore: TwitterCore
-) : LookingTwitterApiClient.Factory by LookingTwitterApiClientFactoryDelegate(twitterCore) {
+) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
     suspend fun retweet(session: TwitterSession, tweetId: Long) {

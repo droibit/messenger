@@ -11,13 +11,13 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-class LookingTwitterApiClient(
+class AppTwitterApiClient(
     session: TwitterSession,
     client: OkHttpClient
 ) : TwitterApiClient(session, client) {
 
     interface Factory {
-        fun get(session: TwitterSession): LookingTwitterApiClient
+        fun get(session: TwitterSession): AppTwitterApiClient
     }
 
     interface UserListService {

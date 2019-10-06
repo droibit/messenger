@@ -52,12 +52,12 @@ object TwitterApiModule {
     @Singleton
     @Provides
     @JvmStatic
-    fun provideLookingClientFactory(
+    fun provideAppTwitterApiClientFactory(
         okHttpClient: OkHttpClient
-    ): LookingTwitterApiClient.Factory {
-        return object : LookingTwitterApiClient.Factory {
-            override fun get(session: TwitterSession): LookingTwitterApiClient {
-                return LookingTwitterApiClient(session, okHttpClient)
+    ): AppTwitterApiClient.Factory {
+        return object : AppTwitterApiClient.Factory {
+            override fun get(session: TwitterSession): AppTwitterApiClient {
+                return AppTwitterApiClient(session, okHttpClient)
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.droibit.looking2.core.data.repository.timeline.service
 
-import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClient
-import com.droibit.looking2.core.data.source.api.twitter.LookingTwitterApiClientFactoryDelegate
+import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFactoryDelegate
 import com.droibit.looking2.core.data.source.api.twitter.await
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class TimelineService @Inject constructor(
     twitterCore: TwitterCore,
     private val mapper: TimelineMapper
-) : LookingTwitterApiClient.Factory by LookingTwitterApiClientFactoryDelegate(twitterCore) {
+) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
     suspend fun getHomeTimeline(session: TwitterSession, count: Int, sinceId: Long?): List<Tweet> {
