@@ -7,7 +7,6 @@ import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.toTwitterError
 import com.twitter.sdk.android.core.TwitterCore
-import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +30,7 @@ class TimelineService @Inject constructor(
                 null
             ).await()
             return mapper.toTimeline(source = timelineResponse)
-        } catch (e: TwitterException) {
+        } catch (e: Exception) {
             Timber.e(e)
             throw e.toTwitterError()
         }

@@ -16,7 +16,7 @@ internal class UserListRepositoryImpl @Inject constructor(
 
     override suspend fun getUserLists(): List<UserList> {
         return withContext(dispatcherProvider.io) {
-            val session = localStore.activeSession() ?: throw TwitterError.Unauthorized()
+            val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
             userListService.getUserLists(session)
         }
     }

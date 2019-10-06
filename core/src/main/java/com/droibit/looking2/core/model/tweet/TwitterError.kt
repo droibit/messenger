@@ -10,8 +10,8 @@ private const val STATUS_CODE_TOO_MANY_ACCESS = 429
 sealed class TwitterError(message: String? = null) : Exception(message) {
     class Network : TwitterError()
     class Limited : TwitterError()
-    class Unauthorized : TwitterError()
-    class UnExpected : TwitterError()
+    object Unauthorized : TwitterError()
+    class UnExpected(val errorCode: Int = Int.MIN_VALUE) : TwitterError()
 }
 
 fun Exception.toTwitterError(): TwitterError {
@@ -19,8 +19,8 @@ fun Exception.toTwitterError(): TwitterError {
     if (this !is TwitterApiException) return TwitterError.UnExpected()
 
     return when (this.statusCode) {
-        STATUS_CODE_UNAUTHORIZED -> TwitterError.Unauthorized()
+        STATUS_CODE_UNAUTHORIZED -> TwitterError.Unauthorized
         STATUS_CODE_TOO_MANY_ACCESS -> TwitterError.Limited()
-        else -> TwitterError.UnExpected()
+        else -> TwitterError.UnExpected(errorCode = this.errorCode)
     }
 }
