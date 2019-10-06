@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    tools:background="@color/black">
+
+    <ImageView
+        android:id="@+id/listIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_bordered_circle"
+        android:scaleType="center"
+        android:tint="?android:attr/colorForeground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_add_white_24dp" />
+
+    <TextView
+        android:id="@+id/listName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.Wearable.Small"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/createdBy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/listIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="List" />
+
+    <TextView
+        android:id="@+id/createdBy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption"
+        android:textColor="@color/colorLighterWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/listIcon"
+        app:layout_constraintTop_toBottomOf="@+id/listName"
+        tools:text="droibit"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

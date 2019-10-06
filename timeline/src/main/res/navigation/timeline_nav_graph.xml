@@ -27,4 +27,13 @@
             android:name="urls"
             app:argType="string[]" />
     </fragment>
+    <fragment
+        android:id="@+id/myListsFragment"
+        android:name="com.droibit.looking2.timeline.ui.content.mylist.MyListsFragment"
+        android:label="My List"
+        tools:layout="@layout/fragment_my_lists" >
+        <action
+            android:id="@+id/action_myListsFragment_to_timelineFragment"
+            app:destination="@id/timelineFragment" />
+    </fragment>
 </navigation>

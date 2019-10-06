@@ -36,7 +36,10 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
             val navController = findNavController(R.id.timelineNavHostFragment)
             val navGraph = navController.navInflater.inflate(R.navigation.timeline_nav_graph)
                 .apply {
-                    startDestination = R.id.timelineFragment
+                    startDestination = if (startDestination == TIMELINE_SOURCE_LISTS)
+                        R.id.myListsFragment
+                    else
+                        R.id.timelineFragment
                 }
             navController.setGraph(navGraph, startDestination.toArgs())
         }
