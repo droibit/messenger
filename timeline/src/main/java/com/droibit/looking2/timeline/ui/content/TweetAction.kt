@@ -68,7 +68,7 @@ class RetweetActionWorker(
     constructor(context: Context, workerParams: WorkerParameters) : this(
         context,
         workerParams,
-        context.coreComponent().provideTweetRepository()
+        context.coreComponent().tweetRepository
     )
 
     override suspend fun doWork(): Result {
@@ -97,7 +97,7 @@ class LikeTweetActionWorker(
     constructor(context: Context, workerParams: WorkerParameters) : this(
         context,
         workerParams,
-        context.coreComponent().provideTweetRepository()
+        context.coreComponent().tweetRepository
     )
 
     override suspend fun doWork(): Result {
