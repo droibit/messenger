@@ -107,6 +107,8 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         observePhotoList()
         observeTweetAction()
         observeGetTimelineResult()
+
+        lifecycle.addObserver(timelineViewModel)
     }
 
     private fun observeGetTimelineResult() {
@@ -117,12 +119,10 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             }
             binding.loadingInProgress = it is GetTimelineResult.InProgress
         }
-        lifecycle.addObserver(timelineViewModel)
     }
 
     private fun showTimeline(timeline: List<Tweet>) {
         tweetListAdapter.setTweets(timeline)
-        binding.list.isVisible = true
     }
 
     private fun showGetTimelineFailureResult(failureType: GetTimelineFailureType) {

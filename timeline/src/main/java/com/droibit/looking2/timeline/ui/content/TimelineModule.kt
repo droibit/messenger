@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content
 
-import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import javax.inject.Named
 
 @Module(includes = [TimelineModule.BindingModule::class])
 object TimelineModule {
@@ -67,6 +65,5 @@ object TimelineModule {
         @IntoMap
         @ViewModelKey(TweetActionViewModel::class)
         fun bindTweetActionViewModel(viewModel: TweetActionViewModel): ViewModel
-
     }
 }

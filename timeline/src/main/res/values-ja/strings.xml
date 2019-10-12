@@ -15,4 +15,5 @@
     <string name="timeline_tweet_action_add_pocket">Pocketへ追加</string>
     <string name="timeline_tweet_action_add_pocket_in_progress">Pocketに追加…</string>
     <string name="timeline_tweet_action_add_pocket_failed">Pocketへの追加に失敗</string>
+    <string name="my_lists_error_obtain_lists">リストの読み込みに失敗</string>
 </resources>

@@ -19,4 +19,7 @@
     <string name="timeline_tweet_action_add_pocket">Add to Pocket</string>
     <string name="timeline_tweet_action_add_pocket_in_progress">Add to Pocket…</string>
     <string name="timeline_tweet_action_add_pocket_failed">Failed to add to Pocket.</string>
+
+    <!-- My list -->
+    <string name="my_lists_error_obtain_lists">Failed to obtain my list.</string>
 </resources>

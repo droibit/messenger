@@ -19,16 +19,16 @@ class MyListAdapter(
 
     private val itemPadding = ListItemPadding(context)
 
-    private val userLists = mutableListOf<UserList>()
+    private val myLists = mutableListOf<UserList>()
 
-    override fun getItemCount(): Int = userLists.size
+    override fun getItemCount(): Int = myLists.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
-                itemClickListener.invoke(userLists[adapterPosition])
+                itemClickListener.invoke(myLists[adapterPosition])
             }
         }
     }
@@ -40,7 +40,13 @@ class MyListAdapter(
             itemPadding.rightPx,
             if (position == itemCount - 1) itemPadding.lastItemBottomPx else 0
         )
-        holder.bind(userLists[position])
+        holder.bind(myLists[position])
+    }
+
+    fun setMyLists(myLists: List<UserList>) {
+        this.myLists.clear()
+        this.myLists.addAll(myLists)
+        this.notifyDataSetChanged()
     }
 
     class ViewHolder(private val binding: ListItemMyListBinding) :
