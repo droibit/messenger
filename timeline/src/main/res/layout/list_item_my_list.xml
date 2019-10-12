@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="userList"
+            type="com.droibit.looking2.core.model.tweet.UserList" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="@color/black">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/listIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/background_bordered_circle"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@sample/timeline.json/timeline/user_icon" />
+
+        <TextView
+            android:id="@+id/listName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.Wearable.Small"
+            android:textColor="@android:color/white"
+            android:text="@{userList.name}"
+            app:layout_constraintBottom_toTopOf="@+id/createdBy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/listIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="List" />
+
+        <TextView
+            android:id="@+id/createdBy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Caption"
+            android:textColor="@color/colorLighterWhite"
+            android:text="@{userList.user.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/listIcon"
+            app:layout_constraintTop_toBottomOf="@+id/listName"
+            tools:text="droibit"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/privateListIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_private"
+            android:tint="@color/colorAccent"
+            android:padding="2.5dp"
+            android:background="@drawable/background_chip_icon"
+            android:visibility="@{userList.private ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/listIcon"
+            app:layout_constraintEnd_toEndOf="@+id/listIcon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

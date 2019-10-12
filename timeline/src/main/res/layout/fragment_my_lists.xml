@@ -23,7 +23,7 @@
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}"
-            tools:listitem="@layout/list_item_user_list"
+            tools:listitem="@layout/list_item_my_list"
             tools:visibility="visible" />
 
         <com.droibit.looking2.timeline.ui.widget.ProgressView

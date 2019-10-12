@@ -23,7 +23,6 @@ class TweetTextProcessor @Inject constructor() {
         tweet: Tweet
     ) {
         val quotedTweetUrl = tweet.quotedTweet?.url
-
         val replaceUrls = ArrayList<Pair<String, String>>()
         tweet.urls.mapTo(replaceUrls) {
             if (quotedTweetUrl == null) it.url to it.displayUrl else {

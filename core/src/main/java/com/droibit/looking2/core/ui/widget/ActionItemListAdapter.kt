@@ -15,13 +15,13 @@ import com.droibit.looking2.core.ui.view.ActionMenu
 import com.droibit.looking2.core.ui.view.ListItemPadding
 import java.util.Objects
 
-typealias ItemClickListener = (ActionItemListAdapter.ActionItem) -> Unit
+typealias ActionItemClickListener = (ActionItemListAdapter.ActionItem) -> Unit
 
 class ActionItemListAdapter(
     context: Context,
     title: String? = null,
     private val items: MutableList<ActionItem>,
-    private val itemClickListener: ItemClickListener
+    private val itemClickListener: ActionItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ActionItem(
@@ -57,7 +57,7 @@ class ActionItemListAdapter(
         context: Context,
         title: String? = null,
         @MenuRes menuRes: Int,
-        itemClickListener: ItemClickListener
+        itemClickListener: ActionItemClickListener
     ) :
         this(context, title, inflateActionMenu(context, menuRes), itemClickListener)
 
