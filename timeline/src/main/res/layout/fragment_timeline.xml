@@ -33,31 +33,12 @@
                 tools:listitem="@layout/list_item_tweet"
                 tools:visibility="visible" />
 
-            <LinearLayout
+            <com.droibit.looking2.timeline.ui.widget.ProgressView
                 android:id="@+id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
                 android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
-                tools:visibility="gone">
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/progressMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@android:style/TextAppearance.Material.Body1"
-                    android:textColor="@color/white"
-                    android:text="@string/progress_loading_content"
-                    tools:text="@string/progress_loading_content" />
-
-            </LinearLayout>
+                tools:visibility="gone" />
 
         </FrameLayout>
 
