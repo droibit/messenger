@@ -26,6 +26,15 @@ class TimelineRepository @Inject constructor(
     }
 
     @Throws(TwitterError::class)
+    suspend fun getMentionsTimeline(sinceId: Long?): List<Tweet> {
+        return withContext(dispatcherProvider.io) {
+            val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
+            // TODO: load count from local store.
+            timelineService.getMentionsTimeline(session, 30, sinceId)
+        }
+    }
+
+    @Throws(TwitterError::class)
     suspend fun getUserListTimeline(listId: Long, sinceId: Long?): List<Tweet> {
         return withContext(dispatcherProvider.io) {
             val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
