@@ -13,6 +13,7 @@ import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -21,9 +22,9 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
-    private val startDestination: StartDestination by lazy(NONE) {
+    private val destinationSource: DestinationSource by lazy(NONE) {
         val source = requireNotNull(intent).getIntExtra(EXTRA_TIMELINE_SOURCE, -1)
-        StartDestination.valueOf(sourceId = source)
+        DestinationSource.valueOf(sourceId = source)
     }
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
@@ -31,21 +32,22 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
+        Timber.d("Start dest: $destinationSource")
 
         if (savedInstanceState == null) {
             val navController = findNavController(R.id.timelineNavHostFragment)
             val navGraph = navController.navInflater.inflate(R.navigation.timeline_nav_graph)
                 .apply {
-                    startDestination = if (startDestination == TIMELINE_SOURCE_LISTS)
+                    this.startDestination = if (destinationSource == DestinationSource.LISTS)
                         R.id.myListsFragment
                     else
                         R.id.timelineFragment
                 }
-            navController.setGraph(navGraph, startDestination.toArgs())
+            navController.setGraph(navGraph, destinationSource.toArgs())
         }
     }
 
-    private enum class StartDestination(val id: Int) {
+    private enum class DestinationSource(val id: Int) {
         HOME(id = TIMELINE_SOURCE_HOME),
         MENTIONS(id = TIMELINE_SOURCE_MENTIONS),
         LISTS(id = TIMELINE_SOURCE_LISTS);
@@ -59,7 +61,7 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
         }
 
         companion object {
-            fun valueOf(sourceId: Int): StartDestination = values().first { it.id == sourceId }
+            fun valueOf(sourceId: Int): DestinationSource = values().first { it.id == sourceId }
         }
     }
 }

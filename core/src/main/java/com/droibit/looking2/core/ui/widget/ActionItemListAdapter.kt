@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,7 @@ class ActionItemListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ActionItem(
-        val id: Int,
+        @get:IdRes val id: Int,
         val icon: Drawable,
         val text: String
     ) {

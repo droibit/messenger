@@ -17,6 +17,7 @@ class MyListsFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyListsBinding.inflate(inflater, container, false)
+        binding.loadingInProgress = true
         return binding.root
     }
 }
