@@ -11,6 +11,7 @@ import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.ActivityHomeBinding
 import com.droibit.looking2.home.ui.HomeNavigation.LISTS
+import com.droibit.looking2.home.ui.HomeNavigation.MENTIONS
 import com.droibit.looking2.home.ui.HomeNavigation.TIMELINE
 import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
 import javax.inject.Inject
@@ -45,8 +46,8 @@ class HomeActivity : FragmentActivity() {
     fun onActionItemClick(item: ActionItem) {
         when (HomeNavigation.of(item.id)) {
             TIMELINE -> startActivity(TimelineActivity.createHomeIntent())
+            MENTIONS -> startActivity(TimelineActivity.createMentionsIntent())
             LISTS -> startActivity(TimelineActivity.createListsIntent())
-            // TODO:
             else -> Unit
         }
     }
