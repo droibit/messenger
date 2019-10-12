@@ -16,8 +16,8 @@
       android:title="@string/navigation_title_mentions"/>
 
   <item
-      android:id="@+id/action_list"
-      android:icon="@drawable/ic_navigation_list"
+      android:id="@+id/action_lists"
+      android:icon="@drawable/ic_navigation_lists"
       android:title="@string/navigation_title_lists"/>
 
   <item
