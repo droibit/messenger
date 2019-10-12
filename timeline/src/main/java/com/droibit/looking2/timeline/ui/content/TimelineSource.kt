@@ -16,16 +16,13 @@ interface GetTimelineCall {
     @Throws(TwitterError::class)
     suspend fun execute(sinceId: Long?): List<Tweet>
 
-    class Factory(
-        private val repository: TimelineRepository,
-        private val numOfTweetsGet: Int
-    ) {
+    class Factory(private val repository: TimelineRepository) {
 
         fun create(source: TimelineSource): GetTimelineCall {
             return when (source) {
                 is TimelineSource.Home -> object : GetTimelineCall {
                     override suspend fun execute(sinceId: Long?): List<Tweet> {
-                        return repository.getHomeTimeline(count = numOfTweetsGet, sinceId = sinceId)
+                        return repository.getHomeTimeline(sinceId = sinceId)
                     }
                 }
                 is TimelineSource.Mentions -> TODO()

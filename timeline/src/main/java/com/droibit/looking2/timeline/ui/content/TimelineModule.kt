@@ -40,8 +40,7 @@ object TimelineModule {
         repository: TimelineRepository,
         timelineSource: TimelineSource
     ): GetTimelineCall {
-        // TODO: Change numOfTweetsGet
-        return GetTimelineCall.Factory(repository, numOfTweetsGet = 30).create(timelineSource)
+        return GetTimelineCall.Factory(repository).create(timelineSource)
     }
 
     @Provides
