@@ -35,4 +35,31 @@ class TimelineService @Inject constructor(
             throw e.toTwitterError()
         }
     }
+
+    @Throws(TwitterError::class)
+    suspend fun getUesrListTimeline(
+        session: TwitterSession,
+        listId: Long,
+        count: Int,
+        sinceId: Long?
+    ): List<Tweet> {
+        val apiClient = get(session)
+        try {
+            val timelineResponse = apiClient.userListService.statuses(
+                listId,
+                count,
+                sinceId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ).await()
+            return mapper.toTimeline(source = timelineResponse)
+        } catch (e: Exception) {
+            Timber.e(e)
+            throw e.toTwitterError()
+        }
+    }
 }
