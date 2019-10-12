@@ -33,7 +33,7 @@
         android:label="My List"
         tools:layout="@layout/fragment_my_lists" >
         <action
-            android:id="@+id/action_myListsFragment_to_timelineFragment"
+            android:id="@+id/showMyListTimeline"
             app:destination="@id/timelineFragment" />
     </fragment>
 </navigation>

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.Event
@@ -15,6 +16,8 @@ import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
+import com.droibit.looking2.timeline.ui.content.TimelineSource
+import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.showMyListTimeline
 import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.FailureType as GetMyListsFailureType
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
@@ -90,5 +93,8 @@ class MyListsFragment : DaggerFragment() {
 
     fun onUserListClick(myList: UserList) {
         Timber.d("onUserListClick(${myList.name})")
+
+        val directions = showMyListTimeline(TimelineSource.MyLists(myList.id))
+        findNavController().navigate(directions)
     }
 }

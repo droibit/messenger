@@ -29,7 +29,11 @@ interface GetTimelineCall {
                     }
                 }
                 is TimelineSource.Mentions -> TODO()
-                is TimelineSource.MyLists -> TODO()
+                is TimelineSource.MyLists -> object : GetTimelineCall {
+                    override suspend fun execute(sinceId: Long?): List<Tweet> {
+                        return repository.getUserListTimeline(source.listId, sinceId)
+                    }
+                }
             }
         }
     }
