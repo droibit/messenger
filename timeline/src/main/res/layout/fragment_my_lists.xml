@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
             name="loadingInProgress"
+            type="Boolean" />
+
+        <variable
+            name="visibleContent"
             type="Boolean" />
     </data>
 
@@ -15,22 +20,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}"
-            tools:listitem="@layout/list_item_my_list"
-            tools:visibility="visible" />
+            android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_my_list"
+                tools:visibility="visible" />
+
+            <com.droibit.looking2.timeline.ui.widget.EmptyContentView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
+                app:text="@string/my_lists_empty_content"
+                tools:visibility="gone" />
+
+        </FrameLayout>
 
         <com.droibit.looking2.timeline.ui.widget.ProgressView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone"
-            />
+            tools:visibility="gone" />
 
     </FrameLayout>
 </layout>

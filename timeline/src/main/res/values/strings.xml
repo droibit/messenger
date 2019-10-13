@@ -4,8 +4,8 @@
 
     <!-- Timeline. -->
     <string name="timeline_error_obtain_timeline">Failed to obtain timeline.</string>
-    <string name="timeline_empty_timeline">No tweets</string>
     <string name="timeline_tweet_retweet_by">Retweet by %1$s</string>
+    <string name="timeline_empty_content">No tweets</string>
 
     <!-- Tweet action. -->
     <string name="timeline_tweet_action_retweet">Retweet</string>
@@ -22,4 +22,5 @@
 
     <!-- My list -->
     <string name="my_lists_error_obtain_lists">Failed to obtain my list.</string>
+    <string name="my_lists_empty_content">No lists</string>
 </resources>

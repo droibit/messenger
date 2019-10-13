@@ -78,6 +78,7 @@ class MyListsFragment : DaggerFragment() {
 
     private fun showMyLists(myLists: List<UserList>) {
         myListAdapter.setMyLists(myLists)
+        binding.visibleContent = myLists.isNotEmpty()
     }
 
     private fun showGetMyListsFailureResult(failureType: Event<GetMyListsFailureType>) {

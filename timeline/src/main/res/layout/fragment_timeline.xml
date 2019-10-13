@@ -10,6 +10,10 @@
         <variable
             name="loadingInProgress"
             type="Boolean" />
+
+        <variable
+            name="visibleContent"
+            type="Boolean" />
     </data>
 
     <androidx.wear.widget.drawer.WearableDrawerLayout
@@ -23,15 +27,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list"
+            <FrameLayout
+                android:id="@+id/contentView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}"
-                tools:listitem="@layout/list_item_tweet"
-                tools:visibility="visible" />
+                android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/list_item_tweet"
+                    tools:visibility="visible" />
+
+                <com.droibit.looking2.timeline.ui.widget.EmptyContentView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
+                    app:text="@string/timeline_empty_content"
+                    tools:visibility="gone" />
+
+            </FrameLayout>
 
             <com.droibit.looking2.timeline.ui.widget.ProgressView
                 android:id="@+id/progress"
