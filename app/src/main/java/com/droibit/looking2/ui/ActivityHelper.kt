@@ -126,4 +126,13 @@ object Activities {
                 .putExtra(EXTRA_TIMELINE_SOURCE, TIMELINE_SOURCE_LISTS)
         }
     }
+
+    object Settings : AddressableActivity {
+        override val className = "${BuildConfig.PACKAGE_NAME}.settings.ui.SettingsHostActivity"
+
+        fun createIntent(): Intent {
+            // TODO:
+            return intentTo(Settings)
+        }
+    }
 }

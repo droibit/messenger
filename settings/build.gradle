@@ -1,0 +1,43 @@
+apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'kotlin-android'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'kotlin-kapt'
+
+apply from: rootProject.file('dependencies_shared.gradle')
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        versionCode buildConfig.version.code
+        versionName buildConfig.version.name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "en", "ja"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    dataBinding {
+        enabled true
+    }
+}
+
+configurations.all {
+    exclude group: 'androidx.appcompat', module: 'appcompat'
+}
+
+dependencies {
+    implementation project(':app')
+    implementation project(':core')
+
+    kapt deps.dagger.compiler
+    kapt deps.dagger.androidProcessor
+
+    implementation deps.ossLicenseUi
+}
+
+kapt {
+    useBuildCache = true
+}
