@@ -12,8 +12,10 @@ import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.ActivityHomeBinding
 import com.droibit.looking2.home.ui.HomeNavigation.LISTS
 import com.droibit.looking2.home.ui.HomeNavigation.MENTIONS
+import com.droibit.looking2.home.ui.HomeNavigation.SETTINGS
 import com.droibit.looking2.home.ui.HomeNavigation.TIMELINE
 import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
+import com.droibit.looking2.ui.Activities.Settings as SettingsActivity
 import javax.inject.Inject
 
 class HomeActivity : FragmentActivity() {
@@ -48,6 +50,7 @@ class HomeActivity : FragmentActivity() {
             TIMELINE -> startActivity(TimelineActivity.createHomeIntent())
             MENTIONS -> startActivity(TimelineActivity.createMentionsIntent())
             LISTS -> startActivity(TimelineActivity.createListsIntent())
+            SETTINGS -> startActivity(SettingsActivity.createIntent())
             else -> Unit
         }
     }

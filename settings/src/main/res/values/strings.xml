@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+
+    <!-- Twitter category. -->
+    <string name="pref_twitter_category_title" translatable="false">Twitter</string>
+    <string name="pref_twitter_get_tweet_count_key" translatable="false">twitter_get_tweet_count</string>
+    <string name="pref_twitter_get_tweet_count_title">Number of tweets to obtain</string>
+    <string name="pref_twitter_get_tweet_count_summary">%1$s tweets</string>
+    <string-array name="pref_twitter_get_tweet_count_entries" translatable="false">
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+    </string-array>
+
+    <!-- App category. -->
+    <string name="pref_app_category_title">App</string>
+    <string name="pref_app_version_title">Build Version</string>
+    <string name="pref_app_version_summary">Version: %1$s</string>
+    <string name="pref_app_version_key" translatable="false">app_version</string>
+    <string name="pref_app_oss_key" translatable="false">oss</string>
+    <string name="pref_app_oss_title">Open Source Licenses</string>
+</resources>

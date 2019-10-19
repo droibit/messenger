@@ -131,7 +131,6 @@ object Activities {
         override val className = "${BuildConfig.PACKAGE_NAME}.settings.ui.SettingsHostActivity"
 
         fun createIntent(): Intent {
-            // TODO:
             return intentTo(Settings)
         }
     }
