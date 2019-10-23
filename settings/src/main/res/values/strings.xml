@@ -4,7 +4,6 @@
 
     <!-- Twitter category. -->
     <string name="pref_twitter_category_title" translatable="false">Twitter</string>
-    <string name="pref_twitter_get_tweet_count_key" translatable="false">twitter_get_tweet_count</string>
     <string name="pref_twitter_get_tweet_count_title">Number of tweets to obtain</string>
     <string name="pref_twitter_get_tweet_count_summary">%1$s tweets</string>
     <string-array name="pref_twitter_get_tweet_count_entries" translatable="false">
