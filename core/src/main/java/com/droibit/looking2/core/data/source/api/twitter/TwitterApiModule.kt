@@ -23,11 +23,9 @@ object TwitterApiModule {
 
     @Singleton
     @Provides
-    @JvmStatic
     fun provideTwitterApi(): TwitterApi = TwitterApi()
 
     @Provides
-    @JvmStatic
     fun provideTwitterConfig(
         @Named("appContext") context: Context,
         logger: Logger,
@@ -39,22 +37,18 @@ object TwitterApiModule {
             .build()
 
     @Provides
-    @JvmStatic
     fun provideLogger(@Named("debuggable") debug: Boolean): Logger =
         DefaultLogger(if (debug) Int.MAX_VALUE else Log.VERBOSE)
 
     @Provides
-    @JvmStatic
     fun provideTwitterCore(): TwitterCore = TwitterCore.getInstance()
 
     @Provides
-    @JvmStatic
     fun provideSessionManager(twitterCore: TwitterCore): SessionManager<TwitterSession> =
         twitterCore.sessionManager
 
     @Singleton
     @Provides
-    @JvmStatic
     fun provideAppTwitterApiClientFactory(
         okHttpClient: OkHttpClient
     ): AppTwitterApiClient.Factory {
@@ -67,7 +61,6 @@ object TwitterApiModule {
 
     @Named("twitterApi")
     @Provides
-    @JvmStatic
     fun provideTwitterApiDateFormat(): DateFormat {
         return SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH)
     }

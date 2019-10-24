@@ -22,7 +22,6 @@ object ApiModule {
     @Named("httpLogging")
     @Singleton
     @Provides
-    @JvmStatic
     fun provideHttpLoggingInterceptor(@Named("debuggable") debug: Boolean): Interceptor {
         return HttpLoggingInterceptor().apply {
             level = if (debug) HEADERS else HttpLoggingInterceptor.Level.NONE
@@ -31,7 +30,6 @@ object ApiModule {
 
     @Singleton
     @Provides
-    @JvmStatic
     fun provideOkHttp(
         @Named("httpLogging") httpLoggingInterceptor: Interceptor
     ): OkHttpClient {

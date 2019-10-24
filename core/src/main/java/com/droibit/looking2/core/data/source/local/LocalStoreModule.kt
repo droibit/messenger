@@ -13,7 +13,6 @@ import javax.inject.Named
 object LocalStoreModule {
 
     @Provides
-    @JvmStatic
     fun provideUserSettingsLocalStoreKeys(@Named("appContext") context: Context): LocalUserSettingsStore.Keys {
         return object : LocalUserSettingsStore.Keys {
             override val numOfTweets: PreferenceKey<Int> = IntPreferenceKey(
@@ -25,7 +24,6 @@ object LocalStoreModule {
 
     @Named("default")
     @Provides
-    @JvmStatic
     fun provideDefaultSharedPrefs(@Named("appContext") context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }

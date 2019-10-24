@@ -16,7 +16,6 @@ import dagger.multibindings.IntoMap
 object TimelineModule {
 
     @Provides
-    @JvmStatic
     fun provideTweetListAdapter(
         fragment: TimelineFragment,
         tweetTextProcessor: TweetTextProcessor
@@ -29,13 +28,11 @@ object TimelineModule {
     }
 
     @Provides
-    @JvmStatic
     fun provideTimelineSource(fragment: TimelineFragment): TimelineSource {
         return fragment.args.source
     }
 
     @Provides
-    @JvmStatic
     fun provideGetTimelineCall(
         repository: TimelineRepository,
         timelineSource: TimelineSource
@@ -44,7 +41,6 @@ object TimelineModule {
     }
 
     @Provides
-    @JvmStatic
     fun provideTweetActionMenu(fragment: TimelineFragment): Menu {
         val context = fragment.requireContext()
         return ActionMenu(context).apply {

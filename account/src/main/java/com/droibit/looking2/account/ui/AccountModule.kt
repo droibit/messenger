@@ -23,9 +23,9 @@ import javax.inject.Named
 object AccountModule {
 
     @Provides
-    @JvmStatic
     fun provideActivity(activity: AccountActivity): Activity = activity
 
+    // TODO: Occur build error when removed @JvmStatic.
     @Named("needTwitterSignIn")
     @Provides
     @JvmStatic

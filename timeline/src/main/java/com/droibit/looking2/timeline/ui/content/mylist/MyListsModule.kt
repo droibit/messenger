@@ -11,7 +11,6 @@ import dagger.multibindings.IntoMap
 object MyListsModule {
 
     @Provides
-    @JvmStatic
     fun provideMyListAdapter(fragment: MyListsFragment): MyListAdapter {
         return MyListAdapter(
             fragment.requireContext(),

@@ -1,6 +1,5 @@
 package com.droibit.looking2
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import com.droibit.looking2.core.data.TwitterBootstrap
@@ -10,7 +9,7 @@ import com.droibit.looking2.core.util.Stetho
 import timber.log.Timber
 import javax.inject.Inject
 
-class LookingApplication: Application() {
+class LookingApplication : Application() {
 
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
         DaggerCoreComponent.builder()

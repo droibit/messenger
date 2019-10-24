@@ -8,7 +8,6 @@ import javax.inject.Named
 @Module
 object ApplicationModule {
 
-    @JvmStatic
     @Provides
     fun provideTimberTree(@Named("debuggable") debug: Boolean): Timber.Tree =
         if (debug) Timber.DebugTree() else {

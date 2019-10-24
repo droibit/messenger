@@ -16,18 +16,15 @@ object CoreModule {
 
     @Named("appContext")
     @Provides
-    @JvmStatic
     fun provideContext(application: Application): Context = application
 
     @Provides
-    @JvmStatic
     fun provideGoogleApiAvailability(): GoogleApiAvailability = GoogleApiAvailability.getInstance()
 
     @Singleton
     @Provides
-    @JvmStatic
-    fun provideWorkManager(@Named("appContext") context: Context): WorkManager
-        = WorkManager.getInstance(context)
+    fun provideWorkManager(@Named("appContext") context: Context): WorkManager =
+        WorkManager.getInstance(context)
 
     interface Provider {
 

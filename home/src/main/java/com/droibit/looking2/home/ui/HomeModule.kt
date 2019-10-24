@@ -15,7 +15,6 @@ import dagger.multibindings.IntoMap
 object HomeModule {
 
     @Provides
-    @JvmStatic
     fun provideActionListAdapter(activity: HomeActivity): ActionItemListAdapter {
         return ActionItemListAdapter(
             activity,
