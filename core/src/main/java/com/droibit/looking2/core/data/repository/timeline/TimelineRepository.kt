@@ -2,7 +2,7 @@ package com.droibit.looking2.core.data.repository.timeline
 
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.repository.timeline.service.TimelineService
-import com.droibit.looking2.core.data.source.local.twitter.TwitterLocalStore
+import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterStore
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
 import kotlinx.coroutines.withContext
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class TimelineRepository @Inject constructor(
     private val timelineService: TimelineService,
-    private val localStore: TwitterLocalStore,
+    private val localStore: LocalTwitterStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {
 

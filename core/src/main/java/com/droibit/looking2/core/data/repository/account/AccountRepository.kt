@@ -2,7 +2,7 @@ package com.droibit.looking2.core.data.repository.account
 
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.repository.account.service.TwitterAccountService
-import com.droibit.looking2.core.data.source.local.twitter.TwitterLocalStore
+import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterStore
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
@@ -21,7 +21,7 @@ import com.droibit.looking2.core.model.account.AuthenticationResult.Success as A
 @Singleton
 class AccountRepository(
     private val twitterService: TwitterAccountService,
-    private val localStore: TwitterLocalStore,
+    private val localStore: LocalTwitterStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val twitterAccountsChannel: BroadcastChannel<List<TwitterAccount>>
 ) {
@@ -29,7 +29,7 @@ class AccountRepository(
     @Inject
     constructor(
         twitterService: TwitterAccountService,
-        localStore: TwitterLocalStore,
+        localStore: LocalTwitterStore,
         dispatcherProvider: CoroutinesDispatcherProvider
     ) : this(
         twitterService,

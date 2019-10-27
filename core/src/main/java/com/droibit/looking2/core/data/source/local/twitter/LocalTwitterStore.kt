@@ -11,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
-class TwitterLocalStore @Inject constructor(
+class LocalTwitterStore @Inject constructor(
     private val twitterCore: TwitterCore,
     private val sessionManager: SessionManager<TwitterSession>,
     private val apiClientFactory: AppTwitterApiClient.Factory
