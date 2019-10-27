@@ -18,7 +18,16 @@ class IntPreferenceKey(
     override val defaultValue: Int
 ) : PreferenceKey<Int>(key)
 
+class IntConvertiblePreferenceKey(
+    key: String,
+    override val defaultValue: Int
+) : PreferenceKey<Int>(key)
+
 fun SharedPreferences.getInt(prefKey: PreferenceKey<Int>): Int {
+    if (prefKey is IntConvertiblePreferenceKey) {
+        val value = getString(prefKey.key, null) ?: return prefKey.defaultValue
+        return value.toInt()
+    }
     return getInt(prefKey.key, prefKey.defaultValue)
 }
 

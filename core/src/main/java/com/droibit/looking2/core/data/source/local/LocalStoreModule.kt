@@ -15,7 +15,7 @@ object LocalStoreModule {
     @Provides
     fun provideUserSettingsLocalStoreKeys(@Named("appContext") context: Context): LocalUserSettingsStore.Keys {
         return object : LocalUserSettingsStore.Keys {
-            override val numOfTweets: PreferenceKey<Int> = IntPreferenceKey(
+            override val numOfTweets: PreferenceKey<Int> = IntConvertiblePreferenceKey(
                 key = context.getString(R.string.pref_twitter_get_tweet_count_key),
                 defaultValue = context.resources.getInteger(R.integer.pref_twitter_tweet_count_default)
             )
