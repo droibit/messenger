@@ -32,6 +32,10 @@ dependencies {
     implementation project(':app')
     implementation project(':core')
 
+    implementation(deps.chopstick.preference) {
+        exclude group: 'androidx.preference', module: 'preference'
+    }
+
     kapt deps.dagger.compiler
     kapt deps.dagger.androidProcessor
 
