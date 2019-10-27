@@ -55,7 +55,7 @@ android {
         exclude 'META-INF/*.version'
     }
 
-    dynamicFeatures = [":account", ":home", ":timeline", ":settings"]
+    dynamicFeatures = [":account", ":home", ":timeline", ":settings", ":tweet"]
 }
 
 configurations.all {
