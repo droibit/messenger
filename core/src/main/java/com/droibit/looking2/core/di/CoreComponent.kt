@@ -1,6 +1,7 @@
 package com.droibit.looking2.core.di
 
 import android.app.Application
+import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.repository.RepositoryModule
 import dagger.BindsInstance
 import dagger.Component
@@ -24,6 +25,9 @@ interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
 
         @BindsInstance
         fun debuggable(@Named("debuggable") debuggable: Boolean): Builder
+
+        @BindsInstance
+        fun appVersion(appVersion: AppVersion): Builder
 
         fun build(): CoreComponent
     }

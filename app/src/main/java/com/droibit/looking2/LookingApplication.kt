@@ -2,6 +2,7 @@ package com.droibit.looking2
 
 import android.app.Application
 import android.content.Context
+import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.DaggerCoreComponent
@@ -14,6 +15,12 @@ class LookingApplication : Application() {
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
         DaggerCoreComponent.builder()
             .debuggable(BuildConfig.DEBUG)
+            .appVersion(
+                AppVersion(
+                    name = BuildConfig.VERSION_NAME,
+                    code = BuildConfig.VERSION_CODE
+                )
+            )
             .application(this)
             .build()
     }

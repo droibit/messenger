@@ -3,6 +3,7 @@ package com.droibit.looking2.core.di
 import android.app.Application
 import android.content.Context
 import androidx.work.WorkManager
+import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.google.android.gms.common.GoogleApiAvailability
@@ -35,6 +36,8 @@ object CoreModule {
 
         @Named("debuggable")
         fun provideDebuggable(): Boolean
+
+        fun provideAppVersion(): AppVersion
 
         fun providePlayServicesChecker(): PlayServicesChecker
 
