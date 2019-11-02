@@ -39,15 +39,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
-                app:text="@string/my_lists_empty_content"
+                android:text="@string/my_lists_empty_content"
                 tools:visibility="gone" />
 
         </FrameLayout>
 
-        <com.droibit.looking2.timeline.ui.widget.ProgressView
+        <com.droibit.looking2.core.ui.widget.ProgressView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
+            android:text="@string/progress_loading_content"
             tools:visibility="gone" />
 
     </FrameLayout>

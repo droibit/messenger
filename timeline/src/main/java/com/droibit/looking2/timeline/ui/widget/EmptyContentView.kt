@@ -18,7 +18,7 @@ class EmptyContentView @JvmOverloads constructor(
         View.inflate(context, R.layout.view_empty_content, this)
         context.withStyledAttributes(attrs, R.styleable.EmptyContentView) {
             val textView = findViewById<TextView>(R.id.text)
-            textView.text = getText(R.styleable.EmptyContentView_text)
+            textView.text = getString(R.styleable.EmptyContentView_android_text)
         }
     }
 }
