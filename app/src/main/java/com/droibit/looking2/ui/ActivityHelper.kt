@@ -27,6 +27,8 @@ import androidx.wear.activity.ConfirmationActivity.FAILURE_ANIMATION
 import androidx.wear.activity.ConfirmationActivity.OPEN_ON_PHONE_ANIMATION
 import androidx.wear.activity.ConfirmationActivity.SUCCESS_ANIMATION
 import com.droibit.looking2.BuildConfig
+import com.droibit.looking2.core.model.tweet.User
+import java.io.Serializable
 
 /**
  * Create an Intent with [Intent.ACTION_VIEW] to an [AddressableActivity].
@@ -142,11 +144,17 @@ object Activities {
      * TweetActivity
      */
     object Tweet : AddressableActivity {
+        const val EXTRA_REPLY_TWEET = "EXTRA_REPLY_TWEET"
+
         override val className: String = "${BuildConfig.PACKAGE_NAME}.tweet.ui.TweetActivity"
 
-        // TODO: support reply.
-        fun createIntent(): Intent {
-            return intentTo(Tweet)
+        fun createIntent(replyTweet: ReplyTweet? = null): Intent {
+            return intentTo(Tweet).putExtra(EXTRA_REPLY_TWEET, replyTweet)
         }
+
+        data class ReplyTweet(
+            val id: Long,
+            val user: User
+        ) : Serializable
     }
 }

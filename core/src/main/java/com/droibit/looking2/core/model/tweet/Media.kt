@@ -1,6 +1,8 @@
 package com.droibit.looking2.core.model.tweet
 
-sealed class Media {
+import java.io.Serializable
+
+sealed class Media: Serializable {
 
     abstract val url: ShorteningUrl
 

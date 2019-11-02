@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tweet_title_tweet">Tweet</string>
+    <string name="tweet_title_reply">Reply</string>
+
+    <string name="tweet_text_tweet_hint">What\'s happening?</string>
+    <string name="tweet_text_reply_hint">Tweet your reply</string>
+</resources>

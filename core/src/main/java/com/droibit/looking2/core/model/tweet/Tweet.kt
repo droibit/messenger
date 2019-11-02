@@ -1,5 +1,7 @@
 package com.droibit.looking2.core.model.tweet
 
+import java.io.Serializable
+
 data class Tweet(
     val id: Long,
     val text: String,
@@ -11,7 +13,7 @@ data class Tweet(
     val retweeted: Boolean,
     val retweetedTweet: Tweet?,
     val quotedTweet: Tweet?
-) {
+): Serializable {
 
     val hasPhotoUrl: Boolean
         get() {
