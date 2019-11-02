@@ -127,11 +127,26 @@ object Activities {
         }
     }
 
+    /**
+     * SettingsActivity
+     */
     object Settings : AddressableActivity {
         override val className = "${BuildConfig.PACKAGE_NAME}.settings.ui.SettingsHostActivity"
 
         fun createIntent(): Intent {
             return intentTo(Settings)
+        }
+    }
+
+    /**
+     * TweetActivity
+     */
+    object Tweet : AddressableActivity {
+        override val className: String = "${BuildConfig.PACKAGE_NAME}.tweet.ui.TweetActivity"
+
+        // TODO: support reply.
+        fun createIntent(): Intent {
+            return intentTo(Tweet)
         }
     }
 }

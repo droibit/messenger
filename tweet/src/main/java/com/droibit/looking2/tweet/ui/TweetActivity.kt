@@ -7,6 +7,7 @@ import com.droibit.looking2.tweet.R
 class TweetActivity : FragmentActivity(R.layout.activity_tweet) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        inject()
         super.onCreate(savedInstanceState)
     }
 }

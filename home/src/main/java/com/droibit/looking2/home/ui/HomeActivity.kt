@@ -14,6 +14,8 @@ import com.droibit.looking2.home.ui.HomeNavigation.LISTS
 import com.droibit.looking2.home.ui.HomeNavigation.MENTIONS
 import com.droibit.looking2.home.ui.HomeNavigation.SETTINGS
 import com.droibit.looking2.home.ui.HomeNavigation.TIMELINE
+import com.droibit.looking2.home.ui.HomeNavigation.TWEET
+import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
 import com.droibit.looking2.ui.Activities.Settings as SettingsActivity
 import javax.inject.Inject
@@ -47,6 +49,7 @@ class HomeActivity : FragmentActivity() {
 
     fun onActionItemClick(item: ActionItem) {
         when (HomeNavigation.of(item.id)) {
+            TWEET -> startActivity(TweetActivity.createIntent())
             TIMELINE -> startActivity(TimelineActivity.createHomeIntent())
             MENTIONS -> startActivity(TimelineActivity.createMentionsIntent())
             LISTS -> startActivity(TimelineActivity.createListsIntent())
