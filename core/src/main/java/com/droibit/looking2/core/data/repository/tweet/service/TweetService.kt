@@ -19,6 +19,26 @@ class TweetService @Inject constructor(
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
+    suspend fun tweet(session: TwitterSession, text: String, inReplyToId: Long?) {
+        val apiClient = get(session)
+        try {
+            apiClient.statusesService.update(
+                text, inReplyToId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ).await()
+        } catch (e: TwitterException) {
+            Timber.e(e)
+            throw e.toTwitterError()
+        }
+    }
+
+    @Throws(TwitterError::class)
     suspend fun retweet(session: TwitterSession, tweetId: Long) {
         val apiClient = get(session)
         try {

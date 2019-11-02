@@ -16,6 +16,14 @@ class TweetRepository @Inject constructor(
 ) {
 
     @Throws(TwitterError::class)
+    suspend fun tweet(text: String, inReplyToId: Long? = null) {
+        withContext(dispatcherProvider.io) {
+            val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
+            tweetService.tweet(session, text, inReplyToId)
+        }
+    }
+
+    @Throws(TwitterError::class)
     suspend fun retweet(tweetId: Long) {
         withContext(dispatcherProvider.io) {
             val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
