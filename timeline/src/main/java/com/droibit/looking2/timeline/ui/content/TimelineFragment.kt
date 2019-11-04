@@ -24,6 +24,9 @@ import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
+import com.droibit.looking2.ui.Activities
+import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
@@ -103,6 +106,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        observeReply()
         observePhotoList()
         observeTweetAction()
         observeGetTimelineResult()
@@ -160,6 +164,13 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         tweetActionViewModel.photos.observeIfNotConsumed(viewLifecycleOwner) {
             val directions = TimelineFragmentDirections.showPhotos(it.toTypedArray())
             findNavController().navigate(directions)
+        }
+    }
+
+    private fun observeReply() {
+        tweetActionViewModel.reply.observeIfNotConsumed(viewLifecycleOwner) {
+            val intent = TweetActivity.createIntent(ReplyTweet(it.id, it.user))
+            startActivity(intent)
         }
     }
 

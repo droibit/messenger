@@ -13,11 +13,15 @@ import javax.inject.Inject
 class TweetActionViewModel(
     private val tweetActionCall: TweetActionCall,
     private val tweetActionSink: MutableLiveData<Event<TweetAction>>,
+    private val replySink: MutableLiveData<Event<Tweet>>,
     private val photoListSink: MutableLiveData<Event<List<String>>>
 ) : ViewModel() {
 
     val tweetAction: LiveData<Event<TweetAction>>
         get() = tweetActionSink
+
+    val reply: LiveData<Event<Tweet>>
+        get() = replySink
 
     val photos: LiveData<Event<List<String>>>
         get() = photoListSink
@@ -25,6 +29,7 @@ class TweetActionViewModel(
     @Inject
     constructor(tweetActionCall: TweetActionCall) : this(
         tweetActionCall,
+        MutableLiveData(),
         MutableLiveData(),
         MutableLiveData()
     )
@@ -51,6 +56,7 @@ class TweetActionViewModel(
         val targetTweet = requireNotNull(tweetActionSink.value).peek().target
         when (actionItem) {
             TweetAction.Item.REPLY -> {
+                replySink.value = targetTweet.toEvent()
             }
             TweetAction.Item.RETWEET -> {
                 tweetActionCall.enqueueRetweetWork(targetTweet.id)
