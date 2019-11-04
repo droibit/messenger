@@ -5,4 +5,8 @@
     <string name="tweet_text_tweet_hint">いまどうしてる？</string>
     <string name="tweet_text_reply_hint">返信をツイート</string>
     <string name="tweet_progress_text">通信中…</string>
+    <string name="tweet_reply_failed">リプライに失敗</string>
+    <string name="tweet_tweet_failed">ツイートに失敗</string>
+    <string name="tweet_reply_successful">リプライに成功</string>
+    <string name="tweet_tweet_successful">ツイートに成功</string>
 </resources>

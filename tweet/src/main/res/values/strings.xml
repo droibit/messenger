@@ -7,4 +7,9 @@
     <string name="tweet_text_reply_hint">Tweet your reply</string>
 
     <string name="tweet_progress_text">Connecting…</string>
+
+    <string name="tweet_tweet_successful">Successful tweet.</string>
+    <string name="tweet_tweet_failed">Failed to tweet.</string>
+    <string name="tweet_reply_successful">Successful reply.</string>
+    <string name="tweet_reply_failed">Failed to reply.</string>
 </resources>

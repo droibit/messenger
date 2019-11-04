@@ -4,6 +4,7 @@ import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.util.Optional
 import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
+import com.droibit.looking2.tweet.ui.input.ViewModelModule
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetModule
 import com.droibit.looking2.ui.Activities.Tweet.EXTRA_REPLY_TWEET
@@ -17,7 +18,8 @@ import javax.inject.Named
 @Module(
     includes = [
         AndroidInjectionModule::class,
-        TweetModule.FragmentBindingModule::class
+        TweetModule.FragmentBindingModule::class,
+        ViewModelModule::class
     ]
 )
 object TweetModule {
@@ -41,9 +43,9 @@ object TweetModule {
     @Provides
     fun provideTitle(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetActivity): String {
         return if (hasReplyTweet)
-            activity.getString(R.string.tweet_title_tweet)
-        else
             activity.getString(R.string.tweet_title_reply)
+        else
+            activity.getString(R.string.tweet_title_tweet)
     }
 
     @FeatureScope

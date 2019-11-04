@@ -11,8 +11,12 @@
             type="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment.LayoutString" />
 
         <variable
-            name="tweetInProgress"
+            name="showProgress"
             type="java.lang.Boolean" />
+
+        <variable
+            name="viewModel"
+            type="com.droibit.looking2.tweet.ui.input.TweetViewModel" />
     </data>
 
     <androidx.wear.widget.SwipeDismissFrameLayout
@@ -38,14 +42,14 @@
                     android:id="@+id/tweetContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:goneUnless="@{showProgress}"
                     tools:visibility="visible">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/tweet_text_side_padding"
-                        android:layout_marginEnd="@dimen/tweet_text_side_padding"
-                        android:orientation="vertical">
+                        android:layout_marginEnd="@dimen/tweet_text_side_padding">
 
                         <TextView
                             android:id="@+id/title"
@@ -88,6 +92,7 @@
                             android:textColor="@android:color/white"
                             android:hint="@{strings.tweetTextHint}"
                             android:minLines="2"
+                            android:text="@={viewModel.tweetText}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/replyUserText"
@@ -98,7 +103,7 @@
                         </EditText>
 
                         <ImageButton
-                            android:id="@+id/send"
+                            android:id="@+id/sendButton"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_horizontal"
@@ -109,6 +114,7 @@
                             android:foreground="?android:attr/actionBarItemBackground"
                             android:scaleType="center"
                             android:src="@drawable/ic_send"
+                            android:onClick="@{() -> viewModel.tweet()}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
@@ -123,8 +129,8 @@
                     android:id="@+id/progress"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="@{tweetInProgress ? View.VISIBLE : View.GONE}"
                     android:text="@string/tweet_progress_text"
+                    app:visibleUnless="@{showProgress}"
                     tools:visibility="gone" />
 
             </FrameLayout>

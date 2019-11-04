@@ -9,15 +9,12 @@
 
     <!-- Tweet action. -->
     <string name="timeline_tweet_action_retweet">Retweet</string>
-    <string name="timeline_tweet_action_retweet_in_progress">Retweet…</string>
     <string name="timeline_tweet_action_retweet_failed">Failed to retweet.</string>
     <string name="timeline_tweet_action_likes">Likes</string>
-    <string name="timeline_tweet_action_likes_in_progress">Likes…</string>
     <string name="timeline_tweet_action_likes_failed">Failed to like.</string>
     <string name="timeline_tweet_action_reply">Reply</string>
     <string name="timeline_tweet_action_show_photo">Photos</string>
     <string name="timeline_tweet_action_add_pocket">Add to Pocket</string>
-    <string name="timeline_tweet_action_add_pocket_in_progress">Add to Pocket…</string>
     <string name="timeline_tweet_action_add_pocket_failed">Failed to add to Pocket.</string>
 
     <!-- My list -->
