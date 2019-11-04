@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
 
         <variable
             name="fragment"
             type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment" />
 
         <variable
-            name="visibleContent"
-            type="java.lang.Boolean"
-            />
+            name="showProgress"
+            type="java.lang.Boolean" />
     </data>
 
     <androidx.wear.widget.BoxInsetLayout
@@ -54,7 +54,7 @@
                 android:textAppearance="@style/TextAppearance.WearDiag.Message"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
+                app:goneUnless="@{showProgress}"
                 app:layout_constraintBottom_toTopOf="@+id/signInButtonContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -69,11 +69,11 @@
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:gravity="center_vertical"
+                android:onClick="@{() -> fragment.showConfirmDialog()}"
                 android:orientation="horizontal"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:onClick="@{() -> fragment.showConfirmDialog()}"
-                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
+                app:goneUnless="@{showProgress}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -99,26 +99,26 @@
             </LinearLayout>
 
             <!-- TODO: Changing visibility of constraint.Group is not working. -->
-<!--            <androidx.constraintlayout.widget.Group-->
-<!--                android:id="@+id/group_content"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"-->
-<!--                app:constraint_referenced_ids="description,signInButtonContainer"-->
-<!--                tools:visibility="visible" />-->
+            <!--            <androidx.constraintlayout.widget.Group-->
+            <!--                android:id="@+id/group_content"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:visibility="@{showProgress ? View.VISIBLE : View.GONE}"-->
+            <!--                app:constraint_referenced_ids="description,signInButtonContainer"-->
+            <!--                tools:visibility="visible" />-->
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
-                tools:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:visibleUnless="@{showProgress}"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

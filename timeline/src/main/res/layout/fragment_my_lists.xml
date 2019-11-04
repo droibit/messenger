@@ -8,11 +8,11 @@
         <import type="android.view.View" />
 
         <variable
-            name="loadingInProgress"
+            name="showProgress"
             type="Boolean" />
 
         <variable
-            name="visibleContent"
+            name="showContent"
             type="Boolean" />
     </data>
 
@@ -23,23 +23,23 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loadingInProgress ? View.GONE : View.VISIBLE}">
+            app:goneUnless="@{showProgress}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:visibility="@{visibleContent ? View.VISIBLE : View.GONE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:visibleUnless="@{showContent}"
                 tools:listitem="@layout/list_item_my_list"
                 tools:visibility="visible" />
 
             <com.droibit.looking2.timeline.ui.widget.EmptyContentView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{visibleContent ? View.GONE : View.VISIBLE}"
                 android:text="@string/my_lists_empty_content"
+                app:goneUnless="@{showContent}"
                 tools:visibility="gone" />
 
         </FrameLayout>
@@ -47,8 +47,8 @@
         <com.droibit.looking2.core.ui.widget.ProgressView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loadingInProgress ? View.VISIBLE : View.GONE}"
             android:text="@string/progress_loading_content"
+            app:visibleUnless="@{showProgress}"
             tools:visibility="gone" />
 
     </FrameLayout>

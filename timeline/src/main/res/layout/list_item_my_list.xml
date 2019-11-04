@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -41,9 +42,9 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="2"
+            android:text="@{userList.name}"
             android:textAppearance="@style/TextAppearance.Wearable.Small"
             android:textColor="@android:color/white"
-            android:text="@{userList.name}"
             app:layout_constraintBottom_toTopOf="@+id/createdBy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -59,9 +60,9 @@
             android:layout_marginBottom="4dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{userList.user.name}"
             android:textAppearance="@android:style/TextAppearance.Material.Caption"
             android:textColor="@color/colorLighterWhite"
-            android:text="@{userList.user.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -74,14 +75,14 @@
             android:id="@+id/privateListIcon"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:background="@drawable/background_chip_icon"
+            android:padding="2.5dp"
             android:src="@drawable/ic_private"
             android:tint="@color/colorAccent"
-            android:padding="2.5dp"
-            android:background="@drawable/background_chip_icon"
-            android:visibility="@{userList.private ? View.VISIBLE : View.GONE}"
-            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/listIcon"
-            app:layout_constraintEnd_toEndOf="@+id/listIcon" />
+            app:layout_constraintEnd_toEndOf="@+id/listIcon"
+            app:visibleUnless="@{userList.private}"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

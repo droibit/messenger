@@ -71,7 +71,7 @@ class TwitterSignInFragment : Fragment() {
         binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
             it.fragment = this
             // TODO:
-            it.visibleContent = true
+            it.showProgress = true
         }
 
         val backStackEntryCount = requireFragmentManager().backStackEntryCount
@@ -114,7 +114,7 @@ class TwitterSignInFragment : Fragment() {
         }
 
         signInViewModel.authenticationResult.observeIfNotConsumed(viewLifecycleOwner) {
-            binding.visibleContent = it !is TwitterAuthenticationResult.InProgress
+            binding.showProgress = it !is TwitterAuthenticationResult.InProgress
 
             when (it) {
                 is TwitterAuthenticationResult.InProgress -> Unit

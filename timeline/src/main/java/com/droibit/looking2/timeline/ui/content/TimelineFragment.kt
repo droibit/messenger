@@ -116,13 +116,13 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
                 is GetTimelineResult.Success -> showTimeline(it.timeline)
                 is GetTimelineResult.Failure -> showGetTimelineFailureResult(it.type)
             }
-            binding.loadingInProgress = it is GetTimelineResult.InProgress
+            binding.showProgress = it is GetTimelineResult.InProgress
         }
     }
 
     private fun showTimeline(timeline: List<Tweet>) {
         tweetListAdapter.setTweets(timeline)
-        binding.visibleContent = timeline.isNotEmpty()
+        binding.showContent = timeline.isNotEmpty()
     }
 
     private fun showGetTimelineFailureResult(failureType: GetTimelineFailureType) {

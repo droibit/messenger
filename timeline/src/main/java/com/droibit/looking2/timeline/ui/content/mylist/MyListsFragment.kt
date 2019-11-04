@@ -72,13 +72,13 @@ class MyListsFragment : DaggerFragment() {
                 is GetMyListsResult.Success -> showMyLists(it.myLists)
                 is GetMyListsResult.Failure -> showGetMyListsFailureResult(it.type)
             }
-            binding.loadingInProgress = it is GetMyListsResult.InProgress
+            binding.showProgress = it is GetMyListsResult.InProgress
         }.exhaustive
     }
 
     private fun showMyLists(myLists: List<UserList>) {
         myListAdapter.setMyLists(myLists)
-        binding.visibleContent = myLists.isNotEmpty()
+        binding.showContent = myLists.isNotEmpty()
     }
 
     private fun showGetMyListsFailureResult(failureType: Event<GetMyListsFailureType>) {
