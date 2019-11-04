@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_tweet"
     app:startDestination="@id/tweetChooserFragment">
@@ -7,5 +8,15 @@
     <fragment
         android:id="@+id/tweetChooserFragment"
         android:name="com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment"
-        android:label="TweetChooser" />
+        android:label="TweetChooser"
+        tools:layout="@layout/fragment_tweet_chooser" >
+        <action
+            android:id="@+id/showKeyboardTweet"
+            app:destination="@id/keyboardTweetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/keyboardTweetFragment"
+        android:name="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment"
+        android:label="KeyboardTweet"
+        tools:layout="@layout/fragment_tweet_keyboard" />
 </navigation>

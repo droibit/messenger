@@ -5,4 +5,6 @@
 
     <string name="tweet_text_tweet_hint">What\'s happening?</string>
     <string name="tweet_text_reply_hint">Tweet your reply</string>
+
+    <string name="tweet_progress_text">Connecting…</string>
 </resources>

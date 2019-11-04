@@ -7,6 +7,10 @@
         <variable
             name="screenTitle"
             type="java.lang.String" />
+
+        <variable
+            name="fragment"
+            type="com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment" />
     </data>
 
     <androidx.wear.widget.BoxInsetLayout
@@ -36,15 +40,16 @@
                 tools:text="Tweet" />
 
             <ImageButton
-                android:id="@+id/inputVoice"
+                android:id="@+id/voiceTweetButton"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/background_circle_light"
                 android:foreground="?android:attr/actionBarItemBackground"
                 android:scaleType="center"
                 android:src="@drawable/ic_tweet_voice"
+                android:onClick="@{fragment::onVoiceTweetButtonClick}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/inputKeyboard"
+                app:layout_constraintEnd_toStartOf="@+id/keyboardTweetButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,17 +57,18 @@
                 tools:ignore="ContentDescription" />
 
             <ImageButton
-                android:id="@+id/inputKeyboard"
+                android:id="@+id/keyboardTweetButton"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/background_circle_light"
                 android:foreground="?android:attr/actionBarItemBackground"
                 android:scaleType="center"
                 android:src="@drawable/ic_tweet_keyboard"
+                android:onClick="@{fragment::onKeyboardTweetButtonClick}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/inputVoice"
+                app:layout_constraintStart_toEndOf="@+id/voiceTweetButton"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:ignore="ContentDescription" />
 
