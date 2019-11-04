@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tweet_title_reply">リプライ</string>
+    <string name="tweet_title_tweet">ツイート</string>
+    <string name="tweet_text_tweet_hint">いまどうしてる？</string>
+    <string name="tweet_text_reply_hint">返信をツイート</string>
+    <string name="tweet_progress_text">通信中…</string>
+</resources>
