@@ -11,7 +11,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class TweetActionViewModel(
-    private val tweetActionCall: TweetActionCall,
+    private val tweetActionCall: TweetAction.Call,
     private val tweetActionSink: MutableLiveData<Event<TweetAction>>,
     private val replySink: MutableLiveData<Event<Tweet>>,
     private val photoListSink: MutableLiveData<Event<List<String>>>
@@ -27,7 +27,7 @@ class TweetActionViewModel(
         get() = photoListSink
 
     @Inject
-    constructor(tweetActionCall: TweetActionCall) : this(
+    constructor(tweetActionCall: TweetAction.Call) : this(
         tweetActionCall,
         MutableLiveData(),
         MutableLiveData(),

@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="userList"
             type="com.droibit.looking2.core.model.tweet.UserList" />

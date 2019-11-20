@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
@@ -62,8 +61,6 @@ class MyListsFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
 
         observeGetMyListsResult()
-
-        lifecycle.addObserver(viewModel)
     }
 
     private fun observeGetMyListsResult() {
@@ -73,7 +70,7 @@ class MyListsFragment : DaggerFragment() {
                 is GetMyListsResult.Failure -> showGetMyListsFailureResult(it.type)
             }
             binding.showProgress = it is GetMyListsResult.InProgress
-        }.exhaustive
+        }
     }
 
     private fun showMyLists(myLists: List<UserList>) {

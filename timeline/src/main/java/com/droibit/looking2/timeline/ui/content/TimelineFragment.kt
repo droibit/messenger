@@ -24,15 +24,14 @@ import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
-import com.droibit.looking2.ui.Activities
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
-import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
+import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
@@ -110,15 +109,15 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         observePhotoList()
         observeTweetAction()
         observeGetTimelineResult()
-
-        lifecycle.addObserver(timelineViewModel)
     }
 
     private fun observeGetTimelineResult() {
         timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
             when (it) {
                 is GetTimelineResult.Success -> showTimeline(it.timeline)
-                is GetTimelineResult.Failure -> showGetTimelineFailureResult(it.type)
+                is GetTimelineResult.Failure -> {
+                    it.type.consume()?.let(::showGetTimelineFailureResult)
+                }
             }
             binding.showProgress = it is GetTimelineResult.InProgress
         }

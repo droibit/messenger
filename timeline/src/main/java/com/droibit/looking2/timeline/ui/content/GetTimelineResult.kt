@@ -2,6 +2,7 @@ package com.droibit.looking2.timeline.ui.content
 
 import androidx.annotation.StringRes
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.util.Event
 
 sealed class GetTimelineResult {
     sealed class FailureType {
@@ -12,5 +13,5 @@ sealed class GetTimelineResult {
 
     object InProgress : GetTimelineResult()
     class Success(val timeline: List<Tweet>) : GetTimelineResult()
-    class Failure(val type: FailureType) : GetTimelineResult()
+    class Failure(val type: Event<FailureType>) : GetTimelineResult()
 }

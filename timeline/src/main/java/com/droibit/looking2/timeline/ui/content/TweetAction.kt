@@ -13,7 +13,7 @@ import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.coreComponent
 import com.droibit.looking2.timeline.R
-import com.droibit.looking2.timeline.ui.content.TweetActionCall.Companion.KEY_TWEET_ID
+import com.droibit.looking2.timeline.ui.content.TweetAction.Call.Companion.KEY_TWEET_ID
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,31 +30,31 @@ data class TweetAction(val target: Tweet, val items: List<Item>) {
             fun valueOf(@IdRes id: Int) = values().first { it.id == id }
         }
     }
-}
 
-class TweetActionCall @Inject constructor(
-    private val workManager: WorkManager
-) {
-    fun enqueueRetweetWork(tweetId: Long) {
-        val work = OneTimeWorkRequestBuilder<RetweetActionWorker>()
-            .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
-            .build()
-        val workName = WORK_NAME_PREFIX_RETWEET + "$tweetId"
-        workManager.enqueueUniqueWork(workName, KEEP, work)
-    }
+    class Call @Inject constructor(
+        private val workManager: WorkManager
+    ) {
+        fun enqueueRetweetWork(tweetId: Long) {
+            val work = OneTimeWorkRequestBuilder<RetweetActionWorker>()
+                .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+                .build()
+            val workName = WORK_NAME_PREFIX_RETWEET + "$tweetId"
+            workManager.enqueueUniqueWork(workName, KEEP, work)
+        }
 
-    fun enqueueLikesWork(tweetId: Long) {
-        val work = OneTimeWorkRequestBuilder<LikeTweetActionWorker>()
-            .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
-            .build()
-        val workName = WORK_NAME_PREFIX_LIKES + "$tweetId"
-        workManager.enqueueUniqueWork(workName, KEEP, work)
-    }
+        fun enqueueLikesWork(tweetId: Long) {
+            val work = OneTimeWorkRequestBuilder<LikeTweetActionWorker>()
+                .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+                .build()
+            val workName = WORK_NAME_PREFIX_LIKES + "$tweetId"
+            workManager.enqueueUniqueWork(workName, KEEP, work)
+        }
 
-    companion object {
-        const val KEY_TWEET_ID = "KEY_TWEET_ID"
-        const val WORK_NAME_PREFIX_RETWEET = "retweet."
-        const val WORK_NAME_PREFIX_LIKES = "like_tweet."
+        companion object {
+            const val KEY_TWEET_ID = "KEY_TWEET_ID"
+            const val WORK_NAME_PREFIX_RETWEET = "retweet."
+            const val WORK_NAME_PREFIX_LIKES = "like_tweet."
+        }
     }
 }
 

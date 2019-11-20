@@ -36,8 +36,8 @@ object TimelineModule {
     fun provideGetTimelineCall(
         repository: TimelineRepository,
         timelineSource: TimelineSource
-    ): GetTimelineCall {
-        return GetTimelineCall.Factory(repository).create(timelineSource)
+    ): TimelineSource.GetCall {
+        return timelineSource.toGetCall(repository)
     }
 
     @Provides

@@ -43,8 +43,6 @@ class HomeActivity : FragmentActivity() {
         viewModel.activeAccountName.observe(this) {
             actionItemListAdapter.title = it
         }
-
-        lifecycle.addObserver(viewModel)
     }
 
     fun onActionItemClick(item: ActionItem) {
