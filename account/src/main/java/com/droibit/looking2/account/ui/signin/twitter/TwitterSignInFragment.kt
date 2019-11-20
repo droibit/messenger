@@ -74,7 +74,7 @@ class TwitterSignInFragment : Fragment() {
             it.showProgress = true
         }
 
-        val backStackEntryCount = requireFragmentManager().backStackEntryCount
+        val backStackEntryCount = parentFragmentManager.backStackEntryCount
         return if (backStackEntryCount == 0) binding.root else {
             Timber.d("Wrapped SwipeDismissFrameLayout(backStackEntryCount=$backStackEntryCount)")
             SwipeDismissFrameLayout(context).apply {

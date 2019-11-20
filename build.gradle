@@ -37,6 +37,7 @@ buildscript { scriptHandler ->
         classpath deps.plugin.ktlint
         classpath deps.plugin.ossLicense
         classpath deps.plugin.navSafeArgs
+        classpath deps.plugin.gradleVersions
     }
 }
 

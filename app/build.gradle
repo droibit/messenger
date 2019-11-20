@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+apply plugin: "com.github.ben-manes.versions"
 
 apply from: rootProject.file('dependencies_shared.gradle')
 
