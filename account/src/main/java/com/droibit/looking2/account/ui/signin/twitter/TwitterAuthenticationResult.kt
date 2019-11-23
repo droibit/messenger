@@ -1,6 +1,7 @@
 package com.droibit.looking2.account.ui.signin.twitter
 
 import androidx.annotation.StringRes
+import com.droibit.looking2.core.util.Event
 
 sealed class TwitterAuthenticationResult {
     sealed class FailureType {
@@ -10,6 +11,6 @@ sealed class TwitterAuthenticationResult {
     }
 
     object InProgress : TwitterAuthenticationResult()
-    object Success : TwitterAuthenticationResult()
-    class Failure(val type: FailureType) : TwitterAuthenticationResult()
+    class Success(val value: Event<Unit>) : TwitterAuthenticationResult()
+    data class Failure(val failureType: Event<FailureType>) : TwitterAuthenticationResult()
 }

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.account.R
@@ -20,7 +21,6 @@ import com.droibit.looking2.core.ui.dialog.DialogViewModel
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
-import com.droibit.looking2.ui.Activities.Home as HomeActivity
 import com.droibit.looking2.ui.Activities.Confirmation.createFailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.createOpenOnPhoneIntent
 import com.github.droibit.chopstick.resource.bindString
@@ -29,6 +29,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.account.ui.signin.twitter.TwitterAuthenticationResult.FailureType as AuthenticationFailureType
+import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
 
@@ -70,8 +71,6 @@ class TwitterSignInFragment : Fragment() {
     ): View? {
         binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
             it.fragment = this
-            // TODO:
-            it.showProgress = true
         }
 
         val backStackEntryCount = parentFragmentManager.backStackEntryCount
@@ -113,19 +112,21 @@ class TwitterSignInFragment : Fragment() {
             startActivity(intent)
         }
 
-        signInViewModel.authenticationResult.observeIfNotConsumed(viewLifecycleOwner) {
-            binding.showProgress = it !is TwitterAuthenticationResult.InProgress
-
-            when (it) {
+        signInViewModel.authenticationResult.observe(viewLifecycleOwner) { result ->
+            Timber.d("authenticationResult: $result")
+            when (result) {
                 is TwitterAuthenticationResult.InProgress -> Unit
                 is TwitterAuthenticationResult.Success -> {
-                    startActivity(HomeActivity.createIntent())
-                    requireActivity().finish()
+                    result.value.consume()?.let {
+                        startActivity(HomeActivity.createIntent())
+                        requireActivity().finish()
+                    }
                 }
                 is TwitterAuthenticationResult.Failure -> {
-                    showSignInFailureResult(failureType = it.type)
+                    result.failureType.consume()?.let(::showSignInFailureResult)
                 }
             }//.exhaustive
+            binding.showProgress = result is TwitterAuthenticationResult.InProgress
         }
     }
 

@@ -25,13 +25,13 @@ import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error a
 class TwitterSignInViewModel(
     private val accountRepository: AccountRepository,
     private val playServicesChecker: PlayServicesChecker,
-    private val authenticationResultSink: MutableLiveData<Event<TwitterAuthenticationResult>>,
+    private val authenticationResultSink: MutableLiveData<TwitterAuthenticationResult>,
     private val authenticateOnPhoneTimingSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
 
     private var signInJob: Job? = null
 
-    val authenticationResult: LiveData<Event<TwitterAuthenticationResult>>
+    val authenticationResult: LiveData<TwitterAuthenticationResult>
         get() = authenticationResultSink
 
     val authenticateOnPhoneTiming: LiveData<Event<Unit>>
@@ -48,9 +48,10 @@ class TwitterSignInViewModel(
         if (canceled ||
             playServicesChecker.checkStatus() is PlayServicesError
         ) {
-            val result =
-                Failure(FailureType.UnExpected(R.string.account_sign_in_error_message_play_services))
-            authenticationResultSink.value = result.toEvent()
+            val failureType = FailureType.UnExpected(
+                R.string.account_sign_in_error_message_play_services
+            )
+            authenticationResultSink.value = Failure(failureType.toEvent())
         }
     }
 
@@ -59,25 +60,24 @@ class TwitterSignInViewModel(
         if (signInJob?.isActive == true) {
             return
         }
-        authenticationResultSink.value = InProgress.toEvent()
+        authenticationResultSink.value = InProgress
 
         signInJob = viewModelScope.launch {
             accountRepository.authenticateTwitter()
                 .collect {
-                    val result: TwitterAuthenticationResult = when (it) {
+                    authenticationResultSink.value = when (it) {
                         is AuthenticationResult.WillAuthenticateOnPhone -> {
                             authenticateOnPhoneTimingSink.value = Unit.toEvent()
                             InProgress
                         }
-                        is AuthenticationResult.Success -> Success
+                        is AuthenticationResult.Success -> Success(Unit.toEvent())
                         is AuthenticationResult.Failure -> Failure(it.error.toErrorType())
                     }
-                    authenticationResultSink.value = result.toEvent()
                 }
         }
     }
 
-    private fun AuthenticationError.toErrorType(): FailureType {
+    private fun AuthenticationError.toErrorType(): Event<FailureType> {
         return when (this) {
             is AuthenticationError.Network -> FailureType.Network
             is AuthenticationError.PlayServices -> {
@@ -92,6 +92,6 @@ class TwitterSignInViewModel(
             is AuthenticationError.UnExpected -> {
                 FailureType.UnExpected(R.string.account_sign_in_error_message_unexpected)
             }
-        }
+        }.toEvent()
     }
 }

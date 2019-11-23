@@ -61,6 +61,10 @@ open class Event<out T>(private val content: T) {
         result = 31 * result + consumed.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "Event(content=$content, consumed=$consumed)"
+    }
 }
 
 fun<T> T.toEvent(): Event<T>  = Event(this)
