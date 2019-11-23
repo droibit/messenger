@@ -16,7 +16,7 @@ class ProgressView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     init {
-        orientation = HORIZONTAL
+        orientation = VERTICAL
         gravity = Gravity.CENTER
         View.inflate(context, R.layout.view_progress, this)
 

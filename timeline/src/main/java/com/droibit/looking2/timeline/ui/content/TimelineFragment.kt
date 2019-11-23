@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
@@ -89,7 +91,16 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
                 DividerItemDecoration(
                     requireContext(),
                     DividerItemDecoration.VERTICAL
-                )
+                ).apply {
+                    setDrawable(
+                        requireNotNull(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.divider_list
+                            )
+                        )
+                    )
+                }
             )
             this.adapter = tweetListAdapter
         }

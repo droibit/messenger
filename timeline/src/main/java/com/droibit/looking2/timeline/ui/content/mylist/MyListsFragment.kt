@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -14,6 +15,7 @@ import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.showMyListTimeline
@@ -51,7 +53,16 @@ class MyListsFragment : DaggerFragment() {
                 DividerItemDecoration(
                     requireContext(),
                     DividerItemDecoration.VERTICAL
-                )
+                ).apply {
+                    setDrawable(
+                        requireNotNull(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.divider_list
+                            )
+                        )
+                    )
+                }
             )
             this.adapter = myListAdapter
         }
