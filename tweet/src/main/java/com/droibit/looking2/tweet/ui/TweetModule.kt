@@ -6,7 +6,6 @@ import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
 import com.droibit.looking2.tweet.ui.input.ViewModelModule
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
-import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetModule
 import com.droibit.looking2.ui.Activities.Tweet.EXTRA_REPLY_TWEET
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import dagger.Module
@@ -48,6 +47,15 @@ object TweetModule {
             activity.getString(R.string.tweet_title_tweet)
     }
 
+    @Named("tweetTextHint")
+    @Provides
+    fun provideTweetTextHint(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetActivity): String {
+        return if (hasReplyTweet)
+            activity.getString(R.string.tweet_text_reply_hint)
+        else
+            activity.getString(R.string.tweet_text_tweet_hint)
+    }
+
     @FeatureScope
     @Named("replyUser")
     @Provides
@@ -61,7 +69,7 @@ object TweetModule {
         @ContributesAndroidInjector
         fun contributeTweetChooserInejector(): TweetChooserFragment
 
-        @ContributesAndroidInjector(modules = [KeyboardTweetModule::class])
+        @ContributesAndroidInjector
         fun contributeKeyboardTweetInejector(): KeyboardTweetFragment
     }
 }

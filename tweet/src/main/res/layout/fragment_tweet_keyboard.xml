@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
             name="strings"
-            type="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment.LayoutString" />
+            type="com.droibit.looking2.tweet.ui.input.TweetLayoutString" />
 
         <variable
             name="showProgress"
@@ -69,12 +70,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+                            android:ellipsize="end"
                             android:maxLines="1"
+                            android:text="@{strings.replyUser}"
                             android:textAppearance="@style/TextAppearance.Wearable.Small"
                             android:textColor="@color/colorAccent"
-                            android:visibility="@{strings.replyUser.isEmpty() ? View.GONE : View.VISIBLE}"
-                            android:text="@{strings.replyUser}"
-                            android:ellipsize="end"
+                            app:goneUnless="@{strings.replyUser.isEmpty()}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/title"
@@ -85,14 +86,14 @@
                             android:id="@+id/tweetText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:hint="@{strings.tweetTextHint}"
                             android:imeOptions="actionDone"
                             android:importantForAutofill="no"
                             android:inputType="textMultiLine"
-                            android:textAppearance="@style/TextAppearance.Wearable.Small"
-                            android:textColor="@android:color/white"
-                            android:hint="@{strings.tweetTextHint}"
                             android:minLines="2"
                             android:text="@={viewModel.tweetText}"
+                            android:textAppearance="@style/TextAppearance.Wearable.Small"
+                            android:textColor="@android:color/white"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/replyUserText"
@@ -112,9 +113,9 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/actionBarItemBackground"
+                            android:onClick="@{() -> viewModel.tweet()}"
                             android:scaleType="center"
                             android:src="@drawable/ic_send"
-                            android:onClick="@{() -> viewModel.tweet()}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
