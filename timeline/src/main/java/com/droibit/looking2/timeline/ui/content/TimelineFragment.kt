@@ -6,24 +6,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
+import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
-import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
@@ -32,7 +29,6 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 
@@ -47,7 +43,10 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
-    internal lateinit var tweetActionMenu: Menu
+    lateinit var tweetActionMenu: Menu
+
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
     private val timelineViewModel: TimelineViewModel by viewModels { viewModelFactory }
 
@@ -56,16 +55,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     private lateinit var binding: FragmentTimelineBinding
 
     private lateinit var tweetActionList: RecyclerView
-
-    private val swipeDismissCallback: SwipeDismissFrameLayout.Callback by lazy(NONE) {
-        object : SwipeDismissFrameLayout.Callback() {
-            override fun onDismissed(layout: SwipeDismissFrameLayout) {
-                // Prevent flicker on screen.
-                layout.isInvisible = true
-                findNavController().popBackStack()
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

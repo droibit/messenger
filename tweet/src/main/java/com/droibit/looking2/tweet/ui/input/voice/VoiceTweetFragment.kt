@@ -12,13 +12,12 @@ import android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.CircularProgressLayout
-import androidx.wear.widget.SwipeDismissFrameLayout
+import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetResult
@@ -28,7 +27,6 @@ import com.droibit.looking2.tweet.ui.input.showTweetSuccessful
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.LazyThreadSafetyMode.NONE
 
 private const val REQUEST_CODE_SPEECH = 1
 
@@ -45,19 +43,12 @@ class VoiceTweetFragment : DaggerFragment(),
     @JvmField
     var waitDurationMillis: Long = 0
 
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
+
     private val viewModel: TweetViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentTweetVoiceBinding
-
-    private val swipeDismissCallback: SwipeDismissFrameLayout.Callback by lazy(NONE) {
-        object : SwipeDismissFrameLayout.Callback() {
-            override fun onDismissed(layout: SwipeDismissFrameLayout) {
-                // Prevent flicker on screen.
-                layout.isInvisible = true
-                findNavController().popBackStack()
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import androidx.wear.widget.SwipeDismissFrameLayout
+import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.timeline.databinding.FragmentPhotoBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 
 class PhotoFragment : DaggerFragment() {
 
@@ -21,18 +18,10 @@ class PhotoFragment : DaggerFragment() {
     @Inject
     lateinit var photoListAdapter: PhotoListAdapter
 
-    private lateinit var binding: FragmentPhotoBinding
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
-    // FIXME: Black background remains when swiping.
-    private val swipeDismissCallback: SwipeDismissFrameLayout.Callback by lazy(NONE) {
-        object : SwipeDismissFrameLayout.Callback() {
-            override fun onDismissed(layout: SwipeDismissFrameLayout) {
-                // Prevent flicker on screen.
-                layout.isInvisible = true
-                findNavController().popBackStack()
-            }
-        }
-    }
+    private lateinit var binding: FragmentPhotoBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
-import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,6 +17,7 @@ import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.core.ui.dialog.DialogViewModel
+import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
@@ -27,7 +27,6 @@ import com.github.droibit.chopstick.resource.bindString
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 import com.droibit.looking2.account.ui.signin.twitter.TwitterAuthenticationResult.FailureType as AuthenticationFailureType
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
@@ -41,6 +40,9 @@ class TwitterSignInFragment : Fragment() {
     @Inject
     lateinit var playServicesChecker: PlayServicesChecker
 
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
+
     private lateinit var binding: FragmentTwitterSigninBinding
 
     private val signInViewModel: TwitterSignInViewModel by viewModels { viewModelFactory }
@@ -48,16 +50,6 @@ class TwitterSignInFragment : Fragment() {
     private val dialogViewModel: DialogViewModel by activityViewModels { viewModelFactory }
 
     private val confirmationMessage: String by bindString(R.string.account_sign_in_message_phone_preparation)
-
-    private val swipeDismissCallback: SwipeDismissFrameLayout.Callback by lazy(NONE) {
-        object : SwipeDismissFrameLayout.Callback() {
-            override fun onDismissed(layout: SwipeDismissFrameLayout) {
-                // Prevent flicker on screen.
-                layout.isInvisible = true
-                findNavController().popBackStack()
-            }
-        }
-    }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
