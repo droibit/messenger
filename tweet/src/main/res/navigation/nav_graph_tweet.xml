@@ -13,10 +13,18 @@
         <action
             android:id="@+id/showKeyboardTweet"
             app:destination="@id/keyboardTweetFragment" />
+        <action
+            android:id="@+id/showVoiceTweet"
+            app:destination="@id/voiceTweetFragment" />
     </fragment>
     <fragment
         android:id="@+id/keyboardTweetFragment"
         android:name="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment"
         android:label="KeyboardTweet"
         tools:layout="@layout/fragment_tweet_keyboard" />
+    <fragment
+        android:id="@+id/voiceTweetFragment"
+        android:name="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment"
+        android:label="VoiceTweet"
+        tools:layout="@layout/fragment_tweet_voice" />
 </navigation>

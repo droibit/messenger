@@ -42,5 +42,7 @@ class TweetChooserFragment : DaggerFragment() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onVoiceTweetButtonClick(v: View) {
+        val direction = TweetChooserFragmentDirections.showVoiceTweet()
+        findNavController().navigate(direction)
     }
 }

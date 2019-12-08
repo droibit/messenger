@@ -2,6 +2,7 @@ package com.droibit.looking2.tweet.ui.input
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.showLongToast
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
@@ -30,4 +31,5 @@ fun Fragment.showTweetFailure(failureType: TweetResult.FailureType) {
         is TweetResult.FailureType.Network -> showNetworkErrorToast()
         is TweetResult.FailureType.UnExpected -> showLongToast(failureType.messageResId)
     }
+    findNavController().popBackStack()
 }

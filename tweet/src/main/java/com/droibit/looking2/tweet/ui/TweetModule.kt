@@ -6,6 +6,8 @@ import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
 import com.droibit.looking2.tweet.ui.input.ViewModelModule
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
+import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment
+import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetModule
 import com.droibit.looking2.ui.Activities.Tweet.EXTRA_REPLY_TWEET
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import dagger.Module
@@ -71,5 +73,8 @@ object TweetModule {
 
         @ContributesAndroidInjector
         fun contributeKeyboardTweetInejector(): KeyboardTweetFragment
+
+        @ContributesAndroidInjector(modules = [VoiceTweetModule::class])
+        fun contributeVoiceTweetInejector(): VoiceTweetFragment
     }
 }

@@ -14,6 +14,10 @@
             type="java.lang.Boolean" />
 
         <variable
+            name="fragment"
+            type="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment" />
+
+        <variable
             name="viewModel"
             type="com.droibit.looking2.tweet.ui.input.TweetViewModel" />
     </data>
@@ -46,7 +50,8 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        app:goneUnless="@{viewModel.tweetText.isEmpty()}">
 
                         <TextView
                             android:id="@+id/title"
@@ -78,15 +83,10 @@
                             tools:text="\@droibit"
                             tools:visibility="visible" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/tweetText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:hint="@{strings.tweetTextHint}"
-                            android:imeOptions="actionDone"
-                            android:importantForAutofill="no"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
                             android:text="@={viewModel.tweetText}"
                             android:textAppearance="@style/TextAppearance.Wearable.Small"
                             android:textColor="@android:color/white"
@@ -97,28 +97,39 @@
                             tools:text="Hello, world!">
 
                             <requestFocus />
-                        </EditText>
+                        </TextView>
 
-                        <ImageButton
-                            android:id="@+id/sendButton"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center_horizontal"
+                        <androidx.wear.widget.CircularProgressLayout
+                            android:id="@+id/circularProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="4dp"
-                            android:background="@drawable/background_circle_light"
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/actionBarItemBackground"
-                            android:onClick="@{() -> viewModel.tweet()}"
-                            android:scaleType="center"
-                            android:src="@drawable/ic_send"
+                            android:onClick="@{() -> fragment.onCancelTweet()}"
+                            android:padding="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tweetText"
-                            tools:ignore="ContentDescription" />
+                            app:colorSchemeColors="@color/colorPrimary"
+                            app:strokeWidth="3dp">
+
+                            <ImageView
+                                android:id="@+id/sendButton"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/background_circle_light"
+                                android:scaleType="center"
+                                android:src="@drawable/ic_close"
+                                tools:ignore="ContentDescription" />
+
+                        </androidx.wear.widget.CircularProgressLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
