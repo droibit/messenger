@@ -55,17 +55,17 @@ class VoiceTweetFragment : DaggerFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetVoiceBinding.inflate(inflater, container, false)
+        binding = FragmentTweetVoiceBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.fragment = this
+            it.viewModel = this.viewModel
+            it.strings = layoutString
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.fragment = this
-        binding.viewModel = viewModel
-        binding.strings = layoutString
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
 
         binding.circularProgress.apply {

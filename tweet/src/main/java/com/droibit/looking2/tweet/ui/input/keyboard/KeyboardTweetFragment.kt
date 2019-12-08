@@ -37,16 +37,16 @@ class KeyboardTweetFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false)
+        binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.strings = layoutString
+            it.viewModel = viewModel
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.strings = layoutString
-        binding.viewModel = viewModel
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
     }
 
