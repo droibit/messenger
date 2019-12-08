@@ -4,25 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
-import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.showMyListTimeline
-import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.FailureType as GetMyListsFailureType
+import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
+import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.FailureType as GetMyListsFailureType
 
 class MyListsFragment : DaggerFragment() {
 
@@ -49,21 +47,7 @@ class MyListsFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.list.apply {
-            this.addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                ).apply {
-                    setDrawable(
-                        requireNotNull(
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.divider_list
-                            )
-                        )
-                    )
-                }
-            )
+            this.addItemDecoration(ListDividerItemDecoration(requireContext()))
             this.adapter = myListAdapter
         }
     }

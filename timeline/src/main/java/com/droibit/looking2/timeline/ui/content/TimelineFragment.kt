@@ -26,6 +26,7 @@ import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
+import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
@@ -87,21 +88,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.list.apply {
-            this.addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                ).apply {
-                    setDrawable(
-                        requireNotNull(
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.divider_list
-                            )
-                        )
-                    )
-                }
-            )
+            this.addItemDecoration(ListDividerItemDecoration(requireContext()))
             this.adapter = tweetListAdapter
         }
 
