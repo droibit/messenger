@@ -63,8 +63,8 @@ data class TweetAction(val target: Tweet, val items: List<Item>) {
         }
         companion object {
             const val KEY_TWEET_ID = "KEY_TWEET_ID"
-            const val WORK_NAME_PREFIX_RETWEET = "retweet."
-            const val WORK_NAME_PREFIX_LIKES = "like_tweet."
+            const val WORK_NAME_PREFIX_RETWEET = "timeline:retweet/"
+            const val WORK_NAME_PREFIX_LIKES = "timeline:like_tweet/"
         }
     }
 }

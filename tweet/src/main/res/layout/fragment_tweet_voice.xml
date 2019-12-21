@@ -10,10 +10,6 @@
             type="com.droibit.looking2.tweet.ui.input.TweetLayoutString" />
 
         <variable
-            name="showProgress"
-            type="java.lang.Boolean" />
-
-        <variable
             name="fragment"
             type="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment" />
 
@@ -35,115 +31,100 @@
             tools:context=".ui.TweetActivity"
             tools:deviceIds="wear">
 
-            <FrameLayout
+            <ScrollView
+                android:id="@+id/tweetContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/inner_frame_layout_padding"
-                app:boxedEdges="left|top|right">
+                app:boxedEdges="top|left|right"
+                tools:visibility="visible">
 
-                <ScrollView
-                    android:id="@+id/tweetContainer"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:goneUnless="@{showProgress}"
-                    tools:visibility="visible">
+                    android:layout_height="wrap_content"
+                    app:goneUnless="@{viewModel.tweetText.isEmpty()}">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:goneUnless="@{viewModel.tweetText.isEmpty()}">
+                        android:gravity="center"
+                        android:text="@{strings.title}"
+                        android:textAppearance="@style/TextAppearance.Wearable.Medium"
+                        android:textColor="@android:color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/tweet_title_reply" />
 
-                        <TextView
-                            android:id="@+id/title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@{strings.title}"
-                            android:textAppearance="@style/TextAppearance.Wearable.Medium"
-                            android:textColor="@android:color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="@string/tweet_title_reply" />
+                    <TextView
+                        android:id="@+id/replyUserText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{strings.replyUser}"
+                        android:textAppearance="@style/TextAppearance.Wearable.Small"
+                        android:textColor="@color/colorAccent"
+                        app:goneUnless="@{strings.replyUser.isEmpty()}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/title"
+                        tools:text="\@droibit"
+                        tools:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/replyUserText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@{strings.replyUser}"
-                            android:textAppearance="@style/TextAppearance.Wearable.Small"
-                            android:textColor="@color/colorAccent"
-                            app:goneUnless="@{strings.replyUser.isEmpty()}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/title"
-                            tools:text="\@droibit"
-                            tools:visibility="visible" />
+                    <TextView
+                        android:id="@+id/tweetText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.tweetText}"
+                        android:textAppearance="@style/TextAppearance.Wearable.Small"
+                        android:textColor="@android:color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/replyUserText"
+                        tools:hint="@string/tweet_text_reply_hint"
+                        tools:text="Hello, world!">
 
-                        <TextView
-                            android:id="@+id/tweetText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@={viewModel.tweetText}"
-                            android:textAppearance="@style/TextAppearance.Wearable.Small"
-                            android:textColor="@android:color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/replyUserText"
-                            tools:hint="@string/tweet_text_reply_hint"
-                            tools:text="Hello, world!">
+                        <requestFocus />
+                    </TextView>
 
-                            <requestFocus />
-                        </TextView>
+                    <androidx.wear.widget.CircularProgressLayout
+                        android:id="@+id/circularProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/actionBarItemBackground"
+                        android:onClick="@{() -> fragment.onCancelTweet()}"
+                        android:padding="6dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tweetText"
+                        app:colorSchemeColors="@color/colorPrimary"
+                        app:strokeWidth="3dp">
 
-                        <androidx.wear.widget.CircularProgressLayout
-                            android:id="@+id/circularProgress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="4dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:foreground="?android:attr/actionBarItemBackground"
-                            android:onClick="@{() -> fragment.onCancelTweet()}"
-                            android:padding="6dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tweetText"
-                            app:colorSchemeColors="@color/colorPrimary"
-                            app:strokeWidth="3dp">
+                        <ImageView
+                            android:id="@+id/sendButton"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/background_circle_light"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_close"
+                            tools:ignore="ContentDescription" />
 
-                            <ImageView
-                                android:id="@+id/sendButton"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/background_circle_light"
-                                android:scaleType="center"
-                                android:src="@drawable/ic_close"
-                                tools:ignore="ContentDescription" />
+                    </androidx.wear.widget.CircularProgressLayout>
 
-                        </androidx.wear.widget.CircularProgressLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </ScrollView>
-
-                <com.droibit.looking2.core.ui.widget.ProgressView
-                    android:id="@+id/progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/tweet_progress_text"
-                    app:visibleUnless="@{showProgress}"
-                    tools:visibility="gone" />
-
-            </FrameLayout>
+            </ScrollView>
 
         </androidx.wear.widget.BoxInsetLayout>
 

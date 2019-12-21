@@ -2,7 +2,7 @@ package com.droibit.looking2.tweet.ui.input
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.droibit.looking2.core.data.repository.tweet.TweetRepository
+import androidx.work.WorkManager
 import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.util.Optional
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
@@ -16,8 +16,11 @@ import dagger.multibindings.IntoMap
 object ViewModelModule {
 
     @Provides
-    fun provideTweetCall(repository: TweetRepository, replyTweet: Optional<ReplyTweet>): TweetCall {
-        return TweetCall(repository, replyTweet.get())
+    fun provideTweetCall(
+        workManager: WorkManager,
+        replyTweet: Optional<ReplyTweet>
+    ): TweetCall {
+        return TweetCall(workManager, replyTweet.get())
     }
 
     @Module

@@ -59,10 +59,14 @@ object Activities {
 
     object Confirmation {
 
-        fun createSuccessIntent(context: Context, @StringRes messageResId: Int): Intent {
+        fun createSuccessIntent(context: Context, @StringRes messageResId: Int?): Intent {
             return Intent(context, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, SUCCESS_ANIMATION)
-                .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+                .apply {
+                    if (messageResId != null) {
+                        this.putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+                    }
+                }
         }
 
         fun createFailureIntent(context: Context, @StringRes messageResId: Int): Intent {
