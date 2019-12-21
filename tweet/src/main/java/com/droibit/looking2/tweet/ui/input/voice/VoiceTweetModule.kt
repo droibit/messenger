@@ -10,7 +10,6 @@ object VoiceTweetModule {
 
     @Named("waitDurationMillis")
     @Provides
-    @JvmStatic
     fun provideWaitDurationMillis(): Long {
         return TimeUnit.SECONDS.toMillis(5)
     }

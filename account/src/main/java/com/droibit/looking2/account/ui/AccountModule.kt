@@ -25,10 +25,8 @@ object AccountModule {
     @Provides
     fun provideActivity(activity: AccountActivity): Activity = activity
 
-    // TODO: Occur build error when removed @JvmStatic.
     @Named("needTwitterSignIn")
     @Provides
-    @JvmStatic
     fun provideNeedTwitterSignIn(activity: Activity): Boolean {
         val intent = requireNotNull(activity.intent)
         return intent.getBooleanExtra(EXTRA_NEED_TWITTER_SIGN_IN, false)
