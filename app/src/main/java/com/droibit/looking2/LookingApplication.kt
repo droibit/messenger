@@ -2,6 +2,7 @@ package com.droibit.looking2
 
 import android.app.Application
 import android.content.Context
+import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
@@ -9,6 +10,7 @@ import com.droibit.looking2.core.di.DaggerCoreComponent
 import com.droibit.looking2.core.util.Stetho
 import timber.log.Timber
 import javax.inject.Inject
+import androidx.work.Configuration as WorkConfiguration
 
 class LookingApplication : Application() {
 
@@ -34,9 +36,13 @@ class LookingApplication : Application() {
     }
 
     @Inject
-    fun bootstrap(timberTree: Timber.Tree, twitterBootstrap: TwitterBootstrap) {
+    fun bootstrap(
+        timberTree: Timber.Tree,
+        twitterBootstrap: TwitterBootstrap,
+        workConfiguration: WorkConfiguration) {
         Timber.plant(timberTree)
         twitterBootstrap.initialize()
+        WorkManager.initialize(this, workConfiguration)
         Stetho.initialize(this)
         Timber.d("Bootstrapped")
     }

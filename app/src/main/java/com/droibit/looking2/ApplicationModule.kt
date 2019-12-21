@@ -1,9 +1,11 @@
 package com.droibit.looking2
 
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import timber.log.Timber
 import javax.inject.Named
+import androidx.work.Configuration as WorkConfiguration
 
 @Module
 object ApplicationModule {
@@ -20,4 +22,17 @@ object ApplicationModule {
                 ) = Unit
             }
         }
+
+    @Provides
+    fun provideWorkConfiguration(
+        @Named("debuggable") debuggable: Boolean
+    ): WorkConfiguration {
+        // Disable log when release build.
+        val loggingLevel = if (debuggable) Log.INFO else Log.ASSERT + 1
+        return WorkConfiguration.Builder()
+            .setMinimumLoggingLevel(loggingLevel)
+            .build()
+    }
+
+
 }

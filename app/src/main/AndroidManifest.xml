@@ -16,7 +16,8 @@
         android:appCategory="social"
         android:theme="@style/AppTheme"
         android:name=".LookingApplication"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="o">
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -47,6 +48,11 @@
         <activity
             android:name="androidx.wear.activity.ConfirmationActivity"
             android:exported="false"/>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
 
     </application>
 
