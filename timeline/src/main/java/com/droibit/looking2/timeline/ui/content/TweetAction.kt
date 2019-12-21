@@ -2,8 +2,10 @@ package com.droibit.looking2.timeline.ui.content
 
 import android.content.Context
 import androidx.annotation.IdRes
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy.KEEP
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -37,6 +39,11 @@ data class TweetAction(val target: Tweet, val items: List<Item>) {
         fun enqueueRetweetWork(tweetId: Long) {
             val work = OneTimeWorkRequestBuilder<RetweetActionWorker>()
                 .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
                 .build()
             val workName = WORK_NAME_PREFIX_RETWEET + "$tweetId"
             workManager.enqueueUniqueWork(workName, KEEP, work)
@@ -45,11 +52,15 @@ data class TweetAction(val target: Tweet, val items: List<Item>) {
         fun enqueueLikesWork(tweetId: Long) {
             val work = OneTimeWorkRequestBuilder<LikeTweetActionWorker>()
                 .setInputData(workDataOf(KEY_TWEET_ID to tweetId))
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
                 .build()
             val workName = WORK_NAME_PREFIX_LIKES + "$tweetId"
             workManager.enqueueUniqueWork(workName, KEEP, work)
         }
-
         companion object {
             const val KEY_TWEET_ID = "KEY_TWEET_ID"
             const val WORK_NAME_PREFIX_RETWEET = "retweet."
