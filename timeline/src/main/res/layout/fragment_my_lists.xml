@@ -30,6 +30,7 @@
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:visibleUnless="@{showContent}"
+                app:requestFocusOnVisible="@{true}"
                 tools:listitem="@layout/list_item_my_list"
                 tools:visibility="visible" />
 

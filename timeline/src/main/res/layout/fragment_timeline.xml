@@ -38,6 +38,7 @@
                     android:scrollbars="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:visibleUnless="@{showContent}"
+                    app:requestFocusOnVisible="@{true}"
                     tools:listitem="@layout/list_item_tweet"
                     tools:visibility="visible" />
 

@@ -5,9 +5,13 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 
-@BindingAdapter("visibleUnless")
-fun bindVisibleUnless(view: View, visible: Boolean) {
+@BindingAdapter(value = ["visibleUnless", "requestFocusOnVisible"], requireAll = false)
+fun bindVisibleUnless(view: View, visible: Boolean, requestFocus: Boolean = false) {
     view.isVisible = visible
+
+    if (view.isVisible && requestFocus) {
+        view.requestFocus()
+    }
 }
 
 @BindingAdapter("goneUnless")
