@@ -30,6 +30,8 @@ import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
+import com.droibit.looking2.ui.Activities.Confirmation.createSuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
@@ -94,8 +96,10 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
         observeReply()
         observePhotoList()
-        observeTweetAction()
+        observeTweetActionItemList()
         observeGetTimelineResult()
+        observeRetweetCompleted()
+        observeLikesCompleted()
     }
 
     private fun observeGetTimelineResult() {
@@ -124,11 +128,11 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         requireActivity().finish()
     }
 
-    private fun observeTweetAction() {
-        tweetActionViewModel.tweetAction.observeIfNotConsumed(viewLifecycleOwner) { tweetAction ->
+    private fun observeTweetActionItemList() {
+        tweetActionViewModel.tweetActionItemList.observeIfNotConsumed(viewLifecycleOwner) { (_, actionItems) ->
             val actionDrawerMenu = binding.tweetActionDrawer.menu
             actionDrawerMenu.clear()
-            tweetAction.items
+            actionItems
                 .map { tweetActionMenu.findItem(it.id) }
                 .forEach { actionMenuItem ->
                     actionDrawerMenu.add(
@@ -160,9 +164,23 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         }
     }
 
+    private fun observeRetweetCompleted() {
+        tweetActionViewModel.retweetCompleted.observeIfNotConsumed(viewLifecycleOwner) {
+            val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
+            startActivity(intent)
+        }
+    }
+
+    private fun observeLikesCompleted() {
+        tweetActionViewModel.likesCompleted.observeIfNotConsumed(viewLifecycleOwner) {
+            val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
+            startActivity(intent)
+        }
+    }
+
     override fun onMenuItemClick(item: MenuItem): Boolean {
         tweetActionViewModel.onTweetActionItemClick(
-            actionItem = TweetAction.Item.valueOf(item.itemId)
+            actionItem = TweetActionItem.valueOf(item.itemId)
         )
         binding.tweetActionDrawer.controller.closeDrawer()
         return true

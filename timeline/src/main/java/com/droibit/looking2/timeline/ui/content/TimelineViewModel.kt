@@ -22,7 +22,6 @@ class TimelineViewModel(
 
     @get:UiThread
     val getTimelineResult: LiveData<GetTimelineResult> by lazy(NONE) {
-        getTimelineResultSink.value = GetTimelineResult.InProgress
         viewModelScope.launch {
             getTimelineResultSink.value = try {
                 val timeline = getTimelineCall(sinceId = null)
@@ -41,5 +40,8 @@ class TimelineViewModel(
     }
 
     @Inject
-    constructor(getTimelineCall: TimelineSource.GetCall) : this(getTimelineCall, MutableLiveData())
+    constructor(getTimelineCall: TimelineSource.GetCall) : this(
+        getTimelineCall,
+        MutableLiveData(GetTimelineResult.InProgress)
+    )
 }

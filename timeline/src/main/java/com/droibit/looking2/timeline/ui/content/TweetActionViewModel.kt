@@ -9,16 +9,19 @@ import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.toEvent
 import timber.log.Timber
 import javax.inject.Inject
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 
 class TweetActionViewModel(
-    private val tweetActionCall: TweetAction.Call,
-    private val tweetActionSink: MutableLiveData<Event<TweetAction>>,
+    private val tweetActionCall: TweetActionCall,
+    private val tweetActionItemListSink: MutableLiveData<Event<TweetActionItemList>>,
     private val replySink: MutableLiveData<Event<Tweet>>,
-    private val photoListSink: MutableLiveData<Event<List<String>>>
+    private val photoListSink: MutableLiveData<Event<List<String>>>,
+    private val retweetCompletedSink: MutableLiveData<Event<Unit>>,
+    private val likesCompletedSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
 
-    val tweetAction: LiveData<Event<TweetAction>>
-        get() = tweetActionSink
+    val tweetActionItemList: LiveData<Event<TweetActionItemList>>
+        get() = tweetActionItemListSink
 
     val reply: LiveData<Event<Tweet>>
         get() = replySink
@@ -26,9 +29,17 @@ class TweetActionViewModel(
     val photos: LiveData<Event<List<String>>>
         get() = photoListSink
 
+    val retweetCompleted: LiveData<Event<Unit>>
+        get() = retweetCompletedSink
+
+    val likesCompleted: LiveData<Event<Unit>>
+        get() = likesCompletedSink
+
     @Inject
-    constructor(tweetActionCall: TweetAction.Call) : this(
+    constructor(tweetActionCall: TweetActionCall) : this(
         tweetActionCall,
+        MutableLiveData(),
+        MutableLiveData(),
         MutableLiveData(),
         MutableLiveData(),
         MutableLiveData()
@@ -36,40 +47,41 @@ class TweetActionViewModel(
 
     @UiThread
     fun onTweetClick(tweet: Tweet) {
-        val items = mutableListOf(TweetAction.Item.REPLY).apply {
+        val items = mutableListOf(TweetActionItem.REPLY).apply {
             if (!tweet.liked) {
-                add(TweetAction.Item.LIKES)
+                add(TweetActionItem.LIKES)
             }
             if (!tweet.retweeted) {
-                add(TweetAction.Item.RETWEET)
+                add(TweetActionItem.RETWEET)
             }
             if (tweet.hasPhotoUrl) {
-                add(TweetAction.Item.PHOTO)
+                add(TweetActionItem.PHOTO)
             }
         }
-        tweetActionSink.value = TweetAction(target = tweet, items = items).toEvent()
+        tweetActionItemListSink.value = TweetActionItemList(target = tweet, items = items).toEvent()
     }
 
     @UiThread
-    fun onTweetActionItemClick(actionItem: TweetAction.Item) {
+    fun onTweetActionItemClick(actionItem: TweetActionItem) {
         Timber.d("Clicked item: $actionItem")
-        val targetTweet = requireNotNull(tweetActionSink.value).peek().target
+        val targetTweet = requireNotNull(tweetActionItemListSink.value).peek().target
         when (actionItem) {
-            TweetAction.Item.REPLY -> {
+            TweetActionItem.REPLY -> {
                 replySink.value = targetTweet.toEvent()
             }
-            TweetAction.Item.RETWEET -> {
+            TweetActionItem.RETWEET -> {
                 tweetActionCall.enqueueRetweetWork(targetTweet.id)
-                // TODO: show in progress message.
+                retweetCompletedSink.value = Unit.toEvent()
             }
-            TweetAction.Item.LIKES -> {
+            TweetActionItem.LIKES -> {
                 tweetActionCall.enqueueLikesWork(targetTweet.id)
+                likesCompletedSink.value = Unit.toEvent()
             }
-            TweetAction.Item.PHOTO -> {
+            TweetActionItem.PHOTO -> {
                 val urls = targetTweet.photoUrls.map { it.expandedUrl }
                 photoListSink.value = urls.toEvent()
             }
-            TweetAction.Item.ADD_TO_POCKET -> TODO()
+            TweetActionItem.ADD_TO_POCKET -> TODO()
         }
     }
 }

@@ -23,7 +23,6 @@ class MyListsViewModel(
 
     @get:UiThread
     val getMyListsResult: LiveData<GetMyListsResult> by lazy(NONE) {
-        getMyListsResultSink.value = GetMyListsResult.InProgress
         viewModelScope.launch {
             getMyListsResultSink.value = try {
                 val myLists = userListRepository.getMyLists()
@@ -46,6 +45,6 @@ class MyListsViewModel(
     @Inject
     constructor(userListRepository: UserListRepository) : this(
         userListRepository,
-        MutableLiveData()
+        MutableLiveData(GetMyListsResult.InProgress)
     )
 }
