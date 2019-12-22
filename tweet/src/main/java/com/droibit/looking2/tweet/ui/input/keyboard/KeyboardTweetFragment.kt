@@ -11,9 +11,9 @@ import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.tweet.databinding.FragmentTweetKeyboardBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
-import com.droibit.looking2.ui.Activities.Confirmation.createSuccessIntent
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
+import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 
 class KeyboardTweetFragment : DaggerFragment() {
 
@@ -56,7 +56,7 @@ class KeyboardTweetFragment : DaggerFragment() {
 
     private fun observeTweetCompleted() {
         viewModel.tweetCompleted.observeIfNotConsumed(viewLifecycleOwner) {
-            val intent = createSuccessIntent(requireContext(), messageResId = null)
+            val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
             requireActivity().finish()
         }

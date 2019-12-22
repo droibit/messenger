@@ -57,9 +57,10 @@ interface AddressableActivity {
  */
 object Activities {
 
+    @Suppress("FunctionName")
     object Confirmation {
 
-        fun createSuccessIntent(context: Context, @StringRes messageResId: Int?): Intent {
+        fun SuccessIntent(context: Context, @StringRes messageResId: Int?): Intent {
             return Intent(context, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, SUCCESS_ANIMATION)
                 .apply {
@@ -69,13 +70,13 @@ object Activities {
                 }
         }
 
-        fun createFailureIntent(context: Context, @StringRes messageResId: Int): Intent {
+        fun FailureIntent(context: Context, @StringRes messageResId: Int): Intent {
             return Intent(context, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, FAILURE_ANIMATION)
                 .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
         }
 
-        fun createOpenOnPhoneIntent(context: Context, @StringRes messageResId: Int): Intent {
+        fun OpenOnPhoneIntent(context: Context, @StringRes messageResId: Int): Intent {
             return Intent(context, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, OPEN_ON_PHONE_ANIMATION)
                 .putExtra(EXTRA_MESSAGE, context.getString(messageResId))

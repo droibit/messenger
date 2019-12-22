@@ -21,8 +21,8 @@ import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
-import com.droibit.looking2.ui.Activities.Confirmation.createFailureIntent
-import com.droibit.looking2.ui.Activities.Confirmation.createOpenOnPhoneIntent
+import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
+import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
 import com.github.droibit.chopstick.resource.bindString
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
@@ -97,7 +97,7 @@ class TwitterSignInFragment : Fragment() {
         }
 
         signInViewModel.authenticateOnPhoneTiming.observeIfNotConsumed(viewLifecycleOwner) {
-            val intent = createOpenOnPhoneIntent(
+            val intent = OpenOnPhoneIntent(
                 requireContext(),
                 messageResId = R.string.account_sign_in_message_open_on_phone
             )
@@ -135,7 +135,7 @@ class TwitterSignInFragment : Fragment() {
                 }
             }
             is AuthenticationFailureType.UnExpected -> {
-                val intent = createFailureIntent(
+                val intent = FailureIntent(
                     requireContext(),
                     messageResId = failureType.messageResId
                 )

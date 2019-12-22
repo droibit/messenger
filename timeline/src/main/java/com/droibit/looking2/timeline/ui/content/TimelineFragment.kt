@@ -31,7 +31,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
-import com.droibit.looking2.ui.Activities.Confirmation.createSuccessIntent as SuccessConfirmationIntent
+import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
