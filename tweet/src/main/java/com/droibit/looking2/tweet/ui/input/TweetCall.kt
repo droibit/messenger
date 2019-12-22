@@ -10,6 +10,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.model.tweet.TwitterError
+import com.droibit.looking2.core.model.tweet.retryIfNeeded
 import com.droibit.looking2.coreComponent
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_REPLY_TWEET_ID
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_TWEET
@@ -87,13 +88,13 @@ class TweetWorker(
 
     override suspend fun doWork(): Result {
         val text = requireNotNull(inputData.getString(KEY_TWEET))
-        Timber.d("Do work: tweet:$text")
+        Timber.d("Do work-$runAttemptCount: tweet:$text")
 
         return try {
             tweetRepository.tweet(text)
             Result.success()
-        } catch (e: TwitterError) {
-            retryIfNeeded()
+        } catch (error: TwitterError) {
+            retryIfNeeded(cause = error)
         }
     }
 }
@@ -114,21 +115,13 @@ class ReplyWorker(
         val text = requireNotNull(inputData.getString(KEY_TWEET))
         val replyTweetId = inputData.getLong(KEY_REPLY_TWEET_ID, Long.MIN_VALUE)
             .takeIf { it != Long.MIN_VALUE } ?: error("Missing reply tweet id")
-        Timber.d("Do work: reply:$text, to: $replyTweetId")
+        Timber.d("Do work-$runAttemptCount: reply:$text, to: $replyTweetId")
 
         return try {
             tweetRepository.tweet(text, replyTweetId)
             Result.success()
-        } catch (e: TwitterError) {
-            retryIfNeeded()
+        } catch (error: TwitterError) {
+            retryIfNeeded(cause = error)
         }
-    }
-}
-
-private fun ListenableWorker.retryIfNeeded(): ListenableWorker.Result {
-    return if (runAttemptCount < TweetCall.MAX_RUN_ATTEMPT_COUNT) {
-        ListenableWorker.Result.retry()
-    } else {
-        ListenableWorker.Result.failure()
     }
 }

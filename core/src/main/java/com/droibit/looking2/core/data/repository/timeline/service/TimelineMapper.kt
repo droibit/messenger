@@ -63,7 +63,6 @@ private fun TweetResponse.toRetweetedTweet(): Tweet {
         retweeted = retweeted,
         retweetedTweet = retweetedStatus.toTweet(),
         quotedTweet = quotedStatus?.toTweet()
-
     )
 }
 
