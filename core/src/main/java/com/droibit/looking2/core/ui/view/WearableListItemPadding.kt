@@ -7,7 +7,7 @@ import android.util.Size
 import androidx.annotation.FractionRes
 import com.droibit.looking2.core.R
 
-class ListItemPadding(context: Context) {
+class ShapeAwareContentPadding(context: Context) {
 
     val firstItemTopPx: Int
     val lastItemBottomPx: Int

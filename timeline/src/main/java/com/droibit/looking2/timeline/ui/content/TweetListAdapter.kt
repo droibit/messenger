@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.size.Scale
 import com.droibit.looking2.core.model.tweet.Tweet
-import com.droibit.looking2.core.ui.view.ListItemPadding
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemTweetBinding
 
@@ -23,7 +23,7 @@ class TweetListAdapter(
 
     private val inflater = LayoutInflater.from(context)
 
-    private val itemPadding = ListItemPadding(context)
+    private val itemPadding = ShapeAwareContentPadding(context)
 
     private val tweets = mutableListOf<Tweet>()
 

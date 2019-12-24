@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.droibit.looking2.core.databinding.ListItemActionBinding
 import com.droibit.looking2.core.databinding.ListItemActionTitleBinding
 import com.droibit.looking2.core.ui.view.ActionMenu
-import com.droibit.looking2.core.ui.view.ListItemPadding
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import java.util.Objects
 
 typealias ActionItemClickListener = (ActionItemListAdapter.ActionItem) -> Unit
@@ -51,7 +51,7 @@ class ActionItemListAdapter(
 
     private val hasTitle get() = !title.isNullOrEmpty()
 
-    private val itemPadding = ListItemPadding(context)
+    private val itemPadding = ShapeAwareContentPadding(context)
 
     constructor(
         context: Context,
