@@ -11,10 +11,11 @@ import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
+import dagger.Lazy
 
 class MyListAdapter(
     context: Context,
-    private val lifecycleOwner: LifecycleOwner,
+    private val lifecycleOwner: Lazy<LifecycleOwner>,
     private val itemClickListener: (UserList) -> Unit
 ) : RecyclerView.Adapter<MyListAdapter.ViewHolder>() {
 
@@ -28,7 +29,7 @@ class MyListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            lifecycleOwner,
+            lifecycleOwner.get(),
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
@@ -55,7 +56,8 @@ class MyListAdapter(
 
     class ViewHolder(
         private val lifecycleOwner: LifecycleOwner,
-        private val binding: ListItemMyListBinding) :
+        private val binding: ListItemMyListBinding
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(myList: UserList) {

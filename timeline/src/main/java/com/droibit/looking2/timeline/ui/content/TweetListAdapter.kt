@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.size.Scale
+import dagger.Lazy
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
@@ -16,7 +17,7 @@ import com.droibit.looking2.timeline.databinding.ListItemTweetBinding
 
 class TweetListAdapter(
     context: Context,
-    private val lifecycleOwner: LifecycleOwner,
+    private val lifecycleOwner: Lazy<LifecycleOwner>,
     private val tweetTextProcessor: TweetTextProcessor,
     private val itemClickListener: (Tweet) -> Unit
 ) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
@@ -34,7 +35,7 @@ class TweetListAdapter(
         viewType: Int
     ): ViewHolder {
         return ViewHolder(
-            lifecycleOwner,
+            lifecycleOwner.get(),
             binding = ListItemTweetBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnLongClickListener {

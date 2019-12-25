@@ -12,10 +12,11 @@ import coil.request.Request
 import coil.size.Scale
 import com.droibit.looking2.R
 import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
+import dagger.Lazy
 
 class PhotoListAdapter(
     context: Context,
-    private val lifecycleOwner: LifecycleOwner,
+    private val lifecycleOwner: Lazy<LifecycleOwner>,
     private val photoUrls: List<String>
 ) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>(), LifecycleObserver {
 
@@ -25,7 +26,7 @@ class PhotoListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            lifecycleOwner,
+            lifecycleOwner.get(),
             binding = ListItemPhotoBinding.inflate(inflater, parent, false)
         )
     }
