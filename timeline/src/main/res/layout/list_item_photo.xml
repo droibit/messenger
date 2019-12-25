@@ -18,7 +18,7 @@
             android:id="@+id/photo"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:scaleType="centerInside"
+            tools:scaleType="fitCenter"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_full_sad" />
 

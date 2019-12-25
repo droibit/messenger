@@ -5,15 +5,18 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.size.Scale
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.view.ListItemPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemTweetBinding
-import com.squareup.picasso.Picasso
 
 class TweetListAdapter(
     context: Context,
+    private val lifecycleOwner: LifecycleOwner,
     private val tweetTextProcessor: TweetTextProcessor,
     private val itemClickListener: (Tweet) -> Unit
 ) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
@@ -31,6 +34,7 @@ class TweetListAdapter(
         viewType: Int
     ): ViewHolder {
         return ViewHolder(
+            lifecycleOwner,
             binding = ListItemTweetBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnLongClickListener {
@@ -60,7 +64,10 @@ class TweetListAdapter(
         this.notifyDataSetChanged()
     }
 
-    class ViewHolder(private val binding: ListItemTweetBinding) :
+    class ViewHolder(
+        private val lifecycleOwner: LifecycleOwner,
+        private val binding: ListItemTweetBinding
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
@@ -68,13 +75,12 @@ class TweetListAdapter(
             srcTweet: Tweet
         ) {
             val tweet = srcTweet.retweetedTweet ?: srcTweet
-            Picasso.get()
-                .load(tweet.user.profileUrl)
-                .error(R.drawable.ic_account_circle)
-                .placeholder(R.drawable.ic_account_circle)
-                .fit()
-                .tag(TAG_TWEET_USER_ICON)
-                .into(binding.userIcon)
+            binding.userIcon.load(tweet.user.profileUrl) {
+                placeholder(R.drawable.ic_account_circle)
+                error(R.drawable.ic_account_circle)
+                scale(Scale.FIT)
+                lifecycle(lifecycleOwner)
+            }
 
             binding.userName.text = tweet.user.name
             binding.tweetText.apply {
@@ -104,10 +110,5 @@ class TweetListAdapter(
                 DateUtils.SECOND_IN_MILLIS
             )
         }
-    }
-
-    companion object {
-
-        const val TAG_TWEET_USER_ICON = "TAG_TWEET_USER_ICON"
     }
 }

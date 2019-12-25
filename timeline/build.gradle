@@ -38,7 +38,7 @@ dependencies {
     implementation deps.circleImageView
     implementation deps.chopstick.resource
 
-    implementation deps.picasso
+    implementation deps.coil
 
     kapt deps.dagger.compiler
     kapt deps.dagger.androidProcessor

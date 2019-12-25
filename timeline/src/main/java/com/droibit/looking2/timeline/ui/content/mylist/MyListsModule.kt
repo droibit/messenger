@@ -14,6 +14,7 @@ object MyListsModule {
     fun provideMyListAdapter(fragment: MyListsFragment): MyListAdapter {
         return MyListAdapter(
             fragment.requireContext(),
+            fragment,
             itemClickListener = fragment::onUserListClick
         )
     }

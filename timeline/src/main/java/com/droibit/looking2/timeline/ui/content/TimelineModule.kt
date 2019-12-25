@@ -22,6 +22,7 @@ object TimelineModule {
     ): TweetListAdapter {
         return TweetListAdapter(
             fragment.requireContext(),
+            fragment,
             tweetTextProcessor,
             fragment::onTweetClick
         )

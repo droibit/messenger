@@ -16,7 +16,8 @@ object PhotoModule {
     @Provides
     fun providePhotoListAdapter(
         fragment: PhotoFragment,
-        @Named("photoUrls") photoUrls: List<String>): PhotoListAdapter {
-        return PhotoListAdapter(fragment.requireContext(), photoUrls)
+        @Named("photoUrls") photoUrls: List<String>
+    ): PhotoListAdapter {
+        return PhotoListAdapter(fragment.requireContext(), fragment, photoUrls)
     }
 }

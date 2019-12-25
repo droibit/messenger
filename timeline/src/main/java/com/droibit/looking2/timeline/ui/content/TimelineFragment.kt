@@ -22,10 +22,8 @@ import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
-import com.droibit.looking2.timeline.ui.content.TweetListAdapter.Companion.TAG_TWEET_USER_ICON
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
-import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
@@ -188,7 +186,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     override fun onDestroyView() {
         (view as? SwipeDismissFrameLayout)?.removeCallback(swipeDismissCallback)
-        Picasso.get().cancelTag(TAG_TWEET_USER_ICON)
         super.onDestroyView()
     }
 

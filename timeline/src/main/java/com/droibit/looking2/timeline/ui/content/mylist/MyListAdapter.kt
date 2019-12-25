@@ -3,15 +3,18 @@ package com.droibit.looking2.timeline.ui.content.mylist
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.size.Scale
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.ui.view.ListItemPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
-import com.squareup.picasso.Picasso
 
 class MyListAdapter(
     context: Context,
+    private val lifecycleOwner: LifecycleOwner,
     private val itemClickListener: (UserList) -> Unit
 ) : RecyclerView.Adapter<MyListAdapter.ViewHolder>() {
 
@@ -25,6 +28,7 @@ class MyListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
+            lifecycleOwner,
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
@@ -49,23 +53,19 @@ class MyListAdapter(
         this.notifyDataSetChanged()
     }
 
-    class ViewHolder(private val binding: ListItemMyListBinding) :
+    class ViewHolder(
+        private val lifecycleOwner: LifecycleOwner,
+        private val binding: ListItemMyListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(myList: UserList) {
-            Picasso.get()
-                .load(myList.user.profileUrl)
-                .error(R.drawable.ic_account_circle)
-                .placeholder(R.drawable.ic_account_circle)
-                .fit()
-                .tag(TAG_LIST_USER_ICON)
-                .into(binding.listIcon)
+            binding.listIcon.load(myList.user.profileUrl) {
+                error(R.drawable.ic_account_circle)
+                placeholder(R.drawable.ic_account_circle)
+                scale(Scale.FIT)
+                lifecycle(lifecycleOwner)
+            }
             binding.userList = myList
         }
-    }
-
-    companion object {
-
-        const val TAG_LIST_USER_ICON = "TAG_LIST_USER_ICON"
     }
 }

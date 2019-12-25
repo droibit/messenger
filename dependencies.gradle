@@ -87,7 +87,7 @@ ext {
             javax          : [
                     inject: 'javax.inject:javax.inject:1'
             ],
-            picasso        : 'com.squareup.picasso:picasso:2.71828',
+            coil           : "io.coil-kt:coil:0.8.0",
             crashlytics    : "com.crashlytics.sdk.android:crashlytics:2.10.1",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.3",
             gson           : 'com.google.code.gson:gson:2.8.5',
