@@ -1,6 +1,7 @@
 package com.droibit.looking2.tweet.ui
 
 import com.droibit.looking2.core.di.scope.FeatureScope
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.Optional
 import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
@@ -65,16 +66,22 @@ object TweetModule {
         return if (replyTweet.isPresent) "@${replyTweet.getValue().user.screenName}" else ""
     }
 
+    @FeatureScope
+    @Provides
+    fun provideContentPadding(activity: TweetActivity): ShapeAwareContentPadding {
+        return ShapeAwareContentPadding(activity)
+    }
+
     @Module
     interface FragmentBindingModule {
 
         @ContributesAndroidInjector
-        fun contributeTweetChooserInejector(): TweetChooserFragment
+        fun contributeTweetChooserInjector(): TweetChooserFragment
 
         @ContributesAndroidInjector
-        fun contributeKeyboardTweetInejector(): KeyboardTweetFragment
+        fun contributeKeyboardTweetInjector(): KeyboardTweetFragment
 
         @ContributesAndroidInjector(modules = [VoiceTweetModule::class])
-        fun contributeVoiceTweetInejector(): VoiceTweetFragment
+        fun contributeVoiceTweetInjector(): VoiceTweetFragment
     }
 }

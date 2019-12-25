@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.tweet.databinding.FragmentTweetChooserBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -16,6 +17,9 @@ class TweetChooserFragment : DaggerFragment() {
     @Named("title")
     lateinit var title: String
 
+    @Inject
+    lateinit var contentPadding: ShapeAwareContentPadding
+
     private lateinit var binding: FragmentTweetChooserBinding
 
     override fun onCreateView(
@@ -23,7 +27,9 @@ class TweetChooserFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetChooserBinding.inflate(inflater, container, false)
+        binding = FragmentTweetChooserBinding.inflate(inflater, container, false).also {
+            it.contentPadding = contentPadding
+        }
         return binding.root
     }
 

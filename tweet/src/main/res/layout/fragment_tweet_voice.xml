@@ -10,6 +10,10 @@
             type="com.droibit.looking2.tweet.ui.input.TweetLayoutString" />
 
         <variable
+            name="contentPadding"
+            type="com.droibit.looking2.core.ui.view.ShapeAwareContentPadding" />
+
+        <variable
             name="fragment"
             type="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment" />
 
@@ -36,12 +40,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/inner_frame_layout_padding"
-                app:boxedEdges="top|left|right"
+                app:boxedEdges="left|right"
                 tools:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="@{contentPadding.firstItemTopPx}"
+                    android:paddingBottom="@{contentPadding.lastItemBottomPx}"
+                    tools:paddingTop="32dp"
+                    tools:paddingBottom="32dp"
                     app:goneUnless="@{viewModel.tweetText.isEmpty()}">
 
                     <TextView
@@ -111,7 +119,7 @@
                         app:strokeWidth="3dp">
 
                         <ImageView
-                            android:id="@+id/sendButton"
+                            android:id="@+id/cancelButton"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"

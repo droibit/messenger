@@ -21,7 +21,17 @@ fun bindGoneUnless(view: View, gone: Boolean) {
     view.isGone = gone
 }
 
-@BindingAdapter("android:layout_marginTop")
-fun bindMarginTop(view: View, @Px marginPx: Int) {
+@BindingAdapter("android:marginTop")
+fun bindPaddingTop(view: View, @Px marginPx: Int) {
     view.updatePadding(top = marginPx)
+}
+
+@BindingAdapter("android:paddingBottom")
+fun bindPaddingBottom(view: View, @Px marginPx: Int) {
+    view.updatePadding(bottom = marginPx)
+}
+
+@BindingAdapter("enabled")
+fun bindEnabled(view: View, enabled: Boolean) {
+    view.isEnabled = enabled
 }

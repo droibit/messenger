@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.tweet.databinding.FragmentTweetKeyboardBinding
@@ -26,6 +27,9 @@ class KeyboardTweetFragment : DaggerFragment() {
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
+    @Inject
+    lateinit var contentPadding: ShapeAwareContentPadding
+
     private val viewModel: TweetViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentTweetKeyboardBinding
@@ -38,6 +42,7 @@ class KeyboardTweetFragment : DaggerFragment() {
         binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.strings = layoutString
+            it.contentPadding = contentPadding
             it.viewModel = viewModel
         }
         return binding.root

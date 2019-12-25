@@ -4,9 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="screenTitle"
             type="java.lang.String" />
+
+        <variable
+            name="contentPadding"
+            type="com.droibit.looking2.core.ui.view.ShapeAwareContentPadding" />
 
         <variable
             name="fragment"
@@ -24,19 +29,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/inner_frame_layout_padding"
-            app:boxedEdges="all">
+            app:boxedEdges="left|right|bottom">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="@{contentPadding.firstItemTopPx}"
+                android:text="@{screenTitle}"
                 android:textAppearance="@style/TextAppearance.Wearable.Medium"
                 android:textColor="@android:color/white"
-                android:text="@{screenTitle}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                tools:paddingTop="32dp"
                 tools:text="Tweet" />
 
             <ImageButton
@@ -45,9 +52,9 @@
                 android:layout_height="56dp"
                 android:background="@drawable/background_circle_light"
                 android:foreground="?android:attr/actionBarItemBackground"
+                android:onClick="@{fragment::onVoiceTweetButtonClick}"
                 android:scaleType="center"
                 android:src="@drawable/ic_tweet_voice"
-                android:onClick="@{fragment::onVoiceTweetButtonClick}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/keyboardTweetButton"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -62,14 +69,14 @@
                 android:layout_height="56dp"
                 android:background="@drawable/background_circle_light"
                 android:foreground="?android:attr/actionBarItemBackground"
+                android:onClick="@{fragment::onKeyboardTweetButtonClick}"
                 android:scaleType="center"
                 android:src="@drawable/ic_tweet_keyboard"
-                android:onClick="@{fragment::onKeyboardTweetButtonClick}"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/voiceTweetButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/voiceTweetButton"
-                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintTop_toTopOf="@+id/voiceTweetButton"
                 tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
