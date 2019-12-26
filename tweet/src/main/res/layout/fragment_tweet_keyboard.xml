@@ -35,7 +35,8 @@
                 android:id="@+id/tweetContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/inner_frame_layout_padding"
+                android:paddingStart="@dimen/inner_frame_layout_padding"
+                android:paddingEnd="@dimen/inner_frame_layout_padding"
                 android:scrollbars="none"
                 app:boxedEdges="left|right"
                 tools:visibility="visible">
