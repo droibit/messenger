@@ -28,18 +28,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/inner_frame_layout_padding"
+            android:paddingTop="@{contentPadding.firstItemTopPx}"
+            android:paddingStart="@dimen/inner_frame_layout_padding"
+            android:paddingEnd="@dimen/inner_frame_layout_padding"
+            android:paddingBottom="@dimen/inner_frame_layout_padding"
             app:boxedEdges="left|right|bottom">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                style="@style/ContentTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@{contentPadding.firstItemTopPx}"
                 android:text="@{screenTitle}"
-                android:textAppearance="@style/TextAppearance.Wearable.Medium"
-                android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

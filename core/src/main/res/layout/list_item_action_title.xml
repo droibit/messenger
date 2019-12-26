@@ -10,13 +10,10 @@
 
     <TextView
         android:id="@+id/itemTitle"
-        style="@android:style/TextAppearance.Material.Subhead"
+        style="@style/ContentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:alpha="0.7"
-        android:gravity="center"
-        android:paddingBottom="8dp"
         android:text="@{title}"
         tools:text="Menu" />
 </layout>

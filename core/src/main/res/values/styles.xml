@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ProgressView">
-        <attr name="android:text" format="string" />
-    </declare-styleable>
+    <style name="ContentTitle" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:alpha">0.7</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
 </resources>

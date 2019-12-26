@@ -16,15 +16,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.CircularProgressLayout
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.observeIfNotConsumed
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
-import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import javax.inject.Named
+import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 
 private const val REQUEST_CODE_SPEECH = 1
 
@@ -44,6 +45,9 @@ class VoiceTweetFragment : DaggerFragment(),
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
+    @Inject
+    lateinit var contentPadding: ShapeAwareContentPadding
+
     private val viewModel: TweetViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentTweetVoiceBinding
@@ -58,6 +62,7 @@ class VoiceTweetFragment : DaggerFragment(),
             it.fragment = this
             it.viewModel = this.viewModel
             it.strings = layoutString
+            it.contentPadding = contentPadding
         }
         return binding.root
     }

@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/inner_frame_layout_padding"
+                android:scrollbars="none"
                 app:boxedEdges="left|right"
                 tools:visibility="visible">
 
@@ -54,12 +55,10 @@
 
                     <TextView
                         android:id="@+id/title"
-                        android:layout_width="wrap_content"
+                        style="@style/ContentTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:text="@{strings.title}"
-                        android:textAppearance="@style/TextAppearance.Wearable.Medium"
-                        android:textColor="@android:color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -69,9 +68,8 @@
                         android:id="@+id/replyUserText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:singleLine="true"
                         android:text="@{strings.replyUser}"
                         android:textAppearance="@style/TextAppearance.Wearable.Small"
                         android:textColor="@color/colorAccent"
