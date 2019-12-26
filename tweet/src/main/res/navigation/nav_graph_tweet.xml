@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_tweet_chooser" >
         <action
             android:id="@+id/showKeyboardTweet"
-            app:destination="@id/keyboardTweetFragment" />
+            app:destination="@id/keyboardTweetFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/showVoiceTweet"
-            app:destination="@id/voiceTweetFragment" />
+            app:destination="@id/voiceTweetFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/keyboardTweetFragment"
