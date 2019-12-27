@@ -11,11 +11,11 @@ import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
-import dagger.Lazy
+import javax.inject.Provider
 
 class MyListAdapter(
     context: Context,
-    private val lifecycleOwner: Lazy<LifecycleOwner>,
+    private val lifecycleOwner: Provider<LifecycleOwner>,
     private val itemClickListener: (UserList) -> Unit
 ) : RecyclerView.Adapter<MyListAdapter.ViewHolder>() {
 

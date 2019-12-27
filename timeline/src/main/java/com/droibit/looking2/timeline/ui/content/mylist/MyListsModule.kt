@@ -4,23 +4,25 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.di.key.ViewModelKey
 import dagger.Binds
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import javax.inject.Named
+import javax.inject.Provider
 
 @Module(includes = [MyListsModule.BindingModule::class])
 object MyListsModule {
 
+    @Named("fragment")
     @Provides
     fun provideLifecycleOwner(fragment: MyListsFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
+        return fragment
     }
 
     @Provides
     fun provideMyListAdapter(
         fragment: MyListsFragment,
-        lifecycleOwner: Lazy<LifecycleOwner>
+        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>
     ): MyListAdapter {
         return MyListAdapter(
             fragment.requireContext(),

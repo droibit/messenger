@@ -5,13 +5,15 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
+import javax.inject.Provider
 
 @Module
 object PhotoModule {
 
+    @Named("fragment")
     @Provides
     fun provideLifecycleOwner(fragment: PhotoFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
+        return fragment
     }
 
     @Named("photoUrls")
@@ -23,7 +25,7 @@ object PhotoModule {
     @Provides
     fun providePhotoListAdapter(
         fragment: PhotoFragment,
-        lifecycleOwner: Lazy<LifecycleOwner>,
+        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
         @Named("photoUrls") photoUrls: List<String>
     ): PhotoListAdapter {
         return PhotoListAdapter(fragment.requireContext(), lifecycleOwner, photoUrls)

@@ -13,19 +13,22 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import javax.inject.Named
+import javax.inject.Provider
 
 @Module(includes = [TimelineModule.BindingModule::class])
 object TimelineModule {
 
+    @Named("fragment")
     @Provides
-    fun provideViewLifecycleProvider(fragment: TimelineFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
+    fun provideFragmentLifecycleProvider(fragment: TimelineFragment): LifecycleOwner {
+        return fragment
     }
 
     @Provides
     fun provideTweetListAdapter(
         fragment: TimelineFragment,
-        lifecycleOwner: Lazy<LifecycleOwner>,
+        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
         tweetTextProcessor: TweetTextProcessor
     ): TweetListAdapter {
         return TweetListAdapter(

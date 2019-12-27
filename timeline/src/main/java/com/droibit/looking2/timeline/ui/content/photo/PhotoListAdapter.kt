@@ -12,11 +12,11 @@ import coil.request.Request
 import coil.size.Scale
 import com.droibit.looking2.R
 import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
-import dagger.Lazy
+import javax.inject.Provider
 
 class PhotoListAdapter(
     context: Context,
-    private val lifecycleOwner: Lazy<LifecycleOwner>,
+    private val lifecycleOwner: Provider<LifecycleOwner>,
     private val photoUrls: List<String>
 ) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>(), LifecycleObserver {
 
