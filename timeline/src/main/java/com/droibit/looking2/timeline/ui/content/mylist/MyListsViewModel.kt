@@ -1,50 +1,55 @@
 package com.droibit.looking2.timeline.ui.content.mylist
 
-import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.core.data.repository.userlist.UserListRepository
 import com.droibit.looking2.core.model.tweet.TwitterError
-import com.droibit.looking2.core.util.toEvent
-import com.droibit.looking2.timeline.R
-import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.FailureType
+import com.droibit.looking2.core.model.tweet.UserList
+import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.core.util.ext.toErrorEventLiveData
+import com.droibit.looking2.core.util.ext.toSuccessLiveData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.Failure as FailureResult
-import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.Success as SuccessResult
+
+private typealias UserLists = List<UserList>
 
 class MyListsViewModel(
     private val userListRepository: UserListRepository,
-    private val getMyListsResultSink: MutableLiveData<GetMyListsResult>
+    private val isLoadingSink: MutableLiveData<Boolean>,
+    private val getMyListsResultSink: MutableLiveData<Result<UserLists>>
 ) : ViewModel() {
 
-    @get:UiThread
-    val getMyListsResult: LiveData<GetMyListsResult> by lazy(NONE) {
+    private val getMyListsResult2: LiveData<Result<UserLists>> by lazy(NONE) {
         viewModelScope.launch {
             getMyListsResultSink.value = try {
+                isLoadingSink.value = true
                 val myLists = userListRepository.getMyLists()
-                SuccessResult(myLists)
+                Result.success(myLists)
             } catch (e: TwitterError) {
-                val failureType = when (e) {
-                    is TwitterError.Network -> FailureType.Network
-                    is TwitterError.Limited -> FailureType.Limited
-                    is TwitterError.UnExpected -> FailureType.UnExpected(
-                        messageResId = R.string.my_lists_error_obtain_lists
-                    )
-                    is TwitterError.Unauthorized -> TODO("No implemented.")
-                }
-                FailureResult(failureType.toEvent())
+                Result.failure(GetMyListsError(source = e))
+            } finally {
+                isLoadingSink.value = false
             }
         }
         getMyListsResultSink
     }
 
+    val isLoading: LiveData<Boolean> = isLoadingSink
+
+    val myLists: LiveData<UserLists> = getMyListsResult2.toSuccessLiveData()
+
+    val isNotEmptyMyLists: LiveData<Boolean> = myLists.map { it.isNotEmpty() }
+
+    val error: LiveData<Event<GetMyListsError>> = getMyListsResult2.toErrorEventLiveData()
+
     @Inject
     constructor(userListRepository: UserListRepository) : this(
         userListRepository,
-        MutableLiveData(GetMyListsResult.InProgress)
+        MutableLiveData(false),
+        MutableLiveData()
     )
 }

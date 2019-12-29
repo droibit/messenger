@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="showProgress"
-            type="Boolean" />
-
-        <variable
-            name="showContent"
-            type="Boolean" />
+            name="viewModel"
+            type="com.droibit.looking2.timeline.ui.content.mylist.MyListsViewModel" />
     </data>
 
     <FrameLayout
@@ -21,7 +17,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:goneUnless="@{showProgress}">
+            app:goneUnless="@{viewModel.isLoading}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
@@ -29,8 +25,8 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:visibleUnless="@{showContent}"
                 app:requestFocusOnVisible="@{true}"
+                app:visibleUnless="@{viewModel.isNotEmptyMyLists}"
                 tools:listitem="@layout/list_item_my_list"
                 tools:visibility="visible" />
 
@@ -38,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/my_lists_empty_content"
-                app:goneUnless="@{showContent}"
+                app:goneUnless="@{viewModel.isNotEmptyMyLists}"
                 tools:visibility="gone" />
 
         </FrameLayout>
@@ -47,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/progress_loading_content"
-            app:visibleUnless="@{showProgress}"
+            app:visibleUnless="@{viewModel.isLoading}"
             tools:visibility="gone" />
 
     </FrameLayout>

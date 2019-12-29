@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View" />
-
+        
         <variable
             name="fragment"
             type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment" />
 
         <variable
-            name="showProgress"
-            type="java.lang.Boolean" />
+            name="viewModel"
+            type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInViewModel" />
     </data>
 
     <androidx.wear.widget.BoxInsetLayout
@@ -54,7 +52,7 @@
                 android:textAppearance="@style/TextAppearance.WearDiag.Message"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-                app:goneUnless="@{showProgress}"
+                app:goneUnless="@{viewModel.isProcessing}"
                 app:layout_constraintBottom_toTopOf="@+id/signInButtonContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -73,7 +71,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                app:goneUnless="@{showProgress}"
+                app:goneUnless="@{viewModel.isProcessing}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -117,7 +115,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                app:visibleUnless="@{showProgress}"
+                app:visibleUnless="@{viewModel.isProcessing}"
                 tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

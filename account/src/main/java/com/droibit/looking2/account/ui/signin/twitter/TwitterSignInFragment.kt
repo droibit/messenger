@@ -28,7 +28,6 @@ import com.github.droibit.chopstick.resource.bindString
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import javax.inject.Inject
-import com.droibit.looking2.account.ui.signin.twitter.TwitterAuthenticationResult.FailureType as AuthenticationFailureType
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
@@ -63,6 +62,8 @@ class TwitterSignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.viewModel = signInViewModel
             it.fragment = this
         }
 
@@ -76,17 +77,8 @@ class TwitterSignInFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR -> {
-                signInViewModel.onPlayServicesErrorResolutionResult()
-            }
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         dialogViewModel.event.observeEvent(viewLifecycleOwner) { event ->
             when (event.id.value) {
@@ -97,6 +89,11 @@ class TwitterSignInFragment : Fragment() {
             }
         }
 
+        observeAuthenticateOnPhoneTiming()
+        observeAuthenticationResult()
+    }
+
+    private fun observeAuthenticateOnPhoneTiming() {
         signInViewModel.authenticateOnPhoneTiming.observeEvent(viewLifecycleOwner) {
             val intent = OpenOnPhoneIntent(
                 requireContext(),
@@ -104,45 +101,51 @@ class TwitterSignInFragment : Fragment() {
             )
             startActivity(intent)
         }
+    }
 
-        signInViewModel.authenticationResult.observe(viewLifecycleOwner) { result ->
-            Timber.d("authenticationResult: $result")
-            when (result) {
-                is TwitterAuthenticationResult.InProgress -> Unit
-                is TwitterAuthenticationResult.Success -> {
-                    result.value.consume()?.let {
-                        startActivity(HomeActivity.createIntent())
-                        requireActivity().finish()
-                    }
-                }
-                is TwitterAuthenticationResult.Failure -> {
-                    result.failureType.consume()?.let(::showSignInFailureResult)
-                }
-            }//.exhaustive
-            binding.showProgress = result is TwitterAuthenticationResult.InProgress
+    private fun observeAuthenticationResult() {
+        signInViewModel.completed.observe(viewLifecycleOwner) {
+            // TODO: back to account list.
+            it.consume()?.let {
+                startActivity(HomeActivity.createIntent())
+                requireActivity().finish()
+            }
+        }
+
+        signInViewModel.error.observe(viewLifecycleOwner) {
+            it.consume()?.let(::showSignInError)
         }
     }
 
-    private fun showSignInFailureResult(failureType: AuthenticationFailureType) {
-        when (failureType) {
-            is AuthenticationFailureType.Network -> showNetworkErrorToast()
-            is AuthenticationFailureType.PlayServices -> {
+    private fun showSignInError(error: TwitterAuthenticationError) {
+        when (error) {
+            is TwitterAuthenticationError.Network -> showNetworkErrorToast()
+            is TwitterAuthenticationError.PlayServices -> {
                 playServicesChecker.showErrorResolutionDialog(
                     requireActivity(),
-                    errorCode = failureType.errorStatusCode,
+                    errorCode = error.statusCode,
                     requestCode = REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR
                 ) {
                     signInViewModel.onPlayServicesErrorResolutionResult(canceled = true)
                 }
             }
-            is AuthenticationFailureType.UnExpected -> {
+            is TwitterAuthenticationError.UnExpected -> {
                 val intent = FailureIntent(
                     requireContext(),
-                    messageResId = failureType.messageResId
+                    messageResId = error.messageResId
                 )
                 startActivity(intent)
             }
         }//.exhaustive
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR -> {
+                signInViewModel.onPlayServicesErrorResolutionResult()
+            }
+        }
     }
 
     @UiThread

@@ -16,8 +16,8 @@ fun bindVisibleUnless(view: View, visible: Boolean, requestFocus: Boolean = fals
     }
 }
 
-@BindingAdapter("goneUnless")
-fun bindGoneUnless(view: View, gone: Boolean) {
+@BindingAdapter(value = ["goneUnless", "requestFocusOnVisible"], requireAll = false)
+fun bindGoneUnless(view: View, gone: Boolean, requestFocus: Boolean = false) {
     view.isGone = gone
 }
 

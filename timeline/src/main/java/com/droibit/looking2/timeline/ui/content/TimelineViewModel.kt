@@ -1,47 +1,54 @@
 package com.droibit.looking2.timeline.ui.content
 
-import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
-import com.droibit.looking2.core.util.toEvent
-import com.droibit.looking2.timeline.R
-import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType
+import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.core.util.ext.toErrorEventLiveData
+import com.droibit.looking2.core.util.ext.toSuccessLiveData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-import com.droibit.looking2.timeline.ui.content.GetTimelineResult.Failure as FailureResult
-import com.droibit.looking2.timeline.ui.content.GetTimelineResult.Success as SuccessResult
+
+private typealias Timeline = List<Tweet>
 
 class TimelineViewModel(
     private val getTimelineCall: TimelineSource.GetCall,
-    private val getTimelineResultSink: MutableLiveData<GetTimelineResult>
+    private val isLoadingSink: MutableLiveData<Boolean>,
+    private val getTimelineResultSink: MutableLiveData<Result<Timeline>>
 ) : ViewModel() {
 
-    @get:UiThread
-    val getTimelineResult: LiveData<GetTimelineResult> by lazy(NONE) {
+    private val getTimelineResult: LiveData<Result<Timeline>> by lazy(NONE) {
         viewModelScope.launch {
             getTimelineResultSink.value = try {
+                isLoadingSink.value = true
                 val timeline = getTimelineCall(sinceId = null)
-                SuccessResult(timeline)
+                Result.success(timeline)
             } catch (e: TwitterError) {
-                val failureType = when (e) {
-                    is TwitterError.Network -> FailureType.Network
-                    is TwitterError.UnExpected -> FailureType.UnExpected(messageResId = R.string.timeline_error_obtain_timeline)
-                    is TwitterError.Limited -> FailureType.Limited
-                    is TwitterError.Unauthorized -> TODO("Not implemented.")
-                }
-                FailureResult(failureType.toEvent())
+                Result.failure(GetTimelineError(source = e))
+            } finally {
+                isLoadingSink.value = false
             }
         }
         getTimelineResultSink
     }
 
+    val isLoading: LiveData<Boolean> = isLoadingSink
+
+    val timeline: LiveData<Timeline> = getTimelineResult.toSuccessLiveData()
+
+    val isNotEmptyTimeline: LiveData<Boolean> = timeline.map { it.isNotEmpty() }
+
+    val error: LiveData<Event<GetTimelineError>> = getTimelineResult.toErrorEventLiveData()
+
     @Inject
     constructor(getTimelineCall: TimelineSource.GetCall) : this(
         getTimelineCall,
-        MutableLiveData(GetTimelineResult.InProgress)
+        MutableLiveData(false),
+        MutableLiveData()
     )
 }

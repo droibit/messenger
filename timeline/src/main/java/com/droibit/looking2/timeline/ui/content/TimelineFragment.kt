@@ -28,7 +28,6 @@ import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
-import com.droibit.looking2.timeline.ui.content.GetTimelineResult.FailureType as GetTimelineFailureType
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
@@ -62,7 +61,10 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTimelineBinding.inflate(inflater, container, false)
+        binding = FragmentTimelineBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.viewModel = timelineViewModel
+        }
 
         val backStackEntryCount = parentFragmentManager.backStackEntryCount
         return if (backStackEntryCount == 0) binding.root else {
@@ -88,10 +90,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             // use RecyclerView to change the scroll position to top.
             this.tweetActionList = it.getChildAt(0) as RecyclerView
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         observeReply()
         observePhotoList()
@@ -102,27 +100,24 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun observeGetTimelineResult() {
-        timelineViewModel.getTimelineResult.observe(viewLifecycleOwner) {
-            when (it) {
-                is GetTimelineResult.Success -> showTimeline(it.timeline)
-                is GetTimelineResult.Failure -> {
-                    it.type.consume()?.let(::showGetTimelineFailureResult)
-                }
-            }
-            binding.showProgress = it is GetTimelineResult.InProgress
+        timelineViewModel.timeline.observe(viewLifecycleOwner) {
+            showTimeline(it)
+        }
+
+        timelineViewModel.error.observe(viewLifecycleOwner) {
+            it.consume()?.let(::showGetTimelineError)
         }
     }
 
     private fun showTimeline(timeline: List<Tweet>) {
         tweetListAdapter.setTweets(timeline)
-        binding.showContent = timeline.isNotEmpty()
     }
 
-    private fun showGetTimelineFailureResult(failureType: GetTimelineFailureType) {
-        when (failureType) {
-            is GetTimelineFailureType.Network -> showNetworkErrorToast()
-            is GetTimelineFailureType.UnExpected -> showShortToast(failureType.messageResId)
-            is GetTimelineFailureType.Limited -> showRateLimitingErrorToast()
+    private fun showGetTimelineError(error: GetTimelineError) {
+        when (error) {
+            is GetTimelineError.Network -> showNetworkErrorToast()
+            is GetTimelineError.UnExpected -> showShortToast(error.messageResId)
+            is GetTimelineError.Limited -> showRateLimitingErrorToast()
         }.exhaustive
         requireActivity().finish()
     }

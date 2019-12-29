@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
@@ -20,7 +19,6 @@ import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
-import com.droibit.looking2.timeline.ui.content.mylist.GetMyListsResult.FailureType as GetMyListsFailureType
 
 class MyListsFragment : DaggerFragment() {
 
@@ -39,7 +37,10 @@ class MyListsFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMyListsBinding.inflate(inflater, container, false)
+        binding = FragmentMyListsBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.viewModel = viewModel
+        }
         return binding.root
     }
 
@@ -50,38 +51,31 @@ class MyListsFragment : DaggerFragment() {
             this.addItemDecoration(ListDividerItemDecoration(requireContext()))
             this.adapter = myListAdapter
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         observeGetMyListsResult()
     }
 
     private fun observeGetMyListsResult() {
-        viewModel.getMyListsResult.observe(viewLifecycleOwner) {
-            when (it) {
-                is GetMyListsResult.Success -> showMyLists(it.myLists)
-                is GetMyListsResult.Failure -> showGetMyListsFailureResult(it.type)
-            }
-            binding.showProgress = it is GetMyListsResult.InProgress
+        viewModel.myLists.observe(viewLifecycleOwner) {
+            showMyLists(it)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            it.consume()?.let(::showGetMyListsError)
         }
     }
 
     private fun showMyLists(myLists: List<UserList>) {
         myListAdapter.setMyLists(myLists)
-        binding.showContent = myLists.isNotEmpty()
     }
 
-    private fun showGetMyListsFailureResult(failureType: Event<GetMyListsFailureType>) {
-        failureType.consume()?.let {
-            when (it) {
-                is GetMyListsFailureType.Network -> showNetworkErrorToast()
-                is GetMyListsFailureType.UnExpected -> showShortToast(it.messageResId)
-                is GetMyListsFailureType.Limited -> showRateLimitingErrorToast()
-            }
-            requireActivity().finish()
+    private fun showGetMyListsError(error: GetMyListsError) {
+        when (error) {
+            is GetMyListsError.Network -> showNetworkErrorToast()
+            is GetMyListsError.UnExpected -> showShortToast(error.messageResId)
+            is GetMyListsError.Limited -> showRateLimitingErrorToast()
         }
+        requireActivity().finish()
     }
 
     fun onUserListClick(myList: UserList) {
