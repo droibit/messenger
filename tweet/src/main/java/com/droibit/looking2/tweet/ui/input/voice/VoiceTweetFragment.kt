@@ -69,12 +69,12 @@ class VoiceTweetFragment : DaggerFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.swipeDismissLayout.addCallback(swipeDismissCallback)
 
         binding.circularProgress.apply {
             onTimerFinishedListener = this@VoiceTweetFragment
             totalTime = waitDurationMillis
         }
+        binding.swipeDismissLayout.addCallback(swipeDismissCallback)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,12 +101,6 @@ class VoiceTweetFragment : DaggerFragment(),
             startActivity(intent)
             requireActivity().finish()
         }
-    }
-
-    override fun onDestroyView() {
-        binding.swipeDismissLayout.removeCallback(swipeDismissCallback)
-        binding.circularProgress.onTimerFinishedListener = null
-        super.onDestroyView()
     }
 
     private fun navigateRecognizeSpeech() {

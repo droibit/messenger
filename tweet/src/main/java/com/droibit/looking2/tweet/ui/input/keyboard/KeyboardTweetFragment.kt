@@ -66,9 +66,4 @@ class KeyboardTweetFragment : DaggerFragment() {
             requireActivity().finish()
         }
     }
-
-    override fun onDestroyView() {
-        binding.swipeDismissLayout.removeCallback(swipeDismissCallback)
-        super.onDestroyView()
-    }
 }

@@ -29,15 +29,10 @@ class TweetChooserFragment : DaggerFragment() {
     ): View? {
         binding = FragmentTweetChooserBinding.inflate(inflater, container, false).also {
             it.contentPadding = contentPadding
+            it.fragment = this
+            it.screenTitle = title
         }
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.fragment = this
-        binding.screenTitle = title
     }
 
     @Suppress("UNUSED_PARAMETER")

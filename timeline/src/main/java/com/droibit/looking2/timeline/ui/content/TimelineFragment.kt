@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
+import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
@@ -68,7 +69,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             Timber.d("Wrapped SwipeDismissFrameLayout(backStackEntryCount=$backStackEntryCount)")
             SwipeDismissFrameLayout(requireContext()).apply {
                 addView(binding.root)
-                addCallback(swipeDismissCallback)
+                addCallback(viewLifecycleOwner, swipeDismissCallback)
             }
         }
     }
@@ -182,11 +183,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         )
         binding.tweetActionDrawer.controller.closeDrawer()
         return true
-    }
-
-    override fun onDestroyView() {
-        (view as? SwipeDismissFrameLayout)?.removeCallback(swipeDismissCallback)
-        super.onDestroyView()
     }
 
     fun onTweetClick(tweet: Tweet) {

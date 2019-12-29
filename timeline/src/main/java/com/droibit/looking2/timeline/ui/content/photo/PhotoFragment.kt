@@ -35,15 +35,10 @@ class PhotoFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.swipeDismissLayout.addCallback(swipeDismissCallback)
         binding.viewPager.apply {
             this.adapter = photoListAdapter
             this.orientation = ViewPager2.ORIENTATION_VERTICAL
         }
-    }
-
-    override fun onDestroyView() {
-        binding.swipeDismissLayout.removeCallback(swipeDismissCallback)
-        super.onDestroyView()
+        binding.swipeDismissLayout.addCallback(swipeDismissCallback)
     }
 }

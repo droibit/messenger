@@ -19,6 +19,7 @@ import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.core.ui.dialog.DialogViewModel
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
+import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
@@ -70,7 +71,7 @@ class TwitterSignInFragment : Fragment() {
             Timber.d("Wrapped SwipeDismissFrameLayout(backStackEntryCount=$backStackEntryCount)")
             SwipeDismissFrameLayout(context).apply {
                 addView(binding.root)
-                addCallback(swipeDismissCallback)
+                addCallback(viewLifecycleOwner, swipeDismissCallback)
             }
         }
     }
@@ -142,11 +143,6 @@ class TwitterSignInFragment : Fragment() {
                 startActivity(intent)
             }
         }//.exhaustive
-    }
-
-    override fun onDestroyView() {
-        (view as? SwipeDismissFrameLayout)?.removeCallback(swipeDismissCallback)
-        super.onDestroyView()
     }
 
     @UiThread
