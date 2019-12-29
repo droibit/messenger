@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
-import com.droibit.looking2.core.util.toEvent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,6 +31,6 @@ class TweetViewModel(
         Timber.d("text: $text")
 
         tweetCall.enqueue(text)
-        tweetCompletedSink.value = Unit.toEvent()
+        tweetCompletedSink.value = Event(Unit)
     }
 }

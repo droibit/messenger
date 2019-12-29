@@ -66,5 +66,3 @@ open class Event<out T>(private val content: T) {
         return "Event(content=$content, consumed=$consumed)"
     }
 }
-
-fun<T> T.toEvent(): Event<T>  = Event(this)

@@ -12,7 +12,6 @@ import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessEventLiveData
-import com.droibit.looking2.core.util.toEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -78,7 +77,7 @@ class TwitterSignInViewModel(
                 .collect {
                     when (it) {
                         is AuthenticationResult.WillAuthenticateOnPhone -> {
-                            authenticateOnPhoneTimingSink.value = Unit.toEvent()
+                            authenticateOnPhoneTimingSink.value = Event(Unit)
                         }
                         is AuthenticationResult.Success -> {
                             authenticationResultSink.value = Result.success(Unit)

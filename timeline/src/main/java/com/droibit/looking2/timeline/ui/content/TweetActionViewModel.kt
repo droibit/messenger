@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
-import com.droibit.looking2.core.util.toEvent
 import timber.log.Timber
 import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
@@ -59,7 +58,7 @@ class TweetActionViewModel(
                 add(TweetActionItem.PHOTO)
             }
         }
-        tweetActionItemListSink.value = TweetActionItemList(target = tweet, items = items).toEvent()
+        tweetActionItemListSink.value = Event(TweetActionItemList(target = tweet, items = items))
     }
 
     @UiThread
@@ -68,19 +67,19 @@ class TweetActionViewModel(
         val targetTweet = tweetActionItemListSink.requireValue().peek().target
         when (actionItem) {
             TweetActionItem.REPLY -> {
-                replySink.value = targetTweet.toEvent()
+                replySink.value = Event(targetTweet)
             }
             TweetActionItem.RETWEET -> {
                 tweetActionCall.enqueueRetweetWork(targetTweet.id)
-                retweetCompletedSink.value = Unit.toEvent()
+                retweetCompletedSink.value = Event(Unit)
             }
             TweetActionItem.LIKES -> {
                 tweetActionCall.enqueueLikesWork(targetTweet.id)
-                likesCompletedSink.value = Unit.toEvent()
+                likesCompletedSink.value = Event(Unit)
             }
             TweetActionItem.PHOTO -> {
                 val urls = targetTweet.photoUrls.map { it.expandedUrl }
-                photoListSink.value = urls.toEvent()
+                photoListSink.value = Event(urls)
             }
             TweetActionItem.ADD_TO_POCKET -> TODO()
         }
