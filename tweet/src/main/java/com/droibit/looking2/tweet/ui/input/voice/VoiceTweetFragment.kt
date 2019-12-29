@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.CircularProgressLayout
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
-import com.droibit.looking2.core.util.ext.observeIfNotConsumed
+import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
@@ -96,7 +96,7 @@ class VoiceTweetFragment : DaggerFragment(),
     }
 
     private fun observeTweetCompleted() {
-        viewModel.tweetCompleted.observeIfNotConsumed(viewLifecycleOwner) {
+        viewModel.tweetCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
             requireActivity().finish()

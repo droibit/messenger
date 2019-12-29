@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.droibit.looking2.core.util.Event
 
-inline fun <T> LiveData<Event<T>>.observeIfNotConsumed(
+inline fun <T> LiveData<Event<T>>.observeEvent(
     owner: LifecycleOwner,
     crossinline onEventUnhandledContent: (T) -> Unit
 ) {
@@ -13,14 +13,5 @@ inline fun <T> LiveData<Event<T>>.observeIfNotConsumed(
         it?.consume()?.let { value ->
             onEventUnhandledContent(value)
         }
-    })
-}
-
-inline fun <T> LiveData<T>.observeNonNull(
-    owner: LifecycleOwner,
-    crossinline observer: (T) -> Unit
-) {
-    this.observe(owner, Observer {
-        if (it != null) observer(it)
     })
 }

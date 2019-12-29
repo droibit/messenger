@@ -17,7 +17,7 @@ import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.exhaustive
-import com.droibit.looking2.core.util.ext.observeIfNotConsumed
+import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
@@ -127,7 +127,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun observeTweetActionItemList() {
-        tweetActionViewModel.tweetActionItemList.observeIfNotConsumed(viewLifecycleOwner) { (_, actionItems) ->
+        tweetActionViewModel.tweetActionItemList.observeEvent(viewLifecycleOwner) { (_, actionItems) ->
             val actionDrawerMenu = binding.tweetActionDrawer.menu
             actionDrawerMenu.clear()
             actionItems
@@ -149,28 +149,28 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun observePhotoList() {
-        tweetActionViewModel.photos.observeIfNotConsumed(viewLifecycleOwner) {
-            val directions = TimelineFragmentDirections.showPhotos(it.toTypedArray())
+        tweetActionViewModel.photos.observeEvent(viewLifecycleOwner) { urls ->
+            val directions = TimelineFragmentDirections.showPhotos(urls.toTypedArray())
             findNavController().navigate(directions)
         }
     }
 
     private fun observeReply() {
-        tweetActionViewModel.reply.observeIfNotConsumed(viewLifecycleOwner) {
+        tweetActionViewModel.reply.observeEvent(viewLifecycleOwner) {
             val intent = TweetActivity.createIntent(ReplyTweet(it.id, it.user))
             startActivity(intent)
         }
     }
 
     private fun observeRetweetCompleted() {
-        tweetActionViewModel.retweetCompleted.observeIfNotConsumed(viewLifecycleOwner) {
+        tweetActionViewModel.retweetCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
         }
     }
 
     private fun observeLikesCompleted() {
-        tweetActionViewModel.likesCompleted.observeIfNotConsumed(viewLifecycleOwner) {
+        tweetActionViewModel.likesCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
         }

@@ -19,7 +19,7 @@ import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.core.ui.dialog.DialogViewModel
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
-import com.droibit.looking2.core.util.ext.observeIfNotConsumed
+import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
@@ -87,7 +87,7 @@ class TwitterSignInFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        dialogViewModel.event.observeIfNotConsumed(viewLifecycleOwner) { event ->
+        dialogViewModel.event.observeEvent(viewLifecycleOwner) { event ->
             when (event.id.value) {
                 R.id.signInConfirmationDialogFragment -> {
                     Timber.d("isok=${event.isOk}")
@@ -96,7 +96,7 @@ class TwitterSignInFragment : Fragment() {
             }
         }
 
-        signInViewModel.authenticateOnPhoneTiming.observeIfNotConsumed(viewLifecycleOwner) {
+        signInViewModel.authenticateOnPhoneTiming.observeEvent(viewLifecycleOwner) {
             val intent = OpenOnPhoneIntent(
                 requireContext(),
                 messageResId = R.string.account_sign_in_message_open_on_phone

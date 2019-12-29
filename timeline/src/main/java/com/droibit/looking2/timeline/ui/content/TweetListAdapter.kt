@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content
 
-import android.content.Context
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,15 +15,12 @@ import com.droibit.looking2.timeline.databinding.ListItemTweetBinding
 import javax.inject.Provider
 
 class TweetListAdapter(
-    context: Context,
+    private val inflater: LayoutInflater,
+    private val itemPadding: ShapeAwareContentPadding,
     private val lifecycleOwner: Provider<LifecycleOwner>,
     private val tweetTextProcessor: TweetTextProcessor,
     private val itemClickListener: (Tweet) -> Unit
 ) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
-
-    private val inflater = LayoutInflater.from(context)
-
-    private val itemPadding = ShapeAwareContentPadding(context)
 
     private val tweets = mutableListOf<Tweet>()
 

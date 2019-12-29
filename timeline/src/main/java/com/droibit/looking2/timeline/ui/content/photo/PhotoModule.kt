@@ -1,7 +1,7 @@
 package com.droibit.looking2.timeline.ui.content.photo
 
+import android.view.LayoutInflater
 import androidx.lifecycle.LifecycleOwner
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -28,6 +28,10 @@ object PhotoModule {
         @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
         @Named("photoUrls") photoUrls: List<String>
     ): PhotoListAdapter {
-        return PhotoListAdapter(fragment.requireContext(), lifecycleOwner, photoUrls)
+        return PhotoListAdapter(
+            LayoutInflater.from(fragment.requireContext()),
+            lifecycleOwner,
+            photoUrls
+        )
     }
 }

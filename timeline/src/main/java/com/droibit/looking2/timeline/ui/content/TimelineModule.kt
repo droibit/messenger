@@ -1,5 +1,6 @@
 package com.droibit.looking2.timeline.ui.content
 
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.lifecycle.LifecycleOwner
@@ -7,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ActionMenu
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
 import dagger.Binds
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
@@ -28,11 +29,13 @@ object TimelineModule {
     @Provides
     fun provideTweetListAdapter(
         fragment: TimelineFragment,
+        contentPadding: ShapeAwareContentPadding,
         @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
         tweetTextProcessor: TweetTextProcessor
     ): TweetListAdapter {
         return TweetListAdapter(
-            fragment.requireContext(),
+            LayoutInflater.from(fragment.requireContext()),
+            contentPadding,
             lifecycleOwner,
             tweetTextProcessor,
             fragment::onTweetClick

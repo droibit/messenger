@@ -1,8 +1,10 @@
 package com.droibit.looking2.timeline.ui.content.mylist
 
+import android.view.LayoutInflater
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.di.key.ViewModelKey
+import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -22,10 +24,12 @@ object MyListsModule {
     @Provides
     fun provideMyListAdapter(
         fragment: MyListsFragment,
+        contentPadding: ShapeAwareContentPadding,
         @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>
     ): MyListAdapter {
         return MyListAdapter(
-            fragment.requireContext(),
+            LayoutInflater.from(fragment.requireContext()),
+            contentPadding,
             lifecycleOwner,
             itemClickListener = fragment::onUserListClick
         )

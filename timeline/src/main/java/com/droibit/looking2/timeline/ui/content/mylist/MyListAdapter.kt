@@ -14,14 +14,11 @@ import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
 import javax.inject.Provider
 
 class MyListAdapter(
-    context: Context,
+    private val inflater: LayoutInflater,
+    private val itemPadding: ShapeAwareContentPadding,
     private val lifecycleOwner: Provider<LifecycleOwner>,
     private val itemClickListener: (UserList) -> Unit
 ) : RecyclerView.Adapter<MyListAdapter.ViewHolder>() {
-
-    private val inflater = LayoutInflater.from(context)
-
-    private val itemPadding = ShapeAwareContentPadding(context)
 
     private val myLists = mutableListOf<UserList>()
 

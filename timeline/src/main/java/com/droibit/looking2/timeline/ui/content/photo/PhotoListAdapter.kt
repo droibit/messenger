@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content.photo
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleObserver
@@ -15,12 +14,10 @@ import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
 import javax.inject.Provider
 
 class PhotoListAdapter(
-    context: Context,
+    private val inflater: LayoutInflater,
     private val lifecycleOwner: Provider<LifecycleOwner>,
     private val photoUrls: List<String>
 ) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>(), LifecycleObserver {
-
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount(): Int = photoUrls.size
 
