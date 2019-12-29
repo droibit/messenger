@@ -15,3 +15,8 @@ inline fun <T> LiveData<Event<T>>.observeEvent(
         }
     })
 }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T : Any> LiveData<T>.requireValue(): T {
+    return requireNotNull(value)
+}
