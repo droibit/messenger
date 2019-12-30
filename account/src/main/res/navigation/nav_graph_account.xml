@@ -5,15 +5,22 @@
     android:id="@+id/navigationAccount"
     tools:ignore="UnusedNavigation">
 
-    <fragment
-        android:id="@+id/twitterSignInFragment"
-        android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment"
-        tools:layout="@layout/fragment_twitter_signin">
-        <action
-            android:id="@+id/toConfirmTwitterSignIn"
-            app:destination="@id/twitterSignInConfirmationDialogFragment" />
-    </fragment>
-    <dialog
-        android:id="@+id/twitterSignInConfirmationDialogFragment"
-        android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInConfirmationDialogFragment" />
+    <navigation
+        android:id="@+id/navigationTwitter"
+        app:startDestination="@id/twitterSignInFragment">
+
+        <fragment
+            android:id="@+id/twitterSignInFragment"
+            android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment"
+            tools:layout="@layout/fragment_twitter_signin">
+            <action
+                android:id="@+id/toConfirmTwitterSignIn"
+                app:destination="@id/twitterSignInConfirmationDialogFragment" />
+        </fragment>
+        <dialog
+            android:id="@+id/twitterSignInConfirmationDialogFragment"
+            android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInConfirmationDialogFragment" />
+
+    </navigation>
+
 </navigation>

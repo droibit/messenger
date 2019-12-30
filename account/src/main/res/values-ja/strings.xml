@@ -3,8 +3,8 @@
     <string name="account_sign_in_label_twitter">Twitterでログイン</string>
     <string name="account_sign_in_title">ログイン</string>
     <string name="account_sign_in_description_twitter">ウォッチでTwitterをはじめましょう</string>
-    <string name="account_sign_in_message_phone_preparation">Twitterアカウントでログインするためにウォッチとペアリングしたデバイスが必要です。</string>
-    <string name="account_sign_in_error_message_unexpected">サインインできませんでした。</string>
+    <string name="account_sign_in_message_phone_preparation">Twitterアカウントでログインするため、ウォッチとペアリングしたデバイスを準備してください。</string>
+    <string name="account_sign_in_error_message_unexpected">ログインできませんでした。</string>
     <string name="account_sign_in_message_open_on_phone">スマートフォンで認証</string>
-    <string name="account_sign_in_error_message_play_services">LookingではサインインするためにGoogle Play servicesが必要です。</string>
+    <string name="account_sign_in_error_message_play_services">ログインするためにはGoogle Play servicesが必要です。</string>
 </resources>

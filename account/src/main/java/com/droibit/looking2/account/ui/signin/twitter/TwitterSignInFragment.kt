@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
-import com.droibit.looking2.core.ui.dialog.DialogViewModel
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.addCallback
@@ -45,9 +43,9 @@ class TwitterSignInFragment : Fragment() {
 
     private lateinit var binding: FragmentTwitterSigninBinding
 
-    private val signInViewModel: TwitterSignInViewModel by viewModels { viewModelFactory }
-
-    private val dialogViewModel: DialogViewModel by activityViewModels { viewModelFactory }
+    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitter) {
+        viewModelFactory
+    }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -77,15 +75,6 @@ class TwitterSignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        dialogViewModel.event.observeEvent(viewLifecycleOwner) { event ->
-            when (event.id.value) {
-                R.id.twitterSignInConfirmationDialogFragment -> {
-                    Timber.d("isok=${event.isOk}")
-                    if (event.isOk) signInViewModel.authenticate()
-                }
-            }
-        }
 
         observeAuthenticateOnPhoneTiming()
         observeAuthenticationResult()
