@@ -28,9 +28,6 @@ class TwitterSignInViewModel(
 
     private var signInJob: Job? = null
 
-    val authenticationResult: LiveData<TwitterAuthenticationResult>
-        get() = TODO()
-
     val authenticateOnPhoneTiming: LiveData<Event<Unit>>
         get() = authenticateOnPhoneTimingSink
 
