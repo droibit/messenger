@@ -1,13 +1,11 @@
 package com.droibit.looking2.account.ui.signin.twitter
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -23,14 +21,14 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
-import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
 
-class TwitterSignInFragment : Fragment() {
+class TwitterSignInFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -45,11 +43,6 @@ class TwitterSignInFragment : Fragment() {
 
     private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitter) {
         viewModelFactory
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(

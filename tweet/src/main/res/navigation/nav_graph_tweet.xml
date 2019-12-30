@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/navigationTweet"
+    android:id="@+id/navGraphTweet"
     app:startDestination="@id/tweetChooserFragment">
 
     <fragment

@@ -16,7 +16,7 @@ class DialogViewModel(private val eventSink: MutableLiveData<Event<DialogAction>
     val event: LiveData<Event<DialogAction>> = eventSink
 
     @Inject
-    constructor(): this(eventSink = MutableLiveData())
+    constructor() : this(eventSink = MutableLiveData())
 
     @UiThread
     fun doAction(

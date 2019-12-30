@@ -34,17 +34,16 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
         super.onCreate(savedInstanceState)
         Timber.d("Start dest: $destinationSource")
 
-        if (savedInstanceState == null) {
-            val navController = findNavController(R.id.timelineNavHostFragment)
-            val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_timeline)
-                .apply {
-                    this.startDestination = if (destinationSource == DestinationSource.LISTS)
-                        R.id.myListsFragment
-                    else
-                        R.id.timelineFragment
-                }
-            navController.setGraph(navGraph, destinationSource.toArgs())
-        }
+        val navController = findNavController(R.id.timelineNavHostFragment)
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_timeline)
+            .apply {
+                this.startDestination = if (destinationSource == DestinationSource.LISTS)
+                    R.id.myListsFragment
+                else
+                    R.id.timelineFragment
+            }
+        navController.setGraph(navGraph, destinationSource.toArgs())
+
     }
 
     private enum class DestinationSource(val id: Int) {
