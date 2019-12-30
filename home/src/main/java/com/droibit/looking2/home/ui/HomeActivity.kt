@@ -10,15 +10,17 @@ import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.ActivityHomeBinding
+import com.droibit.looking2.home.ui.HomeNavigation.ACCOUNTS
 import com.droibit.looking2.home.ui.HomeNavigation.LISTS
 import com.droibit.looking2.home.ui.HomeNavigation.MENTIONS
 import com.droibit.looking2.home.ui.HomeNavigation.SETTINGS
 import com.droibit.looking2.home.ui.HomeNavigation.TIMELINE
 import com.droibit.looking2.home.ui.HomeNavigation.TWEET
-import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
-import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
-import com.droibit.looking2.ui.Activities.Settings as SettingsActivity
 import javax.inject.Inject
+import com.droibit.looking2.ui.Activities.Account as AccountActivity
+import com.droibit.looking2.ui.Activities.Settings as SettingsActivity
+import com.droibit.looking2.ui.Activities.Timeline as TimelineActivity
+import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
 
 class HomeActivity : FragmentActivity() {
 
@@ -46,13 +48,14 @@ class HomeActivity : FragmentActivity() {
     }
 
     fun onActionItemClick(item: ActionItem) {
-        when (HomeNavigation.of(item.id)) {
-            TWEET -> startActivity(TweetActivity.createIntent())
-            TIMELINE -> startActivity(TimelineActivity.createHomeIntent())
-            MENTIONS -> startActivity(TimelineActivity.createMentionsIntent())
-            LISTS -> startActivity(TimelineActivity.createListsIntent())
-            SETTINGS -> startActivity(SettingsActivity.createIntent())
-            else -> Unit
+        val intent = when (HomeNavigation(item.id)) {
+            TWEET -> TweetActivity.createIntent()
+            TIMELINE -> TimelineActivity.createHomeIntent()
+            MENTIONS -> TimelineActivity.createMentionsIntent()
+            LISTS -> TimelineActivity.createListsIntent()
+            ACCOUNTS -> AccountActivity.createIntent(needTwitterSignIn = false)
+            SETTINGS -> SettingsActivity.createIntent()
         }
+        startActivity(intent)
     }
 }
