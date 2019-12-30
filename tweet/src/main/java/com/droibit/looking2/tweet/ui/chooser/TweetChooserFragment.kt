@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.tweet.databinding.FragmentTweetChooserBinding
+import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toKeyboardTweet
+import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toVoiceTweet
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import javax.inject.Named
@@ -37,13 +39,11 @@ class TweetChooserFragment : DaggerFragment() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onKeyboardTweetButtonClick(v: View) {
-        val direction = TweetChooserFragmentDirections.showKeyboardTweet()
-        findNavController().navigate(direction)
+        findNavController().navigate(toKeyboardTweet())
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onVoiceTweetButtonClick(v: View) {
-        val direction = TweetChooserFragmentDirections.showVoiceTweet()
-        findNavController().navigate(direction)
+        findNavController().navigate(toVoiceTweet())
     }
 }

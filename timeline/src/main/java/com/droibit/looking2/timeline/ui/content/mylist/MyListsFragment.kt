@@ -14,7 +14,7 @@ import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
-import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.showMyListTimeline
+import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
@@ -80,8 +80,10 @@ class MyListsFragment : DaggerFragment() {
 
     fun onUserListClick(myList: UserList) {
         Timber.d("onUserListClick(${myList.name})")
-
-        val directions = showMyListTimeline(TimelineSource.MyLists(myList.id))
-        findNavController().navigate(directions)
+        findNavController().navigate(
+            toMyListTimeline(
+                TimelineSource.MyLists(myList.id)
+            )
+        )
     }
 }

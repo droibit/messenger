@@ -2,19 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/timeline_nav_graph"
+    android:id="@+id/navigationTimeline"
     tools:ignore="InvalidNavigation,UnusedNavigation">
 
     <fragment
         android:id="@+id/timelineFragment"
         android:name="com.droibit.looking2.timeline.ui.content.TimelineFragment"
-        android:label="Timeline"
         tools:layout="@layout/fragment_timeline">
         <argument
             android:name="source"
             app:argType="com.droibit.looking2.timeline.ui.content.TimelineSource" />
         <action
-            android:id="@+id/showPhotos"
+            android:id="@+id/toPhotos"
             app:destination="@id/photoFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
@@ -24,7 +23,6 @@
     <fragment
         android:id="@+id/photoFragment"
         android:name="com.droibit.looking2.timeline.ui.content.photo.PhotoFragment"
-        android:label="Photo"
         tools:layout="@layout/fragment_photo">
         <argument
             android:name="urls"
@@ -33,10 +31,9 @@
     <fragment
         android:id="@+id/myListsFragment"
         android:name="com.droibit.looking2.timeline.ui.content.mylist.MyListsFragment"
-        android:label="My List"
         tools:layout="@layout/fragment_my_lists">
         <action
-            android:id="@+id/showMyListTimeline"
+            android:id="@+id/toMyListTimeline"
             app:destination="@id/timelineFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"

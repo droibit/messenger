@@ -2,25 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_account"
+    android:id="@+id/navigationAccount"
     tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/twitterSignInFragment"
         android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment"
-        android:label="Twitter sign in"
-        tools:layout="@layout/fragment_twitter_signin"
-        >
+        tools:layout="@layout/fragment_twitter_signin">
         <action
-            android:id="@+id/confirmTwitterSignIn"
-            app:destination="@id/signInConfirmationDialogFragment" />
+            android:id="@+id/toConfirmTwitterSignIn"
+            app:destination="@id/twitterSignInConfirmationDialogFragment" />
     </fragment>
     <dialog
-        android:id="@+id/signInConfirmationDialogFragment"
-        android:name="com.droibit.looking2.account.ui.signin.SignInConfirmationDialogFragment"
-        android:label="Dialog for confirm twitter sign in ">
-        <argument
-            android:name="message"
-            app:argType="string" />
-    </dialog>
+        android:id="@+id/twitterSignInConfirmationDialogFragment"
+        android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInConfirmationDialogFragment" />
 </navigation>

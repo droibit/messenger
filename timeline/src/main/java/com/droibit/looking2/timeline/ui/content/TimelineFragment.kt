@@ -23,6 +23,7 @@ import com.droibit.looking2.core.util.ext.showNetworkErrorToast
 import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
 import com.droibit.looking2.core.util.ext.showShortToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
+import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import dagger.android.support.DaggerFragment
@@ -146,8 +147,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     private fun observePhotoList() {
         tweetActionViewModel.photos.observeEvent(viewLifecycleOwner) { urls ->
-            val directions = TimelineFragmentDirections.showPhotos(urls.toTypedArray())
-            findNavController().navigate(directions)
+            findNavController().navigate(toPhotos(urls.toTypedArray()))
         }
     }
 

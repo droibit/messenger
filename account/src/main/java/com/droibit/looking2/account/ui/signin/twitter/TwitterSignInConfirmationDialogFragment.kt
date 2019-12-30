@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.signin
+package com.droibit.looking2.account.ui.signin.twitter
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -8,19 +8,17 @@ import android.support.wearable.view.AcceptDenyDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import com.droibit.looking2.account.R
 import com.droibit.looking2.core.ui.dialog.DialogId
 import com.droibit.looking2.core.ui.dialog.DialogViewModel
 
-class SignInConfirmationDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
-
-    private val args: SignInConfirmationDialogFragmentArgs by navArgs()
+class TwitterSignInConfirmationDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private val viewModel: DialogViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AcceptDenyDialog(context).also {
-            it.setMessage(args.message)
+            it.setMessage(getString(R.string.account_sign_in_message_phone_preparation))
             it.setNegativeButton(this)
             it.setPositiveButton(this)
         }
