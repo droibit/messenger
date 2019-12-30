@@ -50,6 +50,12 @@ class AccountRepository(
         return localStore.activeSession()?.toAccount()
     }
 
+    suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
+        if (localStore.updateActiveSession(account.id)) {
+            dispatchTwitterAccountsUpdated()
+        }
+    }
+
     @Throws(AuthenticationError::class)
     suspend fun authenticateTwitter(): Flow<AuthenticationResult> = flow {
         try {

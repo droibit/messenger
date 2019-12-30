@@ -8,6 +8,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
@@ -19,6 +20,22 @@ class LocalTwitterStore @Inject constructor(
 
     suspend fun activeSession(): TwitterSession? = suspendCoroutine { cont ->
         cont.resume(sessionManager.activeSession)
+    }
+
+    @Throws(IllegalArgumentException::class)
+    suspend fun updateActiveSession(sessionId: Long): Boolean = suspendCoroutine { cont ->
+        val session = sessionManager.getSession(sessionId)
+        if (session == null) {
+            cont.resumeWithException(IllegalArgumentException("Invalid sessionId($sessionId)."))
+            return@suspendCoroutine
+        }
+
+        if (sessionId == sessionManager.activeSession?.userId) {
+            cont.resume(false)
+        } else {
+            sessionManager.activeSession = session
+            cont.resume(true)
+        }
     }
 
     suspend fun sessions(): List<TwitterSession> = suspendCoroutine { cont ->
