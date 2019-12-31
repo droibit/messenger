@@ -17,14 +17,19 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
+private const val INVALID_SOURCE_ID = Int.MIN_VALUE
+
 class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     private val destinationSource: DestinationSource by lazy(NONE) {
-        val source = requireNotNull(intent).getIntExtra(EXTRA_TIMELINE_SOURCE, -1)
-        DestinationSource.valueOf(sourceId = source)
+        val intent = requireNotNull(intent)
+        val sourceId = intent.getIntExtra(EXTRA_TIMELINE_SOURCE, INVALID_SOURCE_ID).also {
+            check(it != INVALID_SOURCE_ID) { "Timeline source id does not exist." }
+        }
+        DestinationSource(sourceId)
     }
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
@@ -43,7 +48,6 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
                     R.id.timelineFragment
             }
         navController.setGraph(navGraph, destinationSource.toArgs())
-
     }
 
     private enum class DestinationSource(val id: Int) {
@@ -60,7 +64,8 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
         }
 
         companion object {
-            fun valueOf(sourceId: Int): DestinationSource = values().first { it.id == sourceId }
+
+            operator fun invoke(sourceId: Int) = values().first { it.id == sourceId }
         }
     }
 }

@@ -15,7 +15,7 @@ data class TweetActionItemList(
         ADD_TO_POCKET(R.id.tweet_action_add_pocket);
 
         companion object {
-            fun valueOf(@IdRes id: Int) = values().first { it.id == id }
+            operator fun invoke(@IdRes id: Int) = values().first { it.id == id }
         }
     }
 }

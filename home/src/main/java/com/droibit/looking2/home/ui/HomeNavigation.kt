@@ -12,8 +12,6 @@ enum class HomeNavigation(@IdRes private val idRes: Int) {
     SETTINGS(R.id.action_settings);
 
     companion object {
-        operator fun invoke(@IdRes idRes: Int): HomeNavigation {
-            return values().first { it.idRes == idRes }
-        }
+        operator fun invoke(@IdRes idRes: Int) = values().first { it.idRes == idRes }
     }
 }

@@ -174,7 +174,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         tweetActionViewModel.onTweetActionItemClick(
-            actionItem = TweetActionItem.valueOf(item.itemId)
+            actionItem = TweetActionItem(item.itemId)
         )
         binding.tweetActionDrawer.controller.closeDrawer()
         return true
