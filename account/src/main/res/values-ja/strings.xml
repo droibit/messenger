@@ -7,4 +7,7 @@
     <string name="account_sign_in_error_message_unexpected">ログインできませんでした。</string>
     <string name="account_sign_in_message_open_on_phone">スマートフォンで認証</string>
     <string name="account_sign_in_error_message_play_services">ログインするためにはGoogle Play servicesが必要です。</string>
+    <string name="account_account_action_switch">切り替え</string>
+    <string name="account_account_action_sign_out">ログアウト</string>
+    <string name="account_account_list_add">アカウントの追加</string>
 </resources>

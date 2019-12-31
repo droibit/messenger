@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.droibit.looking2.account.ui.list.AccountListFragment" />
+
+        <variable
+            name="contentPadding"
+            type="com.droibit.looking2.core.ui.view.ShapeAwareContentPadding" />
+    </data>
+
+    <androidx.wear.widget.drawer.WearableDrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.AccountActivity"
+        tools:deviceIds="wear">
+
+        <androidx.wear.widget.BoxInsetLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/box_inset_layout_padding">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/accountContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/inner_frame_layout_padding"
+                android:paddingEnd="@dimen/inner_frame_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title"
+                        style="@style/ContentTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@{contentPadding.firstItemTopPx}"
+                        android:text="@string/account_title_accounts"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:paddingTop="32dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/addAccountButtonContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@{contentPadding.lastItemBottomPx}"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> fragment.onAddAccountButtonClick()}"
+                        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="@{contentPadding.leftPx}"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="@{contentPadding.rightPx}"
+                        android:paddingBottom="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:layout_marginBottom="32dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/background_circle"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_add_account"
+                            android:tint="@color/colorPrimary"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/account_account_list_add"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.wear.widget.BoxInsetLayout>
+
+        <androidx.wear.widget.drawer.WearableActionDrawerView
+            android:id="@+id/accountActionDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorLighterPrimary"
+            app:actionMenu="@menu/account_action"
+            app:enableAutoPeek="false"
+            app:peekView="@+id/action_peek_view"
+            app:showOverflowInPeek="false">
+
+            <!-- For disable peek -->
+            <View
+                android:id="@+id/action_peek_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </androidx.wear.widget.drawer.WearableActionDrawerView>
+
+    </androidx.wear.widget.drawer.WearableDrawerLayout>
+
+</layout>
