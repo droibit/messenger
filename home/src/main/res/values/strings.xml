@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="navigation_title_tweet">Tweet</string>
-    <string name="navigation_title_timeline">Timeline</string>
-    <string name="navigation_title_mentions">Mentions</string>
-    <string name="navigation_title_lists">Lists</string>
-    <string name="navigation_title_accounts">Accounts</string>
-    <string name="navigation_title_settings">Settings</string>
-
+    <string name="navigation_title_tweet" translatable="false">@string/title_tweet</string>
+    <string name="navigation_title_timeline" translatable="false">@string/title_timeline</string>
+    <string name="navigation_title_mentions" translatable="false">@string/title_mentions</string>
+    <string name="navigation_title_lists" translatable="false">@string/title_lists</string>
+    <string name="navigation_title_accounts" translatable="false">@string/title_accounts</string>
+    <string name="navigation_title_settings" translatable="false">@string/title_settings</string>
 </resources>

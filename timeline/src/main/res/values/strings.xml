@@ -9,13 +9,10 @@
 
     <!-- Tweet action. -->
     <string name="timeline_tweet_action_retweet">Retweet</string>
-    <string name="timeline_tweet_action_retweet_failed">Failed to retweet.</string>
     <string name="timeline_tweet_action_likes">Likes</string>
-    <string name="timeline_tweet_action_likes_failed">Failed to like.</string>
     <string name="timeline_tweet_action_reply">Reply</string>
     <string name="timeline_tweet_action_show_photo">Photos</string>
     <string name="timeline_tweet_action_add_pocket">Add to Pocket</string>
-    <string name="timeline_tweet_action_add_pocket_failed">Failed to add to Pocket.</string>
 
     <!-- My list -->
     <string name="my_lists_error_obtain_lists">Failed to obtain my list.</string>

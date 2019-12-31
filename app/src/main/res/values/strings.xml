@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">Looking</string>
+
+    <string name="title_tweet">Tweet</string>
+    <string name="title_timeline">Timeline</string>
+    <string name="title_mentions">Mentions</string>
+    <string name="title_lists">Lists</string>
+    <string name="title_accounts">Accounts</string>
+    <string name="title_settings">Settings</string>
 </resources>
