@@ -1,5 +1,6 @@
 package com.droibit.looking2.core.data.source.local.twitter
 
+import androidx.annotation.Size
 import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
 import com.twitter.sdk.android.core.SessionManager
 import com.twitter.sdk.android.core.TwitterCore
@@ -8,7 +9,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
@@ -18,28 +18,23 @@ class LocalTwitterStore @Inject constructor(
     private val apiClientFactory: AppTwitterApiClient.Factory
 ) {
 
-    suspend fun activeSession(): TwitterSession? = suspendCoroutine { cont ->
+    suspend fun getActiveSession(): TwitterSession? = suspendCoroutine { cont ->
         cont.resume(sessionManager.activeSession)
     }
 
     @Throws(IllegalArgumentException::class)
-    suspend fun updateActiveSession(sessionId: Long): Boolean = suspendCoroutine { cont ->
-        val session = sessionManager.getSession(sessionId)
-        if (session == null) {
-            cont.resumeWithException(IllegalArgumentException("Invalid sessionId($sessionId)."))
-            return@suspendCoroutine
-        }
-
-        if (sessionId == sessionManager.activeSession?.userId) {
-            cont.resume(false)
-        } else {
-            sessionManager.activeSession = session
-            cont.resume(true)
-        }
+    suspend fun setActiveSession(session: TwitterSession): Unit = suspendCoroutine { cont ->
+        sessionManager.activeSession = session
+        cont.resume(Unit)
     }
 
-    suspend fun sessions(): List<TwitterSession> = suspendCoroutine { cont ->
+    @Size(min = 0)
+    suspend fun getSessions(): List<TwitterSession> = suspendCoroutine { cont ->
         cont.resume(sessionManager.sessionMap.map { (_, session) -> session })
+    }
+
+    suspend fun getSession(id: Long): TwitterSession? = suspendCoroutine { cont ->
+        cont.resume(sessionManager.sessionMap[id])
     }
 
     suspend fun add(session: TwitterSession) =

@@ -70,7 +70,7 @@ class TwitterSignInViewModel(
 
         signInJob = viewModelScope.launch {
             isProcessingSink.value = true
-            accountRepository.authenticateTwitter()
+            accountRepository.signInTwitter()
                 .collect {
                     when (it) {
                         is AuthenticationResult.WillAuthenticateOnPhone -> {

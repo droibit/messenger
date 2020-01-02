@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.core.data.repository.account.AccountRepository
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,14 +20,12 @@ class HomeViewModel(
 
     @get:UiThread
     val activeAccountName: LiveData<String> by lazy(NONE) {
-        // FIXME: Crash when all accounts removed.
         viewModelScope.launch {
-            @Suppress("EXPERIMENTAL_API_USAGE")
-            accountRepository.twitterAccounts
-                .asFlow()
-                .map { requireNotNull(accountRepository.activeTwitterAccount()) }
+            accountRepository.twitterAccounts()
+                .map { accounts -> accounts.firstOrNull { it.active }?.name ?: "" }
+                .distinctUntilChanged()
                 .collect {
-                    activeAccountNameSink.value = "@${it.name}"
+                    activeAccountNameSink.value = it
                 }
         }
         activeAccountNameSink

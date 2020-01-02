@@ -8,11 +8,12 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
@@ -23,9 +24,8 @@ class AccountRepository(
     private val twitterService: TwitterAccountService,
     private val localStore: LocalTwitterStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val twitterAccountsChannel: BroadcastChannel<List<TwitterAccount>>
+    private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>
 ) {
-
     @Inject
     constructor(
         twitterService: TwitterAccountService,
@@ -38,26 +38,28 @@ class AccountRepository(
         ConflatedBroadcastChannel<List<TwitterAccount>>()
     )
 
-    val twitterAccounts: BroadcastChannel<List<TwitterAccount>>
-        get() = twitterAccountsChannel
-
     suspend fun initialize() {
-        localStore.sessions().forEach { twitterService.ensureApiClient(session = it) }
+        localStore.getSessions().forEach { twitterService.ensureApiClient(session = it) }
         dispatchTwitterAccountsUpdated()
     }
 
-    suspend fun activeTwitterAccount(): TwitterAccount? {
-        return localStore.activeSession()?.toAccount()
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    fun twitterAccounts(): Flow<List<TwitterAccount>> {
+        return twitterAccountsChannel.asFlow()
     }
 
     suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
-        if (localStore.updateActiveSession(account.id)) {
+        val session = localStore.getSession(account.id)
+        checkNotNull(session) { "Account dose not exist: $account" }
+
+        if (session != localStore.getActiveSession()) {
+            localStore.setActiveSession(session)
             dispatchTwitterAccountsUpdated()
         }
     }
 
     @Throws(AuthenticationError::class)
-    suspend fun authenticateTwitter(): Flow<AuthenticationResult> = flow {
+    suspend fun signInTwitter(): Flow<AuthenticationResult> = flow {
         try {
             val requestToken = twitterService.requestTempToken()
             emit(WillAuthenticateOnPhone)
@@ -72,8 +74,22 @@ class AccountRepository(
         }
     }.flowOn(dispatcherProvider.io)
 
+    suspend fun signOutTwitter(account: TwitterAccount) = withContext(dispatcherProvider.io) {
+        localStore.remove(account.id)
+
+        if (localStore.getActiveSession() == null) {
+            localStore.getSessions().firstOrNull()?.let {
+                localStore.setActiveSession(it)
+            }
+        }
+        dispatchTwitterAccountsUpdated()
+    }
+
     private suspend fun dispatchTwitterAccountsUpdated() {
-        val accounts = localStore.sessions().map { it.toAccount() }
+        val activeAccount = localStore.getActiveSession()
+        val accounts = localStore.getSessions().map {
+            it.toAccount(active = it.userId == activeAccount?.userId)
+        }
         twitterAccountsChannel.offer(accounts)
     }
 }

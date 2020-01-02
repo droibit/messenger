@@ -19,7 +19,7 @@ class UserListRepository @Inject constructor(
     @Throws(TwitterError::class)
     suspend fun getMyLists(): List<UserList> {
         return withContext(dispatcherProvider.io) {
-            val session = localStore.activeSession() ?: throw TwitterError.Unauthorized
+            val session = localStore.getActiveSession() ?: throw TwitterError.Unauthorized
             userListService.getUserLists(session, userId = null)
         }
     }
