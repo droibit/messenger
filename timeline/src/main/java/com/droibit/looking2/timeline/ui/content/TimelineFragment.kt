@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
+import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.observeEvent
@@ -129,14 +130,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             actionDrawerMenu.clear()
             actionItems
                 .map { tweetActionMenu.findItem(it.id) }
-                .forEach { actionMenuItem ->
-                    actionDrawerMenu.add(
-                        actionMenuItem.groupId,
-                        actionMenuItem.itemId,
-                        actionMenuItem.order,
-                        actionMenuItem.title
-                    ).also { it.icon = actionMenuItem.icon }
-                }
+                .forEach { actionDrawerMenu.add(it) }
 
             @Suppress("CAST_NEVER_SUCCEEDS")
             (tweetActionList.layoutManager as LinearLayoutManager)
