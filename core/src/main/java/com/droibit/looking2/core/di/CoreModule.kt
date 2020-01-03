@@ -3,6 +3,7 @@ package com.droibit.looking2.core.di
 import android.app.Application
 import android.content.Context
 import androidx.work.WorkManager
+import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
@@ -22,10 +23,17 @@ object CoreModule {
     @Provides
     fun provideGoogleApiAvailability(): GoogleApiAvailability = GoogleApiAvailability.getInstance()
 
-    @Singleton
     @Provides
     fun provideWorkManager(@Named("appContext") context: Context): WorkManager =
         WorkManager.getInstance(context)
+
+    @Singleton
+    @Provides
+    fun provideAccountConfiguration(): AccountConfiguration {
+        return AccountConfiguration(
+            maxNumOfTwitterAccounts = 2
+        )
+    }
 
     interface Provider {
 
@@ -44,5 +52,7 @@ object CoreModule {
         fun provideTwitterBootstrap(): TwitterBootstrap
 
         fun provideWorkManager(): WorkManager
+
+        fun provideAccountConfiguration(): AccountConfiguration
     }
 }

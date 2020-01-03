@@ -5,7 +5,10 @@ import com.droibit.looking2.core.di.scope.ApplicationScope
 import dagger.Component
 
 @ApplicationScope
-@Component(dependencies = [CoreComponent::class], modules = [ApplicationModule::class])
+@Component(
+    dependencies = [CoreComponent::class],
+    modules = [ApplicationModule::class]
+)
 interface ApplicationComponent {
 
     @Component.Builder
