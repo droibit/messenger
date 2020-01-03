@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.signin.twitter
+package com.droibit.looking2.account.ui.twitter.signin
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -10,7 +10,7 @@ import com.droibit.looking2.account.R
 
 class TwitterSignInConfirmationDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
-    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitter)
+    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitterSignIn)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AcceptDenyDialog(requireContext()).also {

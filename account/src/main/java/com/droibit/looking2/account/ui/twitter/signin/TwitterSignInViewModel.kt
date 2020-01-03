@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.signin.twitter
+package com.droibit.looking2.account.ui.twitter.signin
 
 import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData

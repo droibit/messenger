@@ -1,9 +1,10 @@
-package com.droibit.looking2.account.ui.signin.twitter
+package com.droibit.looking2.account.ui.twitter.signin
 
 import androidx.annotation.StringRes
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
+import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error as PlayServicesError
 
 sealed class TwitterAuthenticationError : Throwable() {
     object Network : TwitterAuthenticationError()
@@ -18,8 +19,8 @@ sealed class TwitterAuthenticationError : Throwable() {
             return when (source) {
                 is AuthenticationError.Network -> Network
                 is AuthenticationError.PlayServices -> {
-                    val status = playServicesChecker.checkStatusCode(source.statusCode)
-                        as PlayServicesChecker.Status.Error
+                    val status =
+                        playServicesChecker.checkStatusCode(source.statusCode) as PlayServicesError
                     if (status.isUserResolvableError) {
                         PlayServices(statusCode = source.statusCode)
                     } else {

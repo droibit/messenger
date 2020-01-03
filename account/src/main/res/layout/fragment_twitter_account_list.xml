@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.droibit.looking2.account.ui.list.AccountListViewModel" />
+            type="com.droibit.looking2.account.ui.twitter.TwitterAccountListViewModel" />
 
         <variable
             name="contentPadding"

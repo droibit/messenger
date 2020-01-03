@@ -7,11 +7,11 @@
         
         <variable
             name="fragment"
-            type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment" />
+            type="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment" />
 
         <variable
             name="viewModel"
-            type="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInViewModel" />
+            type="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInViewModel" />
     </data>
 
     <androidx.wear.widget.BoxInsetLayout

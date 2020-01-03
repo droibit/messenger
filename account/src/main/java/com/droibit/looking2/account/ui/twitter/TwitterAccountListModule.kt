@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import android.view.LayoutInflater
 import androidx.lifecycle.ViewModel
@@ -10,15 +10,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 
-@Module(includes = [AccountListModule.BindingModule::class])
-object AccountListModule {
+@Module(includes = [TwitterAccountListModule.BindingModule::class])
+object TwitterAccountListModule {
 
     @Provides
     fun provideAccountListAdapter(
-        fragment: AccountListFragment,
+        fragment: TwitterAccountListFragment,
         itemPadding: ShapeAwareContentPadding
-    ): AccountListAdapter {
-        return AccountListAdapter(
+    ): TwitterAccountListAdapter {
+        return TwitterAccountListAdapter(
             LayoutInflater.from(fragment.requireContext()),
             itemPadding,
             fragment::onAccountItemClick
@@ -26,8 +26,10 @@ object AccountListModule {
     }
 
     @Provides
-    fun provideSignInErrorMessage(accountConfig: AccountConfiguration): SignInErrorMessage {
-        return SignInErrorMessage(accountConfig.maxNumOfTwitterAccounts)
+    fun provideSignInErrorMessage(accountConfig: AccountConfiguration): LimitSignInErrorMessage {
+        return LimitSignInErrorMessage(
+            accountConfig.maxNumOfTwitterAccounts
+        )
     }
 
     @Module
@@ -35,7 +37,7 @@ object AccountListModule {
 
         @Binds
         @IntoMap
-        @ViewModelKey(AccountListViewModel::class)
-        fun bindAccountListViewModel(viewModel: AccountListViewModel): ViewModel
+        @ViewModelKey(TwitterAccountListViewModel::class)
+        fun bindTwitterAccountListViewModel(viewModel: TwitterAccountListViewModel): ViewModel
     }
 }

@@ -31,9 +31,9 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
         navController.graph = navInflater.inflate(R.navigation.nav_graph_account)
             .apply {
                 this.startDestination = if (needTwitterSignIn) {
-                    R.id.navigationTwitter
+                    R.id.navigationTwitterSignIn
                 } else {
-                    R.id.navigationAccountList
+                    R.id.navigationTwitterAccountList
                 }
             }
     }

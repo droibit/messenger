@@ -1,9 +1,9 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import androidx.annotation.StringRes
 import com.droibit.looking2.account.R
 
-data class SignInErrorMessage(
+data class LimitSignInErrorMessage(
     val maxNumOfAccounts: Int
 ) {
     @get:StringRes

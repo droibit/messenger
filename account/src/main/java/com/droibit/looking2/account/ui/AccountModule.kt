@@ -2,10 +2,10 @@ package com.droibit.looking2.account.ui
 
 import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
-import com.droibit.looking2.account.ui.list.AccountListFragment
-import com.droibit.looking2.account.ui.list.AccountListModule
-import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment
-import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInModule
+import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragment
+import com.droibit.looking2.account.ui.twitter.TwitterAccountListModule
+import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment
+import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInModule
 import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
@@ -48,8 +48,8 @@ object AccountModule {
         @ContributesAndroidInjector(modules = [TwitterSignInModule::class])
         fun contributeTwitterLoginFragmentInjector(): TwitterSignInFragment
 
-        @ContributesAndroidInjector(modules = [AccountListModule::class])
-        fun contributeAccountListFragmentInjector(): AccountListFragment
+        @ContributesAndroidInjector(modules = [TwitterAccountListModule::class])
+        fun contributeAccountListFragmentInjector(): TwitterAccountListFragment
     }
 
     @Module

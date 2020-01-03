@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.signin.twitter
+package com.droibit.looking2.account.ui.twitter.signin
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
-import com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
+import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.addCallback
@@ -46,7 +46,7 @@ class TwitterSignInFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentTwitterSigninBinding
 
-    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitter) {
+    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitterSignIn) {
         viewModelFactory
     }
 

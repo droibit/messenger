@@ -1,10 +1,12 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SIGN_OUT
+import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SWITCH_ACCOUNT
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
@@ -16,14 +18,14 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-class AccountListViewModel(
+class TwitterAccountListViewModel(
     private val accountRepository: AccountRepository,
     private val accountConfig: AccountConfiguration,
     private val accountsSink: MutableLiveData<List<TwitterAccount>>,
     private val selectedAccountSink: MutableLiveData<Event<TwitterAccount>>,
     private val signInTwitterSink: MutableLiveData<Event<Unit>>,
-    private val signInErrorMessageProvider: dagger.Lazy<SignInErrorMessage>,
-    private val signInTwitterErrorMessageSink: MutableLiveData<Event<SignInErrorMessage>>,
+    private val limitSignInErrorMessageProvider: dagger.Lazy<LimitSignInErrorMessage>,
+    private val limitSignInTwitterErrorMessageSink: MutableLiveData<Event<LimitSignInErrorMessage>>,
     private val showSignOutConfirmationSink: MutableLiveData<Event<TwitterAccount>>,
     private val restartAppTimingSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
@@ -50,21 +52,21 @@ class AccountListViewModel(
     val signTwitter: LiveData<Event<Unit>>
         get() = signInTwitterSink
 
-    val signInTwitterErrorMessage: LiveData<Event<SignInErrorMessage>>
-        get() = signInTwitterErrorMessageSink
+    val limitSignInTwitterErrorMessage: LiveData<Event<LimitSignInErrorMessage>>
+        get() = limitSignInTwitterErrorMessageSink
 
     @Inject
     constructor(
         accountRepository: AccountRepository,
         accountConfig: AccountConfiguration,
-        signInErrorMessageProvider: dagger.Lazy<SignInErrorMessage>
+        limitSignInErrorMessageProvider: dagger.Lazy<LimitSignInErrorMessage>
     ) : this(
         accountRepository,
         accountConfig,
         MutableLiveData(),
         MutableLiveData(),
         MutableLiveData(),
-        signInErrorMessageProvider,
+        limitSignInErrorMessageProvider,
         MutableLiveData(),
         MutableLiveData(),
         MutableLiveData()
@@ -74,7 +76,7 @@ class AccountListViewModel(
     fun onAddAccountButtonClick() {
         val accounts = accountsSink.value ?: return
         if (accounts.size >= accountConfig.maxNumOfTwitterAccounts) {
-            signInTwitterErrorMessageSink.value = Event(signInErrorMessageProvider.get())
+            limitSignInTwitterErrorMessageSink.value = Event(limitSignInErrorMessageProvider.get())
         } else {
             signInTwitterSink.value = Event(Unit)
         }
@@ -87,14 +89,14 @@ class AccountListViewModel(
     }
 
     @UiThread
-    fun onAccountActionItemClick(accountAction: AccountAction) {
+    fun onAccountActionItemClick(accountAction: TwitterAccountAction) {
         Timber.d("#onAccountActionItemClick($accountAction)")
         selectedAccountSink.requireValue().consume()?.let { account ->
             when (accountAction) {
-                AccountAction.SWITCH_ACCOUNT -> {
+                SWITCH_ACCOUNT -> {
                     switchActiveAccount(account)
                 }
-                AccountAction.SIGN_OUT -> {
+                SIGN_OUT -> {
                     showSignOutConfirmationSink.value = Event(account)
                 }
             }

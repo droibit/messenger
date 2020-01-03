@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.signin.twitter
+package com.droibit.looking2.account.ui.twitter.signin
 
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.di.key.ViewModelKey

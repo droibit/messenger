@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,11 +8,11 @@ import com.droibit.looking2.account.databinding.ListItemAccountBinding
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 
-class AccountListAdapter(
+class TwitterAccountListAdapter(
     private val inflater: LayoutInflater,
     private val itemPadding: ShapeAwareContentPadding,
     private val itemClickListener: (TwitterAccount) -> Unit
-) : RecyclerView.Adapter<AccountListAdapter.ItemViewHolder>() {
+) : RecyclerView.Adapter<TwitterAccountListAdapter.ItemViewHolder>() {
 
     private val accounts = mutableListOf<TwitterAccount>()
 

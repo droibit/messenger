@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -13,7 +13,7 @@ class SignOutConfirmationDialogFragment : DialogFragment(), DialogInterface.OnCl
 
     private val args: SignOutConfirmationDialogFragmentArgs by navArgs()
 
-    private val accountListViewModel: AccountListViewModel by navGraphViewModels(R.id.navigationAccountList)
+    private val viewModel: TwitterAccountListViewModel by navGraphViewModels(R.id.navigationTwitterAccountList)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val accountName = getString(
@@ -34,7 +34,7 @@ class SignOutConfirmationDialogFragment : DialogFragment(), DialogInterface.OnCl
 
     override fun onClick(dialog: DialogInterface, which: Int) {
         if (which == DialogInterface.BUTTON_POSITIVE) {
-            accountListViewModel.signOutAccount(args.account)
+            viewModel.signOutAccount(args.account)
         }
     }
 }

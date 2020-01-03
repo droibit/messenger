@@ -6,12 +6,12 @@
     tools:ignore="UnusedNavigation">
 
     <navigation
-        android:id="@+id/navigationTwitter"
+        android:id="@+id/navigationTwitterSignIn"
         app:startDestination="@id/twitterSignInFragment">
 
         <fragment
             android:id="@+id/twitterSignInFragment"
-            android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInFragment"
+            android:name="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment"
             tools:layout="@layout/fragment_twitter_signin">
             <action
                 android:id="@+id/toConfirmTwitterSignIn"
@@ -19,21 +19,21 @@
         </fragment>
         <dialog
             android:id="@+id/twitterSignInConfirmationDialogFragment"
-            android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInConfirmationDialogFragment" />
+            android:name="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInConfirmationDialogFragment" />
     </navigation>
 
     <navigation
-        android:id="@+id/navigationAccountList"
-        app:startDestination="@id/accountListFragment">
+        android:id="@+id/navigationTwitterAccountList"
+        app:startDestination="@id/twitterAccountListFragment">
 
         <fragment
-            android:id="@+id/accountListFragment"
-            android:name="com.droibit.looking2.account.ui.list.AccountListFragment"
-            tools:layout="@layout/fragment_account_list">
+            android:id="@+id/twitterAccountListFragment"
+            android:name="com.droibit.looking2.account.ui.twitter.TwitterAccountListFragment"
+            tools:layout="@layout/fragment_twitter_account_list">
 
             <action
                 android:id="@+id/toTwitterSignIn"
-                app:destination="@id/navigationTwitter"
+                app:destination="@id/navigationTwitterSignIn"
                 app:enterAnim="@anim/fragment_open_enter"
                 app:exitAnim="@anim/fragment_open_exit"
                 app:popEnterAnim="@anim/fragment_fade_enter"
@@ -46,7 +46,7 @@
 
         <dialog
             android:id="@+id/signOutConfirmationDialogFragment"
-            android:name="com.droibit.looking2.account.ui.list.SignOutConfirmationDialogFragment">
+            android:name="com.droibit.looking2.account.ui.twitter.SignOutConfirmationDialogFragment">
 
             <argument
                 android:name="account"

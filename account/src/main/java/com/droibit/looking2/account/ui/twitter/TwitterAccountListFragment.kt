@@ -1,4 +1,4 @@
-package com.droibit.looking2.account.ui.list
+package com.droibit.looking2.account.ui.twitter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +11,9 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.droibit.looking2.account.R
-import com.droibit.looking2.account.databinding.FragmentAccountListBinding
-import com.droibit.looking2.account.ui.list.AccountListFragmentDirections.Companion.toConfirmTwitterSignOut
-import com.droibit.looking2.account.ui.list.AccountListFragmentDirections.Companion.toTwitterSignIn
+import com.droibit.looking2.account.databinding.FragmentTwitterAccountListBinding
+import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toConfirmTwitterSignOut
+import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toTwitterSignIn
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.view.OnRotaryScrollListener
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
@@ -23,27 +23,27 @@ import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import com.droibit.looking2.ui.Activities.Account as AccountActivity
 
-class AccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
+class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
 
     @Inject
-    lateinit var accountListAdapter: AccountListAdapter
+    lateinit var accountListAdapter: TwitterAccountListAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: AccountListViewModel by navGraphViewModels(R.id.navigationAccountList) { viewModelFactory }
+    private val viewModel: TwitterAccountListViewModel by navGraphViewModels(R.id.navigationTwitterAccountList) { viewModelFactory }
 
-    private lateinit var binding: FragmentAccountListBinding
+    private lateinit var binding: FragmentTwitterAccountListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAccountListBinding.inflate(inflater, container, false).also {
+        binding = FragmentTwitterAccountListBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
             it.contentPadding = contentPadding
@@ -94,13 +94,14 @@ class AccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             findNavController().navigate(toTwitterSignIn())
         }
 
-        viewModel.signInTwitterErrorMessage.observeEvent(viewLifecycleOwner) { errorMessage ->
+        viewModel.limitSignInTwitterErrorMessage.observeEvent(viewLifecycleOwner) { errorMessage ->
             showLongToast(errorMessage.resId, errorMessage.maxNumOfAccounts)
         }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        val action = AccountAction(item.itemId)
+        val action =
+            TwitterAccountAction(item.itemId)
         viewModel.onAccountActionItemClick(action)
         binding.accountActionDrawer.controller.closeDrawer()
         return true
