@@ -28,13 +28,14 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
 
         val navController = findNavController(R.id.accountNavHostFragment)
         val navInflater = navController.navInflater
-        navController.graph = if (needTwitterSignIn) {
-            navInflater.inflate(R.navigation.nav_graph_account).apply {
-                startDestination = R.id.navigationTwitter
+        navController.graph = navInflater.inflate(R.navigation.nav_graph_account)
+            .apply {
+                this.startDestination = if (needTwitterSignIn) {
+                    R.id.navigationTwitter
+                } else {
+                    R.id.navigationAccountList
+                }
             }
-        } else {
-            TODO()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

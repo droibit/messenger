@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="fragment"
-            type="com.droibit.looking2.account.ui.list.AccountListFragment" />
+            name="viewModel"
+            type="com.droibit.looking2.account.ui.list.AccountListViewModel" />
 
         <variable
             name="contentPadding"
@@ -65,7 +65,7 @@
                         android:layout_marginBottom="@{contentPadding.lastItemBottomPx}"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{() -> fragment.onAddAccountButtonClick()}"
+                        android:onClick="@{() -> viewModel.onAddAccountButtonClick()}"
                         android:foreground="?android:attr/selectableItemBackgroundBorderless"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"

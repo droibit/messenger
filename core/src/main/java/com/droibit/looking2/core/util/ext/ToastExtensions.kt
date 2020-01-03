@@ -9,8 +9,16 @@ fun Fragment.showShortToast(@StringRes resId: Int) {
     Toast.makeText(requireContext(), resId, Toast.LENGTH_SHORT).show()
 }
 
+fun Fragment.showShortToast(@StringRes resId: Int, vararg formatArgs: Any) {
+    Toast.makeText(requireContext(), getString(resId, *formatArgs), Toast.LENGTH_SHORT).show()
+}
+
 fun Fragment.showLongToast(@StringRes resId: Int) {
     Toast.makeText(requireContext(), resId, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.showLongToast(@StringRes resId: Int, vararg formatArgs: Any) {
+    Toast.makeText(requireContext(), getString(resId, *formatArgs), Toast.LENGTH_LONG).show()
 }
 
 fun Fragment.showNetworkErrorToast() {

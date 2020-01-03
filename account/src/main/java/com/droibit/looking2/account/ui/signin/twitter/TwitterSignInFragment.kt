@@ -24,6 +24,7 @@ import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
@@ -38,6 +39,10 @@ class TwitterSignInFragment : DaggerFragment() {
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
+
+    @field:[Inject Named("needTwitterSignIn")]
+    @JvmField
+    var needTwitterSignIn: Boolean = false
 
     private lateinit var binding: FragmentTwitterSigninBinding
 
@@ -85,10 +90,13 @@ class TwitterSignInFragment : DaggerFragment() {
 
     private fun observeAuthenticationResult() {
         signInViewModel.completed.observe(viewLifecycleOwner) {
-            // TODO: back to account list.
             it.consume()?.let {
-                startActivity(HomeActivity.createIntent())
-                requireActivity().finish()
+                if (needTwitterSignIn) {
+                    startActivity(HomeActivity.createIntent())
+                    requireActivity().finish()
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         }
 

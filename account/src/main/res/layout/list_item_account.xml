@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.droibit.looking2.account.ui.list.TwitterAccountItem" />
+            type="com.droibit.looking2.core.model.account.TwitterAccount" />
     </data>
 
     <LinearLayout
@@ -37,7 +37,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="2"
-            android:text="@{item.name}"
+            android:text="@{@string/account_twitter_account_name_with_at(item.name)}"
             android:textAppearance="@style/TextAppearance.Wearable.Small"
             android:textColor="?android:attr/textColorPrimary"
             tools:text="\@droibit" />

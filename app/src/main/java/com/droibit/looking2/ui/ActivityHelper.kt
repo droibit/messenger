@@ -95,6 +95,12 @@ object Activities {
             return intentTo(Account)
                 .putExtra(EXTRA_NEED_TWITTER_SIGN_IN, needTwitterSignIn)
         }
+
+        fun createRestartIntent(): Intent {
+            return intentTo(Account)
+                .putExtra(EXTRA_NEED_TWITTER_SIGN_IN, true)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
     }
 
     /**

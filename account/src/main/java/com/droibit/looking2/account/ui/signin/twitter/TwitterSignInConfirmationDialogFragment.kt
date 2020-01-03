@@ -13,7 +13,7 @@ class TwitterSignInConfirmationDialogFragment : DialogFragment(), DialogInterfac
     private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitter)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AcceptDenyDialog(context).also {
+        return AcceptDenyDialog(requireContext()).also {
             it.setMessage(getString(R.string.account_sign_in_message_phone_preparation))
             it.setNegativeButton(this)
             it.setPositiveButton(this)

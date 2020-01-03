@@ -20,7 +20,39 @@
         <dialog
             android:id="@+id/twitterSignInConfirmationDialogFragment"
             android:name="com.droibit.looking2.account.ui.signin.twitter.TwitterSignInConfirmationDialogFragment" />
+    </navigation>
 
+    <navigation
+        android:id="@+id/navigationAccountList"
+        app:startDestination="@id/accountListFragment">
+
+        <fragment
+            android:id="@+id/accountListFragment"
+            android:name="com.droibit.looking2.account.ui.list.AccountListFragment"
+            tools:layout="@layout/fragment_account_list">
+
+            <action
+                android:id="@+id/toTwitterSignIn"
+                app:destination="@id/navigationTwitter"
+                app:enterAnim="@anim/fragment_open_enter"
+                app:exitAnim="@anim/fragment_open_exit"
+                app:popEnterAnim="@anim/fragment_fade_enter"
+                app:popExitAnim="@anim/fragment_fade_exit" />
+
+            <action
+                android:id="@+id/toConfirmTwitterSignOut"
+                app:destination="@id/signOutConfirmationDialogFragment" />
+        </fragment>
+
+        <dialog
+            android:id="@+id/signOutConfirmationDialogFragment"
+            android:name="com.droibit.looking2.account.ui.list.SignOutConfirmationDialogFragment">
+
+            <argument
+                android:name="account"
+                app:argType="com.droibit.looking2.core.model.account.TwitterAccount" />
+
+        </dialog>
     </navigation>
 
 </navigation>
