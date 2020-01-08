@@ -38,6 +38,7 @@ dependencies {
     implementation deps.androidx.wear
 
     implementation deps.playServices.base
+    implementation deps.firebase.core
     implementation deps.wearable.support
 
     implementation deps.dagger.runtime

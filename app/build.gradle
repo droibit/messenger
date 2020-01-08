@@ -72,7 +72,6 @@ dependencies {
     implementation(deps.crashlytics) {
         transitive = true
     }
-    implementation deps.firebase.core
 
     testImplementation deps.robolectric
 }

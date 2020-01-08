@@ -13,6 +13,7 @@ dependencies {
     implementation deps.androidx.navigation.runtime
     implementation deps.androidx.navigation.fragment
 
+    implementation deps.firebase.core
     implementation deps.androidx.wear
     implementation deps.playServices.base
     implementation deps.playServices.wearable

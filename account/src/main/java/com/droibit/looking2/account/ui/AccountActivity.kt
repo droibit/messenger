@@ -3,18 +3,27 @@ package com.droibit.looking2.account.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.droibit.looking2.account.R
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.sendScreenView
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 import javax.inject.Named
 
-class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidInjector {
+class AccountActivity : FragmentActivity(R.layout.activity_account),
+    HasAndroidInjector,
+    NavController.OnDestinationChangedListener {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    @Inject
+    lateinit var analytics: AnalyticsHelper
 
     @field:[Inject Named("needTwitterSignIn")]
     @JvmField
@@ -36,6 +45,15 @@ class AccountActivity : FragmentActivity(R.layout.activity_account), HasAndroidI
                     R.id.navigationTwitterAccountList
                 }
             }
+        navController.addOnDestinationChangedListener(this)
+    }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        analytics.sendScreenView(destination)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
