@@ -2,7 +2,11 @@ package com.droibit.looking2.timeline.ui
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentArgs
 import com.droibit.looking2.timeline.ui.content.TimelineSource
@@ -19,10 +23,15 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 private const val INVALID_SOURCE_ID = Int.MIN_VALUE
 
-class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAndroidInjector {
+class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline),
+    HasAndroidInjector,
+    NavController.OnDestinationChangedListener {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    @Inject
+    lateinit var analytics: AnalyticsHelper
 
     private val destinationSource: DestinationSource by lazy(NONE) {
         val intent = requireNotNull(intent)
@@ -48,12 +57,26 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline), HasAn
                     R.id.timelineFragment
             }
         navController.setGraph(navGraph, destinationSource.toArgs())
+        navController.addOnDestinationChangedListener(this)
     }
 
-    private enum class DestinationSource(val id: Int) {
-        HOME(id = TIMELINE_SOURCE_HOME),
-        MENTIONS(id = TIMELINE_SOURCE_MENTIONS),
-        LISTS(id = TIMELINE_SOURCE_LISTS);
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        if (destination.id == R.id.timelineFragment) {
+            val navLabel = requireNotNull(destination.label)
+            analytics.sendScreenView("$navLabel: ${destinationSource.label}")
+        } else {
+            analytics.sendScreenView(destination)
+        }
+    }
+
+    private enum class DestinationSource(val id: Int, val label: String) {
+        HOME(id = TIMELINE_SOURCE_HOME, label = "Home"),
+        MENTIONS(id = TIMELINE_SOURCE_MENTIONS, label = "Mentions"),
+        LISTS(id = TIMELINE_SOURCE_LISTS, label = "Lists");
 
         fun toArgs(): Bundle? {
             return when (this) {

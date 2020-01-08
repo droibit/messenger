@@ -3,6 +3,8 @@ package com.droibit.looking2.timeline.ui
 import androidx.lifecycle.ViewModelProvider
 import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.droibit.looking2.timeline.ui.content.TimelineFragment
 import com.droibit.looking2.timeline.ui.content.TimelineModule
@@ -29,6 +31,12 @@ object TimelineHostModule {
     @Provides
     fun provideContentPadding(activity: TimelineHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
+    }
+
+    @FeatureScope
+    @Provides
+    fun provideAnalytics(activity: TimelineHostActivity): AnalyticsHelper {
+        return FirebaseAnalyticsHelper(activity)
     }
 
     @Module
