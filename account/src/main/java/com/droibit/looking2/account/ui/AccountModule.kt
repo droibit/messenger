@@ -1,6 +1,5 @@
 package com.droibit.looking2.account.ui
 
-import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragment
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListModule
@@ -8,6 +7,8 @@ import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInModule
 import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.droibit.looking2.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import dagger.Binds
@@ -26,12 +27,15 @@ import javax.inject.Named
 )
 object AccountModule {
 
+    @FeatureScope
     @Provides
-    fun provideActivity(activity: AccountActivity): Activity = activity
+    fun provideAnalytics(activity: AccountActivity): AnalyticsHelper {
+        return FirebaseAnalyticsHelper(activity)
+    }
 
     @Named("needTwitterSignIn")
     @Provides
-    fun provideNeedTwitterSignIn(activity: Activity): Boolean {
+    fun provideNeedTwitterSignIn(activity: AccountActivity): Boolean {
         val intent = requireNotNull(activity.intent)
         return intent.getBooleanExtra(EXTRA_NEED_TWITTER_SIGN_IN, false)
     }

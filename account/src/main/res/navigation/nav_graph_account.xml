@@ -12,6 +12,7 @@
         <fragment
             android:id="@+id/twitterSignInFragment"
             android:name="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment"
+            android:label="@string/account_navigation_label_twitter_sign_in"
             tools:layout="@layout/fragment_twitter_signin">
             <action
                 android:id="@+id/toConfirmTwitterSignIn"
@@ -29,6 +30,7 @@
         <fragment
             android:id="@+id/twitterAccountListFragment"
             android:name="com.droibit.looking2.account.ui.twitter.TwitterAccountListFragment"
+            android:label="@string/account_navigation_label_twitter_account_list"
             tools:layout="@layout/fragment_twitter_account_list">
 
             <action
