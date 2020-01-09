@@ -8,7 +8,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class TweetActivity : FragmentActivity(R.layout.activity_tweet), HasAndroidInjector {
+class TweetHostActivity : FragmentActivity(R.layout.activity_tweet_host), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>

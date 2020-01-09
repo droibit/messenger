@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:keepScreenOn="true"
         android:padding="@dimen/box_inset_layout_padding"
-        tools:context=".ui.AccountActivity"
+        tools:context=".ui.AccountHostActivity"
         tools:deviceIds="wear">
 
         <androidx.constraintlayout.widget.ConstraintLayout

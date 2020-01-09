@@ -16,7 +16,7 @@
 
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.AccountActivity"
+            android:name=".ui.AccountHostActivity"
             android:exported="false" />
     </application>
 

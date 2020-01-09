@@ -22,7 +22,7 @@
         android:id="@+id/swipeDismissLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.TweetActivity"
+        tools:context=".ui.TweetHostActivity"
         tools:deviceIds="wear">
 
         <androidx.wear.widget.BoxInsetLayout

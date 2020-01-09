@@ -14,7 +14,7 @@
 
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.TweetActivity"
+            android:name=".ui.TweetHostActivity"
             android:exported="false" />
     </application>
 </manifest>

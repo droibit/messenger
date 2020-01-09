@@ -8,7 +8,7 @@
     android:keepScreenOn="true"
     tools:context=".ui.TimelineHostActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/timelineNavHostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"

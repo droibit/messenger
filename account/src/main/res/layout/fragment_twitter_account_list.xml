@@ -17,7 +17,7 @@
     <androidx.wear.widget.drawer.WearableDrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.AccountActivity"
+        tools:context=".ui.AccountHostActivity"
         tools:deviceIds="wear">
 
         <androidx.wear.widget.BoxInsetLayout

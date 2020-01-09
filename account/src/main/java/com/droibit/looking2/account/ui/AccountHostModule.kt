@@ -21,28 +21,28 @@ import javax.inject.Named
 @Module(
     includes = [
         AndroidSupportInjectionModule::class,
-        AccountModule.FragmentBindingModule::class,
-        AccountModule.BindingModule::class
+        AccountHostModule.FragmentBindingModule::class,
+        AccountHostModule.BindingModule::class
     ]
 )
-object AccountModule {
+object AccountHostModule {
 
     @FeatureScope
     @Provides
-    fun provideAnalytics(activity: AccountActivity): AnalyticsHelper {
+    fun provideAnalytics(activity: AccountHostActivity): AnalyticsHelper {
         return FirebaseAnalyticsHelper(activity)
     }
 
     @Named("needTwitterSignIn")
     @Provides
-    fun provideNeedTwitterSignIn(activity: AccountActivity): Boolean {
+    fun provideNeedTwitterSignIn(activity: AccountHostActivity): Boolean {
         val intent = requireNotNull(activity.intent)
         return intent.getBooleanExtra(EXTRA_NEED_TWITTER_SIGN_IN, false)
     }
 
     @FeatureScope
     @Provides
-    fun provideContentPadding(activity: AccountActivity): ShapeAwareContentPadding {
+    fun provideContentPadding(activity: AccountHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
     }
 

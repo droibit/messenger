@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.core.util.analytics.sendScreenView
@@ -15,7 +15,7 @@ import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 import javax.inject.Named
 
-class AccountActivity : FragmentActivity(R.layout.activity_account),
+class AccountHostActivity : FragmentActivity(R.layout.activity_account_host),
     HasAndroidInjector,
     NavController.OnDestinationChangedListener {
 
@@ -35,7 +35,10 @@ class AccountActivity : FragmentActivity(R.layout.activity_account),
         inject()
         super.onCreate(savedInstanceState)
 
-        val navController = findNavController(R.id.accountNavHostFragment)
+        // ref https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.accountNavHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         val navInflater = navController.navInflater
         navController.graph = navInflater.inflate(R.navigation.nav_graph_account)
             .apply {

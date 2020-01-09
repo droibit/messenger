@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true"
-    tools:context=".ui.TweetActivity">
+    tools:context=".ui.AccountHostActivity">
 
-    <fragment
-        android:id="@+id/tweetNavHostFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/accountNavHostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:navGraph="@navigation/nav_graph_tweet"
+        android:tag="@string/nav_host_fragment_tag_account"
         app:defaultNavHost="true" />
 
 </FrameLayout>

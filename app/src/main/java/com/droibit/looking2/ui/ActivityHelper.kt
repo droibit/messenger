@@ -87,7 +87,7 @@ object Activities {
      * AccountActivity
      */
     object Account : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.account.ui.AccountActivity"
+        override val className = "${BuildConfig.PACKAGE_NAME}.account.ui.AccountHostActivity"
 
         const val EXTRA_NEED_TWITTER_SIGN_IN = "EXTRA_NEED_TWITTER_SIGN_IN"
 
@@ -157,7 +157,7 @@ object Activities {
     object Tweet : AddressableActivity {
         const val EXTRA_REPLY_TWEET = "EXTRA_REPLY_TWEET"
 
-        override val className: String = "${BuildConfig.PACKAGE_NAME}.tweet.ui.TweetActivity"
+        override val className: String = "${BuildConfig.PACKAGE_NAME}.tweet.ui.TweetHostActivity"
 
         fun createIntent(replyTweet: ReplyTweet? = null): Intent {
             return intentTo(Tweet).putExtra(EXTRA_REPLY_TWEET, replyTweet)

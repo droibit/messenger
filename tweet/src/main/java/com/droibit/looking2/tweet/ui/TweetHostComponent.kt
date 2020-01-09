@@ -9,7 +9,7 @@ import dagger.Component
 @FeatureScope
 @Component(
     dependencies = [CoreComponent::class],
-    modules = [TweetModule::class]
+    modules = [TweetHostModule::class]
 )
 interface TweetComponent {
 
@@ -17,17 +17,17 @@ interface TweetComponent {
     interface Builder {
 
         @BindsInstance
-        fun activity(activity: TweetActivity): Builder
+        fun activity(activity: TweetHostActivity): Builder
 
         fun core(component: CoreComponent): Builder
 
         fun build(): TweetComponent
     }
 
-    fun inject(activity: TweetActivity)
+    fun inject(activity: TweetHostActivity)
 }
 
-fun TweetActivity.inject() {
+fun TweetHostActivity.inject() {
     DaggerTweetComponent.builder()
         .activity(this)
         .core(coreComponent())

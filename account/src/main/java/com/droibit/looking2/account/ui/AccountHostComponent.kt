@@ -9,7 +9,7 @@ import dagger.Component
 @FeatureScope
 @Component(
     dependencies = [CoreComponent::class],
-    modules = [AccountModule::class]
+    modules = [AccountHostModule::class]
 )
 interface AccountComponent {
 
@@ -17,17 +17,17 @@ interface AccountComponent {
     interface Builder {
 
         @BindsInstance
-        fun activity(activity: AccountActivity): Builder
+        fun activity(activity: AccountHostActivity): Builder
 
         fun core(component: CoreComponent): Builder
 
         fun build(): AccountComponent
     }
 
-    fun inject(activity: AccountActivity)
+    fun inject(activity: AccountHostActivity)
 }
 
-fun AccountActivity.inject() {
+fun AccountHostActivity.inject() {
     DaggerAccountComponent.builder()
         .core(coreComponent())
         .activity(this)

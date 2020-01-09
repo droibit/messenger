@@ -20,15 +20,15 @@ import javax.inject.Named
 @Module(
     includes = [
         AndroidInjectionModule::class,
-        TweetModule.FragmentBindingModule::class,
+        TweetHostModule.FragmentBindingModule::class,
         ViewModelModule::class
     ]
 )
-object TweetModule {
+object TweetHostModule {
 
     @FeatureScope
     @Provides
-    fun provideReplyTweet(activity: TweetActivity): Optional<ReplyTweet> {
+    fun provideReplyTweet(activity: TweetHostActivity): Optional<ReplyTweet> {
         val replyTweet = activity.intent.extras?.getSerializable(EXTRA_REPLY_TWEET) as? ReplyTweet
         return Optional(replyTweet)
     }
@@ -43,7 +43,7 @@ object TweetModule {
     @FeatureScope
     @Named("title")
     @Provides
-    fun provideTitle(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetActivity): String {
+    fun provideTitle(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetHostActivity): String {
         return if (hasReplyTweet)
             activity.getString(R.string.tweet_title_reply)
         else
@@ -52,7 +52,7 @@ object TweetModule {
 
     @Named("tweetTextHint")
     @Provides
-    fun provideTweetTextHint(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetActivity): String {
+    fun provideTweetTextHint(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetHostActivity): String {
         return if (hasReplyTweet)
             activity.getString(R.string.tweet_text_reply_hint)
         else
@@ -68,7 +68,7 @@ object TweetModule {
 
     @FeatureScope
     @Provides
-    fun provideContentPadding(activity: TweetActivity): ShapeAwareContentPadding {
+    fun provideContentPadding(activity: TweetHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
     }
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.timeline.R
@@ -23,7 +23,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 private const val INVALID_SOURCE_ID = Int.MIN_VALUE
 
-class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline),
+class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline_host),
     HasAndroidInjector,
     NavController.OnDestinationChangedListener {
 
@@ -48,7 +48,10 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline),
         super.onCreate(savedInstanceState)
         Timber.d("Start dest: $destinationSource")
 
-        val navController = findNavController(R.id.timelineNavHostFragment)
+        // ref https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.timelineNavHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_timeline)
             .apply {
                 this.startDestination = if (destinationSource == DestinationSource.LISTS)
