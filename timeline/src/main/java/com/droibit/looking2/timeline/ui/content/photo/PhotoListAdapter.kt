@@ -51,7 +51,7 @@ class PhotoListAdapter(
             binding.loadingInProgress = true
         }
 
-        override fun onError(data: Any, throwable: Throwable) {
+        override fun onError(data: Any?, throwable: Throwable) {
             binding.loadingInProgress = false
         }
 
