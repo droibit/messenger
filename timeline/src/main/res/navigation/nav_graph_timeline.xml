@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/timelineFragment"
         android:name="com.droibit.looking2.timeline.ui.content.TimelineFragment"
-        android:label="@string/timeline_navigation_label_timeline"
+        android:label="@string/timeline_nav_label_timeline"
         tools:layout="@layout/fragment_timeline">
         <argument
             android:name="source"
@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/photoFragment"
         android:name="com.droibit.looking2.timeline.ui.content.photo.PhotoFragment"
-        android:label="@string/timeline_navigation_label_photos"
+        android:label="@string/timeline_nav_label_photos"
         tools:layout="@layout/fragment_photo">
         <argument
             android:name="urls"
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/myListsFragment"
         android:name="com.droibit.looking2.timeline.ui.content.mylist.MyListsFragment"
-        android:label="@string/timeline_navigation_label_my_lists"
+        android:label="@string/timeline_nav_label_my_lists"
         tools:layout="@layout/fragment_my_lists">
         <action
             android:id="@+id/toMyListTimeline"

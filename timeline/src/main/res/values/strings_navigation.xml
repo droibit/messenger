@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="timeline_navigation_label_timeline" translatable="false">Timeline</string>
-    <string name="timeline_navigation_label_photos" translatable="false">Photos in Tweet</string>
-    <string name="timeline_navigation_label_my_lists" translatable="false">My Lists</string>
+    <string name="timeline_nav_label_timeline" translatable="false">Timeline</string>
+    <string name="timeline_nav_label_photos" translatable="false">Photos in Tweet</string>
+    <string name="timeline_nav_label_my_lists" translatable="false">My Lists</string>
 </resources>

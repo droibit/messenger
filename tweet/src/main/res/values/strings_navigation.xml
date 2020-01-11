@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tweet_nav_label_tweet_chooser" translatable="false">Tweet Input Chooser</string>
+    <string name="tweet_nav_label_tweet_keyboard" translatable="false">Tweet with Keyboard</string>
+    <string name="tweet_nav_label_tweet_voice_input" translatable="false">Tweet with Voice Input</string>
+</resources>

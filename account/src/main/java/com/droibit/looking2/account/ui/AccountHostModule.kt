@@ -7,8 +7,6 @@ import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInModule
 import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.droibit.looking2.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import dagger.Binds
@@ -26,12 +24,6 @@ import javax.inject.Named
     ]
 )
 object AccountHostModule {
-
-    @FeatureScope
-    @Provides
-    fun provideAnalytics(activity: AccountHostActivity): AnalyticsHelper {
-        return FirebaseAnalyticsHelper(activity)
-    }
 
     @Named("needTwitterSignIn")
     @Provides

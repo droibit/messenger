@@ -70,9 +70,9 @@ class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline_host),
     ) {
         if (destination.id == R.id.timelineFragment) {
             val navLabel = requireNotNull(destination.label)
-            analytics.sendScreenView("$navLabel: ${destinationSource.label}")
+            analytics.sendScreenView("$navLabel: ${destinationSource.label}", this)
         } else {
-            analytics.sendScreenView(destination)
+            analytics.sendScreenView(destination, this)
         }
     }
 

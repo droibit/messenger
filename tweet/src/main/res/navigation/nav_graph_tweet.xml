@@ -8,6 +8,7 @@
     <fragment
         android:id="@+id/tweetChooserFragment"
         android:name="com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment"
+        android:label="@string/tweet_nav_label_tweet_chooser"
         tools:layout="@layout/fragment_tweet_chooser" >
         <action
             android:id="@+id/toKeyboardTweet"
@@ -27,9 +28,11 @@
     <fragment
         android:id="@+id/keyboardTweetFragment"
         android:name="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment"
+        android:label="@string/tweet_nav_label_tweet_keyboard"
         tools:layout="@layout/fragment_tweet_keyboard" />
     <fragment
         android:id="@+id/voiceTweetFragment"
         android:name="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment"
+        android:label="@string/tweet_nav_label_tweet_voice_input"
         tools:layout="@layout/fragment_tweet_voice" />
 </navigation>

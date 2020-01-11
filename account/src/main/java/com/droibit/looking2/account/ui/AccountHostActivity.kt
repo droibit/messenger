@@ -56,7 +56,7 @@ class AccountHostActivity : FragmentActivity(R.layout.activity_account_host),
         destination: NavDestination,
         arguments: Bundle?
     ) {
-        analytics.sendScreenView(destination)
+        analytics.sendScreenView(destination, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

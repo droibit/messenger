@@ -9,6 +9,8 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.home.databinding.ActivityHomeBinding
 import com.droibit.looking2.home.ui.HomeNavigation.ACCOUNTS
 import com.droibit.looking2.home.ui.HomeNavigation.LISTS
@@ -30,6 +32,9 @@ class HomeActivity : FragmentActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
+    lateinit var analytics: AnalyticsHelper
+
+    @Inject
     lateinit var actionItemListAdapter: ActionItemListAdapter
 
     private lateinit var binding: ActivityHomeBinding
@@ -49,6 +54,11 @@ class HomeActivity : FragmentActivity() {
             (binding.navigationList.layoutManager as LinearLayoutManager)
                 .scrollToPositionWithOffset(0, 0)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.sendScreenView(homeR.string.home_nav_label_home, this)
     }
 
     fun onActionItemClick(item: ActionItem) {

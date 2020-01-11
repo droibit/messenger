@@ -6,14 +6,17 @@ import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.google.android.gms.common.GoogleApiAvailability
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [CoreModule.BindingModule::class])
 object CoreModule {
 
     @Named("appContext")
@@ -35,6 +38,13 @@ object CoreModule {
         )
     }
 
+    @Module
+    interface BindingModule {
+
+        @Binds
+        fun bindAnalyticsHelper(analytics: FirebaseAnalyticsHelper): AnalyticsHelper
+    }
+
     interface Provider {
 
         fun provideApplication(): Application
@@ -54,5 +64,7 @@ object CoreModule {
         fun provideWorkManager(): WorkManager
 
         fun provideAccountConfiguration(): AccountConfiguration
+
+        fun provideAnalytics(): AnalyticsHelper
     }
 }
