@@ -4,6 +4,7 @@ import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.data.repository.userlist.UserListRepository
+import com.droibit.looking2.core.data.repository.usersettings.UserSettingsRepository
 import com.droibit.looking2.core.data.source.SourceModule
 import dagger.Module
 
@@ -23,5 +24,7 @@ object RepositoryModule {
         val tweetRepository: TweetRepository
 
         val userListRepository: UserListRepository
+
+        val userSettingsRepository: UserSettingsRepository
     }
 }
