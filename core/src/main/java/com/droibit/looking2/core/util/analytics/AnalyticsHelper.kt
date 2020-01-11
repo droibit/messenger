@@ -9,6 +9,10 @@ interface AnalyticsHelper {
 
     @UiThread
     fun sendScreenView(screenName: CharSequence, activity: Activity)
+
+    fun setNumOfTwitterAccounts(value: Int)
+
+    fun setNumOfGetTweets(value: Int)
 }
 
 @UiThread

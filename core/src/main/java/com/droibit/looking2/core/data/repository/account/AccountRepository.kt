@@ -8,6 +8,7 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -25,17 +26,20 @@ class AccountRepository(
     private val localStore: LocalTwitterStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>,
+    private val analytics: AnalyticsHelper
 ) {
     @Inject
     constructor(
         twitterService: TwitterAccountService,
         localStore: LocalTwitterStore,
         dispatcherProvider: CoroutinesDispatcherProvider,
+        analytics: AnalyticsHelper
     ) : this(
         twitterService,
         localStore,
         dispatcherProvider,
         ConflatedBroadcastChannel<List<TwitterAccount>>(),
+        analytics
     )
 
     suspend fun initialize(): Unit = withContext(dispatcherProvider.io) {
