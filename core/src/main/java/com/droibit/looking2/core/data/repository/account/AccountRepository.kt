@@ -24,22 +24,22 @@ class AccountRepository(
     private val twitterService: TwitterAccountService,
     private val localStore: LocalTwitterStore,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>
+    private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>,
 ) {
     @Inject
     constructor(
         twitterService: TwitterAccountService,
         localStore: LocalTwitterStore,
-        dispatcherProvider: CoroutinesDispatcherProvider
+        dispatcherProvider: CoroutinesDispatcherProvider,
     ) : this(
         twitterService,
         localStore,
         dispatcherProvider,
-        ConflatedBroadcastChannel<List<TwitterAccount>>()
+        ConflatedBroadcastChannel<List<TwitterAccount>>(),
     )
 
-    suspend fun initialize() {
-        localStore.getSessions().forEach { twitterService.ensureApiClient(session = it) }
+    suspend fun initialize(): Unit = withContext(dispatcherProvider.io) {
+        localStore.sessions.forEach { twitterService.ensureApiClient(session = it) }
         dispatchTwitterAccountsUpdated()
     }
 
@@ -49,12 +49,14 @@ class AccountRepository(
     }
 
     suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
-        val session = localStore.getSession(account.id)
-        checkNotNull(session) { "Account dose not exist: $account" }
+        withContext(dispatcherProvider.io) {
+            val session = localStore.getSession(account.id)
+            checkNotNull(session) { "Account dose not exist: $account" }
 
-        if (session != localStore.getActiveSession()) {
-            localStore.setActiveSession(session)
-            dispatchTwitterAccountsUpdated()
+            if (session != localStore.activeSession) {
+                localStore.setActiveSession(session)
+                dispatchTwitterAccountsUpdated()
+            }
         }
     }
 
@@ -66,6 +68,7 @@ class AccountRepository(
             val responseUrl = twitterService.sendAuthorizationRequest(requestToken)
             twitterService.createNewSession(requestToken, responseUrl).also {
                 localStore.add(session = it)
+                analytics.setNumOfGetTweets(localStore.sessions.size)
                 dispatchTwitterAccountsUpdated()
             }
             emit(AuthenticationSuccess)
@@ -74,20 +77,23 @@ class AccountRepository(
         }
     }.flowOn(dispatcherProvider.io)
 
-    suspend fun signOutTwitter(account: TwitterAccount) = withContext(dispatcherProvider.io) {
-        localStore.remove(account.id)
+    suspend fun signOutTwitter(account: TwitterAccount) {
+        withContext(dispatcherProvider.io) {
+            localStore.remove(account.id)
+            analytics.setNumOfGetTweets(localStore.sessions.size)
 
-        if (localStore.getActiveSession() == null) {
-            localStore.getSessions().firstOrNull()?.let {
-                localStore.setActiveSession(it)
+            if (localStore.activeSession == null) {
+                localStore.sessions.firstOrNull()?.let {
+                    localStore.setActiveSession(it)
+                }
             }
+            dispatchTwitterAccountsUpdated()
         }
-        dispatchTwitterAccountsUpdated()
     }
 
-    private suspend fun dispatchTwitterAccountsUpdated() {
-        val activeAccount = localStore.getActiveSession()
-        val accounts = localStore.getSessions().map {
+    private fun dispatchTwitterAccountsUpdated() {
+        val activeAccount = localStore.activeSession
+        val accounts = localStore.sessions.map {
             it.toAccount(active = it.userId == activeAccount?.userId)
         }
         twitterAccountsChannel.offer(accounts)
