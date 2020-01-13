@@ -18,7 +18,7 @@ import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.view.OnRotaryScrollListener
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.ext.observeEvent
-import com.droibit.looking2.core.util.ext.showLongToast
+import com.droibit.looking2.core.util.ext.showToast
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import com.droibit.looking2.ui.Activities.Account as AccountActivity
@@ -94,8 +94,8 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
             findNavController().navigate(toTwitterSignIn())
         }
 
-        viewModel.limitSignInTwitterErrorMessage.observeEvent(viewLifecycleOwner) { errorMessage ->
-            showLongToast(errorMessage.resId, errorMessage.maxNumOfAccounts)
+        viewModel.limitSignInTwitterErrorMessage.observeEvent(viewLifecycleOwner) {
+            showToast(it)
         }
     }
 

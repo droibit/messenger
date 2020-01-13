@@ -1,6 +1,5 @@
 package com.droibit.looking2.core.model.tweet
 
-import androidx.annotation.IntRange
 import androidx.work.ListenableWorker
 import com.twitter.sdk.android.core.TwitterApiException
 import java.io.IOException

@@ -20,9 +20,7 @@ import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.observeEvent
-import com.droibit.looking2.core.util.ext.showNetworkErrorToast
-import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
-import com.droibit.looking2.core.util.ext.showShortToast
+import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
@@ -115,11 +113,9 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         tweetListAdapter.setTweets(timeline)
     }
 
-    private fun showGetTimelineError(error: GetTimelineError) {
+    private fun showGetTimelineError(error: GetTimelineErrorMessage) {
         when (error) {
-            is GetTimelineError.Network -> showNetworkErrorToast()
-            is GetTimelineError.UnExpected -> showShortToast(error.messageResId)
-            is GetTimelineError.Limited -> showRateLimitingErrorToast()
+            is GetTimelineErrorMessage.Toast -> showToast(error)
         }.exhaustive
         requireActivity().finish()
     }

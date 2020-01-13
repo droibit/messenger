@@ -3,32 +3,36 @@ package com.droibit.looking2.account.ui.twitter.signin
 import androidx.annotation.StringRes
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.model.account.AuthenticationError
+import com.droibit.looking2.core.ui.StringResourceToast
+import com.droibit.looking2.core.ui.ToastConvertible
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error as PlayServicesError
 
-sealed class TwitterAuthenticationError : Throwable() {
-    object Network : TwitterAuthenticationError()
-    class PlayServices(val statusCode: Int) : TwitterAuthenticationError()
-    class UnExpected(@StringRes val messageResId: Int) : TwitterAuthenticationError()
+sealed class TwitterAuthenticationErrorMessage : Throwable() {
+    data class Toast(
+        private val value: ToastConvertible
+    ) : TwitterAuthenticationErrorMessage(), ToastConvertible by value
+    class PlayServicesDialog(val statusCode: Int) : TwitterAuthenticationErrorMessage()
+    class FailureConfirmation(@StringRes val messageResId: Int) : TwitterAuthenticationErrorMessage()
 
     companion object {
         operator fun invoke(
             source: AuthenticationError,
             playServicesChecker: PlayServicesChecker
-        ): TwitterAuthenticationError {
+        ): TwitterAuthenticationErrorMessage {
             return when (source) {
-                is AuthenticationError.Network -> Network
+                is AuthenticationError.Network -> Toast(StringResourceToast.Network)
                 is AuthenticationError.PlayServices -> {
                     val status =
                         playServicesChecker.checkStatusCode(source.statusCode) as PlayServicesError
                     if (status.isUserResolvableError) {
-                        PlayServices(statusCode = source.statusCode)
+                        PlayServicesDialog(statusCode = source.statusCode)
                     } else {
-                        UnExpected(R.string.account_sign_in_error_message_unexpected)
+                        FailureConfirmation(R.string.account_sign_in_error_message_unexpected)
                     }
                 }
                 is AuthenticationError.UnExpected -> {
-                    UnExpected(R.string.account_sign_in_error_message_unexpected)
+                    FailureConfirmation(R.string.account_sign_in_error_message_unexpected)
                 }
             }
         }

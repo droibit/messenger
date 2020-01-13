@@ -29,7 +29,7 @@ class TimelineViewModel(
                 val timeline = getTimelineCall(sinceId = null)
                 Result.success(timeline)
             } catch (e: TwitterError) {
-                Result.failure(GetTimelineError(source = e))
+                Result.failure(GetTimelineErrorMessage(source = e))
             } finally {
                 isLoadingSink.value = false
             }
@@ -43,7 +43,7 @@ class TimelineViewModel(
 
     val isNotEmptyTimeline: LiveData<Boolean> = timeline.map { it.isNotEmpty() }
 
-    val error: LiveData<Event<GetTimelineError>> = getTimelineResult.toErrorEventLiveData()
+    val error: LiveData<Event<GetTimelineErrorMessage>> = getTimelineResult.toErrorEventLiveData()
 
     @Inject
     constructor(getTimelineCall: TimelineSource.GetCall) : this(

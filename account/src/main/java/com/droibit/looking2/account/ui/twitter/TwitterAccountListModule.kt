@@ -2,7 +2,6 @@ package com.droibit.looking2.account.ui.twitter
 
 import android.view.LayoutInflater
 import androidx.lifecycle.ViewModel
-import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import dagger.Binds
@@ -22,13 +21,6 @@ object TwitterAccountListModule {
             LayoutInflater.from(fragment.requireContext()),
             itemPadding,
             fragment::onAccountItemClick
-        )
-    }
-
-    @Provides
-    fun provideSignInErrorMessage(accountConfig: AccountConfiguration): LimitSignInErrorMessage {
-        return LimitSignInErrorMessage(
-            accountConfig.maxNumOfTwitterAccounts
         )
     }
 

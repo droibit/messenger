@@ -35,7 +35,7 @@ class TwitterSignInViewModel(
 
     val completed: LiveData<Event<Unit>> = authenticationResultSink.toSuccessEventLiveData()
 
-    val error: LiveData<Event<TwitterAuthenticationError>> =
+    val error: LiveData<Event<TwitterAuthenticationErrorMessage>> =
         authenticationResultSink.toErrorEventLiveData()
 
     @Inject
@@ -55,7 +55,7 @@ class TwitterSignInViewModel(
         if (canceled ||
             playServicesChecker.checkStatus() is PlayServicesError
         ) {
-            val error = TwitterAuthenticationError.UnExpected(
+            val error = TwitterAuthenticationErrorMessage.FailureConfirmation(
                 R.string.account_sign_in_error_message_play_services
             )
             authenticationResultSink.value = Result.failure(error)
@@ -81,7 +81,7 @@ class TwitterSignInViewModel(
                         }
                         is AuthenticationResult.Failure -> {
                             authenticationResultSink.value = Result.failure(
-                                TwitterAuthenticationError(
+                                TwitterAuthenticationErrorMessage(
                                     source = it.error,
                                     playServicesChecker = playServicesChecker
                                 )

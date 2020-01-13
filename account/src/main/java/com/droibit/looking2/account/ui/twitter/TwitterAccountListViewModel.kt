@@ -24,7 +24,6 @@ class TwitterAccountListViewModel(
     private val accountsSink: MutableLiveData<List<TwitterAccount>>,
     private val selectedAccountSink: MutableLiveData<Event<TwitterAccount>>,
     private val signInTwitterSink: MutableLiveData<Event<Unit>>,
-    private val limitSignInErrorMessageProvider: dagger.Lazy<LimitSignInErrorMessage>,
     private val limitSignInTwitterErrorMessageSink: MutableLiveData<Event<LimitSignInErrorMessage>>,
     private val showSignOutConfirmationSink: MutableLiveData<Event<TwitterAccount>>,
     private val restartAppTimingSink: MutableLiveData<Event<Unit>>
@@ -58,15 +57,13 @@ class TwitterAccountListViewModel(
     @Inject
     constructor(
         accountRepository: AccountRepository,
-        accountConfig: AccountConfiguration,
-        limitSignInErrorMessageProvider: dagger.Lazy<LimitSignInErrorMessage>
+        accountConfig: AccountConfiguration
     ) : this(
         accountRepository,
         accountConfig,
         MutableLiveData(),
         MutableLiveData(),
         MutableLiveData(),
-        limitSignInErrorMessageProvider,
         MutableLiveData(),
         MutableLiveData(),
         MutableLiveData()
@@ -76,7 +73,8 @@ class TwitterAccountListViewModel(
     fun onAddAccountButtonClick() {
         val accounts = accountsSink.value ?: return
         if (accounts.size >= accountConfig.maxNumOfTwitterAccounts) {
-            limitSignInTwitterErrorMessageSink.value = Event(limitSignInErrorMessageProvider.get())
+            limitSignInTwitterErrorMessageSink.value =
+                Event(LimitSignInErrorMessage(accountConfig.maxNumOfTwitterAccounts))
         } else {
             signInTwitterSink.value = Event(Unit)
         }

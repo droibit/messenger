@@ -30,7 +30,7 @@ class MyListsViewModel(
                 val myLists = userListRepository.getMyLists()
                 Result.success(myLists)
             } catch (e: TwitterError) {
-                Result.failure(GetMyListsError(source = e))
+                Result.failure(GetMyListsErrorMessage(source = e))
             } finally {
                 isLoadingSink.value = false
             }
@@ -44,7 +44,7 @@ class MyListsViewModel(
 
     val isNotEmptyMyLists: LiveData<Boolean> = myLists.map { it.isNotEmpty() }
 
-    val error: LiveData<Event<GetMyListsError>> = getMyListsResult2.toErrorEventLiveData()
+    val error: LiveData<Event<GetMyListsErrorMessage>> = getMyListsResult2.toErrorEventLiveData()
 
     @Inject
     constructor(userListRepository: UserListRepository) : this(

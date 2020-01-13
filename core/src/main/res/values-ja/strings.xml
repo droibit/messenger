@@ -2,4 +2,5 @@
 <resources>
     <string name="error_message_network_disconnected">接続状況の確認してから再度お試しください。</string>
     <string name="error_message_rate_limiting">しばらく時間を空けてから再度お試してください。</string>
+    <string name="error_message_unauthorized_twitter_account">アカウント画面から再度ログインしてください。</string>
 </resources>

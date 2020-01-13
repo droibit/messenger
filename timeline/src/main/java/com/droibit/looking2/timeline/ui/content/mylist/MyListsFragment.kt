@@ -9,9 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.util.ext.showNetworkErrorToast
-import com.droibit.looking2.core.util.ext.showRateLimitingErrorToast
-import com.droibit.looking2.core.util.ext.showShortToast
+import com.droibit.looking2.core.util.ext.exhaustive
+import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
@@ -69,12 +68,10 @@ class MyListsFragment : DaggerFragment() {
         myListAdapter.setMyLists(myLists)
     }
 
-    private fun showGetMyListsError(error: GetMyListsError) {
+    private fun showGetMyListsError(error: GetMyListsErrorMessage) {
         when (error) {
-            is GetMyListsError.Network -> showNetworkErrorToast()
-            is GetMyListsError.UnExpected -> showShortToast(error.messageResId)
-            is GetMyListsError.Limited -> showRateLimitingErrorToast()
-        }
+            is GetMyListsErrorMessage.Toast -> showToast(error)
+        }.exhaustive
         requireActivity().finish()
     }
 

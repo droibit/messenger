@@ -4,6 +4,7 @@
 
     <string name="error_message_network_disconnected">Please check the network connection status and try again.</string>
     <string name="error_message_rate_limiting">Please try again later.</string>
-
+    <string name="error_message_unauthorized_twitter_account">Please sign in again from account screen.</string>
+    
     <string name="pref_twitter_get_tweet_count_key" translatable="false">twitter_get_tweet_count</string>
 </resources>

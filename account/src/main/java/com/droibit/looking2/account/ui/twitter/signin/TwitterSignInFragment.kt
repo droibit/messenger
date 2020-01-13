@@ -18,7 +18,7 @@ import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.observeEvent
-import com.droibit.looking2.core.util.ext.showNetworkErrorToast
+import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
 import dagger.android.support.DaggerFragment
@@ -105,10 +105,10 @@ class TwitterSignInFragment : DaggerFragment() {
         }
     }
 
-    private fun showSignInError(error: TwitterAuthenticationError) {
+    private fun showSignInError(error: TwitterAuthenticationErrorMessage) {
         when (error) {
-            is TwitterAuthenticationError.Network -> showNetworkErrorToast()
-            is TwitterAuthenticationError.PlayServices -> {
+            is TwitterAuthenticationErrorMessage.Toast -> showToast(error)
+            is TwitterAuthenticationErrorMessage.PlayServicesDialog -> {
                 playServicesChecker.showErrorResolutionDialog(
                     requireActivity(),
                     errorCode = error.statusCode,
@@ -117,7 +117,7 @@ class TwitterSignInFragment : DaggerFragment() {
                     signInViewModel.onPlayServicesErrorResolutionResult(canceled = true)
                 }
             }
-            is TwitterAuthenticationError.UnExpected -> {
+            is TwitterAuthenticationErrorMessage.FailureConfirmation -> {
                 val intent = FailureIntent(
                     requireContext(),
                     messageResId = error.messageResId
