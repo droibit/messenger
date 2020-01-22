@@ -20,7 +20,7 @@ object ViewModelModule {
         workManager: WorkManager,
         replyTweet: Optional<ReplyTweet>
     ): TweetCall {
-        return TweetCall(workManager, replyTweet.get())
+        return TweetCall(workManager, replyTweet.orElse(null))
     }
 
     @Module
