@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1234567890",
+    "firebase_url": "https://mock-looking.firebaseio.com",
+    "project_id": "mock-looking",
+    "storage_bucket": "mock-looking.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789000:android:9f21b6d1c065183b",
+        "android_client_info": {
+          "package_name": "com.droibit.looking2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123456789000-w3or87glvkdgcrfq55ce8td183lw50uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzftlZWktO7GsAoNVbbSv2zvYnrKXoA6LB5TYm"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789000:android:8f21b6d1c065183b",
+        "android_client_info": {
+          "package_name": "com.droibit.looking2.debug"
+        }
+      },
+      "oauth_cliesnt": [
+        {
+          "client_id": "123456789000-w3or87glvkdgcrfq55ce8td183lw50uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzftlZWktO7GsAoNVbbSv2zvYnrKXoA6LB5TYm"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
