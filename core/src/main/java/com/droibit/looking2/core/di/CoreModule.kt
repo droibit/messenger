@@ -34,7 +34,7 @@ object CoreModule {
     @Provides
     fun provideAccountConfiguration(): AccountConfiguration {
         return AccountConfiguration(
-            maxNumOfTwitterAccounts = 2
+            maxNumOfTwitterAccounts = 3
         )
     }
 
