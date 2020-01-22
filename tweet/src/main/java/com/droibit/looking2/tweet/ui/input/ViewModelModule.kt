@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkManager
 import com.droibit.looking2.core.di.key.ViewModelKey
-import com.droibit.looking2.core.util.Optional
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import java.util.Optional
 
 @Module(includes = [ViewModelModule.BindingModule::class])
 object ViewModelModule {

@@ -2,7 +2,6 @@ package com.droibit.looking2.tweet.ui
 
 import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import com.droibit.looking2.core.util.Optional
 import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
 import com.droibit.looking2.tweet.ui.input.ViewModelModule
@@ -15,6 +14,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+import java.util.Optional
 import javax.inject.Named
 
 @Module(
@@ -30,7 +30,7 @@ object TweetHostModule {
     @Provides
     fun provideReplyTweet(activity: TweetHostActivity): Optional<ReplyTweet> {
         val replyTweet = activity.intent.extras?.getSerializable(EXTRA_REPLY_TWEET) as? ReplyTweet
-        return Optional(replyTweet)
+        return Optional.ofNullable(replyTweet)
     }
 
     @FeatureScope
@@ -63,7 +63,7 @@ object TweetHostModule {
     @Named("replyUser")
     @Provides
     fun provideReplyUser(replyTweet: Optional<ReplyTweet>): String {
-        return if (replyTweet.isPresent) "@${replyTweet.getValue().user.screenName}" else ""
+        return if (replyTweet.isPresent) "@${replyTweet.get().user.screenName}" else ""
     }
 
     @FeatureScope
