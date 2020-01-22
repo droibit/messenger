@@ -2,6 +2,7 @@ package com.droibit.looking2.core.model.tweet
 
 import androidx.work.ListenableWorker
 import com.twitter.sdk.android.core.TwitterApiException
+import timber.log.Timber
 import java.io.IOException
 import androidx.work.ListenableWorker.Result as WorkResult
 
@@ -36,11 +37,14 @@ fun ListenableWorker.retryIfNeeded(
     return when (cause) {
         is TwitterError.Network -> {
             if (runAttemptCount < maxRunAttemptCount) {
+                Timber.d("Retry: $runAttemptCount / $maxRunAttemptCount")
                 WorkResult.retry()
             } else {
+                Timber.d("Stop retry.")
                 WorkResult.failure()
             }
         }
         else -> WorkResult.failure()
+            .also { Timber.d("Failed work: $cause") }
     }
 }
