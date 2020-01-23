@@ -11,15 +11,18 @@ android {
     defaultConfig {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode buildConfig.version.code
-        versionName buildConfig.version.name
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "en", "ja"
         vectorDrawables.useSupportLibrary = true
     }
 
     dataBinding {
         enabled true
+    }
+
+    buildTypes {
+        release {
+            proguardFiles 'proguard-rules-dynamic-features.pro'
+        }
     }
 }
 

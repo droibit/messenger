@@ -44,6 +44,7 @@ class HomeActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, homeR.layout.activity_home)
         binding.navigationList.apply {
             adapter = actionItemListAdapter
