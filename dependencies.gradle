@@ -17,7 +17,7 @@ ext {
                     buildTools    : 'com.android.tools.build:gradle:3.6.0-rc01',
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                     googleServices: 'com.google.gms:google-services:4.3.3',
-                    fabric        : 'io.fabric.tools:gradle:1.31.0',
+                    crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta01',
                     ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:8.2.0',
                     ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.0',
                     navSafeArgs   : "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidx.navigation}",
@@ -60,7 +60,8 @@ ext {
                     wearable: "com.google.android.gms:play-services-wearable:17.0.0"
             ],
             firebase       : [
-                    core: "com.google.firebase:firebase-core:17.2.1"
+                    core       : "com.google.firebase:firebase-core:17.2.1",
+                    crashlytics: "com.google.firebase:firebase-crashlytics:17.0.0-beta01",
             ],
             okhttp         : [
                     client : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
@@ -88,7 +89,6 @@ ext {
                     inject: 'javax.inject:javax.inject:1'
             ],
             coil           : "io.coil-kt:coil:0.9.1",
-            crashlytics    : "com.crashlytics.sdk.android:crashlytics:2.10.1",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.3",
             gson           : 'com.google.code.gson:gson:2.8.6',
             okio           : 'com.squareup.okio:okio:2.4.1',

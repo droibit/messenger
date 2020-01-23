@@ -52,14 +52,6 @@ repositories {
     }
 
     maven {
-        url 'https://maven.fabric.io/public'
-        content {
-            includeGroupByRegex "io\\.fabric.*"
-            includeGroupByRegex "com\\.crashlytics.*"
-        }
-    }
-
-    maven {
         url "https://jitpack.io"
         content {
             includeGroupByRegex "com\\.github\\.droibit.*"

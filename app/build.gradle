@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: "com.github.ben-manes.versions"
 
@@ -32,8 +31,6 @@ android {
 
     buildTypes {
         debug {
-            // ref. https://developer.android.com/studio/build/optimize-your-build.html#disable_crashlytics
-            ext.alwaysUpdateBuildId = false
             applicationIdSuffix '.debug'
             versionNameSuffix '.debug'
         }
@@ -65,13 +62,11 @@ configurations.all {
 
 dependencies {
     implementation project(':core')
-
     implementation deps.androidx.work
+    implementation deps.firebase.crashlytics
+
     kapt deps.dagger.compiler
 
-    implementation(deps.crashlytics) {
-        transitive = true
-    }
 
     testImplementation deps.robolectric
 }
@@ -82,3 +77,4 @@ kapt {
 
 // Must be applied after dependencies. See https://stackoverflow.com/a/38018985
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
