@@ -1,2 +1,3 @@
-# Dagger2 Android
--dontwarn com.google.errorprone.annotations.**
+# androidx
+-keep class * extends androidx.databinding.DataBinderMapper { *; }
+-keep class * extends androidx.fragment.app.Fragment { *; }

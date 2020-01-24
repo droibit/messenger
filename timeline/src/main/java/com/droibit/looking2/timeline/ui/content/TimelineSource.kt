@@ -1,13 +1,20 @@
 package com.droibit.looking2.timeline.ui.content
 
+import androidx.annotation.Keep
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
 import java.io.Serializable
 
 sealed class TimelineSource : Serializable {
+
+    @Keep
     object Home : TimelineSource()
+
+    @Keep
     object Mentions : TimelineSource()
+
+    @Keep
     class MyLists(val listId: Long) : TimelineSource()
 
     fun toGetCall(repository: TimelineRepository): GetCall = GetCall(this, repository)

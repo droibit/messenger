@@ -34,6 +34,7 @@ android {
             minifyEnabled false
             applicationIdSuffix '.debug'
             versionNameSuffix '.debug'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled true
@@ -67,7 +68,6 @@ dependencies {
     implementation deps.firebase.crashlytics
 
     kapt deps.dagger.compiler
-
 
     testImplementation deps.robolectric
 }
