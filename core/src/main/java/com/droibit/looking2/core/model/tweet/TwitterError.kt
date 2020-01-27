@@ -2,6 +2,7 @@ package com.droibit.looking2.core.model.tweet
 
 import androidx.work.ListenableWorker
 import com.twitter.sdk.android.core.TwitterApiException
+import com.twitter.sdk.android.core.TwitterException
 import timber.log.Timber
 import java.io.IOException
 import androidx.work.ListenableWorker.Result as WorkResult
@@ -11,22 +12,27 @@ private const val STATUS_CODE_TOO_MANY_ACCESS = 429
 
 private const val DEFAULT_MAX_RUN_ATTEMPT_COUNT = 2
 
-// TODO: Consider adding auth error & limited api error.
 sealed class TwitterError(message: String? = null) : Exception(message) {
     class Network : TwitterError()
     class Limited : TwitterError()
     object Unauthorized : TwitterError()
-    class UnExpected(val errorCode: Int = Int.MIN_VALUE) : TwitterError()
-}
+    data class UnExpected(val errorCode: Int? = null) : TwitterError()
 
-fun Exception.toTwitterError(): TwitterError {
-    if (this.cause is IOException) return TwitterError.Network()
-    if (this !is TwitterApiException) return TwitterError.UnExpected()
+    companion object {
 
-    return when (this.statusCode) {
-        STATUS_CODE_UNAUTHORIZED -> TwitterError.Unauthorized
-        STATUS_CODE_TOO_MANY_ACCESS -> TwitterError.Limited()
-        else -> TwitterError.UnExpected(errorCode = this.errorCode)
+        operator fun invoke(error: TwitterException): TwitterError {
+            return when {
+                error.cause is IOException -> Network()
+                error is TwitterApiException -> {
+                    when (error.statusCode) {
+                        STATUS_CODE_UNAUTHORIZED -> Unauthorized
+                        STATUS_CODE_TOO_MANY_ACCESS -> Limited()
+                        else -> UnExpected(errorCode = error.errorCode)
+                    }
+                }
+                else -> UnExpected()
+            }
+        }
     }
 }
 

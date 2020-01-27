@@ -5,8 +5,8 @@ import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFact
 import com.droibit.looking2.core.data.source.api.twitter.await
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.model.tweet.toTwitterError
 import com.twitter.sdk.android.core.TwitterCore
+import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,9 +22,9 @@ class UserListService @Inject constructor(
         try {
             val userListsResponse = apiClient.userListService.list(userId, null, null).await()
             return mapper.toUserLists(source = userListsResponse)
-        } catch (e: Exception) {
+        } catch (e: TwitterException) {
             Timber.e(e)
-            throw e.toTwitterError()
+            throw TwitterError(e)
         }
     }
 }

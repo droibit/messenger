@@ -4,7 +4,6 @@ import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
 import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFactoryDelegate
 import com.droibit.looking2.core.data.source.api.twitter.await
 import com.droibit.looking2.core.model.tweet.TwitterError
-import com.droibit.looking2.core.model.tweet.toTwitterError
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
@@ -34,7 +33,7 @@ class TweetService @Inject constructor(
             ).await()
         } catch (e: TwitterException) {
             Timber.e(e)
-            throw e.toTwitterError()
+            throw TwitterError(e)
         }
     }
 
@@ -45,7 +44,7 @@ class TweetService @Inject constructor(
             apiClient.statusesService.retweet(tweetId, null).await()
         } catch (e: TwitterException) {
             Timber.e(e)
-            val error = e.toTwitterError()
+            val error = TwitterError(e)
             if (error is TwitterError.UnExpected &&
                 error.errorCode == ERROR_CODE_ALREADY_RETWEETED
             ) {
@@ -62,7 +61,7 @@ class TweetService @Inject constructor(
             apiClient.favoriteService.create(tweetId, null).await()
         } catch (e: TwitterException) {
             Timber.e(e)
-            val error = e.toTwitterError()
+            val error = TwitterError(e)
             if (error is TwitterError.UnExpected &&
                 error.errorCode == ERROR_CODE_ALREADY_FAVORITED
             ) {

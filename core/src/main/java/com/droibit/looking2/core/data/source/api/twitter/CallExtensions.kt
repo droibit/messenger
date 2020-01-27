@@ -13,7 +13,7 @@ internal suspend fun <T> Call<T>.await(): T {
     return suspendCancellableCoroutine { context ->
         enqueue(object : Callback<T>() {
             override fun success(result: Result<T>) {
-                context.resume(result.data)
+                if (context.isActive) context.resume(result.data)
             }
 
             override fun failure(exception: TwitterException) {
