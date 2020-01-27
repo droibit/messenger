@@ -36,14 +36,15 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
 
     private val viewModel: TwitterAccountListViewModel by navGraphViewModels(R.id.navigationTwitterAccountList) { viewModelFactory }
 
-    private lateinit var binding: FragmentTwitterAccountListBinding
+    private var _binding: FragmentTwitterAccountListBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTwitterAccountListBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTwitterAccountListBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
             it.contentPadding = contentPadding
@@ -97,6 +98,11 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
         viewModel.limitSignInTwitterErrorMessage.observeEvent(viewLifecycleOwner) {
             showToast(it)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

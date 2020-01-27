@@ -22,19 +22,25 @@ class TweetChooserFragment : DaggerFragment() {
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
 
-    private lateinit var binding: FragmentTweetChooserBinding
+    private var _binding: FragmentTweetChooserBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetChooserBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTweetChooserBinding.inflate(inflater, container, false).also {
             it.contentPadding = contentPadding
             it.fragment = this
             it.screenTitle = title
         }
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     @Suppress("UNUSED_PARAMETER")

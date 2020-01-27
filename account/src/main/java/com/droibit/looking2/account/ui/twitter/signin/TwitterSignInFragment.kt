@@ -44,7 +44,8 @@ class TwitterSignInFragment : DaggerFragment() {
     @JvmField
     var needTwitterSignIn: Boolean = false
 
-    private lateinit var binding: FragmentTwitterSigninBinding
+    private var _binding: FragmentTwitterSigninBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitterSignIn) {
         viewModelFactory
@@ -55,7 +56,7 @@ class TwitterSignInFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTwitterSigninBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = signInViewModel
             it.fragment = this
@@ -134,6 +135,11 @@ class TwitterSignInFragment : DaggerFragment() {
                 signInViewModel.onPlayServicesErrorResolutionResult()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     @UiThread

@@ -52,16 +52,18 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     private val tweetActionViewModel: TweetActionViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: FragmentTimelineBinding
+    private var _binding: FragmentTimelineBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
-    private lateinit var tweetActionList: RecyclerView
+    private var _tweetActionList: RecyclerView? = null
+    private val tweetActionList get() = requireNotNull(_tweetActionList)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTimelineBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTimelineBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = timelineViewModel
         }
@@ -88,7 +90,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             it.setOnMenuItemClickListener(this)
             // When displaying action list,
             // use RecyclerView to change the scroll position to top.
-            this.tweetActionList = it.getChildAt(0) as RecyclerView
+            this._tweetActionList = it.getChildAt(0) as RecyclerView
         }
 
         observeReply()
@@ -160,6 +162,12 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        _tweetActionList = null
+        super.onDestroyView()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

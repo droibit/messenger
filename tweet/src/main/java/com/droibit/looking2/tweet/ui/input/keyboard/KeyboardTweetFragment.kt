@@ -32,14 +32,15 @@ class KeyboardTweetFragment : DaggerFragment() {
 
     private val viewModel: TweetViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: FragmentTweetKeyboardBinding
+    private var _binding: FragmentTweetKeyboardBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.strings = layoutString
             it.contentPadding = contentPadding
@@ -65,5 +66,10 @@ class KeyboardTweetFragment : DaggerFragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

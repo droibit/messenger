@@ -50,14 +50,15 @@ class VoiceTweetFragment : DaggerFragment(),
 
     private val viewModel: TweetViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: FragmentTweetVoiceBinding
+    private var _binding: FragmentTweetVoiceBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTweetVoiceBinding.inflate(inflater, container, false).also {
+        _binding = FragmentTweetVoiceBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.fragment = this
             it.viewModel = this.viewModel
@@ -93,6 +94,11 @@ class VoiceTweetFragment : DaggerFragment(),
         when (requestCode) {
             REQUEST_CODE_SPEECH -> onRecognizeSpeechResult(resultCode, data)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun observeTweetCompleted() {

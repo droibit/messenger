@@ -29,14 +29,15 @@ class MyListsFragment : DaggerFragment() {
 
     private val viewModel: MyListsViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: FragmentMyListsBinding
+    private var _binding: FragmentMyListsBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMyListsBinding.inflate(inflater, container, false).also {
+        _binding = FragmentMyListsBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
         }
@@ -73,6 +74,11 @@ class MyListsFragment : DaggerFragment() {
             is GetMyListsErrorMessage.Toast -> showToast(error)
         }.exhaustive
         requireActivity().finish()
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     fun onUserListClick(myList: UserList) {

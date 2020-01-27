@@ -21,14 +21,15 @@ class PhotoFragment : DaggerFragment() {
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
-    private lateinit var binding: FragmentPhotoBinding
+    private var _binding: FragmentPhotoBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPhotoBinding.inflate(inflater, container, false)
+        _binding = FragmentPhotoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,5 +41,10 @@ class PhotoFragment : DaggerFragment() {
             this.orientation = ViewPager2.ORIENTATION_VERTICAL
         }
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }
