@@ -19,7 +19,7 @@ ext {
                     googleServices: 'com.google.gms:google-services:4.3.3',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta01',
                     ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:8.2.0',
-                    ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.0',
+                    ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.1',
                     navSafeArgs   : "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidx.navigation}",
                     gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
             ],
@@ -89,7 +89,7 @@ ext {
                     inject: 'javax.inject:javax.inject:1'
             ],
             coil           : "io.coil-kt:coil:0.9.2",
-            ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.3",
+            ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.6",
             gson           : 'com.google.code.gson:gson:2.8.6',
             okio           : 'com.squareup.okio:okio:2.4.1',
             timber         : 'com.jakewharton.timber:timber:4.7.1',
