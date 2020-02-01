@@ -13,6 +13,7 @@ import java.util.Collections
 import java.util.Locale
 import javax.inject.Inject
 import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
+import com.droibit.looking2.core.model.tweet.Media.Unsupported as UnsupportedMedia
 import com.twitter.sdk.android.core.models.Tweet as TweetResponse
 import com.twitter.sdk.android.core.models.User as UserResponse
 
@@ -73,9 +74,10 @@ private fun UrlEntity.toShortUrl(): ShorteningUrl {
 private fun MediaEntity.toMedia(): Media? {
     return when (type) {
         MEDIA_TYPE_PHOTO -> {
-            PhotoMedia(url = ShorteningUrl(url, displayUrl, "$mediaUrlHttps:small"))
+            PhotoMedia(ShorteningUrl(url, displayUrl, "$mediaUrlHttps:small"))
         }
-        else -> null
+        // e.g. `video`, `animated_gif` ...
+        else -> UnsupportedMedia(type, ShorteningUrl(url, displayUrl, mediaUrlHttps))
     }
 }
 

@@ -18,14 +18,13 @@ data class Tweet(
     val hasPhotoUrl: Boolean
         get() {
             val tweet = retweetedTweet ?: this
-            return tweet.medium.firstOrNull { it is Media.Photo } != null
+            return tweet.medium.isNotEmpty()
         }
 
     val photoUrls: List<ShorteningUrl>
         get() {
             val tweet = retweetedTweet ?: this
             return tweet.medium.asSequence()
-                .filter { it is Media.Photo }
                 .map { it.url }
                 .toList()
         }

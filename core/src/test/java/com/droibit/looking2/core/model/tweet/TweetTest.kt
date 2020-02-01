@@ -10,12 +10,18 @@ class TweetTest {
     @Test
     fun hasPhotoUrl() {
         kotlin.run {
-            val tweet = create(medium = listOf(mock(), mock()))
+            val tweet = create(medium = emptyList())
             assertThat(tweet.hasPhotoUrl).isFalse()
         }
 
         kotlin.run {
-            val tweet = create(medium = listOf(mock(), mock<Media.Photo>(), mock()))
+            val tweet = create(
+                medium = listOf(
+                    mock(),
+                    mock<Media.Photo>(),
+                    mock<Media.Unsupported>()
+                )
+            )
             assertThat(tweet.hasPhotoUrl).isTrue()
         }
     }
@@ -24,14 +30,20 @@ class TweetTest {
     fun hasPhotoUrl_inRetweetedTweet() {
         kotlin.run {
             val tweet = create(
-                retweetedTweet = create(medium = listOf(mock(), mock()))
+                retweetedTweet = create(medium = emptyList())
             )
             assertThat(tweet.hasPhotoUrl).isFalse()
         }
 
         kotlin.run {
             val tweet = create(
-                retweetedTweet = create(medium = listOf(mock(), mock<Media.Photo>(), mock()))
+                retweetedTweet = create(
+                    medium = listOf(
+                        mock(),
+                        mock<Media.Photo>(),
+                        mock<Media.Unsupported>()
+                    )
+                )
             )
             assertThat(tweet.hasPhotoUrl).isTrue()
         }
@@ -40,27 +52,29 @@ class TweetTest {
     @Test
     fun photoUrls() {
         val url1 = mock<ShorteningUrl>()
-        val photo1 = mock<Media.Photo> { on { url } doReturn url1 }
+        val photo1 = mock<Media.Unsupported> { on { url } doReturn url1 }
 
         val url2 = mock<ShorteningUrl>()
         val photo2 = mock<Media.Photo> { on { url } doReturn url2 }
 
-        val tweet = create(medium = listOf<Media>(mock(), photo1, photo2))
+        val tweet = create(medium = listOf(photo1, photo2))
         assertThat(tweet.photoUrls).containsExactly(url1, url2)
+        assertThat(tweet.quotedTweet).isNull()
     }
 
     @Test
     fun photoUrls_inRetweetedTweet() {
         val url1 = mock<ShorteningUrl>()
-        val photo1 = mock<Media.Photo> { on { url } doReturn url1 }
+        val photo1 = mock<Media.Unsupported> { on { url } doReturn url1 }
 
         val url2 = mock<ShorteningUrl>()
         val photo2 = mock<Media.Photo> { on { url } doReturn url2 }
 
         val tweet = create(
-            retweetedTweet = create(medium = listOf<Media>(photo1, mock(), photo2))
+            retweetedTweet = create(medium = listOf(photo1, photo2))
         )
         assertThat(tweet.photoUrls).containsExactly(url1, url2)
+        assertThat(tweet.medium).isEmpty()
     }
 }
 

@@ -8,7 +8,6 @@ import android.widget.TextView
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.ext.unescapeRegex
 import javax.inject.Inject
-import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
 import com.twitter.Regex as TwitterRegex
 
 private val highlightPatterns = listOf(
@@ -24,20 +23,18 @@ class TweetTextProcessor @Inject constructor() {
     ) {
         val quotedTweetUrl = tweet.quotedTweet?.url
         val replaceUrls = ArrayList<Pair<String, String>>()
-        tweet.urls.mapTo(replaceUrls) {
-            if (quotedTweetUrl == null) it.url to it.displayUrl else {
+        tweet.urls.mapTo(replaceUrls) { shorteningUrl ->
+            if (quotedTweetUrl == null) shorteningUrl.url to shorteningUrl.displayUrl else {
                 // Remove quoted tweet URL.
                 // NOTE: User name of URL make from "Tweet" is upper case, but user name of expanded URL may be lower case.
                 val quotedTweetShorteningUrl = tweet.urls.firstOrNull {
                     it.expandedUrl.equals(quotedTweetUrl, ignoreCase = true)
                 }
-                it.url to if (quotedTweetShorteningUrl == null) it.displayUrl else ""    // Delete quote tweet URL from text.
+                shorteningUrl.url to if (quotedTweetShorteningUrl == null) shorteningUrl.displayUrl else ""    // Delete quote tweet URL from text.
             }
         }
         // Display photo icon instead of URL.
-        tweet.medium.mapTo(replaceUrls) {
-            it.url.url to if (it is PhotoMedia) "" else it.url.displayUrl
-        }
+        tweet.medium.mapTo(replaceUrls) { it.url.url to "" }
         applyUrlReplacement(view, tweet.text, replaceUrls)
     }
 
