@@ -96,9 +96,9 @@ ext {
             circleImageView: 'de.hdodenhof:circleimageview:3.0.2',
             stetho         : 'com.facebook.stetho:stetho:1.5.1',
 
-            junit          : 'junit:junit:4.12',
+            junit          : 'junit:junit:4.13',
             robolectric    : 'org.robolectric:robolectric:4.3.1',
-            assertj        : 'org.assertj:assertj-core:3.14.0',
-            mockito        : 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+            truth          : 'com.google.truth:truth:1.0.1',
+            mockito        : 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     ]
 }

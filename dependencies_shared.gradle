@@ -28,7 +28,7 @@ dependencies {
     implementation deps.timber
 
     testImplementation deps.junit
-    testImplementation deps.assertj
+    testImplementation deps.truth
     testImplementation deps.mockito
     testImplementation deps.androidx.archTesting
     testImplementation deps.kotlin.coroutines.test
