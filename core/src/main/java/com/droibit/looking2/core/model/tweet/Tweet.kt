@@ -21,12 +21,6 @@ data class Tweet(
             return tweet.medium.firstOrNull { it is Media.Photo } != null
         }
 
-    val includeTweet: Boolean
-        get() {
-            val tweet = retweetedTweet ?: quotedTweet ?: this
-            return tweet.urls.isNotEmpty()
-        }
-
     val photoUrls: List<ShorteningUrl>
         get() {
             val tweet = retweetedTweet ?: this
@@ -38,15 +32,4 @@ data class Tweet(
 
     val url: String
         get() = "https://twitter.com/${user.screenName}/status/$id"
-
-    val shareUrl: ShorteningUrl
-        get() {
-            val tweet = this.retweetedTweet ?: this
-            // Ignore quoted tweet url.
-            val url = tweet.urls.firstOrNull { it.expandedUrl != quotedTweet?.url }
-            if (url != null) {
-                return url
-            }
-            return quotedTweet?.urls?.firstOrNull() ?: error("Not found share url.")
-        }
 }
