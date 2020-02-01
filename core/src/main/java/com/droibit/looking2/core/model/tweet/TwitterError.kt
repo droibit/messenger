@@ -2,35 +2,40 @@ package com.droibit.looking2.core.model.tweet
 
 import androidx.work.ListenableWorker
 import com.twitter.sdk.android.core.TwitterApiException
+import com.twitter.sdk.android.core.TwitterApiException.DEFAULT_ERROR_CODE
 import com.twitter.sdk.android.core.TwitterException
 import timber.log.Timber
 import java.io.IOException
 import androidx.work.ListenableWorker.Result as WorkResult
 
+// ref. https://developer.twitter.com/en/docs/ads/general/guides/response-codes
 private const val STATUS_CODE_UNAUTHORIZED = 401
 private const val STATUS_CODE_TOO_MANY_ACCESS = 429
 
 private const val DEFAULT_MAX_RUN_ATTEMPT_COUNT = 2
 
 sealed class TwitterError(message: String? = null) : Exception(message) {
-    class Network : TwitterError()
-    class Limited : TwitterError()
+    object Network : TwitterError()
+    object Limited : TwitterError()
     object Unauthorized : TwitterError()
-    data class UnExpected(val errorCode: Int? = null) : TwitterError()
+    data class UnExpected(
+        val errorCode: Int? = null,
+        override val message: String? = null
+    ) : TwitterError(message)
 
     companion object {
 
         operator fun invoke(error: TwitterException): TwitterError {
             return when {
-                error.cause is IOException -> Network()
+                error.cause is IOException -> Network
                 error is TwitterApiException -> {
                     when (error.statusCode) {
                         STATUS_CODE_UNAUTHORIZED -> Unauthorized
-                        STATUS_CODE_TOO_MANY_ACCESS -> Limited()
-                        else -> UnExpected(errorCode = error.errorCode)
+                        STATUS_CODE_TOO_MANY_ACCESS -> Limited
+                        else -> UnExpected(error.statusCode, error.errorMessage)
                     }
                 }
-                else -> UnExpected()
+                else -> UnExpected(DEFAULT_ERROR_CODE, error.message)
             }
         }
     }
