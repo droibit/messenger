@@ -11,6 +11,7 @@ ext {
                     lifecycle : '2.2.0'
             ],
             chopstick : '1.0.0-beta01',
+            stehto : '1.5.1'
     ]
     deps = [
             plugin         : [
@@ -88,14 +89,16 @@ ext {
             javax          : [
                     inject: 'javax.inject:javax.inject:1'
             ],
+            stetho         : [
+                    core: "com.facebook.stetho:stetho:${versions.stetho}",
+                    okhttp3: "com.facebook.stetho:stetho-okhttp3:${versions.stehto}"
+            ],
             coil           : "io.coil-kt:coil:0.9.2",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.6",
             gson           : 'com.google.code.gson:gson:2.8.6',
             okio           : 'com.squareup.okio:okio:2.4.1',
             timber         : 'com.jakewharton.timber:timber:4.7.1',
             circleImageView: 'de.hdodenhof:circleimageview:3.0.2',
-            stetho         : 'com.facebook.stetho:stetho:1.5.1',
-
             junit          : 'junit:junit:4.13',
             robolectric    : 'org.robolectric:robolectric:4.3.1',
             truth          : 'com.google.truth:truth:1.0.1',

@@ -59,7 +59,8 @@ dependencies {
 
     implementation deps.timber
 
-    debugImplementation deps.stetho
+    debugImplementation deps.stetho.core
+    debugImplementation deps.stetho.okhttp3
 
     testImplementation deps.junit
     testImplementation deps.truth
