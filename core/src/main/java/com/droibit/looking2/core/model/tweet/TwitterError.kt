@@ -47,8 +47,9 @@ fun ListenableWorker.retryIfNeeded(
 ): WorkResult {
     return when (cause) {
         is TwitterError.Network -> {
-            if (runAttemptCount < maxRunAttemptCount) {
-                Timber.d("Retry: $runAttemptCount / $maxRunAttemptCount")
+            val attemptCount = this.runAttemptCount
+            if (attemptCount < maxRunAttemptCount) {
+                Timber.d("Retry: $attemptCount / $maxRunAttemptCount")
                 WorkResult.retry()
             } else {
                 Timber.d("Stop retry.")
