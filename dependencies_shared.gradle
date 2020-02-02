@@ -32,4 +32,5 @@ dependencies {
     testImplementation deps.mockito
     testImplementation deps.androidx.archTesting
     testImplementation deps.kotlin.coroutines.test
+    testImplementation deps.liveDataTesting
 }
