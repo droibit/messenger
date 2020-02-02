@@ -2,6 +2,7 @@ package com.droibit.looking2.timeline.ui.content.photo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -35,8 +36,7 @@ class PhotoListAdapter(
     class ViewHolder(
         private val lifecycleOwner: LifecycleOwner,
         private val binding: ListItemPhotoBinding
-    ) :
-        RecyclerView.ViewHolder(binding.root), Request.Listener {
+    ) : RecyclerView.ViewHolder(binding.root), Request.Listener {
 
         fun update(url: String) {
             binding.photo.load(url) {
@@ -52,6 +52,7 @@ class PhotoListAdapter(
         }
 
         override fun onError(data: Any?, throwable: Throwable) {
+            binding.photo.scaleType = ImageView.ScaleType.CENTER
             binding.loadingInProgress = false
         }
 
