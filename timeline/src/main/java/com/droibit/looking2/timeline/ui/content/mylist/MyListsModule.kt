@@ -18,7 +18,7 @@ object MyListsModule {
     @Named("fragment")
     @Provides
     fun provideLifecycleOwner(fragment: MyListsFragment): LifecycleOwner {
-        return fragment
+        return fragment.viewLifecycleOwner
     }
 
     @Provides

@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content.mylist
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner

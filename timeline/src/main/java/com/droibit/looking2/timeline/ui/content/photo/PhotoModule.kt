@@ -13,7 +13,7 @@ object PhotoModule {
     @Named("fragment")
     @Provides
     fun provideLifecycleOwner(fragment: PhotoFragment): LifecycleOwner {
-        return fragment
+        return fragment.viewLifecycleOwner
     }
 
     @Named("photoUrls")

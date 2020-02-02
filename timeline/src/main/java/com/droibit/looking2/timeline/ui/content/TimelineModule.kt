@@ -23,7 +23,7 @@ object TimelineModule {
     @Named("fragment")
     @Provides
     fun provideFragmentLifecycleProvider(fragment: TimelineFragment): LifecycleOwner {
-        return fragment
+        return fragment.viewLifecycleOwner
     }
 
     @Provides
