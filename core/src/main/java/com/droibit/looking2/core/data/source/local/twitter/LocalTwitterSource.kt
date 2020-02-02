@@ -2,9 +2,7 @@ package com.droibit.looking2.core.data.source.local.twitter
 
 import androidx.annotation.Size
 import androidx.annotation.WorkerThread
-import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
 import com.twitter.sdk.android.core.SessionManager
-import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession
 import timber.log.Timber
 import javax.inject.Inject
@@ -12,9 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LocalTwitterSource @Inject constructor(
-    private val twitterCore: TwitterCore,
-    private val sessionManager: SessionManager<TwitterSession>,
-    private val apiClientFactory: AppTwitterApiClient.Factory
+    private val sessionManager: SessionManager<TwitterSession>
 ) {
     @get:WorkerThread
     val activeSession: TwitterSession?
@@ -38,7 +34,6 @@ class LocalTwitterSource @Inject constructor(
     fun add(session: TwitterSession) {
         Timber.d("Add: $session")
         sessionManager.setSession(session.id, session)
-        twitterCore.addApiClient(session, apiClientFactory.get(session))
     }
 
     @WorkerThread

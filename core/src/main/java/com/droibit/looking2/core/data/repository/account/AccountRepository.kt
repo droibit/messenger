@@ -70,11 +70,12 @@ class AccountRepository(
             val requestToken = remoteSource.requestTempToken()
             emit(WillAuthenticateOnPhone)
             val responseUrl = remoteSource.sendAuthorizationRequest(requestToken)
-            remoteSource.createNewSession(requestToken, responseUrl).also {
-                localSource.add(session = it)
-                analytics.setNumOfGetTweets(localSource.sessions.size)
-                dispatchTwitterAccountsUpdated()
-            }
+            val newSession = remoteSource.createNewSession(requestToken, responseUrl)
+            localSource.add(newSession)
+            remoteSource.ensureApiClient(newSession)
+            analytics.setNumOfGetTweets(localSource.sessions.size)
+            dispatchTwitterAccountsUpdated()
+
             emit(AuthenticationSuccess)
         } catch (e: AuthenticationError) {
             emit(AuthenticationFailure(error = e))
