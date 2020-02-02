@@ -1,5 +1,6 @@
 package com.droibit.looking2.core.data.repository.account
 
+import androidx.annotation.VisibleForTesting
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
 import com.droibit.looking2.core.data.source.remote.twitter.account.RemoteTwitterAccountSource
@@ -96,10 +97,11 @@ class AccountRepository(
         }
     }
 
-    private fun dispatchTwitterAccountsUpdated() {
-        val activeAccount = localSource.activeSession
+    @VisibleForTesting
+    internal fun dispatchTwitterAccountsUpdated() {
+        val activeAccount = localSource.activeSession ?: return
         val accounts = localSource.sessions.map {
-            it.toAccount(active = it.userId == activeAccount?.userId)
+            it.toAccount(active = it.userId == activeAccount.userId)
         }
         twitterAccountsChannel.offer(accounts)
     }
