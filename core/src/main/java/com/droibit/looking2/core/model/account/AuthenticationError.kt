@@ -1,7 +1,17 @@
 package com.droibit.looking2.core.model.account
 
+import com.twitter.sdk.android.core.TwitterException
+import java.io.IOException
+
 sealed class AuthenticationError(message: String? = null) : Exception(message) {
-    class Network : AuthenticationError()
+    object Network : AuthenticationError()
     data class PlayServices(val statusCode: Int) : AuthenticationError()
-    class UnExpected : AuthenticationError()
+    object UnExpected : AuthenticationError()
+
+    companion object {
+
+        operator fun invoke(error: TwitterException): AuthenticationError {
+            return if (error.cause is IOException) Network else UnExpected
+        }
+    }
 }

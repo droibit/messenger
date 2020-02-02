@@ -12,7 +12,6 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -35,11 +34,7 @@ class RemoteTwitterAccountSource @Inject constructor(
             return result.authToken
         } catch (e: TwitterException) {
             Timber.e(e)
-            throw if (e.cause is IOException) {
-                AuthenticationError.Network()
-            } else {
-                AuthenticationError.UnExpected()
-            }
+            throw AuthenticationError(e)
         }
     }
 
@@ -68,11 +63,7 @@ class RemoteTwitterAccountSource @Inject constructor(
             return TwitterSession(result.authToken, result.userId, result.userName)
         } catch (e: TwitterException) {
             Timber.e(e)
-            throw if (e.cause is IOException) {
-                AuthenticationError.Network()
-            } else {
-                AuthenticationError.UnExpected()
-            }
+            throw AuthenticationError(e)
         }
     }
 }
