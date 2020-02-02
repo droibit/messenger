@@ -11,7 +11,7 @@ class TwitterAccountKtTest {
     @Test
     fun toAccount_TwitterSession() {
         val session = mock<TwitterSession> {
-            on { this.userId } doReturn 1L
+            on { this.userId } doReturn L
             on { this.userName } doReturn "test"
         }
         assertThat(session.toAccount(active = true)).isEqualTo(
