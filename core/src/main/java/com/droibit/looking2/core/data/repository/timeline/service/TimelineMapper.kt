@@ -5,11 +5,9 @@ import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.util.ext.unescapeHtml
-import com.twitter.sdk.android.core.models.MediaEntity
-import com.twitter.sdk.android.core.models.UrlEntity
+import com.twitter.sdk.android.core.models.TweetEntities
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Collections
 import java.util.Locale
 import javax.inject.Inject
 import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
@@ -42,8 +40,8 @@ private fun TweetResponse.toTweet(): Tweet {
         id = id,
         text = text.unescapeHtml(),
         createdAt = parseTime(createdAt),
-        urls = entities?.urls?.map { it.toShortUrl() } ?: emptyList(),
-        medium = extendedEntities?.media?.mapNotNull { it.toMedia() } ?: emptyList(),
+        urls = entities.toShorteningUrls(),
+        medium = extendedEntities.toMediaShorteningUrls(),
         user = user.toUser(),
         liked = favorited,
         retweeted = retweeted,
@@ -57,8 +55,8 @@ private fun TweetResponse.toRetweetedTweet(): Tweet {
         id = id,
         text = "",
         createdAt = parseTime(createdAt),
-        urls = Collections.emptyList(),
-        medium = Collections.emptyList(),
+        urls = emptyList(),
+        medium = emptyList(),
         user = user.toUser(),
         liked = favorited,
         retweeted = retweeted,
@@ -67,17 +65,26 @@ private fun TweetResponse.toRetweetedTweet(): Tweet {
     )
 }
 
-private fun UrlEntity.toShortUrl(): ShorteningUrl {
-    return ShorteningUrl(url, displayUrl, expandedUrl)
+private fun TweetEntities?.toShorteningUrls(): List<ShorteningUrl> {
+    val urls = this?.urls ?: return emptyList()
+    return urls.map {
+        ShorteningUrl(it.url, it.displayUrl, it.expandedUrl)
+    }
 }
 
-private fun MediaEntity.toMedia(): Media? {
-    return when (type) {
-        MEDIA_TYPE_PHOTO -> {
-            PhotoMedia(ShorteningUrl(url, displayUrl, "$mediaUrlHttps:small"))
+private fun TweetEntities?.toMediaShorteningUrls(): List<Media> {
+    val media = this?.media ?: return emptyList()
+    return media.map {
+        when (it.type) {
+            MEDIA_TYPE_PHOTO -> PhotoMedia(
+                ShorteningUrl(it.url, it.displayUrl, "${it.mediaUrlHttps}:small")
+            )
+            // e.g. `video`, `animated_gif` ...
+            else -> UnsupportedMedia(
+                it.type,
+                ShorteningUrl(it.url, it.displayUrl, it.mediaUrlHttps)
+            )
         }
-        // e.g. `video`, `animated_gif` ...
-        else -> UnsupportedMedia(type, ShorteningUrl(url, displayUrl, mediaUrlHttps))
     }
 }
 
@@ -91,5 +98,5 @@ private fun UserResponse.toUser() = User(
 
 @Throws(ParseException::class)
 private fun parseTime(time: String): Long {
-    return dateTimeRFC822.parse(time)!!.time
+    return requireNotNull(dateTimeRFC822.parse(time)).time
 }
