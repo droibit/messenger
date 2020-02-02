@@ -5,7 +5,8 @@ import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.timeline.R
 
 data class TweetActionItemList(
-    val target: Tweet, val items: List<Item>
+    val target: Tweet,
+    val items: List<Item>
 ) {
     enum class Item(@IdRes val id: Int) {
         REPLY(R.id.tweet_action_reply),

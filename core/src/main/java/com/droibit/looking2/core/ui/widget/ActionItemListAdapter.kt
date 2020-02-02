@@ -144,7 +144,8 @@ private class ActionViewHolder(private val binding: ListItemActionBinding) :
 }
 
 private fun inflateActionMenu(
-    context: Context, @MenuRes menuRes: Int
+    context: Context,
+    @MenuRes menuRes: Int
 ): MutableList<ActionItemListAdapter.ActionItem> {
     val menu = ActionMenu(context).also {
         MenuInflater(context).inflate(menuRes, it)

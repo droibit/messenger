@@ -25,7 +25,7 @@ class TwitterAccountService @Inject constructor(
 ) {
 
     fun ensureApiClient(session: TwitterSession) {
-         twitterCore.addApiClient(session, apiClientFactory.get(session))
+        twitterCore.addApiClient(session, apiClientFactory.get(session))
     }
 
     @Throws(AuthenticationError::class)

@@ -33,6 +33,4 @@ object ApplicationModule {
             .setMinimumLoggingLevel(loggingLevel)
             .build()
     }
-
-
 }

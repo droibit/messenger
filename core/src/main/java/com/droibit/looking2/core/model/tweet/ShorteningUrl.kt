@@ -6,4 +6,4 @@ data class ShorteningUrl(
     val url: String,
     val displayUrl: String,
     val expandedUrl: String
-): Serializable
+) : Serializable

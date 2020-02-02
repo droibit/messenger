@@ -2,7 +2,6 @@ package com.droibit.looking2.core.data.source.api.twitter
 
 import com.droibit.looking2.core.data.source.api.twitter.list.UserList
 import com.twitter.sdk.android.core.TwitterApiClient
-import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User
@@ -29,10 +28,7 @@ class AppTwitterApiClient(
             @Query("reverse") reverse: Boolean?
         ): Call<List<UserList>>
 
-        @GET(
-            "/1.1/lists/statuses.json?"
-                + "tweet_mode=extended&include_cards=true&cards_platform=TwitterKit-13"
-        )
+        @GET("/1.1/lists/statuses.json?tweet_mode=extended&include_cards=true&cards_platform=TwitterKit-13")
         fun statuses(
             @Query("list_id") listId: Long?,
             @Query("count") count: Int?,

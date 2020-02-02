@@ -39,7 +39,8 @@ class LookingApplication : Application() {
     fun bootstrap(
         timberTree: Timber.Tree,
         twitterBootstrap: TwitterBootstrap,
-        workConfiguration: WorkConfiguration) {
+        workConfiguration: WorkConfiguration
+    ) {
         Timber.plant(timberTree)
         twitterBootstrap.initialize()
         WorkManager.initialize(this, workConfiguration)

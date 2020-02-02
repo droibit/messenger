@@ -7,4 +7,4 @@ data class User(
     val name: String,
     val screenName: String,
     val profileUrl: String
-): Serializable
+) : Serializable

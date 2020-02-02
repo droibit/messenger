@@ -37,7 +37,7 @@ class PlayServicesChecker @Inject constructor(
     }
 
     fun checkStatusCode(code: Int): Status {
-        return  if (code == ConnectionResult.SUCCESS) {
+        return if (code == ConnectionResult.SUCCESS) {
             Status.Available
         } else {
             Status.Error(

@@ -9,7 +9,7 @@ data class TwitterAccount(
     val id: Long,
     val name: String,
     val active: Boolean
-): Serializable {
+) : Serializable {
     companion object
 }
 

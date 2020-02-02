@@ -47,7 +47,6 @@ fun bindPaddingEnd(view: View, @Px spacePx: Int) {
     view.updatePadding(right = spacePx)
 }
 
-
 @BindingAdapter("android:layout_marginTop")
 fun bindMarginTop(view: View, @Px spacePx: Int) {
     view.updateLayoutParams<ViewGroup.MarginLayoutParams> {

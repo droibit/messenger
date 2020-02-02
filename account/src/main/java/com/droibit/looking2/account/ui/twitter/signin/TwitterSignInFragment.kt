@@ -125,7 +125,7 @@ class TwitterSignInFragment : DaggerFragment() {
                 )
                 startActivity(intent)
             }
-        }//.exhaustive
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

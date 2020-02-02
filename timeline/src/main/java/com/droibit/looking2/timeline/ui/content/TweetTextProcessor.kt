@@ -30,7 +30,8 @@ class TweetTextProcessor @Inject constructor() {
                 val quotedTweetShorteningUrl = tweet.urls.firstOrNull {
                     it.expandedUrl.equals(quotedTweetUrl, ignoreCase = true)
                 }
-                shorteningUrl.url to if (quotedTweetShorteningUrl == null) shorteningUrl.displayUrl else ""    // Delete quote tweet URL from text.
+                // Delete quote tweet URL from text.
+                shorteningUrl.url to if (quotedTweetShorteningUrl == null) shorteningUrl.displayUrl else ""
             }
         }
         // Display photo icon instead of URL.

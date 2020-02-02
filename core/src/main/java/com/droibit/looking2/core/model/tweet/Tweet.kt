@@ -13,7 +13,7 @@ data class Tweet(
     val retweeted: Boolean,
     val retweetedTweet: Tweet?,
     val quotedTweet: Tweet?
-): Serializable {
+) : Serializable {
 
     val hasPhotoUrl: Boolean
         get() {
