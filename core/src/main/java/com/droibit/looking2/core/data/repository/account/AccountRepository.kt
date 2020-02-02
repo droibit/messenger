@@ -1,8 +1,8 @@
 package com.droibit.looking2.core.data.repository.account
 
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
-import com.droibit.looking2.core.data.repository.account.service.TwitterAccountService
-import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterStore
+import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
+import com.droibit.looking2.core.data.source.remote.twitter.account.RemoteTwitterAccountSource
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
@@ -22,28 +22,28 @@ import com.droibit.looking2.core.model.account.AuthenticationResult.Success as A
 
 @Singleton
 class AccountRepository(
-    private val twitterService: TwitterAccountService,
-    private val localStore: LocalTwitterStore,
+    private val remoteSource: RemoteTwitterAccountSource,
+    private val localSource: LocalTwitterSource,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
     private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>,
     private val analytics: AnalyticsHelper
 ) {
     @Inject
     constructor(
-        twitterService: TwitterAccountService,
-        localStore: LocalTwitterStore,
+        remoteSource: RemoteTwitterAccountSource,
+        localSource: LocalTwitterSource,
         dispatcherProvider: CoroutinesDispatcherProvider,
         analytics: AnalyticsHelper
     ) : this(
-        twitterService,
-        localStore,
+        remoteSource,
+        localSource,
         dispatcherProvider,
         ConflatedBroadcastChannel<List<TwitterAccount>>(),
         analytics
     )
 
     suspend fun initialize(): Unit = withContext(dispatcherProvider.io) {
-        localStore.sessions.forEach { twitterService.ensureApiClient(session = it) }
+        localSource.sessions.forEach { remoteSource.ensureApiClient(session = it) }
         dispatchTwitterAccountsUpdated()
     }
 
@@ -54,11 +54,11 @@ class AccountRepository(
 
     suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
         withContext(dispatcherProvider.io) {
-            val session = localStore.getSession(account.id)
+            val session = localSource.getSession(account.id)
             checkNotNull(session) { "Account dose not exist: $account" }
 
-            if (session != localStore.activeSession) {
-                localStore.setActiveSession(session)
+            if (session != localSource.activeSession) {
+                localSource.setActiveSession(session)
                 dispatchTwitterAccountsUpdated()
             }
         }
@@ -67,12 +67,12 @@ class AccountRepository(
     @Throws(AuthenticationError::class)
     suspend fun signInTwitter(): Flow<AuthenticationResult> = flow {
         try {
-            val requestToken = twitterService.requestTempToken()
+            val requestToken = remoteSource.requestTempToken()
             emit(WillAuthenticateOnPhone)
-            val responseUrl = twitterService.sendAuthorizationRequest(requestToken)
-            twitterService.createNewSession(requestToken, responseUrl).also {
-                localStore.add(session = it)
-                analytics.setNumOfGetTweets(localStore.sessions.size)
+            val responseUrl = remoteSource.sendAuthorizationRequest(requestToken)
+            remoteSource.createNewSession(requestToken, responseUrl).also {
+                localSource.add(session = it)
+                analytics.setNumOfGetTweets(localSource.sessions.size)
                 dispatchTwitterAccountsUpdated()
             }
             emit(AuthenticationSuccess)
@@ -83,12 +83,12 @@ class AccountRepository(
 
     suspend fun signOutTwitter(account: TwitterAccount) {
         withContext(dispatcherProvider.io) {
-            localStore.remove(account.id)
-            analytics.setNumOfGetTweets(localStore.sessions.size)
+            localSource.remove(account.id)
+            analytics.setNumOfGetTweets(localSource.sessions.size)
 
-            if (localStore.activeSession == null) {
-                localStore.sessions.firstOrNull()?.let {
-                    localStore.setActiveSession(it)
+            if (localSource.activeSession == null) {
+                localSource.sessions.firstOrNull()?.let {
+                    localSource.setActiveSession(it)
                 }
             }
             dispatchTwitterAccountsUpdated()
@@ -96,8 +96,8 @@ class AccountRepository(
     }
 
     private fun dispatchTwitterAccountsUpdated() {
-        val activeAccount = localStore.activeSession
-        val accounts = localStore.sessions.map {
+        val activeAccount = localSource.activeSession
+        val accounts = localSource.sessions.map {
             it.toAccount(active = it.userId == activeAccount?.userId)
         }
         twitterAccountsChannel.offer(accounts)

@@ -9,7 +9,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class LocalUserSettingsStore @Inject constructor(
+class LocalUserSettingsSource @Inject constructor(
     @Named("default") private val sharedPrefs: SharedPreferences,
     private val keys: Keys
 ) {

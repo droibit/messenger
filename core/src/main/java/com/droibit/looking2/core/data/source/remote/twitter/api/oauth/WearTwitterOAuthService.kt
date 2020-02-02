@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.api.twitter.oauth
+package com.droibit.looking2.core.data.source.remote.twitter.api.oauth
 
 import android.net.Uri
 import android.support.wearable.authentication.OAuthClient

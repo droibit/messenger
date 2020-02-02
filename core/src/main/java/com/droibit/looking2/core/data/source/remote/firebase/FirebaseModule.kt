@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.firebase
+package com.droibit.looking2.core.data.source.remote.firebase
 
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics

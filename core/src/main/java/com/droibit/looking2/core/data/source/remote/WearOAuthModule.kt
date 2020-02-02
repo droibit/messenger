@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.api
+package com.droibit.looking2.core.data.source.remote
 
 import android.content.Context
 import android.support.wearable.authentication.OAuthClient
@@ -8,6 +8,7 @@ import javax.inject.Named
 
 @Module
 object WearOAuthModule {
+
     @Provides
     fun provideOAuthClient(@Named("appContext") context: Context): OAuthClient {
         return OAuthClient.create(context)

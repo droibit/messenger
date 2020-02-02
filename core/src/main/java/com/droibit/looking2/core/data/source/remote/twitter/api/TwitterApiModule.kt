@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.api.twitter
+package com.droibit.looking2.core.data.source.remote.twitter.api
 
 import android.content.Context
 import android.util.Log
@@ -52,9 +52,13 @@ object TwitterApiModule {
     fun provideAppTwitterApiClientFactory(
         okHttpClient: OkHttpClient
     ): AppTwitterApiClient.Factory {
-        return object : AppTwitterApiClient.Factory {
+        return object :
+            AppTwitterApiClient.Factory {
             override fun get(session: TwitterSession): AppTwitterApiClient {
-                return AppTwitterApiClient(session, okHttpClient)
+                return AppTwitterApiClient(
+                    session,
+                    okHttpClient
+                )
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.api.twitter.list
+package com.droibit.looking2.core.data.source.remote.twitter.api.list
 
 import com.google.gson.annotations.SerializedName
 import com.twitter.sdk.android.core.models.User

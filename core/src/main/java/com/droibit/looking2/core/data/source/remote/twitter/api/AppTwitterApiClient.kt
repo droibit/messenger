@@ -1,6 +1,6 @@
-package com.droibit.looking2.core.data.source.api.twitter
+package com.droibit.looking2.core.data.source.remote.twitter.api
 
-import com.droibit.looking2.core.data.source.api.twitter.list.UserList
+import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList
 import com.twitter.sdk.android.core.TwitterApiClient
 import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.models.Tweet
@@ -52,7 +52,13 @@ class AppTwitterApiClient(
         ): Call<User>
     }
 
-    val userListService: UserListService get() = getService(UserListService::class.java)
+    val userListService: UserListService
+        get() = getService(
+            UserListService::class.java
+        )
 
-    val userService: UserService get() = getService(UserService::class.java)
+    val userService: UserService
+        get() = getService(
+            UserService::class.java
+        )
 }

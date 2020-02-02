@@ -1,6 +1,6 @@
-package com.droibit.looking2.core.data.source.api
+package com.droibit.looking2.core.data.source.remote
 
-import com.droibit.looking2.core.data.source.api.twitter.TwitterApiModule
+import com.droibit.looking2.core.data.source.remote.twitter.api.TwitterApiModule
 import com.droibit.looking2.core.util.Stetho
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ import javax.inject.Singleton
         WearOAuthModule::class
     ]
 )
-object ApiModule {
+object RemoteSourceModule {
 
     @Named("httpLogging")
     @Singleton

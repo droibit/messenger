@@ -1,13 +1,13 @@
 package com.droibit.looking2.core.data.repository.usersettings
 
-import com.droibit.looking2.core.data.source.local.usersettings.LocalUserSettingsStore
+import com.droibit.looking2.core.data.source.local.usersettings.LocalUserSettingsSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserSettingsRepository @Inject constructor(
-    private val localStore: LocalUserSettingsStore
+    private val localSource: LocalUserSettingsSource
 ) {
     val numOfTweets: Int
-        get() = localStore.numOfTweets
+        get() = localSource.numOfTweets
 }

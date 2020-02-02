@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.source.api.twitter
+package com.droibit.looking2.core.data.source.remote.twitter.api
 
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession

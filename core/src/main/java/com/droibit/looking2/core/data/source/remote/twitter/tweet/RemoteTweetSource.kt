@@ -1,8 +1,8 @@
-package com.droibit.looking2.core.data.repository.tweet.service
+package com.droibit.looking2.core.data.source.remote.twitter.tweet
 
-import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
-import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFactoryDelegate
-import com.droibit.looking2.core.data.source.api.twitter.await
+import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClientFactoryDelegate
+import com.droibit.looking2.core.data.source.remote.twitter.api.await
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
@@ -13,7 +13,7 @@ import javax.inject.Inject
 private const val ERROR_CODE_ALREADY_FAVORITED = 139
 private const val ERROR_CODE_ALREADY_RETWEETED = 327
 
-class TweetService @Inject constructor(
+class RemoteTweetSource @Inject constructor(
     private val twitterCore: TwitterCore
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 

@@ -1,9 +1,9 @@
-package com.droibit.looking2.core.data.repository.account.service
+package com.droibit.looking2.core.data.source.remote.twitter.account
 
 import android.support.wearable.authentication.OAuthClient
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
-import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
-import com.droibit.looking2.core.data.source.api.twitter.oauth.WearTwitterOAuthService
+import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.oauth.WearTwitterOAuthService
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.google.android.gms.common.api.ApiException
 import com.twitter.sdk.android.core.TwitterAuthToken
@@ -16,7 +16,7 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Provider
 
-class TwitterAccountService @Inject constructor(
+class RemoteTwitterAccountSource @Inject constructor(
     private val twitterCore: TwitterCore,
     private val oAuthService: WearTwitterOAuthService,
     private val apiClientFactory: AppTwitterApiClient.Factory,

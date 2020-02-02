@@ -1,8 +1,8 @@
-package com.droibit.looking2.core.data.repository.timeline.service
+package com.droibit.looking2.core.data.source.remote.twitter.timeline
 
-import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClient
-import com.droibit.looking2.core.data.source.api.twitter.AppTwitterApiClientFactoryDelegate
-import com.droibit.looking2.core.data.source.api.twitter.await
+import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClientFactoryDelegate
+import com.droibit.looking2.core.data.source.remote.twitter.api.await
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.twitter.sdk.android.core.TwitterCore
@@ -11,7 +11,7 @@ import com.twitter.sdk.android.core.TwitterSession
 import timber.log.Timber
 import javax.inject.Inject
 
-class TimelineService @Inject constructor(
+class RemoteTimelineSource @Inject constructor(
     twitterCore: TwitterCore,
     private val mapper: TimelineMapper
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {

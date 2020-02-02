@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.repository.timeline.service
+package com.droibit.looking2.core.data.source.remote.twitter.timeline
 
 import com.droibit.looking2.core.model.tweet.Media
 import com.droibit.looking2.core.model.tweet.ShorteningUrl
@@ -39,7 +39,9 @@ private fun TweetResponse.toTweet(): Tweet {
     return Tweet(
         id = id,
         text = text.unescapeHtml(),
-        createdAt = parseTime(createdAt),
+        createdAt = parseTime(
+            createdAt
+        ),
         urls = entities.toShorteningUrls(),
         medium = extendedEntities.toMediaShorteningUrls(),
         user = user.toUser(),
@@ -54,7 +56,9 @@ private fun TweetResponse.toRetweetedTweet(): Tweet {
     return Tweet(
         id = id,
         text = "",
-        createdAt = parseTime(createdAt),
+        createdAt = parseTime(
+            createdAt
+        ),
         urls = emptyList(),
         medium = emptyList(),
         user = user.toUser(),

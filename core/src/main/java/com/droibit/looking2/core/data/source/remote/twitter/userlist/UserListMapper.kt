@@ -1,4 +1,4 @@
-package com.droibit.looking2.core.data.repository.userlist.service
+package com.droibit.looking2.core.data.source.remote.twitter.userlist
 
 import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.model.tweet.UserList
@@ -6,7 +6,7 @@ import java.text.DateFormat
 import java.text.ParseException
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.core.data.source.api.twitter.list.UserList as UserListResponse
+import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList as UserListResponse
 import com.twitter.sdk.android.core.models.User as UserResponse
 
 private const val PROFILE_ICON_SIZE_NORMAL = "_normal"
