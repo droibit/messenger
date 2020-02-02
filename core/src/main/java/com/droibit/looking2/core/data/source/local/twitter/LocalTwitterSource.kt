@@ -21,8 +21,8 @@ class LocalTwitterSource @Inject constructor(
         get() = sessionManager.sessionMap.map { (_, session) -> session }
 
     @WorkerThread
-    fun getSession(id: Long): TwitterSession? {
-        return sessionManager.sessionMap[id]
+    fun getSessionBy(sessionId: Long): TwitterSession? {
+        return sessionManager.sessionMap[sessionId]
     }
 
     @WorkerThread

@@ -54,7 +54,7 @@ class AccountRepository(
 
     suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
         withContext(dispatcherProvider.io) {
-            val session = localSource.getSession(account.id)
+            val session = localSource.getSessionBy(account.id)
             checkNotNull(session) { "Account dose not exist: $account" }
 
             if (session != localSource.activeSession) {
