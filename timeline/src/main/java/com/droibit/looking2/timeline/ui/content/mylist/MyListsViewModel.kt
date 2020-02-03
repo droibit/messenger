@@ -23,7 +23,7 @@ class MyListsViewModel(
     private val getMyListsResultSink: MutableLiveData<Result<UserLists>>
 ) : ViewModel() {
 
-    private val getMyListsResult2: LiveData<Result<UserLists>> by lazy(NONE) {
+    private val getMyListsResult: LiveData<Result<UserLists>> by lazy(NONE) {
         viewModelScope.launch {
             getMyListsResultSink.value = try {
                 isLoadingSink.value = true
@@ -38,13 +38,14 @@ class MyListsViewModel(
         getMyListsResultSink
     }
 
-    val isLoading: LiveData<Boolean> = isLoadingSink
+    val isLoading: LiveData<Boolean>
+        get() = isLoadingSink
 
-    val myLists: LiveData<UserLists> = getMyListsResult2.toSuccessLiveData()
+    val myLists: LiveData<UserLists> = getMyListsResult.toSuccessLiveData()
 
     val isNotEmptyMyLists: LiveData<Boolean> = myLists.map { it.isNotEmpty() }
 
-    val error: LiveData<Event<GetMyListsErrorMessage>> = getMyListsResult2.toErrorEventLiveData()
+    val error: LiveData<Event<GetMyListsErrorMessage>> = getMyListsResult.toErrorEventLiveData()
 
     @Inject
     constructor(userListRepository: UserListRepository) : this(

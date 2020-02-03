@@ -31,7 +31,8 @@ class TwitterSignInViewModel(
     val authenticateOnPhoneTiming: LiveData<Event<Unit>>
         get() = authenticateOnPhoneTimingSink
 
-    val isProcessing: LiveData<Boolean> = isProcessingSink
+    val isProcessing: LiveData<Boolean>
+        get() = isProcessingSink
 
     val completed: LiveData<Event<Unit>> = authenticationResultSink.toSuccessEventLiveData()
 

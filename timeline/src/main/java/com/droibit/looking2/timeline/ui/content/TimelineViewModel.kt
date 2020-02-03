@@ -37,7 +37,8 @@ class TimelineViewModel(
         getTimelineResultSink
     }
 
-    val isLoading: LiveData<Boolean> = isLoadingSink
+    val isLoading: LiveData<Boolean>
+        get() = isLoadingSink
 
     val timeline: LiveData<Timeline> = getTimelineResult.toSuccessLiveData()
 
