@@ -12,8 +12,8 @@ sealed class TwitterAuthenticationErrorMessage : Throwable() {
     data class Toast(
         private val value: ToastConvertible
     ) : TwitterAuthenticationErrorMessage(), ToastConvertible by value
-    class PlayServicesDialog(val statusCode: Int) : TwitterAuthenticationErrorMessage()
-    class FailureConfirmation(@StringRes val messageResId: Int) : TwitterAuthenticationErrorMessage()
+    data class PlayServicesDialog(val statusCode: Int) : TwitterAuthenticationErrorMessage()
+    data class FailureConfirmation(@StringRes val messageResId: Int) : TwitterAuthenticationErrorMessage()
 
     companion object {
         operator fun invoke(
