@@ -9,14 +9,14 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:appCategory="social"
-        android:theme="@style/AppTheme"
         android:name=".LookingApplication"
+        android:allowBackup="false"
+        android:appCategory="social"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="o">
 
@@ -48,7 +48,7 @@
 
         <activity
             android:name="androidx.wear.activity.ConfirmationActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

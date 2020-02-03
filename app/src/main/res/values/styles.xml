@@ -5,10 +5,4 @@
         <item name="android:colorPrimaryDark">@color/colorDarkerPrimary</item>
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
-    
-    <style name="AppTheme.Translucent">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
 </resources>
