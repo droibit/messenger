@@ -191,7 +191,7 @@ class TwitterSignInViewModelTest {
         val authenticateOnPhoneTimingObserver = authenticateOnPhoneTimingSink.test()
         val authenticationResultObserver = authenticationResultSink.test()
 
-        val error = mock<AuthenticationError.Network>()
+        val error = mock<AuthenticationError.UnExpected>()
         val flow = flowOf(
             AuthenticationResult.WillAuthenticateOnPhone,
             AuthenticationResult.Failure(error)
@@ -203,7 +203,7 @@ class TwitterSignInViewModelTest {
         isProcessingObserver.assertValueHistory(true, false)
         authenticateOnPhoneTimingObserver.assertValue(Event(Unit))
         authenticationResultObserver.assertValue {
-            it.exceptionOrNull() is TwitterAuthenticationErrorMessage.Toast
+            it.exceptionOrNull() is TwitterAuthenticationErrorMessage.FailureConfirmation
         }
 
         verify(accountRepository).signInTwitter()
