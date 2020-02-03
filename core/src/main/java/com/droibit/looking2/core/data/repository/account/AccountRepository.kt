@@ -99,7 +99,12 @@ class AccountRepository(
 
     @VisibleForTesting
     internal fun dispatchTwitterAccountsUpdated() {
-        val activeAccount = localSource.activeSession ?: return
+        val activeAccount = localSource.activeSession
+        if (activeAccount == null) {
+            twitterAccountsChannel.offer(emptyList())
+            return
+        }
+
         val accounts = localSource.sessions.map {
             it.toAccount(active = it.userId == activeAccount.userId)
         }

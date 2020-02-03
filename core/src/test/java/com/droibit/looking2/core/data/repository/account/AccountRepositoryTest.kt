@@ -365,4 +365,13 @@ class AccountRepositoryTest {
         )
         verify(twitterAccountsChannel).offer(listOf(account1, account2))
     }
+
+    @Test
+    fun dispatchTwitterAccounts_noSessions() {
+        whenever(localSource.activeSession).thenReturn(null)
+        whenever(localSource.sessions).thenReturn(emptyList())
+
+        repository.dispatchTwitterAccountsUpdated()
+        verify(twitterAccountsChannel).offer(emptyList())
+    }
 }
