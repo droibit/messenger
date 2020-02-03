@@ -13,5 +13,7 @@ jobs:
       run: ./.buildscript/prepare_build.sh
     - name: Build with Gradle
       run: ./gradlew assembleDebug
-    - name: Unit test
+    - name: Run ktlint
+      run: ./gradlew ktlintDebugCheck
+    - name: Run unit test
       run: ./gradlew testDebugUnitTest
