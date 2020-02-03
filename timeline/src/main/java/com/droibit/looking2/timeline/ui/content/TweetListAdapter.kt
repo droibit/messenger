@@ -73,8 +73,8 @@ class TweetListAdapter(
         ) {
             val tweet = srcTweet.retweetedTweet ?: srcTweet
             binding.userIcon.load(tweet.user.profileUrl) {
-                placeholder(R.drawable.ic_account_circle)
-                error(R.drawable.ic_account_circle)
+                placeholder(R.drawable.ic_user_icon_circle)
+                error(R.drawable.ic_user_icon_circle)
                 scale(Scale.FIT)
                 lifecycle(lifecycleOwner)
             }

@@ -58,8 +58,8 @@ class MyListAdapter(
 
         fun bind(myList: UserList) {
             binding.listIcon.load(myList.user.profileUrl) {
-                error(R.drawable.ic_account_circle)
-                placeholder(R.drawable.ic_account_circle)
+                error(R.drawable.ic_user_icon_circle)
+                placeholder(R.drawable.ic_user_icon_circle)
                 scale(Scale.FIT)
                 lifecycle(lifecycleOwner)
             }
