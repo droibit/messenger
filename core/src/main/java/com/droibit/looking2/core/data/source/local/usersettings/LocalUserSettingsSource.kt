@@ -14,9 +14,7 @@ class LocalUserSettingsSource @Inject constructor(
     private val keys: Keys
 ) {
     var numOfTweets: Int
-        get() {
-            return sharedPrefs.getInt(keys.numOfTweets)
-        }
+        get() = sharedPrefs.getInt(keys.numOfTweets)
         set(value) {
             sharedPrefs.edit { putInt(keys.numOfTweets.key, value) }
         }
