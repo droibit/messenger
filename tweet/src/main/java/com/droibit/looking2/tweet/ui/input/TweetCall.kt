@@ -6,6 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
@@ -17,14 +18,18 @@ import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_TWEET
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import timber.log.Timber
 
-sealed class TweetCall(
-    protected val workManager: WorkManager
-) {
-    abstract fun enqueue(text: String)
+sealed class TweetCall(private val workManager: WorkManager) {
+
+    abstract fun buildWorkRequest(text: String): WorkRequest
+
+    fun enqueue(text: String) {
+        val work = buildWorkRequest(text)
+        workManager.enqueue(work)
+    }
 
     class Tweet(workManager: WorkManager) : TweetCall(workManager) {
-        override fun enqueue(text: String) {
-            val work = OneTimeWorkRequestBuilder<TweetWorker>()
+        override fun buildWorkRequest(text: String): WorkRequest {
+            return OneTimeWorkRequestBuilder<TweetWorker>()
                 .setInputData(workDataOf(KEY_TWEET to text))
                 .setConstraints(
                     Constraints.Builder()
@@ -32,17 +37,15 @@ sealed class TweetCall(
                         .build()
                 )
                 .build()
-            workManager.enqueue(work)
         }
     }
 
     class Reply(
         workManager: WorkManager,
-        private val replyTweetId: Long
-    ) :
-        TweetCall(workManager) {
-        override fun enqueue(text: String) {
-            val work = OneTimeWorkRequestBuilder<ReplyWorker>()
+        val replyTweetId: Long
+    ) : TweetCall(workManager) {
+        override fun buildWorkRequest(text: String): WorkRequest {
+            return OneTimeWorkRequestBuilder<ReplyWorker>()
                 .setInputData(
                     workDataOf(
                         KEY_TWEET to text,
@@ -55,7 +58,6 @@ sealed class TweetCall(
                         .build()
                 )
                 .build()
-            workManager.enqueue(work)
         }
     }
 
