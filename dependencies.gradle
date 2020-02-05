@@ -51,6 +51,9 @@ ext {
                     work            : 'androidx.work:work-runtime-ktx:2.3.0',
                     viewPager2      : 'androidx.viewpager2:viewpager2:1.0.0',
                     archTesting     : "androidx.arch.core:core-testing:2.1.0",
+                    test            : [
+                            junit: 'androidx.test.ext:junit-ktx:1.1.1',
+                    ]
             ],
             wearable       : [
                     support : "com.google.android.support:wearable:${versions.wearable}",

@@ -23,6 +23,10 @@ android {
     packagingOptions {
         exclude 'META-INF/core_debug.kotlin_module'
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -63,7 +67,9 @@ dependencies {
     debugImplementation deps.stetho.okhttp3
 
     testImplementation deps.junit
+    testImplementation deps.androidx.test.junit
     testImplementation deps.truth
     testImplementation deps.mockito
     testImplementation deps.kotlin.coroutines.test
+    testImplementation deps.robolectric
 }
