@@ -52,7 +52,7 @@ object TimelineModule {
         repository: TimelineRepository,
         timelineSource: TimelineSource
     ): TimelineSource.GetCall {
-        return timelineSource.toGetCall(repository)
+        return TimelineSource.GetCall(timelineSource, repository)
     }
 
     @Provides

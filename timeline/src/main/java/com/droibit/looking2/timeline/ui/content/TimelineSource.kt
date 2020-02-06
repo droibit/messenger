@@ -8,44 +8,56 @@ import java.io.Serializable
 
 sealed class TimelineSource : Serializable {
 
-    abstract fun toGetCall(repository: TimelineRepository): GetCall
+    @Keep
+    object Home : TimelineSource()
 
     @Keep
-    object Home : TimelineSource() {
-        override fun toGetCall(repository: TimelineRepository): GetCall {
-            return object : GetCall {
-                override suspend fun invoke(sinceId: Long?): List<Tweet> {
-                    return repository.getHomeTimeline(sinceId = sinceId)
-                }
-            }
-        }
-    }
+    object Mentions : TimelineSource()
 
     @Keep
-    object Mentions : TimelineSource() {
-        override fun toGetCall(repository: TimelineRepository): GetCall {
-            return object : GetCall {
-                override suspend fun invoke(sinceId: Long?): List<Tweet> {
-                    return repository.getMentionsTimeline(sinceId)
-                }
-            }
-        }
-    }
-
-    @Keep
-    class MyLists(val listId: Long) : TimelineSource() {
-        override fun toGetCall(repository: TimelineRepository): GetCall {
-            return object : GetCall {
-                override suspend fun invoke(sinceId: Long?): List<Tweet> {
-                    return repository.getUserListTimeline(listId, sinceId)
-                }
-            }
-        }
-    }
+    data class MyLists(val listId: Long) : TimelineSource()
 
     interface GetCall {
 
         @Throws(TwitterError::class)
         suspend operator fun invoke(sinceId: Long?): List<Tweet>
+
+        companion object {
+            operator fun invoke(source: TimelineSource, repository: TimelineRepository): GetCall {
+                return when (source) {
+                    is Home -> GetHomeTimelineCall(repository)
+                    is Mentions -> GetMentionsTimelineCall(repository)
+                    is MyLists -> GetMyListsTimelineCall(source.listId, repository)
+                }
+            }
+        }
+    }
+}
+
+class GetHomeTimelineCall(
+    private val repository: TimelineRepository
+) : TimelineSource.GetCall {
+
+    override suspend fun invoke(sinceId: Long?): List<Tweet> {
+        return repository.getHomeTimeline(sinceId)
+    }
+}
+
+class GetMentionsTimelineCall(
+    private val repository: TimelineRepository
+) : TimelineSource.GetCall {
+
+    override suspend fun invoke(sinceId: Long?): List<Tweet> {
+        return repository.getMentionsTimeline(sinceId)
+    }
+}
+
+class GetMyListsTimelineCall(
+    private val listId: Long,
+    private val repository: TimelineRepository
+) : TimelineSource.GetCall {
+
+    override suspend fun invoke(sinceId: Long?): List<Tweet> {
+        return repository.getUserListTimeline(listId, sinceId)
     }
 }
