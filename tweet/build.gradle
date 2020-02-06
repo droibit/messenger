@@ -34,7 +34,7 @@ dependencies {
     implementation project(':app')
     implementation project(':core')
 
-    implementation deps.androidx.work
+    implementation deps.androidx.work.runtime
     kapt deps.androidx.lifecycle.compiler
 
     kapt deps.dagger.compiler

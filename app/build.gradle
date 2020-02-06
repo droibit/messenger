@@ -64,7 +64,7 @@ configurations.all {
 
 dependencies {
     implementation project(':core')
-    implementation deps.androidx.work
+    implementation deps.androidx.work.runtime
     implementation deps.firebase.crashlytics
 
     kapt deps.dagger.compiler

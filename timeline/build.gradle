@@ -35,7 +35,7 @@ dependencies {
     implementation project(':core')
 
     implementation deps.androidx.viewPager2
-    implementation deps.androidx.work
+    implementation deps.androidx.work.runtime
     kapt deps.androidx.lifecycle.compiler
 
     implementation deps.circleImageView
