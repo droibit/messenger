@@ -1,6 +1,7 @@
 package com.droibit.looking2.timeline.ui.content
 
 import androidx.annotation.Keep
+import androidx.annotation.VisibleForTesting
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
@@ -53,7 +54,7 @@ class GetMentionsTimelineCall(
 }
 
 class GetMyListsTimelineCall(
-    private val listId: Long,
+    @VisibleForTesting val listId: Long,
     private val repository: TimelineRepository
 ) : TimelineSource.GetCall {
 
