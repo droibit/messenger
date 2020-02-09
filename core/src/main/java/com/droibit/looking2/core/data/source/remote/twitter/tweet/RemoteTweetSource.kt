@@ -10,8 +10,8 @@ import com.twitter.sdk.android.core.TwitterSession
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val ERROR_CODE_ALREADY_FAVORITED = 139
-private const val ERROR_CODE_ALREADY_RETWEETED = 327
+private const val ERROR_CODE_ALREADY_FAVORITE = 139
+private const val ERROR_CODE_ALREADY_RETWEET = 327
 
 class RemoteTweetSource @Inject constructor(
     private val twitterCore: TwitterCore
@@ -22,7 +22,8 @@ class RemoteTweetSource @Inject constructor(
         val apiClient = get(session)
         try {
             apiClient.statusesService.update(
-                text, inReplyToId,
+                text,
+                inReplyToId,
                 null,
                 null,
                 null,
@@ -46,7 +47,7 @@ class RemoteTweetSource @Inject constructor(
             Timber.e(e)
             val error = TwitterError(e)
             if (error is TwitterError.UnExpected &&
-                error.errorCode == ERROR_CODE_ALREADY_RETWEETED
+                error.errorCode == ERROR_CODE_ALREADY_RETWEET
             ) {
                 return
             }
@@ -63,7 +64,7 @@ class RemoteTweetSource @Inject constructor(
             Timber.e(e)
             val error = TwitterError(e)
             if (error is TwitterError.UnExpected &&
-                error.errorCode == ERROR_CODE_ALREADY_FAVORITED
+                error.errorCode == ERROR_CODE_ALREADY_FAVORITE
             ) {
                 return
             }
