@@ -11,13 +11,15 @@ import javax.inject.Singleton
 
 @Singleton
 class UserListRepository @Inject constructor(
-    private val remoteService: RemoteUserListSource,
+    private val remoteSource: RemoteUserListSource,
     private val localSource: LocalTwitterSource,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {
     @Throws(TwitterError::class)
-    suspend fun getMyLists(): List<UserList> = withContext(dispatcherProvider.io) {
-        val session = localSource.activeSession ?: throw TwitterError.Unauthorized
-        remoteService.getUserLists(session, userId = null)
+    suspend fun getMyLists(): List<UserList> {
+        return withContext(dispatcherProvider.io) {
+            val session = localSource.activeSession ?: throw TwitterError.Unauthorized
+            remoteSource.getUserLists(session, userId = null)
+        }
     }
 }
