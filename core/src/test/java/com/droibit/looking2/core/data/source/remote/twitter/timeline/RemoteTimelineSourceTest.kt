@@ -37,15 +37,13 @@ class RemoteTimelineSourceTest {
     @get:Rule
     val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-    @Suppress("unused")
-    @Mock
+    @[Mock Suppress("unused")]
     private lateinit var twitterCore: TwitterCore
 
     @Mock
     private lateinit var timelineMapper: TimelineMapper
 
-    @Spy
-    @InjectMocks
+    @[Spy InjectMocks]
     private lateinit var remoteSource: RemoteTimelineSource
 
     private lateinit var apiClient: AppTwitterApiClient

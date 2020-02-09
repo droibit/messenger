@@ -13,17 +13,15 @@ import javax.inject.Inject
 
 class RemoteUserListSource @Inject constructor(
     twitterCore: TwitterCore,
-    private val mapper: UserListMapper
-) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(
-    twitterCore
-) {
+    private val userListMapper: UserListMapper
+) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
     suspend fun getUserLists(session: TwitterSession, userId: Long?): List<UserList> {
         val apiClient = get(session)
         try {
             val userListsResponse = apiClient.userListService.list(userId, null, null).await()
-            return mapper.toUserLists(source = userListsResponse)
+            return userListMapper.toUserLists(source = userListsResponse)
         } catch (e: TwitterException) {
             Timber.e(e)
             throw TwitterError(e)
