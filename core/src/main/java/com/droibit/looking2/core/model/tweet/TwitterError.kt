@@ -32,7 +32,7 @@ sealed class TwitterError(message: String? = null) : Exception(message) {
                     when (error.statusCode) {
                         STATUS_CODE_UNAUTHORIZED -> Unauthorized
                         STATUS_CODE_TOO_MANY_ACCESS -> Limited
-                        else -> UnExpected(error.statusCode, error.errorMessage)
+                        else -> UnExpected(error.errorCode, error.errorMessage)
                     }
                 }
                 else -> UnExpected(DEFAULT_ERROR_CODE, error.message)

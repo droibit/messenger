@@ -45,10 +45,11 @@ class TwitterErrorTest {
     fun invoke_toUnExpectedError() {
         kotlin.run {
             val error = mock<TwitterApiException> {
-                on { statusCode } doReturn DEFAULT_ERROR_CODE
+                on { statusCode } doReturn 403
+                on { errorCode } doReturn 327
             }
             assertThat(TwitterError(error))
-                .isEqualTo(TwitterError.UnExpected(DEFAULT_ERROR_CODE))
+                .isEqualTo(TwitterError.UnExpected(327))
         }
 
         kotlin.run {
