@@ -52,8 +52,11 @@ class HomeActivity : FragmentActivity() {
 
         viewModel.activeAccountName.observe(this) {
             actionItemListAdapter.title = getString(coreR.string.twitter_account_name_with_at, it)
-            (binding.navigationList.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(0, 0)
+
+            binding.navigationList.apply {
+                (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                requestFocus()
+            }
         }
     }
 
