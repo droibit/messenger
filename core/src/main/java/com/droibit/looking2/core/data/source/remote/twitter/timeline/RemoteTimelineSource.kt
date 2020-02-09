@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class RemoteTimelineSource @Inject constructor(
     twitterCore: TwitterCore,
-    private val mapper: TimelineMapper
+    private val timelineMapper: TimelineMapper
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {
 
     @Throws(TwitterError::class)
@@ -29,7 +29,7 @@ class RemoteTimelineSource @Inject constructor(
                 null,
                 null
             ).await()
-            return mapper.toTimeline(source = timelineResponse)
+            return timelineMapper.toTimeline(source = timelineResponse)
         } catch (e: TwitterException) {
             Timber.e(e)
             throw TwitterError(e)
@@ -52,7 +52,7 @@ class RemoteTimelineSource @Inject constructor(
                 null,
                 null
             ).await()
-            return mapper.toTimeline(source = timelineResponse)
+            return timelineMapper.toTimeline(source = timelineResponse)
         } catch (e: TwitterException) {
             Timber.e(e)
             throw TwitterError(e)
@@ -60,7 +60,7 @@ class RemoteTimelineSource @Inject constructor(
     }
 
     @Throws(TwitterError::class)
-    suspend fun getUesrListTimeline(
+    suspend fun getUserListTimeline(
         session: TwitterSession,
         listId: Long,
         count: Int,
@@ -79,7 +79,7 @@ class RemoteTimelineSource @Inject constructor(
                 null,
                 null
             ).await()
-            return mapper.toTimeline(source = timelineResponse)
+            return timelineMapper.toTimeline(source = timelineResponse)
         } catch (e: TwitterException) {
             Timber.e(e)
             throw TwitterError(e)

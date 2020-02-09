@@ -5,6 +5,7 @@ import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.util.ext.unescapeHtml
+import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.models.TweetEntities
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -23,18 +24,23 @@ private const val PROFILE_ICON_SIZE_BIGGER = "_bigger"
 
 class TimelineMapper @Inject constructor() {
 
-    @Throws(ParseException::class)
+    @Throws(TwitterException::class)
     fun toTimeline(source: List<TweetResponse>): List<Tweet> {
-        return source.map { tweet ->
-            if (tweet.retweetedStatus == null) {
-                tweet.toTweet()
-            } else {
-                tweet.toRetweetedTweet()
+        try {
+            return source.map { tweet ->
+                if (tweet.retweetedStatus == null) {
+                    tweet.toTweet()
+                } else {
+                    tweet.toRetweetedTweet()
+                }
             }
+        } catch (e: ParseException) {
+            throw TwitterException("Parse Failure", e)
         }
     }
 }
 
+@Throws(ParseException::class)
 private fun TweetResponse.toTweet(): Tweet {
     return Tweet(
         id = id,
@@ -52,6 +58,7 @@ private fun TweetResponse.toTweet(): Tweet {
     )
 }
 
+@Throws(ParseException::class)
 private fun TweetResponse.toRetweetedTweet(): Tweet {
     return Tweet(
         id = id,

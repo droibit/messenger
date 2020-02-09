@@ -6,5 +6,6 @@ import com.nhaarman.mockitokotlin2.mock
 fun mockAppTwitterApiClient(): AppTwitterApiClient {
     return mock {
         on { this.statusesService } doReturn mock()
+        on { this.userListService } doReturn mock()
     }
 }

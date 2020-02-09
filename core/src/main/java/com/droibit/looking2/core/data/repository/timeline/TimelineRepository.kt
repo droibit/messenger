@@ -46,7 +46,7 @@ class TimelineRepository @Inject constructor(
     suspend fun getUserListTimeline(listId: Long, sinceId: Long?): List<Tweet> {
         return withContext(dispatcherProvider.io) {
             val session = localTwitterSource.activeSession ?: throw TwitterError.Unauthorized
-            remoteTimelineSource.getUesrListTimeline(
+            remoteTimelineSource.getUserListTimeline(
                 session,
                 listId,
                 localUserSettingsSource.numOfTweets,
