@@ -14,7 +14,7 @@ class TwitterErrorKtTest {
         val maxRunAttemptCount = 2
         val cause = mock<TwitterError.Network>()
 
-        val worker = mock<ListenableWorker>() {
+        val worker = mock<ListenableWorker> {
             on { runAttemptCount } doReturn 0 doReturn 1 doReturn 2
         }
 

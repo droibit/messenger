@@ -120,7 +120,7 @@ class RemoteTwitterAccountSourceTest {
         whenever(oauthClientProvider.get()).thenReturn(client)
 
         val errorCode = CommonStatusCodes.ERROR
-        val error = mock<ApiException>() {
+        val error = mock<ApiException> {
             on { statusCode } doReturn errorCode
         }
         whenever(oAuthService.sendAuthorizationRequest(any(), any()))

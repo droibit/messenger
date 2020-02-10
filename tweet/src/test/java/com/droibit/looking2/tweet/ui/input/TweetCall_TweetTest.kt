@@ -17,7 +17,7 @@ class TweetCall_TweetTest {
     @get:Rule
     val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-    @Mock
+    @[Mock Suppress("unused")]
     private lateinit var workManager: WorkManager
 
     @InjectMocks

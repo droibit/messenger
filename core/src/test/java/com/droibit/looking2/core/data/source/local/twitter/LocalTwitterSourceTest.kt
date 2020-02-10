@@ -73,7 +73,7 @@ class LocalTwitterSourceTest {
     @Test
     fun add() {
         val sessionId = 1L
-        val session = mock<TwitterSession>() {
+        val session = mock<TwitterSession> {
             on { this.id } doReturn sessionId
         }
 

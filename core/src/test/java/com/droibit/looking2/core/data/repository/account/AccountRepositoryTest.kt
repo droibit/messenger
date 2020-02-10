@@ -120,7 +120,7 @@ class AccountRepositoryTest {
     }
 
     @Test
-    fun updateActiveTwitterAccount_skipUpdate() = runBlockingTest() {
+    fun updateActiveTwitterAccount_skipUpdate() = runBlockingTest {
         val activeSession = mock<TwitterSession>()
         whenever(localSource.activeSession)
             .thenReturn(activeSession)
@@ -344,7 +344,7 @@ class AccountRepositoryTest {
             on { this.userId } doReturn 1L
             on { this.userName } doReturn "test1"
         }
-        val session2 = mock<TwitterSession>() {
+        val session2 = mock<TwitterSession> {
             on { this.userId } doReturn 2L
             on { this.userName } doReturn "test2"
         }

@@ -80,6 +80,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/listIcon"
             app:layout_constraintEnd_toEndOf="@+id/listIcon"
             app:visibleUnless="@{userList.private}"
+            tools:ignore="ContentDescription"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
