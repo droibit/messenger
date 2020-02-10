@@ -1,5 +1,6 @@
 package com.droibit.looking2.core.data.source.remote.twitter.tweet
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.droibit.looking2.core.data.source.remote.mockErrorCall
 import com.droibit.looking2.core.data.source.remote.mockSuccessfulCall
 import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
@@ -17,11 +18,12 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.coroutines.test.runBlockingTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.fail
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Spy
@@ -30,6 +32,7 @@ import org.mockito.junit.MockitoRule
 import java.io.IOException
 import com.twitter.sdk.android.core.models.Tweet as TweetResponse
 
+@RunWith(AndroidJUnit4::class)
 class RemoteTweetSourceTest {
 
     @get:Rule
@@ -172,10 +175,91 @@ class RemoteTweetSourceTest {
         verify(apiClient.statusesService).retweet(eq(tweetId), isNull())
     }
 
-    @Ignore("Not implemented yet.")
     @Test
     fun retweet_alreadyRetweet() = runBlockingTest {
-        // MEMO: {"errors":[{"code":327,"message":"You have already retweeted this Tweet."}]}
-        TODO("")
+        val errorBody = """{"errors":[{"code":327,"message":"error"}]}"""
+        val call = mockErrorCall<TweetResponse>(
+            statusCode = 403,
+            errorBody = errorBody.toResponseBody()
+        )
+        whenever(
+            apiClient.statusesService.retweet(
+                anyOrNull(),
+                anyOrNull()
+            )
+        ).thenReturn(call)
+
+        val session = mock<TwitterSession>()
+        val tweetId = Long.MAX_VALUE
+        remoteSource.retweet(session, tweetId)
+
+        verify(remoteSource).get(session)
+        verify(apiClient.statusesService).retweet(eq(tweetId), isNull())
+    }
+
+    @Test
+    fun likeTweet_success() = runBlockingTest {
+        val tweetResponse = mock<TweetResponse>()
+        val call = mockSuccessfulCall(tweetResponse)
+        whenever(
+            apiClient.favoriteService.create(
+                anyOrNull(),
+                anyOrNull()
+            )
+        ).thenReturn(call)
+
+        val session = mock<TwitterSession>()
+        val tweetId = Long.MAX_VALUE
+        remoteSource.likeTweet(session, tweetId)
+
+        verify(remoteSource).get(session)
+        verify(apiClient.favoriteService).create(eq(tweetId), isNull())
+    }
+
+    @Test
+    fun likeTweet_communicationError() = runBlockingTest {
+        val error = mock<IOException>()
+        val call = mockErrorCall<TweetResponse>(error)
+        whenever(
+            apiClient.favoriteService.create(
+                anyOrNull(),
+                anyOrNull()
+            )
+        ).thenReturn(call)
+
+        val session = mock<TwitterSession>()
+        val tweetId = Long.MAX_VALUE
+
+        try {
+            remoteSource.likeTweet(session, tweetId)
+            fail("error")
+        } catch (e: Exception) {
+            assertThat(e).isInstanceOf(TwitterError::class.java)
+        }
+
+        verify(remoteSource).get(session)
+        verify(apiClient.favoriteService).create(eq(tweetId), isNull())
+    }
+
+    @Test
+    fun likeTweet_alreadyFavorite() = runBlockingTest {
+        val errorBody = """{"errors":[{"code":139,"message":"error"}]}"""
+        val call = mockErrorCall<TweetResponse>(
+            statusCode = 403,
+            errorBody = errorBody.toResponseBody()
+        )
+        whenever(
+            apiClient.favoriteService.create(
+                anyOrNull(),
+                anyOrNull()
+            )
+        ).thenReturn(call)
+
+        val session = mock<TwitterSession>()
+        val tweetId = Long.MAX_VALUE
+        remoteSource.likeTweet(session, tweetId)
+
+        verify(remoteSource).get(session)
+        verify(apiClient.favoriteService).create(eq(tweetId), isNull())
     }
 }

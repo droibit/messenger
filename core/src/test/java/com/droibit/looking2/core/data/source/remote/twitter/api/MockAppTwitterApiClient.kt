@@ -7,5 +7,6 @@ fun mockAppTwitterApiClient(): AppTwitterApiClient {
     return mock {
         on { this.statusesService } doReturn mock()
         on { this.userListService } doReturn mock()
+        on { this.favoriteService } doReturn mock()
     }
 }
