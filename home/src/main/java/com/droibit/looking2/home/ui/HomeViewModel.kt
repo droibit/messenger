@@ -32,5 +32,8 @@ class HomeViewModel(
     }
 
     @Inject
-    constructor(accountRepository: AccountRepository) : this(accountRepository, MutableLiveData())
+    constructor(accountRepository: AccountRepository) : this(
+        accountRepository,
+        MutableLiveData()
+    )
 }
