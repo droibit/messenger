@@ -26,16 +26,17 @@ class TwitterAccountListViewModel(
     private val signInTwitterSink: MutableLiveData<Event<Unit>>,
     private val limitSignInTwitterErrorMessageSink: MutableLiveData<Event<LimitSignInErrorMessage>>,
     private val showSignOutConfirmationSink: MutableLiveData<Event<TwitterAccount>>,
-    private val restartAppTimingSink: MutableLiveData<Event<Unit>>
+    private val restartAppSink: MutableLiveData<Event<Unit>>
 ) : ViewModel() {
 
+    @get:UiThread
     val twitterAccounts: LiveData<List<TwitterAccount>> by lazy(NONE) {
         viewModelScope.launch {
             accountRepository.twitterAccounts().collect {
                 if (it.isNotEmpty()) {
                     accountsSink.value = it
                 } else {
-                    restartAppTimingSink.value = Event(Unit)
+                    restartAppSink.value = Event(Unit)
                 }
             }
         }
@@ -45,8 +46,8 @@ class TwitterAccountListViewModel(
     val showSignOutConfirmation: LiveData<Event<TwitterAccount>>
         get() = showSignOutConfirmationSink
 
-    val restartAppTiming: LiveData<Event<Unit>>
-        get() = restartAppTimingSink
+    val restartApp: LiveData<Event<Unit>>
+        get() = restartAppSink
 
     val signTwitter: LiveData<Event<Unit>>
         get() = signInTwitterSink
@@ -107,6 +108,7 @@ class TwitterAccountListViewModel(
         }
     }
 
+    @UiThread
     fun signOutAccount(account: TwitterAccount) {
         viewModelScope.launch {
             accountRepository.signOutTwitter(account)

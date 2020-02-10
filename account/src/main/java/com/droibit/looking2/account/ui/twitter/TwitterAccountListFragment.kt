@@ -67,7 +67,7 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
 
         observeTwitterAccounts()
         observeShowSignOutConfirmation()
-        observeRestartAppTiming()
+        observeRestartApp()
         observeSignInTwitter()
     }
 
@@ -83,8 +83,8 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
         }
     }
 
-    private fun observeRestartAppTiming() {
-        viewModel.restartAppTiming.observeEvent(viewLifecycleOwner) {
+    private fun observeRestartApp() {
+        viewModel.restartApp.observeEvent(viewLifecycleOwner) {
             val intent = AccountActivity.createRestartIntent()
             requireActivity().startActivity(intent)
         }
