@@ -20,4 +20,8 @@ projectFilesBackup/
 /.gradle
 /build
 
+# Android app
+*.apk
+*.aab
+
 .DS_Store
