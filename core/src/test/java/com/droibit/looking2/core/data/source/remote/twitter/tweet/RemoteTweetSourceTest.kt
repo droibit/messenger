@@ -75,7 +75,6 @@ class RemoteTweetSourceTest {
         val inReplyToId = Long.MAX_VALUE
         remoteSource.tweet(session, text, inReplyToId)
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).update(
             eq(text),
             eq(inReplyToId),
@@ -117,7 +116,6 @@ class RemoteTweetSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).update(
             eq(text),
             eq(inReplyToId),
@@ -146,7 +144,6 @@ class RemoteTweetSourceTest {
         val tweetId = Long.MAX_VALUE
         remoteSource.retweet(session, tweetId)
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).retweet(eq(tweetId), isNull())
     }
 
@@ -171,7 +168,6 @@ class RemoteTweetSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).retweet(eq(tweetId), isNull())
     }
 
@@ -193,7 +189,6 @@ class RemoteTweetSourceTest {
         val tweetId = Long.MAX_VALUE
         remoteSource.retweet(session, tweetId)
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).retweet(eq(tweetId), isNull())
     }
 
@@ -212,7 +207,6 @@ class RemoteTweetSourceTest {
         val tweetId = Long.MAX_VALUE
         remoteSource.likeTweet(session, tweetId)
 
-        verify(remoteSource).get(session)
         verify(apiClient.favoriteService).create(eq(tweetId), isNull())
     }
 
@@ -237,7 +231,6 @@ class RemoteTweetSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.favoriteService).create(eq(tweetId), isNull())
     }
 
@@ -259,7 +252,6 @@ class RemoteTweetSourceTest {
         val tweetId = Long.MAX_VALUE
         remoteSource.likeTweet(session, tweetId)
 
-        verify(remoteSource).get(session)
         verify(apiClient.favoriteService).create(eq(tweetId), isNull())
     }
 }

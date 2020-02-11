@@ -12,14 +12,16 @@ class AuthenticationErrorTest {
     @Test
     fun invoke_toNetworkError() {
         val error = mock<TwitterException> {
-            on { cause } doReturn mock<IOException>()
+            on { this.cause } doReturn mock<IOException>()
         }
-        assertThat(AuthenticationError(error)).isEqualTo(AuthenticationError.Network)
+        assertThat(AuthenticationError(error))
+            .isEqualTo(AuthenticationError.Network)
     }
 
     @Test
     fun invoke_toUnExpected() {
         val error = mock<TwitterException>()
-        assertThat(AuthenticationError(error)).isEqualTo(AuthenticationError.UnExpected)
+        assertThat(AuthenticationError(error))
+            .isEqualTo(AuthenticationError.UnExpected)
     }
 }

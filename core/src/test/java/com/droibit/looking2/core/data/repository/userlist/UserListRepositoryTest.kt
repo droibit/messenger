@@ -57,7 +57,6 @@ class UserListRepositoryTest {
         val actualMyLists = repository.getMyLists()
         assertThat(actualMyLists).isEqualTo(myLists)
 
-        verify(localSource).activeSession
         verify(remoteSource).getUserLists(same(session), isNull())
     }
 
@@ -78,7 +77,6 @@ class UserListRepositoryTest {
             assertThat(e).isEqualTo(error)
         }
 
-        verify(localSource).activeSession
         verify(remoteSource).getUserLists(same(session), isNull())
     }
 
@@ -94,7 +92,6 @@ class UserListRepositoryTest {
             assertThat(e).isEqualTo(TwitterError.Unauthorized)
         }
 
-        verify(localSource).activeSession
         verify(remoteSource, never()).getUserLists(any(), anyOrNull())
     }
 }

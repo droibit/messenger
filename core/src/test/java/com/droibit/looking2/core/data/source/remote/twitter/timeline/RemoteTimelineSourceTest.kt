@@ -79,7 +79,6 @@ class RemoteTimelineSourceTest {
         val actualTimeline = remoteSource.getHomeTimeline(session, count, sinceId)
         assertThat(actualTimeline).isEqualTo(timeline)
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).homeTimeline(
             eq(count),
             eq(sinceId),
@@ -119,7 +118,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).homeTimeline(
             eq(count),
             eq(sinceId),
@@ -162,7 +160,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).homeTimeline(
             eq(count),
             eq(sinceId),
@@ -199,7 +196,6 @@ class RemoteTimelineSourceTest {
         val actualTimeline = remoteSource.getMentionsTimeline(session, count, sinceId)
         assertThat(actualTimeline).isEqualTo(timeline)
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).mentionsTimeline(
             eq(count),
             eq(sinceId),
@@ -237,7 +233,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).mentionsTimeline(
             eq(count),
             eq(sinceId),
@@ -278,7 +273,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.statusesService).mentionsTimeline(
             eq(count),
             eq(sinceId),
@@ -318,7 +312,6 @@ class RemoteTimelineSourceTest {
         val actualTimeline = remoteSource.getUserListTimeline(session, listId, count, sinceId)
         assertThat(actualTimeline).isEqualTo(timeline)
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).statuses(
             eq(listId),
             eq(count),
@@ -363,7 +356,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).statuses(
             eq(listId),
             eq(count),
@@ -411,7 +403,6 @@ class RemoteTimelineSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).statuses(
             eq(listId),
             eq(count),

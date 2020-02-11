@@ -61,7 +61,6 @@ class LocalUserSettingsSourceTest {
         whenever(keys.numOfTweets).doReturn(numOfTweetsKey)
 
         assertThat(localSource.numOfTweets).isEqualTo(0)
-        assertThat(localSource.numOfTweets).isEqualTo(0)
     }
 
     @Test

@@ -111,7 +111,6 @@ class AccountRepositoryTest {
         whenever(localSource.getSessionBy(2L))
             .thenReturn(newActiveSession)
 
-
         val updateAccount = TwitterAccount(2L, "test2", active = false)
         repository.updateActiveTwitterAccount(updateAccount)
 

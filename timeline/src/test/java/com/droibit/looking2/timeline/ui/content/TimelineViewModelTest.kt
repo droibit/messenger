@@ -1,6 +1,5 @@
 package com.droibit.looking2.timeline.ui.content
 
-import androidx.annotation.CheckResult
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.core.model.tweet.Tweet
@@ -43,9 +42,22 @@ class TimelineViewModelTest {
     @Spy
     private var getTimelineResultSink = MutableLiveData<Result<Timeline>>()
 
+    private lateinit var viewModel: TimelineViewModel
+
+    private lateinit var testCoroutineDispatcher: TestCoroutineDispatcher
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(TestCoroutineDispatcher())
+        testCoroutineDispatcher = TestCoroutineDispatcher().also {
+            it.pauseDispatcher()
+        }
+        Dispatchers.setMain(testCoroutineDispatcher)
+
+        viewModel = TimelineViewModel(
+            getTimelineCall,
+            isLoadingSink,
+            getTimelineResultSink
+        )
     }
 
     @After
@@ -53,14 +65,8 @@ class TimelineViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @CheckResult
-    private fun createViewModel(): TimelineViewModel {
-        return TimelineViewModel(getTimelineCall, isLoadingSink, getTimelineResultSink)
-    }
-
     @Test
     fun isLoading() {
-        val viewModel = createViewModel()
         val testObserver = viewModel.isLoading.test()
 
         isLoadingSink.value = true
@@ -75,8 +81,8 @@ class TimelineViewModelTest {
         whenever(getTimelineCall.invoke(anyOrNull())).thenReturn(timeline)
 
         val isLoadingObserver = isLoadingSink.test()
-        val viewModel = createViewModel()
         val timelineObserver = viewModel.timeline.test()
+        testCoroutineDispatcher.resumeDispatcher()
 
         timelineObserver.assertValue(timeline)
         isLoadingObserver.assertValueHistory(false, true, false)
@@ -89,8 +95,8 @@ class TimelineViewModelTest {
         }
         whenever(getTimelineCall(anyOrNull())).thenReturn(timeline)
 
-        val viewModel = createViewModel()
         val timelineObserver = viewModel.isNotEmptyTimeline.test()
+        testCoroutineDispatcher.resumeDispatcher()
 
         timelineObserver.assertValue(true)
     }
@@ -102,8 +108,8 @@ class TimelineViewModelTest {
             .thenThrow(error)
 
         val isLoadingObserver = isLoadingSink.test()
-        val viewModel = createViewModel()
         val errorObserver = viewModel.error.test()
+        testCoroutineDispatcher.resumeDispatcher()
 
         errorObserver.assertValue {
             val message = it.peek()

@@ -62,7 +62,6 @@ class RemoteTwitterAccountSourceTest {
         val session = mock<TwitterSession>()
         remoteSource.ensureApiClient(session)
 
-        verify(apiClientFactory).get(session)
         verify(twitterCore).addApiClient(session, apiClient)
     }
 

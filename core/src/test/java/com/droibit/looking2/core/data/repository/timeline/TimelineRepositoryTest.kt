@@ -68,8 +68,6 @@ class TimelineRepositoryTest {
         val actualTimeline = repository.getHomeTimeline(sinceId = null)
         assertThat(actualTimeline).isEqualTo(actualTimeline)
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getHomeTimeline(same(session), eq(numOfTweets), isNull())
     }
 
@@ -94,8 +92,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(error)
         }
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getHomeTimeline(same(session), eq(numOfTweets), isNull())
     }
 
@@ -111,7 +107,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(TwitterError.Unauthorized)
         }
 
-        verify(localTwitterSource).activeSession
         verify(localUserSettingsSource, never()).numOfTweets
         verify(remoteTimelineSource, never()).getHomeTimeline(any(), anyInt(), anyOrNull())
     }
@@ -133,8 +128,6 @@ class TimelineRepositoryTest {
         val actualTimeline = repository.getMentionsTimeline(sinceId = null)
         assertThat(actualTimeline).isEqualTo(actualTimeline)
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getMentionsTimeline(same(session), eq(numOfTweets), isNull())
     }
 
@@ -159,8 +152,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(error)
         }
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getMentionsTimeline(same(session), eq(numOfTweets), isNull())
     }
 
@@ -176,7 +167,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(TwitterError.Unauthorized)
         }
 
-        verify(localTwitterSource).activeSession
         verify(localUserSettingsSource, never()).numOfTweets
         verify(remoteTimelineSource, never()).getMentionsTimeline(any(), anyInt(), anyOrNull())
     }
@@ -199,8 +189,6 @@ class TimelineRepositoryTest {
         val actualTimeline = repository.getUserListTimeline(listId, sinceId = null)
         assertThat(actualTimeline).isEqualTo(actualTimeline)
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getUserListTimeline(
             same(session),
             eq(listId),
@@ -231,8 +219,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(error)
         }
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource).numOfTweets
         verify(remoteTimelineSource).getUserListTimeline(
             same(session),
             eq(listId),
@@ -254,8 +240,6 @@ class TimelineRepositoryTest {
             assertThat(e).isEqualTo(TwitterError.Unauthorized)
         }
 
-        verify(localTwitterSource).activeSession
-        verify(localUserSettingsSource, never()).numOfTweets
         verify(remoteTimelineSource, never()).getUserListTimeline(
             any(),
             anyLong(),

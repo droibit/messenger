@@ -73,7 +73,6 @@ class RemoteUserListSourceTest {
         val actualUserLists = remoteSource.getUserLists(session, userId = null)
         assertThat(actualUserLists).isEqualTo(userLists)
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).list(
             isNull(),
             isNull(),
@@ -103,7 +102,6 @@ class RemoteUserListSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).list(
             isNull(),
             isNull(),
@@ -136,7 +134,6 @@ class RemoteUserListSourceTest {
             assertThat(e).isInstanceOf(TwitterError::class.java)
         }
 
-        verify(remoteSource).get(session)
         verify(apiClient.userListService).list(
             isNull(),
             isNull(),

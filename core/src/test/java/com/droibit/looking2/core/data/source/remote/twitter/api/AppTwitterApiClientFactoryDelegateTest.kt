@@ -3,7 +3,6 @@ package com.droibit.looking2.core.data.source.remote.twitter.api
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterSession
@@ -32,6 +31,5 @@ class AppTwitterApiClientFactoryDelegateTest {
 
         val session = mock<TwitterSession>()
         assertThat(factory.get(session)).isSameInstanceAs(client)
-        verify(twitterCore).getApiClient(session)
     }
 }
