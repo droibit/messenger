@@ -26,6 +26,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -108,11 +109,11 @@ class AccountRepositoryTest {
         whenever(localSource.sessions)
             .thenReturn(listOf(oldActiveSession, newActiveSession))
 
-        whenever(localSource.getSessionBy(2L))
+        whenever(localSource.getSessionBy(anyLong()))
             .thenReturn(newActiveSession)
 
-        val updateAccount = TwitterAccount(2L, "test2", active = false)
-        repository.updateActiveTwitterAccount(updateAccount)
+        val updateAccountId = 2L
+        repository.updateActiveTwitterAccount(updateAccountId)
 
         verify(localSource).setActiveSession(newActiveSession)
         verify(repository).dispatchTwitterAccountsUpdated()
@@ -124,11 +125,11 @@ class AccountRepositoryTest {
         whenever(localSource.activeSession)
             .thenReturn(activeSession)
 
-        whenever(localSource.getSessionBy(2L))
+        whenever(localSource.getSessionBy(anyLong()))
             .thenReturn(activeSession)
 
-        val updateAccount = TwitterAccount(2L, "test2", active = false)
-        repository.updateActiveTwitterAccount(updateAccount)
+        val updateAccountId = 2L
+        repository.updateActiveTwitterAccount(updateAccountId)
 
         verify(localSource, never()).setActiveSession(any())
         verify(repository, never()).dispatchTwitterAccountsUpdated()
@@ -284,11 +285,11 @@ class AccountRepositoryTest {
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(localSource).setActiveSession(session)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
@@ -303,11 +304,11 @@ class AccountRepositoryTest {
         whenever(localSource.activeSession)
             .thenReturn(null)
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
 
@@ -326,11 +327,11 @@ class AccountRepositoryTest {
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
 

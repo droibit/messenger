@@ -1,6 +1,7 @@
 package com.droibit.looking2.account.ui.twitter.signin
 
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationResult
+import com.droibit.looking2.core.ui.dialog.DialogButtonResult
+import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
@@ -64,6 +67,13 @@ class TwitterSignInViewModel(
     }
 
     @UiThread
+    fun onConfirmationDialogResult(dialogResult: DialogButtonResult) {
+        if (dialogResult.isPositive) {
+            authenticate()
+        }
+    }
+
+    @VisibleForTesting
     fun authenticate() {
         if (signInJob?.isActive == true) {
             return

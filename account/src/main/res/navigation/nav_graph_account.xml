@@ -20,7 +20,11 @@
         </fragment>
         <dialog
             android:id="@+id/twitterSignInConfirmationDialogFragment"
-            android:name="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInConfirmationDialogFragment" />
+            android:name="com.droibit.looking2.account.ui.twitter.signin.TwitterSignInConfirmationDialogFragment">
+            <argument
+                android:name="resultKey"
+                app:argType="string" />
+        </dialog>
     </navigation>
 
     <navigation
@@ -48,8 +52,11 @@
 
         <dialog
             android:id="@+id/signOutConfirmationDialogFragment"
-            android:name="com.droibit.looking2.account.ui.twitter.SignOutConfirmationDialogFragment">
+            android:name="com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogFragment">
 
+            <argument
+                android:name="resultKey"
+                app:argType="string" />
             <argument
                 android:name="account"
                 app:argType="com.droibit.looking2.core.model.account.TwitterAccount" />

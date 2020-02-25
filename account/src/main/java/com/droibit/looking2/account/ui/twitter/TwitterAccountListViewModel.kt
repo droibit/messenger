@@ -1,15 +1,18 @@
 package com.droibit.looking2.account.ui.twitter
 
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SIGN_OUT
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SWITCH_ACCOUNT
+import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
+import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
 import kotlinx.coroutines.flow.collect
@@ -104,14 +107,21 @@ class TwitterAccountListViewModel(
 
     private fun switchActiveAccount(account: TwitterAccount) {
         viewModelScope.launch {
-            accountRepository.updateActiveTwitterAccount(account)
+            accountRepository.updateActiveTwitterAccount(account.id)
         }
     }
 
     @UiThread
+    fun onSignOutConfirmationDialogResult(dialogResult: SignOutConfirmationDialogResult) {
+        if (dialogResult.isPositive) {
+            signOutAccount(dialogResult.account)
+        }
+    }
+
+    @VisibleForTesting
     fun signOutAccount(account: TwitterAccount) {
         viewModelScope.launch {
-            accountRepository.signOutTwitter(account)
+            accountRepository.signOutTwitter(account.id)
         }
     }
 }
