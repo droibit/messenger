@@ -10,6 +10,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.ext.exhaustive
+import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
@@ -83,7 +84,7 @@ class MyListsFragment : DaggerFragment() {
 
     fun onUserListClick(myList: UserList) {
         Timber.d("onUserListClick(${myList.name})")
-        findNavController().navigate(
+        findNavController().navigateSafely(
             toMyListTimeline(
                 TimelineSource.MyLists(myList.id)
             )
