@@ -19,6 +19,7 @@ import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.exhaustive
+import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
@@ -139,7 +140,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     private fun observePhotoList() {
         tweetActionViewModel.photos.observeEvent(viewLifecycleOwner) { urls ->
-            findNavController().navigate(toPhotos(urls.toTypedArray()))
+            findNavController().navigateSafely(toPhotos(urls.toTypedArray()))
         }
     }
 

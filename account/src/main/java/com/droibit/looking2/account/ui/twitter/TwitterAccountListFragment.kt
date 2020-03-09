@@ -17,6 +17,7 @@ import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirecti
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.view.OnRotaryScrollListener
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
+import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import dagger.android.support.DaggerFragment
@@ -79,7 +80,7 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
 
     private fun observeShowSignOutConfirmation() {
         viewModel.showSignOutConfirmation.observeEvent(viewLifecycleOwner) {
-            findNavController().navigate(toConfirmTwitterSignOut(account = it))
+            findNavController().navigateSafely(toConfirmTwitterSignOut(account = it))
         }
     }
 
@@ -92,7 +93,7 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
 
     private fun observeSignInTwitter() {
         viewModel.signTwitter.observeEvent(viewLifecycleOwner) {
-            findNavController().navigate(toTwitterSignIn())
+            findNavController().navigateSafely(toTwitterSignIn())
         }
 
         viewModel.limitSignInTwitterErrorMessage.observeEvent(viewLifecycleOwner) {
