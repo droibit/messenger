@@ -1,6 +1,5 @@
 package com.droibit.looking2.ui.launch
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,11 +18,6 @@ class LaunchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
-    }
-
-    @SuppressLint("FragmentLiveDataObserve")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         viewModel.launchDestination.observe(this) {
             val intent = when (it) {
