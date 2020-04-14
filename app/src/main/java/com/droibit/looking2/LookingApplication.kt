@@ -2,6 +2,7 @@ package com.droibit.looking2
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.UiThread
 import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
@@ -15,23 +16,21 @@ import androidx.work.Configuration as WorkConfiguration
 class LookingApplication : Application() {
 
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
-        DaggerCoreComponent.builder()
-            .debuggable(BuildConfig.DEBUG)
-            .appVersion(
-                AppVersion(
+        DaggerCoreComponent.factory()
+            .create(
+                application = this,
+                debuggable = BuildConfig.DEBUG,
+                appVersion = AppVersion(
                     name = BuildConfig.VERSION_NAME,
                     code = BuildConfig.VERSION_CODE
                 )
             )
-            .application(this)
-            .build()
     }
 
     override fun onCreate() {
         super.onCreate()
-        DaggerApplicationComponent.builder()
-            .core(coreComponent)
-            .build()
+        DaggerApplicationComponent.factory()
+            .create(coreComponent)
             .inject(this)
     }
 
@@ -49,10 +48,11 @@ class LookingApplication : Application() {
     }
 
     companion object {
-        @JvmStatic
+        @UiThread
         fun coreComponent(context: Context) =
             (context.applicationContext as LookingApplication).coreComponent
     }
 }
 
+@UiThread
 fun Context.coreComponent() = LookingApplication.coreComponent(this)

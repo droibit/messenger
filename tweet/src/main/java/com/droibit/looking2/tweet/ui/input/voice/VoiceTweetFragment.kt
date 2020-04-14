@@ -76,10 +76,6 @@ class VoiceTweetFragment : DaggerFragment(),
             totalTime = waitDurationMillis
         }
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         observeTweetCompleted()
 

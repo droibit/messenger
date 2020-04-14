@@ -6,19 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.wear.widget.SwipeDismissFrameLayout
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
+import com.droibit.looking2.core.ui.dialog.DialogButtonResult
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.addCallback
+import com.droibit.looking2.core.util.ext.consume
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
+import com.droibit.looking2.core.util.ext.requireCurrentBackStackEntry
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
@@ -29,6 +34,7 @@ import javax.inject.Named
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
+private const val RESULT_KEY_SIGN_IN_CONFORMATION = "RESULT_KEY_SIGN_IN_CONFORMATION"
 
 class TwitterSignInFragment : DaggerFragment() {
 
@@ -48,9 +54,7 @@ class TwitterSignInFragment : DaggerFragment() {
     private var _binding: FragmentTwitterSigninBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitterSignIn) {
-        viewModelFactory
-    }
+    private val signInViewModel: TwitterSignInViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,8 +80,23 @@ class TwitterSignInFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeConformationResult()
         observeAuthenticateOnPhoneTiming()
         observeAuthenticationResult()
+    }
+
+    private fun observeConformationResult() {
+        val navBackStackEntry = findNavController().requireCurrentBackStackEntry()
+        navBackStackEntry.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                navBackStackEntry.savedStateHandle.consume<DialogButtonResult>(
+                    RESULT_KEY_SIGN_IN_CONFORMATION
+                )?.let {
+                    signInViewModel.onConfirmationDialogResult(it)
+                    Timber.d("Sign in confirmation result: $it")
+                }
+            }
+        })
     }
 
     private fun observeAuthenticateOnPhoneTiming() {
@@ -145,6 +164,10 @@ class TwitterSignInFragment : DaggerFragment() {
 
     @UiThread
     fun showConfirmDialog() {
-        findNavController().navigateSafely(toConfirmTwitterSignIn())
+        findNavController().navigateSafely(
+            toConfirmTwitterSignIn(
+                resultKey = RESULT_KEY_SIGN_IN_CONFORMATION
+            )
+        )
     }
 }

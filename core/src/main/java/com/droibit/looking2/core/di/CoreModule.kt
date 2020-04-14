@@ -2,6 +2,7 @@ package com.droibit.looking2.core.di
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.config.AppVersion
@@ -9,6 +10,7 @@ import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
+import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.Binds
 import dagger.Module
@@ -43,6 +45,9 @@ object CoreModule {
 
         @Binds
         fun bindAnalyticsHelper(analytics: FirebaseAnalyticsHelper): AnalyticsHelper
+
+        @Binds
+        fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
     }
 
     interface Provider {

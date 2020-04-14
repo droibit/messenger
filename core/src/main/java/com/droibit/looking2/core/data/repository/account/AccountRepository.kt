@@ -53,10 +53,10 @@ class AccountRepository(
         return twitterAccountsChannel.asFlow()
     }
 
-    suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
+    suspend fun updateActiveTwitterAccount(accountId: Long) {
         withContext(dispatcherProvider.io) {
-            val session = localSource.getSessionBy(account.id)
-            checkNotNull(session) { "Account dose not exist: $account" }
+            val session = localSource.getSessionBy(accountId)
+            checkNotNull(session) { "Account dose not exist: $accountId" }
 
             if (session != localSource.activeSession) {
                 localSource.setActiveSession(session)
@@ -83,9 +83,9 @@ class AccountRepository(
         }
     }.flowOn(dispatcherProvider.io)
 
-    suspend fun signOutTwitter(account: TwitterAccount) {
+    suspend fun signOutTwitter(accountId: Long) {
         withContext(dispatcherProvider.io) {
-            localSource.remove(account.id)
+            localSource.remove(accountId)
             analytics.setNumOfGetTweets(localSource.sessions.size)
 
             if (localSource.activeSession == null) {

@@ -1,16 +1,22 @@
 package com.droibit.looking2.account.ui.twitter.signin
 
+import android.content.DialogInterface.BUTTON_NEGATIVE
+import android.content.DialogInterface.BUTTON_POSITIVE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
+import com.droibit.looking2.core.ui.dialog.DialogButtonResult
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.jraska.livedata.test
+import com.nhaarman.mockitokotlin2.doNothing
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
@@ -159,6 +165,32 @@ class TwitterSignInViewModelTest {
     }
 
     @Test
+    fun onConfirmationDialogResult_positive() {
+        val spyViewModel = spy(viewModel)
+        doNothing().whenever(spyViewModel).authenticate()
+
+        val result = mock<DialogButtonResult> {
+            on { button } doReturn BUTTON_POSITIVE
+        }
+        spyViewModel.onConfirmationDialogResult(result)
+
+        verify(spyViewModel).authenticate()
+    }
+
+    @Test
+    fun onConfirmationDialogResult_negative() {
+        val spyViewModel = spy(viewModel)
+        doNothing().whenever(spyViewModel).authenticate()
+
+        val result = mock<DialogButtonResult> {
+            on { button } doReturn BUTTON_NEGATIVE
+        }
+        spyViewModel.onConfirmationDialogResult(result)
+
+        verify(spyViewModel, never()).authenticate()
+    }
+
+    @Test
     fun authenticate_success() = runBlockingTest {
         val isProcessingObserver = isProcessingSink.test()
         val authenticateOnPhoneTimingObserver = authenticateOnPhoneTimingSink.test()
@@ -181,7 +213,7 @@ class TwitterSignInViewModelTest {
 
     @Ignore("Not implemented yet.")
     @Test
-    fun authenticate_skipExecuting()  {
+    fun authenticate_skipExecuting() {
         fail("Not implemented yet.")
     }
 
