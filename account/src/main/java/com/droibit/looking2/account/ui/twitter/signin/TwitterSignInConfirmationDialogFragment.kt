@@ -4,20 +4,23 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.DialogInterface.BUTTON_NEGATIVE
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.wearable.view.AcceptDenyDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.ui.dialog.DialogButton
 import com.droibit.looking2.core.ui.dialog.DialogButtonResult
-import com.droibit.looking2.core.util.ext.setResult
-import kotlinx.android.parcel.Parcelize
+import com.droibit.looking2.core.ui.dialog.DialogButtonResult.Companion.KEY_BUTTON
 
-@Parcelize
 data class TwitterSignInConfirmationDialogResult(
     override val button: Int
-) : DialogButtonResult, Parcelable
+) : DialogButtonResult {
+    constructor(data: Bundle) : this(data.getInt(KEY_BUTTON))
+
+    override fun toBundle() = bundleOf(KEY_BUTTON to button)
+}
 
 class TwitterSignInConfirmationDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
@@ -32,11 +35,16 @@ class TwitterSignInConfirmationDialogFragment : DialogFragment(), DialogInterfac
     }
 
     override fun onClick(dialog: DialogInterface, @DialogButton which: Int) {
-        setResult(args.resultKey, TwitterSignInConfirmationDialogResult(which))
+        setDialogResult(which)
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        setResult(args.resultKey, TwitterSignInConfirmationDialogResult(BUTTON_NEGATIVE))
+        setDialogResult(which = BUTTON_NEGATIVE)
+    }
+
+    private fun setDialogResult(@DialogButton which: Int) {
+        val result = TwitterSignInConfirmationDialogResult(button = which)
+        setFragmentResult(args.requestKey, result.toBundle())
     }
 }

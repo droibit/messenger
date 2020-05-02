@@ -56,8 +56,8 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     private var _binding: FragmentTimelineBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private var _tweetActionList: RecyclerView? = null
-    private val tweetActionList get() = requireNotNull(_tweetActionList)
+    private val tweetActionList: RecyclerView?
+        get() = binding.tweetActionDrawer.getChildAt(0) as? RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,9 +89,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
         binding.tweetActionDrawer.also {
             it.setOnMenuItemClickListener(this)
-            // When displaying action list,
-            // use RecyclerView to change the scroll position to top.
-            this._tweetActionList = it.getChildAt(0) as RecyclerView
         }
 
         observeReply()
@@ -131,9 +128,9 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
                 .map { tweetActionMenu.findItem(it.id) }
                 .forEach { actionDrawerMenu.add(it) }
 
-            @Suppress("CAST_NEVER_SUCCEEDS")
-            (tweetActionList.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(0, 0)
+            tweetActionList?.layoutManager?.let {
+                (it as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+            }
             binding.tweetActionDrawer.controller.openDrawer()
         }
     }
@@ -167,7 +164,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     override fun onDestroyView() {
         _binding = null
-        _tweetActionList = null
         super.onDestroyView()
     }
 

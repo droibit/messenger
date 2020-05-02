@@ -1,7 +1,6 @@
 apply plugin: 'com.android.dynamic-feature'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 apply from: rootProject.file('dependencies_shared.gradle')
@@ -25,10 +24,6 @@ android {
             proguardFiles 'proguard-rules-dynamic-features.pro'
         }
     }
-}
-
-androidExtensions {
-    features = ["parcelize"]
 }
 
 configurations.all {

@@ -12,6 +12,8 @@ import android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.invoke
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -26,8 +28,6 @@ import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import javax.inject.Named
 import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
-
-private const val REQUEST_CODE_SPEECH = 1
 
 class VoiceTweetFragment : DaggerFragment(),
     CircularProgressLayout.OnTimerFinishedListener {
@@ -52,6 +52,10 @@ class VoiceTweetFragment : DaggerFragment(),
 
     private var _binding: FragmentTweetVoiceBinding? = null
     private val binding get() = requireNotNull(_binding)
+
+    private val startRecognizeSpeech = registerForActivityResult(StartActivityForResult()) {
+        onRecognizeSpeechResult(it.resultCode, it.data)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,14 +88,6 @@ class VoiceTweetFragment : DaggerFragment(),
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            REQUEST_CODE_SPEECH -> onRecognizeSpeechResult(resultCode, data)
-        }
-    }
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
@@ -110,7 +106,7 @@ class VoiceTweetFragment : DaggerFragment(),
             val intent = Intent(ACTION_RECOGNIZE_SPEECH)
                 .putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
                 .putExtra(EXTRA_PROMPT, layoutString.title)
-            startActivityForResult(intent, REQUEST_CODE_SPEECH)
+            startRecognizeSpeech(intent)
         } catch (e: ActivityNotFoundException) {
             findNavController().popBackStack()
         }

@@ -47,16 +47,16 @@ class PhotoListAdapter(
             }
         }
 
-        override fun onStart(data: Any) {
+        override fun onStart(request: Request) {
             binding.loadingInProgress = true
         }
 
-        override fun onError(data: Any?, throwable: Throwable) {
+        override fun onError(request: Request, throwable: Throwable) {
             binding.photo.scaleType = ImageView.ScaleType.CENTER
             binding.loadingInProgress = false
         }
 
-        override fun onSuccess(data: Any, source: DataSource) {
+        override fun onSuccess(request: Request, source: DataSource) {
             binding.loadingInProgress = false
         }
     }
