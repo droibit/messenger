@@ -3,87 +3,89 @@
     <!-- ref. https://designguidelines.withgoogle.com/wearos/style/typography.html -->
 
     <!-- for Main Titles -->
-    <style name="TextAppearance.Wearable.MainTitle1" parent="@style/TextAppearance.Wearable.Medium">
+    <style name="TextAppearance.Looking.Display1" parent="@android:style/TextAppearance.Material.Display4">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Display2" parent="@android:style/TextAppearance.Material.Display3">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:lineSpacingExtra">26sp</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
-    <style name="TextAppearance.Wearable.MainTitle2" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Looking.Display3" parent="@android:style/TextAppearance.Material.Display2">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:lineSpacingExtra">24sp</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
-    <style name="TextAppearance.Wearable.MainTitle3" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Looking.Display4" parent="@android:style/TextAppearance.Material.Display1">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:lineSpacingExtra">22sp</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <!-- for Action List Titles -->
-    <style name="TextAppearance.Wearable.ListTitle1" parent="@style/TextAppearance.Wearable.Medium">
+    <style name="TextAppearance.Wearable.Title1" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">22sp</item>
-        <item name="android:lineSpacingExtra">26sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
-    <style name="TextAppearance.Wearable.ListTitle2" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Title2" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:lineSpacingExtra">24sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
-    <style name="TextAppearance.Wearable.ListTitle3" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Title3" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineSpacingExtra">22sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <!-- for Action Titles -->
-    <style name="TextAppearance.Wearable.ActionTitle1" parent="@style/TextAppearance.Wearable.Medium">
+    <style name="TextAppearance.Wearable.Subtitle1" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineSpacingExtra">22sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.Wearable.ActionTitle2" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Subtitle2" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">16sp</item>
-        <item name="android:lineSpacingExtra">20sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.Wearable.Caption3" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Subtitle3" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">14sp</item>
-        <item name="android:lineSpacingExtra">18sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.Wearable.Caption4" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Subtitle4" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">12sp</item>
-        <item name="android:lineSpacingExtra">16sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <!-- for Body Content -->
-    <style name="TextAppearance.Wearable.Body1" parent="@style/TextAppearance.Wearable.Medium">
+    <style name="TextAppearance.Wearable.Body1" parent="@android:style/TextAppearance.Material.Body2">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineSpacingExtra">22sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
-    <style name="TextAppearance.Wearable.Body2" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Body2" parent="@android:style/TextAppearance.Material.Body1">
         <item name="android:textSize">16sp</item>
-        <item name="android:lineSpacingExtra">20sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
-    <style name="TextAppearance.Wearable.Body3" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Caption1" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textSize">14sp</item>
-        <item name="android:lineSpacingExtra">18sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
-    <style name="TextAppearance.Wearable.Body4" parent="@style/TextAppearance.Wearable.Medium">
+
+    <style name="TextAppearance.Wearable.Caption2" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textSize">12sp</item>
-        <item name="android:lineSpacingExtra">16sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 </resources>
