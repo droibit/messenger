@@ -39,7 +39,6 @@ dependencies {
     }
 
     kapt deps.dagger.compiler
-    kapt deps.dagger.androidProcessor
 
     implementation deps.ossLicenseUi
 }

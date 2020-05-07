@@ -8,7 +8,6 @@ import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.settings.R
 import com.github.droibit.chopstick.preference.bindPreference
 import com.github.droibit.oss_licenses.ui.wearable.WearableOssLicensesActivity
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragment() {
@@ -21,7 +20,7 @@ class SettingsFragment : PreferenceFragment() {
     private val ossLicensesPref: Preference by bindPreference(R.string.pref_app_oss_key)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+        inject()
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.settings)
     }
