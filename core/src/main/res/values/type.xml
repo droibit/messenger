@@ -28,63 +28,63 @@
     </style>
 
     <!-- for Action List Titles -->
-    <style name="TextAppearance.Wearable.Title1" parent="@android:style/TextAppearance.Material.Title">
+    <style name="TextAppearance.Looking.Title1" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">22sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Title2" parent="@android:style/TextAppearance.Material.Title">
+    <style name="TextAppearance.Looking.Title2" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Title3" parent="@android:style/TextAppearance.Material.Title">
+    <style name="TextAppearance.Looking.Title3" parent="@android:style/TextAppearance.Material.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <!-- for Action Titles -->
-    <style name="TextAppearance.Wearable.Subtitle1" parent="@android:style/TextAppearance.Material.Subhead">
+    <style name="TextAppearance.Looking.Subtitle1" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Subtitle2" parent="@android:style/TextAppearance.Material.Subhead">
+    <style name="TextAppearance.Looking.Subtitle2" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Subtitle3" parent="@android:style/TextAppearance.Material.Subhead">
+    <style name="TextAppearance.Looking.Subtitle3" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Subtitle4" parent="@android:style/TextAppearance.Material.Subhead">
+    <style name="TextAppearance.Looking.Subtitle4" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <!-- for Body Content -->
-    <style name="TextAppearance.Wearable.Body1" parent="@android:style/TextAppearance.Material.Body2">
+    <style name="TextAppearance.Looking.Body1" parent="@android:style/TextAppearance.Material.Body2">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Body2" parent="@android:style/TextAppearance.Material.Body1">
+    <style name="TextAppearance.Looking.Body2" parent="@android:style/TextAppearance.Material.Body1">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Caption1" parent="@android:style/TextAppearance.Material.Caption">
+    <style name="TextAppearance.Looking.Caption1" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="TextAppearance.Wearable.Caption2" parent="@android:style/TextAppearance.Material.Caption">
+    <style name="TextAppearance.Looking.Caption2" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>

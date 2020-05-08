@@ -31,11 +31,10 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                style="@style/Widget.Looking.TextView.MainTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/account_sign_in_title"
-                android:textAppearance="@style/TextAppearance.WearDiag.Title"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,13 +44,10 @@
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/account_sign_in_description_twitter"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.WearDiag.Message"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textAppearance="@style/TextAppearance.Looking.Body2"
                 app:goneUnless="@{viewModel.isProcessing}"
                 app:layout_constraintBottom_toTopOf="@+id/signInButtonContainer"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,8 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/account_sign_in_label_twitter"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textAppearance="@style/TextAppearance.Looking.Caption1" />
 
             </LinearLayout>
 

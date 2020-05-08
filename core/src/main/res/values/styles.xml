@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Widget.Looking.TextView" parent="android:Widget.Material.TextView" />
+
+    <style name="Widget.Looking.TextView.MainTitle">
+        <item name="android:textAppearance">@style/TextAppearance.Looking.Display3</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Widget.Looking.TextView.InlineActionButtonLabel">
+        <item name="android:textAppearance">@style/TextAppearance.Looking.Body1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="ContentTitle" parent="@android:style/TextAppearance.Material.Subhead">
         <item name="android:alpha">0.7</item>
         <item name="android:gravity">center</item>
