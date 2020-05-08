@@ -7,4 +7,14 @@
     <color name="colorLighterBackground">#00344D</color>
     <color name="colorDarkerBackground">#002333</color>
     <color name="colorLighterWhite">#a6ffffff</color>
+
+    <!--Color palette-->
+    
+    <color name="light_blue_500">#03A9F4</color>
+    <color name="light_blue_500_b100">#80D7FF</color>   <!-- Accent -->
+    <color name="light_blue_500_b65">#0272A6</color>    <!-- Active UI element -->
+    <color name="light_blue_500_b55">#01608C</color>    <!-- Lighter UI element -->
+    <color name="light_blue_500_b40">#014666</color>    <!-- Darker UI element -->
+    <color name="light_blue_500_b30">#00344D</color>    <!-- Lighter background 2 -->
+    <color name="light_blue_500_b20">#012333</color>    <!-- Lighter background 1 -->
 </resources>

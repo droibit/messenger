@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="@style/Theme.Wearable">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorDarkerPrimary</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/light_blue_500</item>
+        <item name="android:colorPrimaryDark">@color/light_blue_500_b40</item>
+        <item name="android:colorAccent">@color/light_blue_500_b100</item>
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 </resources>
