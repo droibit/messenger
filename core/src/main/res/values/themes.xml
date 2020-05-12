@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@style/Theme.Wearable">
+        <item name="android:colorPrimary">@color/light_blue_500</item>
+        <item name="android:colorPrimaryDark">@color/light_blue_500_b40</item>
+        <item name="android:colorAccent">@color/light_blue_500_b100</item>
+        <item name="android:windowBackground">@android:color/black</item>
+
+        <!-- Mainly for WearableActionDrawerView -->
+        <item name="android:colorBackgroundFloating">@color/light_blue_500_b40</item>
+
+        <!-- Darker color palettes -->
+        <item name="colorActiveElement">@color/light_blue_500_b65</item>
+        <item name="colorLighterElement">@color/light_blue_500_b55</item>
+        <item name="colorDarkerElement">@color/light_blue_500_b40</item>
+        <item name="colorLighterBackground1">@color/light_blue_500_b30</item>
+        <item name="colorLighterBackground2">@color/light_blue_500_b20</item>
+    </style>
+</resources>

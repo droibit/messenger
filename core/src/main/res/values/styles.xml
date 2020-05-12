@@ -12,4 +12,19 @@
         <item name="android:textAppearance">@style/TextAppearance.Looking.Body1</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Widget.Looking.ImageButton" parent="android:Widget.Material.ImageButton" />
+
+    <style name="Widget.Looking.ImageButton.Circle">
+        <item name="android:background">@drawable/background_circle_light</item>
+        <item name="android:foreground">?android:attr/actionBarItemBackground</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="Widget.Looking.WearableDrawerView" parent="@style/Widget.Wear.WearableDrawerView" />
+
+    <style name="Widget.Looking.WearableDrawerView.Action">
+        <item name="enableAutoPeek">false</item>
+        <item name="showOverflowInPeek">false</item>
+    </style>
 </resources>
