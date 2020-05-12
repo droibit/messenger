@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Looking.ImageButton" parent="android:Widget.Material.ImageButton" />
+
+    <style name="Widget.Looking.ImageButton.Circle">
+        <item name="android:background">@drawable/background_circle_light</item>
+        <item name="android:foreground">?android:attr/actionBarItemBackground</item>
+        <item name="android:scaleType">center</item>
+    </style>
+</resources>
