@@ -8,6 +8,6 @@
       android:topRightRadius="2dp"/>
 
   <stroke
-      android:color="@color/colorDarkerPrimary"
+      android:color="?attr/colorDarkerElement"
       android:width="2px"/>
 </shape>
