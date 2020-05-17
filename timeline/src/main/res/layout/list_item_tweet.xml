@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.Looking.Body1"
+            android:textAppearance="@style/TextAppearance.Looking.Body2"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toTopOf="@+id/tweetText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.Looking.Caption1"
+                android:textAppearance="@style/TextAppearance.Looking.Caption2"
                 tools:text="@sample/timeline.json/timeline/screen_name" />
 
             <TextView
