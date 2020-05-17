@@ -89,6 +89,11 @@ class VoiceTweetFragment : DaggerFragment(),
     }
 
     override fun onDestroyView() {
+        binding.circularProgress.apply {
+            if (isTimerRunning) {
+                stopTimer()
+            }
+        }
         _binding = null
         super.onDestroyView()
     }

@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/itemTitle"
-        style="@style/ContentTitle"
+        style="@style/Widget.Looking.TextView.MainTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorActiveElement" format="color" />
+    <attr name="colorLighterElement" format="color" />
+    <attr name="colorDarkerElement" format="color" />
+    <attr name="colorLighterBackground1" format="color" />
+    <attr name="colorLighterBackground2" format="color" />
+</resources>

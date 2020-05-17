@@ -39,7 +39,7 @@
 
                     <TextView
                         android:id="@+id/title"
-                        style="@style/ContentTitle"
+                        style="@style/Widget.Looking.TextView.MainTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="@{contentPadding.firstItemTopPx}"
@@ -65,12 +65,12 @@
                         android:layout_marginBottom="@{contentPadding.lastItemBottomPx}"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{() -> viewModel.onAddAccountButtonClick()}"
                         android:foreground="?android:attr/selectableItemBackgroundBorderless"
                         android:gravity="center_vertical"
+                        android:onClick="@{() -> viewModel.onAddAccountButtonClick()}"
                         android:orientation="horizontal"
                         android:paddingStart="@{contentPadding.leftPx}"
-                        android:paddingTop="4dp"
+                        android:paddingTop="8dp"
                         android:paddingEnd="@{contentPadding.rightPx}"
                         android:paddingBottom="4dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,23 +80,22 @@
                         tools:layout_marginBottom="32dp">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            style="@style/Widget.Looking.ImageButton.Circle"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
-                            android:background="@drawable/background_circle"
-                            android:scaleType="center"
                             android:src="@drawable/ic_add_account"
-                            android:tint="@color/colorPrimary"
                             tools:ignore="ContentDescription" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            style="@style/Widget.Looking.TextView.InlineActionButtonLabel"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/account_account_list_add"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp" />
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:text="@string/account_account_list_add" />
 
                     </LinearLayout>
 
@@ -108,13 +107,11 @@
 
         <androidx.wear.widget.drawer.WearableActionDrawerView
             android:id="@+id/accountActionDrawer"
+            style="@style/Widget.Looking.WearableDrawerView.Action"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorLighterPrimary"
             app:actionMenu="@menu/account_action"
-            app:enableAutoPeek="false"
-            app:peekView="@+id/action_peek_view"
-            app:showOverflowInPeek="false">
+            app:peekView="@+id/action_peek_view">
 
             <!-- For disable peek -->
             <View

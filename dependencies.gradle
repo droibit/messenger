@@ -2,7 +2,7 @@ ext {
     versions = [
             kotlin    : '1.3.72',
             coroutines: '1.3.4',
-            wearable  : '2.6.0',
+            wearable  : '2.7.0',
             okhttp    : '4.6.0',
             retrofit  : '2.8.1',
             dagger    : '2.27',
@@ -16,7 +16,7 @@ ext {
     ]
     deps = [
             plugin         : [
-                    buildTools    : 'com.android.tools.build:gradle:4.0.0-beta05',
+                    buildTools    : 'com.android.tools.build:gradle:4.0.0-rc01',
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                     googleServices: 'com.google.gms:google-services:4.3.3',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.0.0',
@@ -44,7 +44,7 @@ ext {
                             fragment: "androidx.navigation:navigation-fragment-ktx:${versions.androidx.navigation}",
                     ],
                     core            : 'androidx.core:core-ktx:1.3.0-rc01',
-                    wear            : 'androidx.wear:wear:1.1.0-beta01',
+                    wear            : 'androidx.wear:wear:1.1.0-rc01',
                     activity        : 'androidx.activity:activity-ktx:1.2.0-alpha04',
                     fragment        : 'androidx.fragment:fragment-ktx:1.3.0-alpha04',
                     constraintlayout: 'androidx.constraintlayout:constraintlayout:1.1.3',
@@ -68,7 +68,7 @@ ext {
                     wearable: "com.google.android.gms:play-services-wearable:17.0.0"
             ],
             firebase       : [
-                    core       : "com.google.firebase:firebase-core:17.4.0",
+                    core       : "com.google.firebase:firebase-core:17.4.1",
                     crashlytics: "com.google.firebase:firebase-crashlytics:17.0.0",
             ],
             okhttp         : [
@@ -100,7 +100,7 @@ ext {
                     core   : "com.facebook.stetho:stetho:${versions.stetho}",
                     okhttp3: "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"
             ],
-            coil           : "io.coil-kt:coil:0.10.1",
+            coil           : "io.coil-kt:coil:0.11.0",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.6",
             gson           : 'com.google.code.gson:gson:2.8.6',
             okio           : 'com.squareup.okio:okio:2.4.1',

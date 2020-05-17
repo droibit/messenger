@@ -50,13 +50,13 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@{contentPadding.firstItemTopPx}"
                     android:paddingBottom="@{contentPadding.lastItemBottomPx}"
-                    tools:paddingTop="32dp"
+                    app:goneUnless="@{viewModel.tweetText.isEmpty()}"
                     tools:paddingBottom="32dp"
-                    app:goneUnless="@{viewModel.tweetText.isEmpty()}">
+                    tools:paddingTop="32dp">
 
                     <TextView
                         android:id="@+id/title"
-                        style="@style/ContentTitle"
+                        style="@style/Widget.Looking.TextView.MainTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@{strings.title}"
@@ -72,8 +72,8 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="@{strings.replyUser}"
-                        android:textAppearance="@style/TextAppearance.Wearable.Small"
-                        android:textColor="@color/colorAccent"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
+                        android:textColor="?attr/colorLighterElement"
                         app:goneUnless="@{strings.replyUser.isEmpty()}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -86,8 +86,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@={viewModel.tweetText}"
-                        android:textAppearance="@style/TextAppearance.Wearable.Small"
-                        android:textColor="@android:color/white"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/replyUserText"
@@ -109,21 +108,20 @@
                         android:foreground="?android:attr/actionBarItemBackground"
                         android:onClick="@{() -> fragment.onCancelTweet()}"
                         android:padding="6dp"
+                        app:colorSchemeColors="@color/colorProgressScheme"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tweetText"
-                        app:colorSchemeColors="@color/colorPrimary"
                         app:strokeWidth="3dp">
 
                         <ImageView
                             android:id="@+id/cancelButton"
+                            style="@style/Widget.Looking.ImageButton.Circle"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/background_circle_light"
-                            android:scaleType="center"
                             android:src="@drawable/ic_close"
                             tools:ignore="ContentDescription" />
 

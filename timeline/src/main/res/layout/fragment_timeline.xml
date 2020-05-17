@@ -58,14 +58,12 @@
         </FrameLayout>
 
         <androidx.wear.widget.drawer.WearableActionDrawerView
+            style="@style/Widget.Looking.WearableDrawerView.Action"
             android:id="@+id/tweetActionDrawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorLighterPrimary"
             app:actionMenu="@menu/tweet_action"
-            app:enableAutoPeek="false"
-            app:peekView="@+id/action_peek_view"
-            app:showOverflowInPeek="false">
+            app:peekView="@+id/action_peek_view">
 
             <!-- For disable peek -->
             <View
