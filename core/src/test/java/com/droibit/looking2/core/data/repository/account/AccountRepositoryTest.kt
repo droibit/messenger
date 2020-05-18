@@ -19,8 +19,9 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterSession
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -50,7 +51,7 @@ class AccountRepositoryTest {
         TestCoroutinesDispatcherProvider()
 
     @Spy
-    private var twitterAccountsChannel = ConflatedBroadcastChannel<List<TwitterAccount>>()
+    private var twitterAccountsSink = MutableStateFlow<List<TwitterAccount>>(emptyList())
 
     @Mock
     private lateinit var analytics: AnalyticsHelper
@@ -61,14 +62,14 @@ class AccountRepositoryTest {
 
     @Test
     fun initialize() = runBlockingTest {
-        val session1 = mock<TwitterSession>()
-        whenever(localSource.sessions).thenReturn(listOf(session1))
+        val session = mock<TwitterSession>()
+        whenever(localSource.sessions).thenReturn(listOf(session))
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
         repository.initialize()
 
-        verify(remoteSource).ensureApiClient(session1)
+        verify(remoteSource).ensureApiClient(session)
         verify(repository).dispatchTwitterAccountsUpdated()
     }
 
@@ -78,15 +79,16 @@ class AccountRepositoryTest {
         val recordedValues = mutableListOf<List<TwitterAccount>>()
         val job = launch {
             repository.twitterAccounts()
+                .drop(1)    // drop initial value
                 .collect { recordedValues.add(it) }
         }
 
         val account1 = mock<List<TwitterAccount>>()
-        twitterAccountsChannel.offer(account1)
+        twitterAccountsSink.value = account1
         assertThat(recordedValues).containsExactly(account1)
 
         val account2 = mock<List<TwitterAccount>>()
-        twitterAccountsChannel.offer(account2)
+        twitterAccountsSink.value = account2
         assertThat(recordedValues).containsExactly(account1, account2)
 
         job.cancel()
@@ -363,7 +365,7 @@ class AccountRepositoryTest {
             session2.userName,
             active = false
         )
-        verify(twitterAccountsChannel).offer(listOf(account1, account2))
+        verify(twitterAccountsSink).value = listOf(account1, account2)
     }
 
     @Test
@@ -372,6 +374,6 @@ class AccountRepositoryTest {
         whenever(localSource.sessions).thenReturn(emptyList())
 
         repository.dispatchTwitterAccountsUpdated()
-        verify(twitterAccountsChannel).offer(emptyList())
+        verify(twitterAccountsSink).value = emptyList()
     }
 }
