@@ -10,9 +10,8 @@ import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenti
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
@@ -26,7 +25,7 @@ class AccountRepository(
     private val remoteSource: RemoteTwitterAccountSource,
     private val localSource: LocalTwitterSource,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>,
+    private val twitterAccountsSink: MutableStateFlow<List<TwitterAccount>>,
     private val analytics: AnalyticsHelper
 ) {
     @Inject
@@ -39,7 +38,7 @@ class AccountRepository(
         remoteSource,
         localSource,
         dispatcherProvider,
-        ConflatedBroadcastChannel<List<TwitterAccount>>(),
+        MutableStateFlow<List<TwitterAccount>>(emptyList()),
         analytics
     )
 
@@ -50,7 +49,7 @@ class AccountRepository(
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     fun twitterAccounts(): Flow<List<TwitterAccount>> {
-        return twitterAccountsChannel.asFlow()
+        return twitterAccountsSink
     }
 
     suspend fun updateActiveTwitterAccount(accountId: Long) {
@@ -101,13 +100,13 @@ class AccountRepository(
     internal fun dispatchTwitterAccountsUpdated() {
         val activeAccount = localSource.activeSession
         if (activeAccount == null) {
-            twitterAccountsChannel.offer(emptyList())
+            twitterAccountsSink.value = emptyList()
             return
         }
 
         val accounts = localSource.sessions.map {
             it.toAccount(active = it.userId == activeAccount.userId)
         }
-        twitterAccountsChannel.offer(accounts)
+        twitterAccountsSink.value = accounts
     }
 }
