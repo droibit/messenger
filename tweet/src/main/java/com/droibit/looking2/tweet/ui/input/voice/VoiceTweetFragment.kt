@@ -12,7 +12,6 @@ import android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.invoke
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -53,7 +52,7 @@ class VoiceTweetFragment : DaggerFragment(),
     private var _binding: FragmentTweetVoiceBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val startRecognizeSpeech = registerForActivityResult(StartActivityForResult()) {
+    private val recognizeSpeech = registerForActivityResult(StartActivityForResult()) {
         onRecognizeSpeechResult(it.resultCode, it.data)
     }
 
@@ -111,7 +110,7 @@ class VoiceTweetFragment : DaggerFragment(),
             val intent = Intent(ACTION_RECOGNIZE_SPEECH)
                 .putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
                 .putExtra(EXTRA_PROMPT, layoutString.title)
-            startRecognizeSpeech(intent)
+            recognizeSpeech.launch(intent)
         } catch (e: ActivityNotFoundException) {
             findNavController().popBackStack()
         }
