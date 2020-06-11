@@ -17,7 +17,7 @@ class ShapeAwareContentPadding(context: Context) {
     init {
         val res = context.resources
         if (res.getBoolean(R.bool.round_shaped_screen)) {
-            val screenPx = res.displayMetrics.sizePx
+            val screenPx = Size(res.displayMetrics.widthPixels, res.displayMetrics.heightPixels)
             firstItemTopPx = res.fractionOfScreenPx(
                 screenPx.height,
                 R.fraction.action_item_first_item_top_padding
@@ -39,11 +39,9 @@ class ShapeAwareContentPadding(context: Context) {
             rightPx = res.getDimensionPixelSize(R.dimen.square_action_item_right_padding)
         }
     }
-}
 
-private val DisplayMetrics.sizePx: Size get() = Size(widthPixels, heightPixels)
-
-private fun Resources.fractionOfScreenPx(screenPx: Int, @FractionRes resId: Int): Int {
-    val marginPercent = getFraction(resId, 1, 1)
-    return (marginPercent * screenPx).toInt()
+    private fun Resources.fractionOfScreenPx(screenPx: Int, @FractionRes resId: Int): Int {
+        val marginPercent = getFraction(resId, 1, 1)
+        return (marginPercent * screenPx).toInt()
+    }
 }
