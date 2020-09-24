@@ -2,7 +2,6 @@ package com.droibit.looking2.core.ui.view
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.DisplayMetrics
 import android.util.Size
 import androidx.annotation.FractionRes
 import com.droibit.looking2.core.R
