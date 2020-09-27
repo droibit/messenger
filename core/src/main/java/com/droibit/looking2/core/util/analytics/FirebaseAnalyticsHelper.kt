@@ -2,9 +2,9 @@ package com.droibit.looking2.core.util.analytics
 
 import android.app.Activity
 import com.google.firebase.analytics.FirebaseAnalytics
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import timber.log.Timber
 
 private const val UPROP_NUM_OF_TWITTER_ACCOUNTS = "num_of_twitter_accounts"
 private const val UPROP_NUM_OF_GET_TWEETS = "num_of_twitter_accounts"

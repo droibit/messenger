@@ -1,14 +1,14 @@
 package com.droibit.looking2.core.data.source.remote.twitter.userlist
 
+import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList as UserListResponse
 import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.model.tweet.UserList
 import com.twitter.sdk.android.core.TwitterException
+import com.twitter.sdk.android.core.models.User as UserResponse
 import java.text.DateFormat
 import java.text.ParseException
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList as UserListResponse
-import com.twitter.sdk.android.core.models.User as UserResponse
 
 private const val PROFILE_ICON_SIZE_NORMAL = "_normal"
 private const val PROFILE_ICON_SIZE_BIGGER = "_bigger"
@@ -29,7 +29,9 @@ class UserListMapper @Inject constructor(
     @Throws(ParseException::class)
     private fun UserListResponse.toUserLists(): UserList {
         return UserList(
-            id, name, description,
+            id,
+            name,
+            description,
             createdAt = parseTime(createdAt),
             isPrivate = mode == "private",
             user = user.toUser()
@@ -37,7 +39,9 @@ class UserListMapper @Inject constructor(
     }
 
     private fun UserResponse.toUser() = User(
-        id, name, screenName,
+        id,
+        name,
+        screenName,
         profileUrl = profileImageUrlHttps.replaceFirst(
             PROFILE_ICON_SIZE_NORMAL,
             PROFILE_ICON_SIZE_BIGGER

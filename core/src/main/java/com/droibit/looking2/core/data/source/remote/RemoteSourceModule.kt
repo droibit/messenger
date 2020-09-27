@@ -4,14 +4,14 @@ import com.droibit.looking2.core.data.source.remote.twitter.api.TwitterApiModule
 import com.droibit.looking2.core.util.Stetho
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 import java.util.Optional
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 
 @Module(
     includes = [

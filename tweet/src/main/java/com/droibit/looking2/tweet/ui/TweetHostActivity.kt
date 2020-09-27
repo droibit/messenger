@@ -13,7 +13,8 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class TweetHostActivity : FragmentActivity(R.layout.activity_tweet_host),
+class TweetHostActivity :
+    FragmentActivity(R.layout.activity_tweet_host),
     HasAndroidInjector,
     NavController.OnDestinationChangedListener {
 

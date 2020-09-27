@@ -6,19 +6,19 @@ import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
 import com.droibit.looking2.core.data.source.remote.twitter.account.RemoteTwitterAccountSource
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
+import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
+import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
-import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
-import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
 
 @Singleton
 class AccountRepository(

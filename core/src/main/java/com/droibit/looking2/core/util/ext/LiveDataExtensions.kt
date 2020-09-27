@@ -9,11 +9,14 @@ inline fun <T> LiveData<Event<T>>.observeEvent(
     owner: LifecycleOwner,
     crossinline onEventUnhandledContent: (T) -> Unit
 ) {
-    this.observe(owner, Observer {
-        it?.consume()?.let { value ->
-            onEventUnhandledContent(value)
+    this.observe(
+        owner,
+        Observer {
+            it?.consume()?.let { value ->
+                onEventUnhandledContent(value)
+            }
         }
-    })
+    )
 }
 
 @Suppress("NOTHING_TO_INLINE")

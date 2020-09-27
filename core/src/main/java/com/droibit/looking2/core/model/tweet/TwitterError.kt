@@ -1,12 +1,12 @@
 package com.droibit.looking2.core.model.tweet
 
 import androidx.work.ListenableWorker
+import androidx.work.ListenableWorker.Result as WorkResult
 import com.twitter.sdk.android.core.TwitterApiException
 import com.twitter.sdk.android.core.TwitterApiException.DEFAULT_ERROR_CODE
 import com.twitter.sdk.android.core.TwitterException
-import timber.log.Timber
 import java.io.IOException
-import androidx.work.ListenableWorker.Result as WorkResult
+import timber.log.Timber
 
 // ref. https://developer.twitter.com/en/docs/ads/general/guides/response-codes
 private const val STATUS_CODE_UNAUTHORIZED = 401
@@ -56,7 +56,8 @@ fun ListenableWorker.retryIfNeeded(
                 WorkResult.failure()
             }
         }
-        else -> WorkResult.failure()
-            .also { Timber.d("Failed work: $cause") }
+        else ->
+            WorkResult.failure()
+                .also { Timber.d("Failed work: $cause") }
     }
 }

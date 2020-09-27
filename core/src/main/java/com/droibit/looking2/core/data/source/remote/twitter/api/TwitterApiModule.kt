@@ -11,12 +11,12 @@ import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.internal.TwitterApi
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Named
 import javax.inject.Singleton
+import okhttp3.OkHttpClient
 
 @Module
 object TwitterApiModule {

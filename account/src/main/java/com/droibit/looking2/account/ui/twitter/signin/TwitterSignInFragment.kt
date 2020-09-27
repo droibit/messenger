@@ -22,11 +22,11 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.Activities.Home as HomeActivity
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.ui.Activities.Home as HomeActivity
+import timber.log.Timber
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
 private const val REQUEST_KEY_SIGN_IN_CONFORMATION = "REQUEST_KEY_SIGN_IN_CONFORMATION"

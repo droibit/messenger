@@ -1,11 +1,11 @@
 package com.droibit.looking2
 
 import android.util.Log
+import androidx.work.Configuration as WorkConfiguration
 import dagger.Module
 import dagger.Provides
-import timber.log.Timber
 import javax.inject.Named
-import androidx.work.Configuration as WorkConfiguration
+import timber.log.Timber
 
 @Module
 object ApplicationModule {

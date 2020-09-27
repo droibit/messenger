@@ -16,8 +16,12 @@ sealed class GetMyListsErrorMessage : Throwable() {
             return when (source) {
                 is TwitterError.Network -> Toast(StringResourceToast.Network)
                 is TwitterError.Limited -> Toast(StringResourceToast.RateLimited)
-                is TwitterError.UnExpected -> Toast(StringResourceToast(R.string.my_lists_error_obtain_lists))
-                is TwitterError.Unauthorized -> Toast(StringResourceToast.UnauthorizedTwitterAccount)
+                is TwitterError.UnExpected -> Toast(
+                    StringResourceToast(R.string.my_lists_error_obtain_lists)
+                )
+                is TwitterError.Unauthorized -> Toast(
+                    StringResourceToast.UnauthorizedTwitterAccount
+                )
             }
         }
     }

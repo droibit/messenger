@@ -5,9 +5,9 @@ import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
 import com.droibit.looking2.core.data.source.remote.twitter.userlist.RemoteUserListSource
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.UserList
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.withContext
 
 @Singleton
 class UserListRepository @Inject constructor(

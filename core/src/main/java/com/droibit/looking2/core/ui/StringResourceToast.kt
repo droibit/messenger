@@ -31,7 +31,10 @@ data class StringResourceToast(
 
         @get:UiThread
         val UnauthorizedTwitterAccount: ToastConvertible by lazy(NONE) {
-            StringResourceToast(R.string.error_message_unauthorized_twitter_account, longDuration = true)
+            StringResourceToast(
+                R.string.error_message_unauthorized_twitter_account,
+                longDuration = true
+            )
         }
     }
 }

@@ -20,10 +20,10 @@ import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
-import dagger.android.support.DaggerFragment
-import timber.log.Timber
-import javax.inject.Inject
 import com.droibit.looking2.ui.Activities.Account as AccountActivity
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
+import timber.log.Timber
 
 private const val REQUEST_KEY_SIGN_OUT_CONFORMATION = "REQUEST_KEY_SIGN_OUT_CONFORMATION"
 

@@ -13,13 +13,13 @@ import com.droibit.looking2.core.ui.dialog.DialogButtonResult
 import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PlayServicesChecker
+import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error as PlayServicesError
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessEventLiveData
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error as PlayServicesError
 
 class TwitterSignInViewModel(
     private val accountRepository: AccountRepository,

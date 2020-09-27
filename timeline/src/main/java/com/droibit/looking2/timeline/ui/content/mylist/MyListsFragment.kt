@@ -16,8 +16,8 @@ import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class MyListsFragment : DaggerFragment() {
 

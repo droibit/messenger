@@ -10,10 +10,10 @@ import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class RemoteTwitterAccountSource @Inject constructor(
     private val twitterCore: TwitterCore,

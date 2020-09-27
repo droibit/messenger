@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.decode.DataSource
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import coil.size.Scale

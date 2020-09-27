@@ -6,9 +6,9 @@ import com.droibit.looking2.core.data.source.local.usersettings.LocalUserSetting
 import com.droibit.looking2.core.data.source.remote.twitter.timeline.RemoteTimelineSource
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.withContext
 
 @Singleton
 class TimelineRepository @Inject constructor(
