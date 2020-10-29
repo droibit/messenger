@@ -221,8 +221,6 @@ class TwitterAccountListViewModelTest {
 
     @Test
     fun onAddAccountButtonClick_skip() {
-        accountsSink.value = null
-
         val signInTwitterObserver = signInTwitterSink.test()
         val errorMessageObserver = limitSignInTwitterErrorMessageSink.test()
         viewModel.onAddAccountButtonClick()
@@ -233,7 +231,7 @@ class TwitterAccountListViewModelTest {
 
     @Test
     fun onAccountActionItemClick_switchAccount() = runBlockingTest {
-        val account = mock<TwitterAccount>() {
+        val account = mock<TwitterAccount> {
             on { this.id } doReturn 1L
         }
         selectedAccountSink.value = Event(account)

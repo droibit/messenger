@@ -38,7 +38,7 @@ class MyListsViewModelTest {
     private lateinit var userListRepository: UserListRepository
 
     @Spy
-    private var isLoadingSink = MutableLiveData<Boolean>(false)
+    private var isLoadingSink = MutableLiveData(false)
 
     @Spy
     private var getMyListsResultSink = MutableLiveData<Result<UserLists>>()

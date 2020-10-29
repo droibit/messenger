@@ -1,14 +1,14 @@
 ext {
     versions = [
             kotlin    : '1.4.10',
-            coroutines: '1.3.7',
-            wearable  : '2.7.0',
+            coroutines: '1.4.0',
+            wearable  : '2.8.1',
             okhttp    : '4.9.0',
             retrofit  : '2.9.0',
             dagger    : '2.29.1',
             androidx  : [
-                    navigation: '2.3.0',
-                    lifecycle : '2.3.0-alpha07',
+                    navigation: '2.3.1',
+                    lifecycle : '2.3.0-beta01',
                     work      : '2.4.0'
             ],
             chopstick : '1.0.0-beta01',
@@ -16,17 +16,16 @@ ext {
     ]
     deps = [
             plugin         : [
-                    buildTools    : 'com.android.tools.build:gradle:4.0.1',
+                    buildTools    : 'com.android.tools.build:gradle:4.1.0',
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
-                    googleServices: 'com.google.gms:google-services:4.3.3',
+                    googleServices: 'com.google.gms:google-services:4.3.4',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.3.0',
-                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:9.4.0',
+                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:9.4.1',
                     ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.2',
                     navSafeArgs   : "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidx.navigation}",
-                    gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
+                    gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.33.0'
             ],
             kotlin         : [
-                    stdlib    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
                     coroutines: [
                             core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
                             android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
@@ -45,9 +44,9 @@ ext {
                     ],
                     core            : 'androidx.core:core-ktx:1.3.1',
                     wear            : 'androidx.wear:wear:1.1.0-rc03',
-                    activity        : 'androidx.activity:activity-ktx:1.2.0-alpha08',
-                    fragment        : 'androidx.fragment:fragment-ktx:1.3.0-alpha08',
-                    constraintlayout: 'androidx.constraintlayout:constraintlayout:2.0.1',
+                    activity        : 'androidx.activity:activity-ktx:1.2.0-beta01',
+                    fragment        : 'androidx.fragment:fragment-ktx:1.3.0-beta01',
+                    constraintlayout: 'androidx.constraintlayout:constraintlayout:2.0.3',
                     recyclerview    : 'androidx.recyclerview:recyclerview:1.1.0',
                     work            : [
                             runtime: "androidx.work:work-runtime-ktx:${versions.androidx.work}",
@@ -64,12 +63,12 @@ ext {
                     wearable: "com.google.android.wearable:wearable:${versions.wearable}"
             ],
             playServices   : [
-                    base    : "com.google.android.gms:play-services-base:17.4.0",
+                    base    : "com.google.android.gms:play-services-base:17.5.0",
                     wearable: "com.google.android.gms:play-services-wearable:17.0.0"
             ],
             firebase       : [
-                    analytics       : "com.google.firebase:firebase-analytics-ktx:17.5.0",
-                    crashlytics: "com.google.firebase:firebase-crashlytics-ktx:17.2.1",
+                    analytics       : "com.google.firebase:firebase-analytics:18.0.0",
+                    crashlytics: "com.google.firebase:firebase-crashlytics:17.2.2",
             ],
             okhttp         : [
                     client : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
@@ -104,15 +103,15 @@ ext {
                     core: 'org.mockito:mockito-core:2.28.2',
                     kotlin: 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
             ],
-            coil           : "io.coil-kt:coil:1.0.0-rc3",
+            coil           : "io.coil-kt:coil:1.0.0",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.6",
             gson           : 'com.google.code.gson:gson:2.8.6',
-            okio           : 'com.squareup.okio:okio:2.8.0',
+            okio           : 'com.squareup.okio:okio:2.9.0',
             timber         : 'com.jakewharton.timber:timber:4.7.1',
             circleImageView: 'de.hdodenhof:circleimageview:3.1.0',
-            junit          : 'junit:junit:4.13',
+            junit          : 'junit:junit:4.13.1',
             robolectric    : 'org.robolectric:robolectric:4.4',
-            truth          : 'com.google.truth:truth:1.0.1',
+            truth          : 'com.google.truth:truth:1.1',
             liveDataTesting: 'com.jraska.livedata:testing-ktx:1.1.1'
     ]
 }

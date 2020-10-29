@@ -37,7 +37,7 @@ class TimelineViewModelTest {
     private lateinit var getTimelineCall: TimelineSource.GetCall
 
     @Spy
-    private var isLoadingSink = MutableLiveData<Boolean>(false)
+    private var isLoadingSink = MutableLiveData(false)
 
     @Spy
     private var getTimelineResultSink = MutableLiveData<Result<Timeline>>()

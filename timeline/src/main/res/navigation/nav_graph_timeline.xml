@@ -16,10 +16,10 @@
         <action
             android:id="@+id/toPhotos"
             app:destination="@id/photoFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/photoFragment"
@@ -38,9 +38,9 @@
         <action
             android:id="@+id/toMyListTimeline"
             app:destination="@id/timelineFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit" />
     </fragment>
 </navigation>

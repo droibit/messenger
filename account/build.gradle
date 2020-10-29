@@ -26,10 +26,6 @@ android {
     }
 }
 
-configurations.all {
-    exclude group: 'androidx.appcompat', module: 'appcompat'
-}
-
 dependencies {
     implementation project(':app')
     implementation project(':core')

@@ -80,6 +80,11 @@ subprojects {
                 android = true
             }
         }
+
+        configurations.all {
+            exclude group: 'androidx.preference', module: 'preference'
+            exclude group: 'androidx.appcompat', module: 'appcompat'
+        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach { task ->
