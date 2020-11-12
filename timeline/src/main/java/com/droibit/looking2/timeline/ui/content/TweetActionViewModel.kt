@@ -4,6 +4,7 @@ import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
@@ -65,6 +66,7 @@ class TweetActionViewModel(
     fun onTweetActionItemClick(actionItem: TweetActionItem) {
         Timber.d("Clicked item: $actionItem")
         val targetTweet = tweetActionItemListSink.requireValue().peek().target
+        @Exhaustive
         when (actionItem) {
             TweetActionItem.REPLY -> {
                 replySink.value = Event(targetTweet)

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationResult
@@ -83,6 +84,7 @@ class TwitterSignInViewModel(
             isProcessingSink.value = true
             accountRepository.signInTwitter()
                 .collect {
+                    @Exhaustive
                     when (it) {
                         is AuthenticationResult.WillAuthenticateOnPhone -> {
                             authenticateOnPhoneTimingSink.value = Event(Unit)

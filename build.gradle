@@ -37,6 +37,7 @@ buildscript { scriptHandler ->
         classpath deps.plugin.ossLicense
         classpath deps.plugin.navSafeArgs
         classpath deps.plugin.gradleVersions
+        classpath deps.plugin.exhaustive
     }
 }
 
@@ -53,6 +54,7 @@ subprojects {
     }
 
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'app.cash.exhaustive'
 
     plugins.whenPluginAdded { plugin ->
         if (plugin instanceof BasePlugin) {
