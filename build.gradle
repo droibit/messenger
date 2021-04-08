@@ -24,7 +24,7 @@ buildscript { scriptHandler ->
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
 
@@ -44,6 +44,7 @@ buildscript { scriptHandler ->
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 }

@@ -48,7 +48,6 @@ dependencies {
 
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
-    compileOnly deps.javax.inject
 
     api(deps.twitter.kit) {
         transitive = true
