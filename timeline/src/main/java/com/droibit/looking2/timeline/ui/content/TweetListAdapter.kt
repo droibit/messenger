@@ -35,7 +35,7 @@ class TweetListAdapter(
             binding = ListItemTweetBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnLongClickListener {
-                itemClickListener.invoke(tweets[adapterPosition]); true
+                itemClickListener.invoke(tweets[bindingAdapterPosition]); true
             }
         }
     }

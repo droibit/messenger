@@ -295,7 +295,7 @@ class TwitterAccountListViewModelTest {
 
     @Test
     fun signOutAccount() = runBlockingTest {
-        val account = mock<TwitterAccount>() {
+        val account = mock<TwitterAccount> {
             on { this.id } doReturn 1L
         }
         viewModel.signOutAccount(account)
