@@ -98,8 +98,8 @@ ext {
                     okhttp3: "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"
             ],
             mockito: [
-                    core: 'org.mockito:mockito-core:2.28.2',
-                    kotlin: 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
+                    core: 'org.mockito:mockito-core:3.9.0',
+                    kotlin: 'org.mockito.kotlin:mockito-kotlin:3.1.0'
             ],
             coil           : "io.coil-kt:coil:1.1.1",
             ossLicenseUi   : "com.github.droibit.oss-licenses-android:ui-wear:0.0.6",

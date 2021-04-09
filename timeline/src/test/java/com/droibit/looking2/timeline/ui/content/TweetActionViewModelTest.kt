@@ -10,10 +10,10 @@ import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.PHOTO
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.REPLY
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.RETWEET
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule

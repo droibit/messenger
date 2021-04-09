@@ -3,8 +3,8 @@ package com.droibit.looking2.tweet.ui.input
 import androidx.work.WorkManager
 import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test

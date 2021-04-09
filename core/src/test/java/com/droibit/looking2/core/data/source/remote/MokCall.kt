@@ -1,8 +1,8 @@
 package com.droibit.looking2.core.data.source.remote
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.mock
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

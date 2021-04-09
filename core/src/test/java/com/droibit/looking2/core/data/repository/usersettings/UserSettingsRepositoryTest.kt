@@ -2,7 +2,7 @@ package com.droibit.looking2.core.data.repository.usersettings
 
 import com.droibit.looking2.core.data.source.local.usersettings.LocalUserSettingsSource
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.InjectMocks
