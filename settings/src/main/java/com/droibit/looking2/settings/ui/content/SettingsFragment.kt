@@ -5,6 +5,7 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.view.View
 import com.droibit.looking2.core.config.AppVersion
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.settings.R
 import com.github.droibit.chopstick.preference.bindPreference
 import com.github.droibit.oss_licenses.ui.wearable.WearableOssLicensesActivity
@@ -14,6 +15,9 @@ class SettingsFragment : PreferenceFragment() {
 
     @Inject
     lateinit var appVersion: AppVersion
+
+    @Inject
+    lateinit var analytics: AnalyticsHelper
 
     private val appVersionPref: Preference by bindPreference(R.string.pref_app_version_key)
 
@@ -34,5 +38,13 @@ class SettingsFragment : PreferenceFragment() {
             startActivity(WearableOssLicensesActivity.createIntent(context))
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.sendScreenView(
+            screenName = getString(R.string.settings_nav_label),
+            screenClass = null
+        )
     }
 }
