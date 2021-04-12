@@ -9,8 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.droibit.looking2.core.data.source.local.IntPreferenceKey
 import com.droibit.looking2.core.data.source.local.getInt
 import com.google.common.truth.Truth.assertThat
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.whenever
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +16,8 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class LocalUserSettingsSourceTest {
@@ -76,7 +76,6 @@ class LocalUserSettingsSourceTest {
         kotlin.run {
             localSource.numOfTweets = 2
             assertThat(sharedPrefs.getInt(numOfTweetsKey)).isEqualTo(2)
-
         }
     }
 }

@@ -80,7 +80,11 @@ subprojects {
             }
 
             ktlint {
+                version = "0.41.0"
                 android = true
+                filter {
+                    include("**/java/**")
+                }
             }
         }
 

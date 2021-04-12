@@ -6,9 +6,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.droibit.looking2.R
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import javax.inject.Inject
 import com.droibit.looking2.ui.Activities.Account as AccountActivity
 import com.droibit.looking2.ui.Activities.Home as HomeActivity
+import javax.inject.Inject
 
 class LaunchFragment : Fragment() {
 
@@ -41,7 +41,7 @@ class LaunchFragment : Fragment() {
 
         analytics.sendScreenView(
             screenName = getString(R.string.launch_nav_label),
-            screenClass =  null
+            screenClass = null
         )
     }
 }

@@ -3,13 +3,13 @@ package com.droibit.looking2.timeline.ui.content
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.timeline.ui.content.TimelineSource.GetCall
 import com.google.common.truth.Truth.assertThat
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 @Suppress("ClassName")
 class TimelineSource_GetCallTest {

@@ -1,9 +1,9 @@
 package com.droibit.looking2.core.model.tweet
 
 import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.junit.Test
 
 class TweetTest {
 

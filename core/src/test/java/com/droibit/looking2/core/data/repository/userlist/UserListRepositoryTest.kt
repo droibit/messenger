@@ -7,14 +7,6 @@ import com.droibit.looking2.core.data.source.remote.twitter.userlist.RemoteUserL
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.UserList
 import com.google.common.truth.Truth.assertThat
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.isNull
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.same
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.fail
@@ -25,6 +17,14 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.isNull
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.same
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class UserListRepositoryTest {
 

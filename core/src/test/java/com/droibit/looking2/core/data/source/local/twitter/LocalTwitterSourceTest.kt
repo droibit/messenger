@@ -1,10 +1,6 @@
 package com.droibit.looking2.core.data.source.local.twitter
 
 import com.google.common.truth.Truth.assertThat
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import com.twitter.sdk.android.core.SessionManager
 import com.twitter.sdk.android.core.TwitterSession
 import org.junit.Rule
@@ -13,6 +9,10 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class LocalTwitterSourceTest {
 

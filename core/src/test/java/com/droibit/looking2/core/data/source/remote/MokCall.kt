@@ -1,9 +1,9 @@
 package com.droibit.looking2.core.data.source.remote
 
+import okhttp3.ResponseBody
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

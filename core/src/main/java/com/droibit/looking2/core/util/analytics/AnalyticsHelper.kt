@@ -1,7 +1,6 @@
 package com.droibit.looking2.core.util.analytics
 
 import android.app.Activity
-import androidx.annotation.StringRes
 import androidx.annotation.UiThread
 import androidx.navigation.NavDestination
 
