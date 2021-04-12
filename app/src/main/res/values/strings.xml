@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Looking</string>
 
+    <string name="launch_nav_label" translatable="false">Launch</string>
+
     <string name="title_tweet">Tweet</string>
     <string name="title_timeline">Timeline</string>
     <string name="title_mentions">Mentions</string>

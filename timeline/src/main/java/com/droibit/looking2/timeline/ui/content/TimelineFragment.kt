@@ -13,11 +13,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.core.util.ext.addCallback
-import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
@@ -113,9 +113,10 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun showGetTimelineError(error: GetTimelineErrorMessage) {
+        @Exhaustive
         when (error) {
             is GetTimelineErrorMessage.Toast -> showToast(error)
-        }.exhaustive
+        }
         requireActivity().finish()
     }
 

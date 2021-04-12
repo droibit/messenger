@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SIGN_OUT
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SWITCH_ACCOUNT
 import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
@@ -94,6 +95,7 @@ class TwitterAccountListViewModel(
     fun onAccountActionItemClick(accountAction: TwitterAccountAction) {
         Timber.d("#onAccountActionItemClick($accountAction)")
         selectedAccountSink.requireValue().consume()?.let { account ->
+            @Exhaustive
             when (accountAction) {
                 SWITCH_ACCOUNT -> {
                     switchActiveAccount(account)

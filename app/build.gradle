@@ -62,10 +62,6 @@ android {
     dynamicFeatures = [":account", ":home", ":timeline", ":settings", ":tweet"]
 }
 
-configurations.all {
-    exclude group: 'androidx.appcompat', module: 'appcompat'
-}
-
 dependencies {
     implementation project(':core')
     implementation deps.androidx.work.runtime

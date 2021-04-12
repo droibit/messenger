@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.SwipeDismissFrameLayout
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
@@ -121,6 +122,7 @@ class TwitterSignInFragment : DaggerFragment() {
     }
 
     private fun showSignInError(error: TwitterAuthenticationErrorMessage) {
+        @Exhaustive
         when (error) {
             is TwitterAuthenticationErrorMessage.Toast -> showToast(error)
             is TwitterAuthenticationErrorMessage.PlayServicesDialog -> {

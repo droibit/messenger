@@ -1,5 +1,4 @@
 dependencies {
-    implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
     implementation deps.kotlin.coroutines.android
 
@@ -22,7 +21,6 @@ dependencies {
 
     implementation deps.dagger.runtime
     implementation deps.dagger.androidSupport
-    compileOnly deps.javax.inject
 
     implementation deps.chopstick.resource
     implementation deps.timber

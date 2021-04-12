@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
 
     implementation deps.androidx.core
@@ -44,12 +43,11 @@ dependencies {
 
     implementation deps.playServices.base
     implementation deps.firebase.analytics
-    implementation deps.wearable.support
+    implementation(deps.wearable.support)
     compileOnly deps.wearable.wearable
 
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
-    compileOnly deps.javax.inject
 
     api(deps.twitter.kit) {
         transitive = true

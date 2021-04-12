@@ -9,14 +9,6 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.inOrder
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +26,14 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class AccountRepositoryTest {
 
@@ -79,7 +79,7 @@ class AccountRepositoryTest {
         val recordedValues = mutableListOf<List<TwitterAccount>>()
         val job = launch {
             repository.twitterAccounts()
-                .drop(1)    // drop initial value
+                .drop(1) // drop initial value
                 .collect { recordedValues.add(it) }
         }
 

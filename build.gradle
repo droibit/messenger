@@ -6,8 +6,8 @@ buildscript { scriptHandler ->
 
     ext.buildConfig = [
             applicationId: "com.droibit.looking2",
-            compileSdk: 29,
-            targetSdk : 29,
+            compileSdk: 30,
+            targetSdk : 30,
             minSdk    : 24,
             version   : [
                     'major': 1,
@@ -24,7 +24,7 @@ buildscript { scriptHandler ->
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
 
@@ -37,12 +37,14 @@ buildscript { scriptHandler ->
         classpath deps.plugin.ossLicense
         classpath deps.plugin.navSafeArgs
         classpath deps.plugin.gradleVersions
+        classpath deps.plugin.exhaustive
     }
 }
 
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 }
@@ -53,6 +55,7 @@ subprojects {
     }
 
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'app.cash.exhaustive'
 
     plugins.whenPluginAdded { plugin ->
         if (plugin instanceof BasePlugin) {
@@ -77,8 +80,17 @@ subprojects {
             }
 
             ktlint {
+                version = "0.41.0"
                 android = true
+                filter {
+                    include("**/java/**")
+                }
             }
+        }
+
+        configurations.all {
+            exclude group: 'androidx.preference', module: 'preference'
+            exclude group: 'androidx.appcompat', module: 'appcompat'
         }
     }
 

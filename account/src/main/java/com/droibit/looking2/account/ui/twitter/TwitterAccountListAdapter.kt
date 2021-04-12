@@ -33,7 +33,7 @@ class TwitterAccountListAdapter(
                 right = itemPadding.rightPx
             )
             itemView.setOnClickListener {
-                itemClickListener(accounts[adapterPosition])
+                itemClickListener(accounts[bindingAdapterPosition])
             }
         }
     }

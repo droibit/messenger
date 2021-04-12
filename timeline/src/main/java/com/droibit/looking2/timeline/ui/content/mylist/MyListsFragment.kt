@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
@@ -70,9 +70,10 @@ class MyListsFragment : DaggerFragment() {
     }
 
     private fun showGetMyListsError(error: GetMyListsErrorMessage) {
+        @Exhaustive
         when (error) {
             is GetMyListsErrorMessage.Toast -> showToast(error)
-        }.exhaustive
+        }
         requireActivity().finish()
     }
 

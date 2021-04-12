@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.core.util.Event
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -12,6 +11,7 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.verify
 
 class TweetViewModelTest {
 

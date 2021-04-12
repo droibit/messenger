@@ -1,13 +1,13 @@
 package com.droibit.looking2.core.model.tweet
 
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import com.twitter.sdk.android.core.TwitterApiException
 import com.twitter.sdk.android.core.TwitterApiException.DEFAULT_ERROR_CODE
 import com.twitter.sdk.android.core.TwitterException
-import org.junit.Test
 import java.io.IOException
+import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 private const val UNAUTHORIZED_ACCESS = 401
 private const val TOO_MANY_REQUESTS = 429

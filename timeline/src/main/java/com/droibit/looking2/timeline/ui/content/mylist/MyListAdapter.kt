@@ -29,7 +29,7 @@ class MyListAdapter(
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
-                itemClickListener.invoke(myLists[adapterPosition])
+                itemClickListener.invoke(myLists[bindingAdapterPosition])
             }
         }
     }
