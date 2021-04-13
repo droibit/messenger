@@ -177,7 +177,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     fun onTweetClick(tweet: Tweet) {
-        Timber.d("onTweetClick(${tweet.url})")
+        Timber.d("onTweetClick(${tweet.tweetUrl})")
         tweetActionViewModel.onTweetClick(tweet)
     }
 }

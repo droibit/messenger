@@ -21,7 +21,7 @@ class TweetTextProcessor @Inject constructor() {
         view: TextView,
         tweet: Tweet
     ) {
-        val quotedTweetUrl = tweet.quotedTweet?.url
+        val quotedTweetUrl = tweet.quotedTweet?.tweetUrl
         val replaceUrls = ArrayList<Pair<String, String>>()
         tweet.urls.mapTo(replaceUrls) { shorteningUrl ->
             if (quotedTweetUrl == null) shorteningUrl.url to shorteningUrl.displayUrl else {
