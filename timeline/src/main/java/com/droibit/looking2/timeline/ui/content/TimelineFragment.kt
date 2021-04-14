@@ -1,5 +1,7 @@
 package com.droibit.looking2.timeline.ui.content
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -21,16 +23,19 @@ import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
-import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
+import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.google.android.wearable.intent.RemoteIntent
+import dagger.android.support.DaggerFragment
+import timber.log.Timber
+import javax.inject.Inject
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
-import timber.log.Timber
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
@@ -96,6 +101,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         observeGetTimelineResult()
         observeRetweetCompleted()
         observeLikesCompleted()
+        observeOpenTweetOnPhone()
     }
 
     private fun observeGetTimelineResult() {
@@ -160,6 +166,20 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         tweetActionViewModel.likesCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
+        }
+    }
+
+    private fun observeOpenTweetOnPhone() {
+        tweetActionViewModel.openTweetOnPhone.observeEvent(viewLifecycleOwner) { url ->
+            startActivity(OpenOnPhoneIntent(requireContext()))
+
+            // ref. https://developer.android.com/reference/com/google/android/wearable/intent/RemoteIntent.html#startremoteactivity_1
+            RemoteIntent.startRemoteActivity(
+                requireContext(),
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    .addCategory(Intent.CATEGORY_BROWSABLE),
+                null
+            )
         }
     }
 

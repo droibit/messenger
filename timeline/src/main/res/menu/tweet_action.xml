@@ -22,6 +22,11 @@
         android:title="@string/timeline_tweet_action_show_photo"/>
 
     <item
+        android:id="@+id/tweet_action_open_on_phone"
+        android:icon="@drawable/ic_tweet_action_open_on_phone"
+        android:title="@string/timeline_tweet_action_open_on_phone"/>
+
+    <item
         android:id="@+id/tweet_action_add_pocket"
         android:icon="@drawable/ic_tweet_action_add_pocket"
         android:title="@string/timeline_tweet_action_add_pocket"
