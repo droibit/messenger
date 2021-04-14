@@ -9,9 +9,9 @@ import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
 import com.droibit.looking2.core.util.ext.requireValue
-import timber.log.Timber
-import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
+import javax.inject.Inject
+import timber.log.Timber
 
 class TweetActionViewModel(
     private val tweetActionCall: TweetActionCall,
