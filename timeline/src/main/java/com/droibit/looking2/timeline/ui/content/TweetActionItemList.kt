@@ -13,6 +13,7 @@ data class TweetActionItemList(
         RETWEET(R.id.tweet_action_retweet),
         LIKES(R.id.tweet_action_likes),
         PHOTO(R.id.tweet_action_show_photo),
+        OPEN_ON_PHONE(R.id.tweet_action_open_on_phone),
         ADD_TO_POCKET(R.id.tweet_action_add_pocket);
 
         companion object {

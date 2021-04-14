@@ -13,6 +13,7 @@
     <string name="timeline_tweet_action_reply">Reply</string>
     <string name="timeline_tweet_action_show_photo">Photos</string>
     <string name="timeline_tweet_action_add_pocket">Add to Pocket</string>
+    <string name="timeline_tweet_action_open_on_phone">Open on Phone</string>
 
     <!-- My list -->
     <string name="my_lists_error_obtain_lists">Failed to obtain my list.</string>

@@ -29,6 +29,6 @@ data class Tweet(
                 .toList()
         }
 
-    val url: String
+    val tweetUrl: String
         get() = "https://twitter.com/${user.screenName}/status/$id"
 }
