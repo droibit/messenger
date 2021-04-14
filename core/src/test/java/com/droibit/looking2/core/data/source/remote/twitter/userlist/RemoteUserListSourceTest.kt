@@ -3,22 +3,16 @@ package com.droibit.looking2.core.data.source.remote.twitter.userlist
 import com.droibit.looking2.core.data.source.remote.mockErrorCall
 import com.droibit.looking2.core.data.source.remote.mockSuccessfulCall
 import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList as UserListResponse
 import com.droibit.looking2.core.data.source.remote.twitter.api.mockAppTwitterApiClient
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.UserList
 import com.google.common.truth.Truth.assertThat
 import com.ibm.icu.impl.Assert.fail
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.isNull
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
+import java.io.IOException
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
@@ -28,8 +22,14 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import java.io.IOException
-import com.droibit.looking2.core.data.source.remote.twitter.api.list.UserList as UserListResponse
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.isNull
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class RemoteUserListSourceTest {
 

@@ -7,8 +7,8 @@ import android.text.style.URLSpan
 import android.widget.TextView
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.ext.unescapeRegex
-import javax.inject.Inject
 import com.twitter.Regex as TwitterRegex
+import javax.inject.Inject
 
 private val highlightPatterns = listOf(
     TwitterRegex.VALID_HASHTAG,
@@ -21,7 +21,7 @@ class TweetTextProcessor @Inject constructor() {
         view: TextView,
         tweet: Tweet
     ) {
-        val quotedTweetUrl = tweet.quotedTweet?.url
+        val quotedTweetUrl = tweet.quotedTweet?.tweetUrl
         val replaceUrls = ArrayList<Pair<String, String>>()
         tweet.urls.mapTo(replaceUrls) { shorteningUrl ->
             if (quotedTweetUrl == null) shorteningUrl.url to shorteningUrl.displayUrl else {
@@ -31,7 +31,8 @@ class TweetTextProcessor @Inject constructor() {
                     it.expandedUrl.equals(quotedTweetUrl, ignoreCase = true)
                 }
                 // Delete quote tweet URL from text.
-                shorteningUrl.url to if (quotedTweetShorteningUrl == null) shorteningUrl.displayUrl else ""
+                shorteningUrl.url to
+                    if (quotedTweetShorteningUrl == null) shorteningUrl.displayUrl else ""
             }
         }
         // Display photo icon instead of URL.

@@ -1,5 +1,4 @@
 dependencies {
-    implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
     implementation deps.kotlin.coroutines.android
 
@@ -13,7 +12,7 @@ dependencies {
     implementation deps.androidx.navigation.runtime
     implementation deps.androidx.navigation.fragment
 
-    implementation deps.firebase.core
+    implementation deps.firebase.analytics
     implementation deps.androidx.wear
     implementation deps.playServices.base
     implementation deps.playServices.wearable
@@ -22,14 +21,14 @@ dependencies {
 
     implementation deps.dagger.runtime
     implementation deps.dagger.androidSupport
-    compileOnly deps.javax.inject
 
     implementation deps.chopstick.resource
     implementation deps.timber
 
     testImplementation deps.junit
     testImplementation deps.truth
-    testImplementation deps.mockito
+    testImplementation deps.mockito.core
+    testImplementation deps.mockito.kotlin
     testImplementation deps.androidx.archTesting
     testImplementation deps.kotlin.coroutines.test
     testImplementation deps.liveDataTesting

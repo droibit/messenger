@@ -51,7 +51,7 @@
 
                     <TextView
                         android:id="@+id/title"
-                        style="@style/ContentTitle"
+                        style="@style/Widget.Looking.TextView.MainTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@{strings.title}"
@@ -68,7 +68,6 @@
                         android:maxLines="1"
                         android:text="@{strings.replyUser}"
                         android:textAppearance="@style/TextAppearance.Wearable.Small"
-                        android:textColor="@color/colorAccent"
                         app:goneUnless="@{strings.replyUser.isEmpty()}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -86,8 +85,7 @@
                         android:inputType="textMultiLine"
                         android:minLines="2"
                         android:text="@={viewModel.tweetText}"
-                        android:textAppearance="@style/TextAppearance.Wearable.Small"
-                        android:textColor="@android:color/white"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/replyUserText"
@@ -99,13 +97,11 @@
 
                     <ImageButton
                         android:id="@+id/sendButton"
+                        style="@style/Widget.Looking.ImageButton.Circle"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/background_circle_light"
-                        android:foreground="?android:attr/actionBarItemBackground"
                         android:onClick="@{() -> viewModel.tweet()}"
-                        android:scaleType="center"
                         android:src="@drawable/ic_send"
                         app:enabled="@{!viewModel.tweetText.isEmpty()}"
                         app:layout_constraintBottom_toBottomOf="parent"

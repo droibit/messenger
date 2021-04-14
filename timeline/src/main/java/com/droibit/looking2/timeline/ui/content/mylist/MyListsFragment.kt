@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
@@ -17,8 +16,8 @@ import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class MyListsFragment : DaggerFragment() {
 
@@ -71,9 +70,10 @@ class MyListsFragment : DaggerFragment() {
     }
 
     private fun showGetMyListsError(error: GetMyListsErrorMessage) {
+        @Exhaustive
         when (error) {
             is GetMyListsErrorMessage.Toast -> showToast(error)
-        }.exhaustive
+        }
         requireActivity().finish()
     }
 

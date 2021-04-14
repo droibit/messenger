@@ -107,7 +107,7 @@ class ActionItemListAdapter(
                     binding = ListItemActionBinding.inflate(inflater, parent, false)
                 ).apply {
                     itemView.setOnClickListener {
-                        val titleAwarePosition = adapterPosition - if (hasTitle) 1 else 0
+                        val titleAwarePosition = bindingAdapterPosition - if (hasTitle) 1 else 0
                         itemClickListener.invoke(items[titleAwarePosition])
                     }
                 }

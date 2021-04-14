@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class TweetViewModel(
     val tweetText: MutableLiveData<String>,

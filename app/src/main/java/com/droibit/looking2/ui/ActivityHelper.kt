@@ -76,10 +76,14 @@ object Activities {
                 .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
         }
 
-        fun OpenOnPhoneIntent(context: Context, @StringRes messageResId: Int): Intent {
+        fun OpenOnPhoneIntent(context: Context, @StringRes messageResId: Int? = null): Intent {
             return Intent(context, ConfirmationActivity::class.java)
                 .putExtra(EXTRA_ANIMATION_TYPE, OPEN_ON_PHONE_ANIMATION)
-                .putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+                .apply {
+                    if (messageResId != null) {
+                        putExtra(EXTRA_MESSAGE, context.getString(messageResId))
+                    }
+                }
         }
     }
 

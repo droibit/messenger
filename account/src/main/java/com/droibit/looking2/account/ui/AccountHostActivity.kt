@@ -15,7 +15,8 @@ import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 import javax.inject.Named
 
-class AccountHostActivity : FragmentActivity(R.layout.activity_account_host),
+class AccountHostActivity :
+    FragmentActivity(R.layout.activity_account_host),
     HasAndroidInjector,
     NavController.OnDestinationChangedListener {
 
@@ -63,7 +64,9 @@ class AccountHostActivity : FragmentActivity(R.layout.activity_account_host),
         super.onActivityResult(requestCode, resultCode, data)
 
         val navHostFragment =
-            supportFragmentManager.findFragmentByTag(getString(R.string.nav_host_fragment_tag_account))
+            supportFragmentManager.findFragmentByTag(
+                getString(R.string.nav_host_fragment_tag_account)
+            )
         requireNotNull(navHostFragment).childFragmentManager.fragments.firstOrNull()
             ?.onActivityResult(requestCode, resultCode, data)
     }

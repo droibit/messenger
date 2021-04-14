@@ -12,20 +12,17 @@ import dagger.Component
 )
 internal interface LaunchComponent {
 
-    @Component.Builder
-    interface Builder {
+    @Component.Factory
+    interface Factory {
 
-        fun core(component: CoreComponent): Builder
-
-        fun build(): LaunchComponent
+        fun create(component: CoreComponent): LaunchComponent
     }
 
-    fun inject(activity: LaunchActivity)
+    fun inject(fragment: LaunchFragment)
 }
 
-internal fun LaunchActivity.inject() {
-    DaggerLaunchComponent.builder()
-        .core(coreComponent())
-        .build()
+internal fun LaunchFragment.inject() {
+    DaggerLaunchComponent.factory()
+        .create(requireContext().coreComponent())
         .inject(this)
 }

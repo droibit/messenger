@@ -6,9 +6,9 @@ import android.widget.ImageView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
-import coil.decode.DataSource
-import coil.request.Request
+import coil.load
+import coil.request.ImageRequest
+import coil.request.ImageResult
 import coil.size.Scale
 import com.droibit.looking2.R
 import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
@@ -36,7 +36,7 @@ class PhotoListAdapter(
     class ViewHolder(
         private val lifecycleOwner: LifecycleOwner,
         private val binding: ListItemPhotoBinding
-    ) : RecyclerView.ViewHolder(binding.root), Request.Listener {
+    ) : RecyclerView.ViewHolder(binding.root), ImageRequest.Listener {
 
         fun update(url: String) {
             binding.photo.load(url) {
@@ -47,16 +47,16 @@ class PhotoListAdapter(
             }
         }
 
-        override fun onStart(data: Any) {
+        override fun onStart(request: ImageRequest) {
             binding.loadingInProgress = true
         }
 
-        override fun onError(data: Any?, throwable: Throwable) {
+        override fun onError(request: ImageRequest, throwable: Throwable) {
             binding.photo.scaleType = ImageView.ScaleType.CENTER
             binding.loadingInProgress = false
         }
 
-        override fun onSuccess(data: Any, source: DataSource) {
+        override fun onSuccess(request: ImageRequest, metadata: ImageResult.Metadata) {
             binding.loadingInProgress = false
         }
     }

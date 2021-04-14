@@ -14,11 +14,11 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.internal.TwitterApi
 import com.twitter.sdk.android.core.internal.oauth.OAuth1aService
 import com.twitter.sdk.android.core.internal.oauth.OAuthResponse
-import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class WearTwitterOAuthService @Inject constructor(
     twitterCore: TwitterCore,
@@ -32,15 +32,17 @@ class WearTwitterOAuthService @Inject constructor(
 
     @Throws(TwitterException::class)
     suspend fun requestTempToken(): OAuthResponse = suspendCancellableCoroutine { cont ->
-        requestTempToken(object : Callback<OAuthResponse>() {
-            override fun success(result: Result<OAuthResponse>) {
-                if (cont.isActive) cont.resume(result.data)
-            }
+        requestTempToken(
+            object : Callback<OAuthResponse>() {
+                override fun success(result: Result<OAuthResponse>) {
+                    if (cont.isActive) cont.resume(result.data)
+                }
 
-            override fun failure(exception: TwitterException) {
-                if (cont.isActive) cont.resumeWithException(exception)
+                override fun failure(exception: TwitterException) {
+                    if (cont.isActive) cont.resumeWithException(exception)
+                }
             }
-        })
+        )
     }
 
     @UiThread
@@ -64,7 +66,8 @@ class WearTwitterOAuthService @Inject constructor(
                     ) {
                         if (cont.isActive) cont.resume(responseUrl.toString())
                     }
-                })
+                }
+            )
         }
 
     @Throws(TwitterException::class)
@@ -74,14 +77,18 @@ class WearTwitterOAuthService @Inject constructor(
     ): OAuthResponse = suspendCancellableCoroutine { cont ->
         val oauthVerifier = Uri.parse(authorizationResponseUrl)
             .getQueryParameter("oauth_verifier")
-        requestAccessToken(object : Callback<OAuthResponse>() {
-            override fun success(result: Result<OAuthResponse>) {
-                if (cont.isActive) cont.resume(result.data)
-            }
+        requestAccessToken(
+            object : Callback<OAuthResponse>() {
+                override fun success(result: Result<OAuthResponse>) {
+                    if (cont.isActive) cont.resume(result.data)
+                }
 
-            override fun failure(exception: TwitterException) {
-                if (cont.isActive) cont.resumeWithException(exception)
-            }
-        }, requestToken, oauthVerifier)
+                override fun failure(exception: TwitterException) {
+                    if (cont.isActive) cont.resumeWithException(exception)
+                }
+            },
+            requestToken,
+            oauthVerifier
+        )
     }
 }

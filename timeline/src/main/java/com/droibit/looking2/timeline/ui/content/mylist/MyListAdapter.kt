@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
+import coil.load
 import coil.size.Scale
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
@@ -29,7 +29,7 @@ class MyListAdapter(
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
-                itemClickListener.invoke(myLists[adapterPosition])
+                itemClickListener.invoke(myLists[bindingAdapterPosition])
             }
         }
     }

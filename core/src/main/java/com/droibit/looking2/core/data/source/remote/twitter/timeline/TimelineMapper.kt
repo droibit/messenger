@@ -1,20 +1,20 @@
 package com.droibit.looking2.core.data.source.remote.twitter.timeline
 
 import com.droibit.looking2.core.model.tweet.Media
+import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
+import com.droibit.looking2.core.model.tweet.Media.Unsupported as UnsupportedMedia
 import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.User
 import com.droibit.looking2.core.util.ext.unescapeHtml
 import com.twitter.sdk.android.core.TwitterException
+import com.twitter.sdk.android.core.models.Tweet as TweetResponse
 import com.twitter.sdk.android.core.models.TweetEntities
+import com.twitter.sdk.android.core.models.User as UserResponse
 import java.text.DateFormat
 import java.text.ParseException
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.core.model.tweet.Media.Photo as PhotoMedia
-import com.droibit.looking2.core.model.tweet.Media.Unsupported as UnsupportedMedia
-import com.twitter.sdk.android.core.models.Tweet as TweetResponse
-import com.twitter.sdk.android.core.models.User as UserResponse
 
 private const val MEDIA_TYPE_PHOTO = "photo"
 private const val PROFILE_ICON_SIZE_NORMAL = "_normal"
@@ -99,7 +99,9 @@ class TimelineMapper @Inject constructor(
     }
 
     private fun UserResponse.toUser() = User(
-        id, name, screenName,
+        id,
+        name,
+        screenName,
         profileUrl = profileImageUrlHttps.replaceFirst(
             PROFILE_ICON_SIZE_NORMAL,
             PROFILE_ICON_SIZE_BIGGER

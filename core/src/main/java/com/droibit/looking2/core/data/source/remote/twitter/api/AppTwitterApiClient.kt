@@ -28,7 +28,10 @@ class AppTwitterApiClient(
             @Query("reverse") reverse: Boolean?
         ): Call<List<UserList>>
 
-        @GET("/1.1/lists/statuses.json?tweet_mode=extended&include_cards=true&cards_platform=TwitterKit-13")
+        @GET(
+            "/1.1/lists/statuses.json?tweet_mode=extended&include_cards=true" +
+                "&cards_platform=TwitterKit-13"
+        )
         fun statuses(
             @Query("list_id") listId: Long?,
             @Query("count") count: Int?,

@@ -14,7 +14,7 @@
 
     <string name="account_account_action_switch">Switch</string>
     <string name="account_account_action_sign_out">Sign out</string>
-    <string name="account_account_list_add">Add account</string>
+    <string name="account_account_list_add">Add</string>
     <string name="account_sign_out_message_sign_out_twitter_account">Are you sure? \"%1$s\" will not be able to watch tweets.</string>
     <string name="account_sign_in_error_message_unable_to_add_account" tools:ignore="PluralsCandidate">You can add up to %1$d accounts.</string>
 

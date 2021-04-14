@@ -9,29 +9,31 @@ import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.inOrder
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterSession
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class AccountRepositoryTest {
 
@@ -49,7 +51,7 @@ class AccountRepositoryTest {
         TestCoroutinesDispatcherProvider()
 
     @Spy
-    private var twitterAccountsChannel = ConflatedBroadcastChannel<List<TwitterAccount>>()
+    private var twitterAccountsSink = MutableStateFlow<List<TwitterAccount>>(emptyList())
 
     @Mock
     private lateinit var analytics: AnalyticsHelper
@@ -60,14 +62,14 @@ class AccountRepositoryTest {
 
     @Test
     fun initialize() = runBlockingTest {
-        val session1 = mock<TwitterSession>()
-        whenever(localSource.sessions).thenReturn(listOf(session1))
+        val session = mock<TwitterSession>()
+        whenever(localSource.sessions).thenReturn(listOf(session))
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
         repository.initialize()
 
-        verify(remoteSource).ensureApiClient(session1)
+        verify(remoteSource).ensureApiClient(session)
         verify(repository).dispatchTwitterAccountsUpdated()
     }
 
@@ -77,15 +79,16 @@ class AccountRepositoryTest {
         val recordedValues = mutableListOf<List<TwitterAccount>>()
         val job = launch {
             repository.twitterAccounts()
+                .drop(1) // drop initial value
                 .collect { recordedValues.add(it) }
         }
 
         val account1 = mock<List<TwitterAccount>>()
-        twitterAccountsChannel.offer(account1)
+        twitterAccountsSink.value = account1
         assertThat(recordedValues).containsExactly(account1)
 
         val account2 = mock<List<TwitterAccount>>()
-        twitterAccountsChannel.offer(account2)
+        twitterAccountsSink.value = account2
         assertThat(recordedValues).containsExactly(account1, account2)
 
         job.cancel()
@@ -108,11 +111,11 @@ class AccountRepositoryTest {
         whenever(localSource.sessions)
             .thenReturn(listOf(oldActiveSession, newActiveSession))
 
-        whenever(localSource.getSessionBy(2L))
+        whenever(localSource.getSessionBy(anyLong()))
             .thenReturn(newActiveSession)
 
-        val updateAccount = TwitterAccount(2L, "test2", active = false)
-        repository.updateActiveTwitterAccount(updateAccount)
+        val updateAccountId = 2L
+        repository.updateActiveTwitterAccount(updateAccountId)
 
         verify(localSource).setActiveSession(newActiveSession)
         verify(repository).dispatchTwitterAccountsUpdated()
@@ -124,11 +127,11 @@ class AccountRepositoryTest {
         whenever(localSource.activeSession)
             .thenReturn(activeSession)
 
-        whenever(localSource.getSessionBy(2L))
+        whenever(localSource.getSessionBy(anyLong()))
             .thenReturn(activeSession)
 
-        val updateAccount = TwitterAccount(2L, "test2", active = false)
-        repository.updateActiveTwitterAccount(updateAccount)
+        val updateAccountId = 2L
+        repository.updateActiveTwitterAccount(updateAccountId)
 
         verify(localSource, never()).setActiveSession(any())
         verify(repository, never()).dispatchTwitterAccountsUpdated()
@@ -284,11 +287,11 @@ class AccountRepositoryTest {
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(localSource).setActiveSession(session)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
@@ -303,11 +306,11 @@ class AccountRepositoryTest {
         whenever(localSource.activeSession)
             .thenReturn(null)
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
 
@@ -326,11 +329,11 @@ class AccountRepositoryTest {
 
         doNothing().whenever(repository).dispatchTwitterAccountsUpdated()
 
-        val account = TwitterAccount(1L, "test", active = true)
-        repository.signOutTwitter(account)
+        val accountId = 1L
+        repository.signOutTwitter(accountId)
 
         val inOrder = inOrder(localSource, analytics, repository)
-        inOrder.verify(localSource).remove(account.id)
+        inOrder.verify(localSource).remove(accountId)
         inOrder.verify(analytics).setNumOfGetTweets(sessions.size)
         inOrder.verify(repository).dispatchTwitterAccountsUpdated()
 
@@ -362,7 +365,7 @@ class AccountRepositoryTest {
             session2.userName,
             active = false
         )
-        verify(twitterAccountsChannel).offer(listOf(account1, account2))
+        verify(twitterAccountsSink).value = listOf(account1, account2)
     }
 
     @Test
@@ -371,6 +374,6 @@ class AccountRepositoryTest {
         whenever(localSource.sessions).thenReturn(emptyList())
 
         repository.dispatchTwitterAccountsUpdated()
-        verify(twitterAccountsChannel).offer(emptyList())
+        verify(twitterAccountsSink).value = emptyList()
     }
 }

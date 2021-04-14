@@ -16,8 +16,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled true
+    buildFeatures {
+        dataBinding true
     }
 
     packagingOptions {
@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines.core
 
     implementation deps.androidx.core
@@ -38,16 +37,17 @@ dependencies {
     implementation deps.androidx.lifecycle.livedata
     implementation deps.androidx.lifecycle.viewmodel
     implementation deps.androidx.navigation.runtime
+    implementation deps.androidx.navigation.fragment
     implementation deps.androidx.work.runtime
     implementation deps.androidx.wear
 
     implementation deps.playServices.base
-    implementation deps.firebase.core
-    implementation deps.wearable.support
+    implementation deps.firebase.analytics
+    implementation(deps.wearable.support)
+    compileOnly deps.wearable.wearable
 
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
-    compileOnly deps.javax.inject
 
     api(deps.twitter.kit) {
         transitive = true
@@ -69,7 +69,8 @@ dependencies {
     testImplementation deps.junit
     testImplementation deps.androidx.test.junit
     testImplementation deps.truth
-    testImplementation deps.mockito
+    testImplementation deps.mockito.core
+    testImplementation deps.mockito.kotlin
     testImplementation deps.kotlin.coroutines.test
     testImplementation deps.robolectric
 }

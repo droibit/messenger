@@ -1,22 +1,26 @@
 package com.droibit.looking2.account.ui.twitter
 
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SIGN_OUT
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SWITCH_ACCOUNT
+import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
+import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
+import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 
 class TwitterAccountListViewModel(
     private val accountRepository: AccountRepository,
@@ -91,6 +95,7 @@ class TwitterAccountListViewModel(
     fun onAccountActionItemClick(accountAction: TwitterAccountAction) {
         Timber.d("#onAccountActionItemClick($accountAction)")
         selectedAccountSink.requireValue().consume()?.let { account ->
+            @Exhaustive
             when (accountAction) {
                 SWITCH_ACCOUNT -> {
                     switchActiveAccount(account)
@@ -104,14 +109,21 @@ class TwitterAccountListViewModel(
 
     private fun switchActiveAccount(account: TwitterAccount) {
         viewModelScope.launch {
-            accountRepository.updateActiveTwitterAccount(account)
+            accountRepository.updateActiveTwitterAccount(account.id)
         }
     }
 
     @UiThread
+    fun onSignOutConfirmationDialogResult(dialogResult: SignOutConfirmationDialogResult) {
+        if (dialogResult.isPositive) {
+            signOutAccount(dialogResult.account)
+        }
+    }
+
+    @VisibleForTesting
     fun signOutAccount(account: TwitterAccount) {
         viewModelScope.launch {
-            accountRepository.signOutTwitter(account)
+            accountRepository.signOutTwitter(account.id)
         }
     }
 }

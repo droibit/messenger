@@ -1,18 +1,17 @@
 package com.droibit.looking2.account.ui.twitter
 
+import android.content.DialogInterface.BUTTON_NEGATIVE
+import android.content.DialogInterface.BUTTON_POSITIVE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SIGN_OUT
 import com.droibit.looking2.account.ui.twitter.TwitterAccountAction.SWITCH_ACCOUNT
+import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.util.Event
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -27,6 +26,14 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class TwitterAccountListViewModelTest {
 
@@ -214,8 +221,6 @@ class TwitterAccountListViewModelTest {
 
     @Test
     fun onAddAccountButtonClick_skip() {
-        accountsSink.value = null
-
         val signInTwitterObserver = signInTwitterSink.test()
         val errorMessageObserver = limitSignInTwitterErrorMessageSink.test()
         viewModel.onAddAccountButtonClick()
@@ -226,12 +231,14 @@ class TwitterAccountListViewModelTest {
 
     @Test
     fun onAccountActionItemClick_switchAccount() = runBlockingTest {
-        val account = mock<TwitterAccount>()
+        val account = mock<TwitterAccount> {
+            on { this.id } doReturn 1L
+        }
         selectedAccountSink.value = Event(account)
 
         viewModel.onAccountActionItemClick(SWITCH_ACCOUNT)
 
-        verify(accountRepository).updateActiveTwitterAccount(account)
+        verify(accountRepository).updateActiveTwitterAccount(account.id)
     }
 
     @Test
@@ -255,10 +262,44 @@ class TwitterAccountListViewModelTest {
     }
 
     @Test
-    fun signOutAccount() = runBlockingTest {
+    fun onSignOutConfirmationDialogResult_positive() {
+        val spyViewModel = spy(viewModel)
+        doNothing().whenever(spyViewModel).signOutAccount(any())
+
         val account = mock<TwitterAccount>()
+        val result = mock<SignOutConfirmationDialogResult> {
+            on { this.button } doReturn BUTTON_POSITIVE
+            on { this.account } doReturn account
+        }
+
+        spyViewModel.onSignOutConfirmationDialogResult(result)
+
+        verify(spyViewModel).signOutAccount(account)
+    }
+
+    @Test
+    fun onSignOutConfirmationDialogResult_negative() {
+        val spyViewModel = spy(viewModel)
+        doNothing().whenever(spyViewModel).signOutAccount(any())
+
+        val account = mock<TwitterAccount>()
+        val result = mock<SignOutConfirmationDialogResult> {
+            on { this.button } doReturn BUTTON_NEGATIVE
+            on { this.account } doReturn account
+        }
+
+        spyViewModel.onSignOutConfirmationDialogResult(result)
+
+        verify(spyViewModel, never()).signOutAccount(any())
+    }
+
+    @Test
+    fun signOutAccount() = runBlockingTest {
+        val account = mock<TwitterAccount> {
+            on { this.id } doReturn 1L
+        }
         viewModel.signOutAccount(account)
 
-        verify(accountRepository).signOutTwitter(account)
+        verify(accountRepository).signOutTwitter(account.id)
     }
 }

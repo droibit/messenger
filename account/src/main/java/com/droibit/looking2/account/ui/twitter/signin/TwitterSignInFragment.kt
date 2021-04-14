@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.wear.widget.SwipeDismissFrameLayout
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
@@ -22,13 +23,14 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.ui.Activities.Confirmation.FailureIntent
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.Activities.Home as HomeActivity
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.ui.Activities.Home as HomeActivity
+import timber.log.Timber
 
 private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
+private const val REQUEST_KEY_SIGN_IN_CONFORMATION = "REQUEST_KEY_SIGN_IN_CONFORMATION"
 
 class TwitterSignInFragment : DaggerFragment() {
 
@@ -48,8 +50,12 @@ class TwitterSignInFragment : DaggerFragment() {
     private var _binding: FragmentTwitterSigninBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val signInViewModel: TwitterSignInViewModel by navGraphViewModels(R.id.navigationTwitterSignIn) {
-        viewModelFactory
+    private val signInViewModel: TwitterSignInViewModel by viewModels { viewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        observeConformationResult()
     }
 
     override fun onCreateView(
@@ -80,6 +86,14 @@ class TwitterSignInFragment : DaggerFragment() {
         observeAuthenticationResult()
     }
 
+    private fun observeConformationResult() {
+        setFragmentResultListener(REQUEST_KEY_SIGN_IN_CONFORMATION) { _, data ->
+            val result = TwitterSignInConfirmationDialogResult(data)
+            signInViewModel.onConfirmationDialogResult(result)
+            Timber.d("Sign in confirmation result: $result")
+        }
+    }
+
     private fun observeAuthenticateOnPhoneTiming() {
         signInViewModel.authenticateOnPhoneTiming.observeEvent(viewLifecycleOwner) {
             val intent = OpenOnPhoneIntent(
@@ -108,6 +122,7 @@ class TwitterSignInFragment : DaggerFragment() {
     }
 
     private fun showSignInError(error: TwitterAuthenticationErrorMessage) {
+        @Exhaustive
         when (error) {
             is TwitterAuthenticationErrorMessage.Toast -> showToast(error)
             is TwitterAuthenticationErrorMessage.PlayServicesDialog -> {
@@ -145,6 +160,10 @@ class TwitterSignInFragment : DaggerFragment() {
 
     @UiThread
     fun showConfirmDialog() {
-        findNavController().navigateSafely(toConfirmTwitterSignIn())
+        findNavController().navigateSafely(
+            toConfirmTwitterSignIn(
+                requestKey = REQUEST_KEY_SIGN_IN_CONFORMATION
+            )
+        )
     }
 }

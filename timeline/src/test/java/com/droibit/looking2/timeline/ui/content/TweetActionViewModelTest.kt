@@ -5,15 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.LIKES
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.OPEN_ON_PHONE
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.PHOTO
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.REPLY
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.RETWEET
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -23,6 +21,11 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class TweetActionViewModelTest {
 
@@ -34,6 +37,9 @@ class TweetActionViewModelTest {
 
     @Mock
     private lateinit var tweetActionCall: TweetActionCall
+
+    @Mock
+    private lateinit var phoneDeviceTypeChecker: PhoneDeviceTypeChecker
 
     @Spy
     private var tweetActionItemListSink = MutableLiveData<Event<TweetActionItemList>>()
@@ -50,17 +56,22 @@ class TweetActionViewModelTest {
     @Spy
     private var likesCompletedSink = MutableLiveData<Event<Unit>>()
 
+    @Spy
+    private var openTweetOnPhoneSink = MutableLiveData<Event<String>>()
+
     private lateinit var viewModel: TweetActionViewModel
 
     @Before
     fun setUp() {
         viewModel = TweetActionViewModel(
             tweetActionCall,
+            phoneDeviceTypeChecker,
             tweetActionItemListSink,
             replySink,
             photoListSink,
             retweetCompletedSink,
-            likesCompletedSink
+            likesCompletedSink,
+            openTweetOnPhoneSink
         )
     }
 
@@ -131,6 +142,8 @@ class TweetActionViewModelTest {
             on { this.retweeted } doReturn true
             on { this.hasPhotoUrl } doReturn false
         }
+        whenever(phoneDeviceTypeChecker.checkPairedWithAndroidDevice())
+            .thenReturn(false)
 
         val testObserver = tweetActionItemListSink.test()
         viewModel.onTweetClick(tweet)
@@ -151,6 +164,8 @@ class TweetActionViewModelTest {
             on { this.retweeted } doReturn false
             on { this.hasPhotoUrl } doReturn true
         }
+        whenever(phoneDeviceTypeChecker.checkPairedWithAndroidDevice())
+            .thenReturn(true)
 
         val testObserver = tweetActionItemListSink.test()
         viewModel.onTweetClick(tweet)
@@ -158,7 +173,8 @@ class TweetActionViewModelTest {
         testObserver.assertValue(
             Event(
                 TweetActionItemList(
-                    tweet, items = listOf(REPLY, LIKES, RETWEET, PHOTO)
+                    tweet,
+                    items = listOf(REPLY, LIKES, RETWEET, PHOTO, OPEN_ON_PHONE)
                 )
             )
         )
@@ -191,6 +207,21 @@ class TweetActionViewModelTest {
         testObserver.assertValue(Event(Unit))
         verify(tweetActionCall).enqueueRetweetWork(tweetId)
         verify(tweetActionCall, never()).enqueueLikesWork(anyLong())
+    }
+
+    @Test
+    fun onTweetActionItemClick_openOnPhone() {
+        val tweetURL = "https://example.com"
+        val tweet = mock<Tweet> {
+            on { this.tweetUrl } doReturn tweetURL
+        }
+        val actionItem = OPEN_ON_PHONE
+        tweetActionItemListSink.value = Event(TweetActionItemList(tweet, listOf(actionItem)))
+
+        val testObserver = openTweetOnPhoneSink.test()
+        viewModel.onTweetActionItemClick(actionItem)
+
+        testObserver.assertValue(Event(tweetURL))
     }
 
     @Test

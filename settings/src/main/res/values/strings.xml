@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_title_settings" translatable="false">@string/title_settings</string>
+    <string name="settings_nav_label" translatable="false">Settings</string>
 
     <!-- Twitter category. -->
     <string name="pref_twitter_category_title" translatable="false">Twitter</string>

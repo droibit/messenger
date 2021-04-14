@@ -1,12 +1,12 @@
 package com.droibit.looking2.core.data.repository.tweet
 
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
-import com.droibit.looking2.core.data.source.remote.twitter.tweet.RemoteTweetSource
 import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
+import com.droibit.looking2.core.data.source.remote.twitter.tweet.RemoteTweetSource
 import com.droibit.looking2.core.model.tweet.TwitterError
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.withContext
 
 @Singleton
 class TweetRepository @Inject constructor(

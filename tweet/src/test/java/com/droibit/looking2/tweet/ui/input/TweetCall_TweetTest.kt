@@ -1,5 +1,6 @@
 package com.droibit.looking2.tweet.ui.input
 
+import android.annotation.SuppressLint
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -23,6 +24,7 @@ class TweetCall_TweetTest {
     @InjectMocks
     private lateinit var call: TweetCall.Tweet
 
+    @SuppressLint("RestrictedApi")
     @Test
     fun buildWorkRequest() {
         val text = "tweet_text"

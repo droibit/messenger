@@ -43,7 +43,10 @@ object TweetHostModule {
     @FeatureScope
     @Named("title")
     @Provides
-    fun provideTitle(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetHostActivity): String {
+    fun provideTitle(
+        @Named("hasReplyTweet") hasReplyTweet: Boolean,
+        activity: TweetHostActivity
+    ): String {
         return if (hasReplyTweet)
             activity.getString(R.string.tweet_title_reply)
         else
@@ -52,7 +55,10 @@ object TweetHostModule {
 
     @Named("tweetTextHint")
     @Provides
-    fun provideTweetTextHint(@Named("hasReplyTweet") hasReplyTweet: Boolean, activity: TweetHostActivity): String {
+    fun provideTweetTextHint(
+        @Named("hasReplyTweet") hasReplyTweet: Boolean,
+        activity: TweetHostActivity
+    ): String {
         return if (hasReplyTweet)
             activity.getString(R.string.tweet_text_reply_hint)
         else

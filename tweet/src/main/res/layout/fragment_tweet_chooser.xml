@@ -28,15 +28,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@{contentPadding.firstItemTopPx}"
             android:paddingStart="@dimen/inner_frame_layout_padding"
+            android:paddingTop="@{contentPadding.firstItemTopPx}"
             android:paddingEnd="@dimen/inner_frame_layout_padding"
             android:paddingBottom="@dimen/inner_frame_layout_padding"
             app:boxedEdges="left|right|bottom">
 
             <TextView
                 android:id="@+id/title"
-                style="@style/ContentTitle"
+                style="@style/Widget.Looking.TextView.MainTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{screenTitle}"
@@ -48,12 +48,10 @@
 
             <ImageButton
                 android:id="@+id/voiceTweetButton"
+                style="@style/Widget.Looking.ImageButton.Circle"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:background="@drawable/background_circle_light"
-                android:foreground="?android:attr/actionBarItemBackground"
                 android:onClick="@{fragment::onVoiceTweetButtonClick}"
-                android:scaleType="center"
                 android:src="@drawable/ic_tweet_voice"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/keyboardTweetButton"
@@ -65,12 +63,10 @@
 
             <ImageButton
                 android:id="@+id/keyboardTweetButton"
+                style="@style/Widget.Looking.ImageButton.Circle"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:background="@drawable/background_circle_light"
-                android:foreground="?android:attr/actionBarItemBackground"
                 android:onClick="@{fragment::onKeyboardTweetButtonClick}"
-                android:scaleType="center"
                 android:src="@drawable/ic_tweet_keyboard"
                 app:layout_constraintBottom_toBottomOf="@+id/voiceTweetButton"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,7 +1,7 @@
 package com.droibit.looking2.core.data.source.remote.twitter.api
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 fun mockAppTwitterApiClient(): AppTwitterApiClient {
     return mock {

@@ -1,5 +1,7 @@
 package com.droibit.looking2.timeline.ui.content
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,30 +10,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.widget.SwipeDismissFrameLayout
+import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.core.util.ext.addCallback
-import com.droibit.looking2.core.util.ext.exhaustive
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
-import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
-import dagger.android.support.DaggerFragment
-import timber.log.Timber
-import javax.inject.Inject
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
+import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
+import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
 import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
+import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.google.android.wearable.intent.RemoteIntent
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
+import timber.log.Timber
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
@@ -56,8 +59,8 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     private var _binding: FragmentTimelineBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private var _tweetActionList: RecyclerView? = null
-    private val tweetActionList get() = requireNotNull(_tweetActionList)
+    private val tweetActionList: RecyclerView?
+        get() = binding.tweetActionDrawer.getChildAt(0) as? RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,9 +92,6 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
         binding.tweetActionDrawer.also {
             it.setOnMenuItemClickListener(this)
-            // When displaying action list,
-            // use RecyclerView to change the scroll position to top.
-            this._tweetActionList = it.getChildAt(0) as RecyclerView
         }
 
         observeReply()
@@ -100,6 +100,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         observeGetTimelineResult()
         observeRetweetCompleted()
         observeLikesCompleted()
+        observeOpenTweetOnPhone()
     }
 
     private fun observeGetTimelineResult() {
@@ -117,25 +118,27 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun showGetTimelineError(error: GetTimelineErrorMessage) {
+        @Exhaustive
         when (error) {
             is GetTimelineErrorMessage.Toast -> showToast(error)
-        }.exhaustive
+        }
         requireActivity().finish()
     }
 
     private fun observeTweetActionItemList() {
-        tweetActionViewModel.tweetActionItemList.observeEvent(viewLifecycleOwner) { (_, actionItems) ->
-            val actionDrawerMenu = binding.tweetActionDrawer.menu
-            actionDrawerMenu.clear()
-            actionItems
-                .map { tweetActionMenu.findItem(it.id) }
-                .forEach { actionDrawerMenu.add(it) }
+        tweetActionViewModel.tweetActionItemList
+            .observeEvent(viewLifecycleOwner) { (_, actionItems) ->
+                val actionDrawerMenu = binding.tweetActionDrawer.menu
+                actionDrawerMenu.clear()
+                actionItems
+                    .map { tweetActionMenu.findItem(it.id) }
+                    .forEach { actionDrawerMenu.add(it) }
 
-            @Suppress("CAST_NEVER_SUCCEEDS")
-            (tweetActionList.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(0, 0)
-            binding.tweetActionDrawer.controller.openDrawer()
-        }
+                tweetActionList?.layoutManager?.let {
+                    (it as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                }
+                binding.tweetActionDrawer.controller.openDrawer()
+            }
     }
 
     private fun observePhotoList() {
@@ -165,9 +168,22 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         }
     }
 
+    private fun observeOpenTweetOnPhone() {
+        tweetActionViewModel.openTweetOnPhone.observeEvent(viewLifecycleOwner) { url ->
+            startActivity(OpenOnPhoneIntent(requireContext()))
+
+            // ref. https://developer.android.com/reference/com/google/android/wearable/intent/RemoteIntent.html#startremoteactivity_1
+            RemoteIntent.startRemoteActivity(
+                requireContext(),
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    .addCategory(Intent.CATEGORY_BROWSABLE),
+                null
+            )
+        }
+    }
+
     override fun onDestroyView() {
         _binding = null
-        _tweetActionList = null
         super.onDestroyView()
     }
 
@@ -180,7 +196,7 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     }
 
     fun onTweetClick(tweet: Tweet) {
-        Timber.d("onTweetClick(${tweet.url})")
+        Timber.d("onTweetClick(${tweet.tweetUrl})")
         tweetActionViewModel.onTweetClick(tweet)
     }
 }

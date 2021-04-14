@@ -11,12 +11,10 @@ import dagger.Component
 )
 interface ApplicationComponent {
 
-    @Component.Builder
-    interface Builder {
+    @Component.Factory
+    interface Factory {
 
-        fun core(component: CoreComponent): Builder
-
-        fun build(): ApplicationComponent
+        fun create(component: CoreComponent): ApplicationComponent
     }
 
     fun inject(application: LookingApplication)

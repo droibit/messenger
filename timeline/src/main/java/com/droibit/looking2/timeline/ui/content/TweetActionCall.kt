@@ -14,8 +14,8 @@ import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.retryIfNeeded
 import com.droibit.looking2.coreComponent
 import com.droibit.looking2.timeline.ui.content.TweetActionCall.Companion.KEY_TWEET_ID
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class TweetActionCall @Inject constructor(
     private val workManager: WorkManager

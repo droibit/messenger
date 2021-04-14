@@ -11,9 +11,9 @@ import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessLiveData
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
+import kotlinx.coroutines.launch
 
 private typealias UserLists = List<UserList>
 

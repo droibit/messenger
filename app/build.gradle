@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: "com.github.ben-manes.versions"
 
@@ -25,8 +25,8 @@ android {
         buildConfigField("String", "PACKAGE_NAME", "\"${buildConfig.applicationId}\"")
     }
 
-    dataBinding {
-        enabled true
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
@@ -35,6 +35,10 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '.debug'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
         release {
             minifyEnabled true
@@ -56,10 +60,6 @@ android {
     }
 
     dynamicFeatures = [":account", ":home", ":timeline", ":settings", ":tweet"]
-}
-
-configurations.all {
-    exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
 dependencies {

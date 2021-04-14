@@ -12,6 +12,7 @@ import android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,14 +23,13 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
+import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 
-private const val REQUEST_CODE_SPEECH = 1
-
-class VoiceTweetFragment : DaggerFragment(),
+class VoiceTweetFragment :
+    DaggerFragment(),
     CircularProgressLayout.OnTimerFinishedListener {
 
     @Inject
@@ -52,6 +52,10 @@ class VoiceTweetFragment : DaggerFragment(),
 
     private var _binding: FragmentTweetVoiceBinding? = null
     private val binding get() = requireNotNull(_binding)
+
+    private val recognizeSpeech = registerForActivityResult(StartActivityForResult()) {
+        onRecognizeSpeechResult(it.resultCode, it.data)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,10 +80,6 @@ class VoiceTweetFragment : DaggerFragment(),
             totalTime = waitDurationMillis
         }
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         observeTweetCompleted()
 
@@ -88,15 +88,12 @@ class VoiceTweetFragment : DaggerFragment(),
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            REQUEST_CODE_SPEECH -> onRecognizeSpeechResult(resultCode, data)
-        }
-    }
-
     override fun onDestroyView() {
+        binding.circularProgress.apply {
+            if (isTimerRunning) {
+                stopTimer()
+            }
+        }
         _binding = null
         super.onDestroyView()
     }
@@ -114,7 +111,7 @@ class VoiceTweetFragment : DaggerFragment(),
             val intent = Intent(ACTION_RECOGNIZE_SPEECH)
                 .putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
                 .putExtra(EXTRA_PROMPT, layoutString.title)
-            startActivityForResult(intent, REQUEST_CODE_SPEECH)
+            recognizeSpeech.launch(intent)
         } catch (e: ActivityNotFoundException) {
             findNavController().popBackStack()
         }

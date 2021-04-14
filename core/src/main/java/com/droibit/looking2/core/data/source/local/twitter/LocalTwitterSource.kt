@@ -4,9 +4,9 @@ import androidx.annotation.Size
 import androidx.annotation.WorkerThread
 import com.twitter.sdk.android.core.SessionManager
 import com.twitter.sdk.android.core.TwitterSession
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import timber.log.Timber
 
 @Singleton
 class LocalTwitterSource @Inject constructor(

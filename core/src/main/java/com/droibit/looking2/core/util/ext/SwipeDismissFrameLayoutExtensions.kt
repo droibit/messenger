@@ -6,7 +6,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.wear.widget.SwipeDismissFrameLayout
 import timber.log.Timber
 
-fun SwipeDismissFrameLayout.addCallback(owner: LifecycleOwner, callback: SwipeDismissFrameLayout.Callback) {
+fun SwipeDismissFrameLayout.addCallback(
+    owner: LifecycleOwner,
+    callback: SwipeDismissFrameLayout.Callback
+) {
     val lifecycle = owner.lifecycle
     if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
         return

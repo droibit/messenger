@@ -7,8 +7,8 @@ import com.droibit.looking2.core.model.tweet.TwitterError
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 private const val ERROR_CODE_ALREADY_FAVORITE = 139
 private const val ERROR_CODE_ALREADY_RETWEET = 327

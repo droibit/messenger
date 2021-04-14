@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ref. https://designguidelines.withgoogle.com/wearos/style/typography.html -->
+
+    <!-- for Main Titles -->
+    <style name="TextAppearance.Looking.Display1" parent="@android:style/TextAppearance.Material.Display4">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Display2" parent="@android:style/TextAppearance.Material.Display3">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Display3" parent="@android:style/TextAppearance.Material.Display2">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Display4" parent="@android:style/TextAppearance.Material.Display1">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- for Action List Titles -->
+    <style name="TextAppearance.Looking.Title1" parent="@android:style/TextAppearance.Material.Title">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Title2" parent="@android:style/TextAppearance.Material.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Title3" parent="@android:style/TextAppearance.Material.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- for Action Titles -->
+    <style name="TextAppearance.Looking.Subtitle1" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Subtitle2" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Subtitle3" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Subtitle4" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- for Body Content -->
+    <style name="TextAppearance.Looking.Body1" parent="@android:style/TextAppearance.Material.Body2">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Body2" parent="@android:style/TextAppearance.Material.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Caption1" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="TextAppearance.Looking.Caption2" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+</resources>

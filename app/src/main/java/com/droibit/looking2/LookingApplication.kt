@@ -2,36 +2,35 @@ package com.droibit.looking2
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.UiThread
+import androidx.work.Configuration as WorkConfiguration
 import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.DaggerCoreComponent
 import com.droibit.looking2.core.util.Stetho
-import timber.log.Timber
 import javax.inject.Inject
-import androidx.work.Configuration as WorkConfiguration
+import timber.log.Timber
 
 class LookingApplication : Application() {
 
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
-        DaggerCoreComponent.builder()
-            .debuggable(BuildConfig.DEBUG)
-            .appVersion(
-                AppVersion(
+        DaggerCoreComponent.factory()
+            .create(
+                application = this,
+                debuggable = BuildConfig.DEBUG,
+                appVersion = AppVersion(
                     name = BuildConfig.VERSION_NAME,
                     code = BuildConfig.VERSION_CODE
                 )
             )
-            .application(this)
-            .build()
     }
 
     override fun onCreate() {
         super.onCreate()
-        DaggerApplicationComponent.builder()
-            .core(coreComponent)
-            .build()
+        DaggerApplicationComponent.factory()
+            .create(coreComponent)
             .inject(this)
     }
 
@@ -49,10 +48,11 @@ class LookingApplication : Application() {
     }
 
     companion object {
-        @JvmStatic
+        @UiThread
         fun coreComponent(context: Context) =
             (context.applicationContext as LookingApplication).coreComponent
     }
 }
 
+@UiThread
 fun Context.coreComponent() = LookingApplication.coreComponent(this)

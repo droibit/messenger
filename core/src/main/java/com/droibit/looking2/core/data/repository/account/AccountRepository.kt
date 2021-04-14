@@ -6,27 +6,26 @@ import com.droibit.looking2.core.data.source.local.twitter.LocalTwitterSource
 import com.droibit.looking2.core.data.source.remote.twitter.account.RemoteTwitterAccountSource
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
+import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
+import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
 import com.droibit.looking2.core.model.account.AuthenticationResult.WillAuthenticateOnPhone
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.model.account.toAccount
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
-import com.droibit.looking2.core.model.account.AuthenticationResult.Failure as AuthenticationFailure
-import com.droibit.looking2.core.model.account.AuthenticationResult.Success as AuthenticationSuccess
 
 @Singleton
 class AccountRepository(
     private val remoteSource: RemoteTwitterAccountSource,
     private val localSource: LocalTwitterSource,
     private val dispatcherProvider: CoroutinesDispatcherProvider,
-    private val twitterAccountsChannel: ConflatedBroadcastChannel<List<TwitterAccount>>,
+    private val twitterAccountsSink: MutableStateFlow<List<TwitterAccount>>,
     private val analytics: AnalyticsHelper
 ) {
     @Inject
@@ -39,7 +38,7 @@ class AccountRepository(
         remoteSource,
         localSource,
         dispatcherProvider,
-        ConflatedBroadcastChannel<List<TwitterAccount>>(),
+        MutableStateFlow<List<TwitterAccount>>(emptyList()),
         analytics
     )
 
@@ -50,13 +49,13 @@ class AccountRepository(
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     fun twitterAccounts(): Flow<List<TwitterAccount>> {
-        return twitterAccountsChannel.asFlow()
+        return twitterAccountsSink
     }
 
-    suspend fun updateActiveTwitterAccount(account: TwitterAccount) {
+    suspend fun updateActiveTwitterAccount(accountId: Long) {
         withContext(dispatcherProvider.io) {
-            val session = localSource.getSessionBy(account.id)
-            checkNotNull(session) { "Account dose not exist: $account" }
+            val session = localSource.getSessionBy(accountId)
+            checkNotNull(session) { "Account dose not exist: $accountId" }
 
             if (session != localSource.activeSession) {
                 localSource.setActiveSession(session)
@@ -83,9 +82,9 @@ class AccountRepository(
         }
     }.flowOn(dispatcherProvider.io)
 
-    suspend fun signOutTwitter(account: TwitterAccount) {
+    suspend fun signOutTwitter(accountId: Long) {
         withContext(dispatcherProvider.io) {
-            localSource.remove(account.id)
+            localSource.remove(accountId)
             analytics.setNumOfGetTweets(localSource.sessions.size)
 
             if (localSource.activeSession == null) {
@@ -101,13 +100,13 @@ class AccountRepository(
     internal fun dispatchTwitterAccountsUpdated() {
         val activeAccount = localSource.activeSession
         if (activeAccount == null) {
-            twitterAccountsChannel.offer(emptyList())
+            twitterAccountsSink.value = emptyList()
             return
         }
 
         val accounts = localSource.sessions.map {
             it.toAccount(active = it.userId == activeAccount.userId)
         }
-        twitterAccountsChannel.offer(accounts)
+        twitterAccountsSink.value = accounts
     }
 }

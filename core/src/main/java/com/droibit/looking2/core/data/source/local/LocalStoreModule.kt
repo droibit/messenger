@@ -13,11 +13,15 @@ import javax.inject.Named
 object LocalStoreModule {
 
     @Provides
-    fun provideUserSettingsLocalStoreKeys(@Named("appContext") context: Context): LocalUserSettingsSource.Keys {
+    fun provideUserSettingsLocalStoreKeys(
+        @Named("appContext") context: Context
+    ): LocalUserSettingsSource.Keys {
         return object : LocalUserSettingsSource.Keys {
             override val numOfTweets: PreferenceKey<Int> = IntConvertiblePreferenceKey(
                 key = context.getString(R.string.pref_twitter_get_tweet_count_key),
-                defaultValue = context.resources.getInteger(R.integer.pref_twitter_tweet_count_default)
+                defaultValue = context.resources.getInteger(
+                    R.integer.pref_twitter_tweet_count_default
+                )
             )
         }
     }

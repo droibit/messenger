@@ -15,8 +15,8 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    dataBinding {
-        enabled true
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
@@ -24,10 +24,6 @@ android {
             proguardFiles 'proguard-rules-dynamic-features.pro'
         }
     }
-}
-
-configurations.all {
-    exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
 dependencies {
@@ -39,7 +35,6 @@ dependencies {
     }
 
     kapt deps.dagger.compiler
-    kapt deps.dagger.androidProcessor
 
     implementation deps.ossLicenseUi
 }

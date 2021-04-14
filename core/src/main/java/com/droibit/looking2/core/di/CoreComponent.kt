@@ -17,18 +17,12 @@ import javax.inject.Singleton
 )
 interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
 
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        @BindsInstance
-        fun debuggable(@Named("debuggable") debuggable: Boolean): Builder
-
-        @BindsInstance
-        fun appVersion(appVersion: AppVersion): Builder
-
-        fun build(): CoreComponent
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance application: Application,
+            @Named("debuggable") @BindsInstance debuggable: Boolean,
+            @BindsInstance appVersion: AppVersion
+        ): CoreComponent
     }
 }

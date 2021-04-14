@@ -6,8 +6,8 @@ import androidx.lifecycle.liveData
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.ui.launch.LaunchDestination.HOME
 import com.droibit.looking2.ui.launch.LaunchDestination.LOGIN_TWITTER
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 
 internal class LaunchViewModel @Inject constructor(
     private val accountRepository: AccountRepository

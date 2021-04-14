@@ -3,9 +3,9 @@ package com.droibit.looking2.core.data
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterConfig
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.runBlocking
 
 @Singleton
 class TwitterBootstrap @Inject constructor(

@@ -16,8 +16,12 @@ sealed class GetTimelineErrorMessage : Throwable() {
             return when (source) {
                 is TwitterError.Network -> Toast(StringResourceToast.Network)
                 is TwitterError.Limited -> Toast(StringResourceToast.RateLimited)
-                is TwitterError.UnExpected -> Toast(StringResourceToast(timelineR.string.timeline_error_obtain_timeline))
-                is TwitterError.Unauthorized -> Toast(StringResourceToast.UnauthorizedTwitterAccount)
+                is TwitterError.UnExpected -> Toast(
+                    StringResourceToast(timelineR.string.timeline_error_obtain_timeline)
+                )
+                is TwitterError.Unauthorized -> Toast(
+                    StringResourceToast.UnauthorizedTwitterAccount
+                )
             }
         }
     }

@@ -13,24 +13,20 @@ import dagger.Component
 )
 interface HomeComponent {
 
-    @Component.Builder
-    interface Builder {
+    @Component.Factory
+    interface Factory {
 
-        @BindsInstance
-        fun activity(activity: HomeActivity): Builder
-
-        fun core(component: CoreComponent): Builder
-
-        fun build(): HomeComponent
+        fun create(
+            @BindsInstance fragment: HomeFragment,
+            component: CoreComponent
+        ): HomeComponent
     }
 
-    fun inject(activity: HomeActivity)
+    fun inject(fragment: HomeFragment)
 }
 
-fun HomeActivity.inject() {
-    DaggerHomeComponent.builder()
-        .core(coreComponent())
-        .activity(this)
-        .build()
+fun HomeFragment.inject() {
+    DaggerHomeComponent.factory()
+        .create(this, requireContext().coreComponent())
         .inject(this)
 }

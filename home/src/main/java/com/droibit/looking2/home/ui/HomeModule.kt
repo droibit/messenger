@@ -15,11 +15,11 @@ import dagger.multibindings.IntoMap
 object HomeModule {
 
     @Provides
-    fun provideActionListAdapter(activity: HomeActivity): ActionItemListAdapter {
+    fun provideActionListAdapter(fragment: HomeFragment): ActionItemListAdapter {
         return ActionItemListAdapter(
-            activity,
+            fragment.requireContext(),
             menuRes = R.menu.navigation,
-            itemClickListener = activity::onActionItemClick
+            itemClickListener = fragment::onActionItemClick
         )
     }
 

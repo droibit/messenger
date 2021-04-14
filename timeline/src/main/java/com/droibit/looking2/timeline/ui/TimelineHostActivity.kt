@@ -17,13 +17,14 @@ import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
+import timber.log.Timber
 
 private const val INVALID_SOURCE_ID = Int.MIN_VALUE
 
-class TimelineHostActivity : FragmentActivity(R.layout.activity_timeline_host),
+class TimelineHostActivity :
+    FragmentActivity(R.layout.activity_timeline_host),
     HasAndroidInjector,
     NavController.OnDestinationChangedListener {
 

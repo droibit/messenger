@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ContentTitle" parent="@android:style/TextAppearance.Material.Subhead">
-        <item name="android:alpha">0.7</item>
+    <style name="Widget.Looking.TextView" parent="android:Widget.Material.TextView" />
+
+    <style name="Widget.Looking.TextView.MainTitle">
+        <item name="android:textAppearance">@style/TextAppearance.Looking.Display3</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Widget.Looking.TextView.InlineActionButtonLabel">
+        <item name="android:textAppearance">@style/TextAppearance.Looking.Body1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Looking.ImageButton" parent="android:Widget.Material.ImageButton" />
+
+    <style name="Widget.Looking.ImageButton.Circle">
+        <item name="android:background">@drawable/background_circle_light</item>
+        <item name="android:foreground">?android:attr/actionBarItemBackground</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="Widget.Looking.WearableDrawerView" parent="@style/Widget.Wear.WearableDrawerView" />
+
+    <style name="Widget.Looking.WearableDrawerView.Action">
+        <item name="enableAutoPeek">false</item>
+        <item name="showOverflowInPeek">false</item>
     </style>
 </resources>
