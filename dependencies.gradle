@@ -16,7 +16,7 @@ ext {
     ]
     deps = [
             plugin         : [
-                    buildTools    : 'com.android.tools.build:gradle:4.2.0-rc01',
+                    buildTools    : 'com.android.tools.build:gradle:4.1.3',
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                     googleServices: 'com.google.gms:google-services:4.3.4',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.5.2',
