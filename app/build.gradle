@@ -8,12 +8,12 @@ apply plugin: "com.github.ben-manes.versions"
 apply from: rootProject.file('dependencies_shared.gradle')
 
 android {
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         applicationId buildConfig.applicationId
-        minSdkVersion buildConfig.minSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
         versionCode buildConfig.version.code
         versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
