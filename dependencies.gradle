@@ -5,7 +5,7 @@ ext {
             wearable  : '2.8.1',
             okhttp    : '4.9.1',
             retrofit  : '2.9.0',
-            dagger    : '2.34',
+            dagger    : '2.38.1',
             androidx  : [
                     navigation: '2.3.5',
                     lifecycle : '2.3.1',
