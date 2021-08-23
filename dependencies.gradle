@@ -18,13 +18,12 @@ ext {
             plugin         : [
                     buildTools    : 'com.android.tools.build:gradle:7.0.1',
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
-                    googleServices: 'com.google.gms:google-services:4.3.4',
+                    googleServices: 'com.google.gms:google-services:4.3.10',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.5.2',
-                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:9.4.1',
-                    ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.3',
+                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:10.1.0',
+                    ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.4',
                     navSafeArgs   : "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidx.navigation}",
-                    gradleVersions: 'com.github.ben-manes:gradle-versions-plugin:0.33.0',
-                    exhaustive    : 'app.cash.exhaustive:exhaustive-gradle:0.1.1'
+                    exhaustive    : 'app.cash.exhaustive:exhaustive-gradle:0.2.0'
             ],
             kotlin         : [
                     coroutines: [

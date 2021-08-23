@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
-apply plugin: "com.github.ben-manes.versions"
 
 apply from: rootProject.file('dependencies_shared.gradle')
 
