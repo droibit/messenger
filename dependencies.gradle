@@ -110,6 +110,6 @@ ext {
             junit          : 'junit:junit:4.13.1',
             robolectric    : 'org.robolectric:robolectric:4.5.1',
             truth          : 'com.google.truth:truth:1.1.2',
-            liveDataTesting: 'com.jraska.livedata:testing-ktx:1.1.2'
+            liveDataTesting: 'com.jraska.livedata:testing-ktx:1.2.0'
     ]
 }
