@@ -4,6 +4,4 @@ import java.lang.Exception
 
 internal class PhoneAuthenticationException(
     val errorCode: Int
-) : Exception("remote authentication request failed: $errorCode") {
-
-}
+) : Exception("remote authentication request failed: $errorCode")
