@@ -1,1 +1,1 @@
-include ':app', ':core', ':account', ':home', ':timeline', ':settings', ':tweet'
+include ':app', ':core', ':account', ':home', ':timeline', ':settings', ':tweet', ':support-wearable-backport'

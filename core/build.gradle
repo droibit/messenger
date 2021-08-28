@@ -8,12 +8,8 @@ android {
     defaultConfig {
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
-    }
 
-    buildTypes {
-        release {
-            consumerProguardFiles 'consumer-rules.pro'
-        }
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildFeatures {

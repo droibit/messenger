@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+  <LinearLayout
+      android:id="@android:id/content"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:minHeight="@dimen/diag_preferred_padding"
+        >
+      <ImageView
+          android:id="@android:id/icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:layout_marginTop="@dimen/diag_icon_margin_top"
+          android:layout_marginBottom="8dp"
+          android:adjustViewBounds="true"
+          android:maxWidth="24dp"
+          android:maxHeight="24dp"
+          android:scaleType="centerInside"
+          android:src="@null"
+          android:visibility="gone"
+          tools:ignore="ContentDescription"
+          />
+    </FrameLayout>
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:paddingLeft="@dimen/diag_preferred_padding"
+        android:paddingRight="@dimen/diag_preferred_padding"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        />
+
+    <TextView
+        android:id="@android:id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:paddingLeft="@dimen/diag_preferred_padding"
+        android:paddingRight="@dimen/diag_preferred_padding"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+        android:visibility="gone"
+        />
+
+    <!-- absorbs all remaining space due to weight=1 -->
+    <FrameLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+      <LinearLayout
+          style="?android:attr/buttonBarStyle"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:gravity="center_horizontal|top"
+          android:orientation="horizontal"
+          android:paddingLeft="@dimen/diag_button_padding_horizontal"
+          android:paddingTop="8dp"
+          android:paddingRight="@dimen/diag_button_padding_horizontal"
+          android:paddingBottom="@dimen/diag_button_padding_bottom"
+          >
+
+        <ImageButton
+            android:id="@android:id/button2"
+            android:layout_width="@dimen/diag_button_size"
+            android:layout_height="@dimen/diag_button_size"
+            android:background="@drawable/accept_deny_dialog_negative_bg"
+            android:contentDescription="@android:string/cancel"
+            android:src="@drawable/ic_cc_clear"
+            android:visibility="gone"
+            />
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@android:id/button1"
+            android:layout_width="@dimen/diag_button_size"
+            android:layout_height="@dimen/diag_button_size"
+            android:background="@drawable/accept_deny_dialog_positive_bg"
+            android:contentDescription="@android:string/yes"
+            android:src="@drawable/ic_cc_checkmark"
+            android:visibility="gone"
+            />
+      </LinearLayout>
+    </FrameLayout>
+  </LinearLayout>
+</ScrollView>
