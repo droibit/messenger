@@ -10,6 +10,8 @@ import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.DaggerCoreComponent
 import com.droibit.looking2.core.util.Stetho
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 import timber.log.Timber
 
@@ -45,6 +47,10 @@ class LookingApplication : Application() {
         WorkManager.initialize(this, workConfiguration)
         Stetho.initialize(this)
         Timber.d("Bootstrapped")
+
+        if (BuildConfig.DEBUG) {
+            Firebase.crashlytics.setCrashlyticsCollectionEnabled(false)
+        }
     }
 
     companion object {
