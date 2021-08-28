@@ -7,10 +7,10 @@ buildscript { scriptHandler ->
 
     ext.buildConfig = [
             applicationId: "com.droibit.looking2",
-            compileSdk: 31,
-            targetSdk : 30,
-            minSdk    : 25, // TODO: Change to 26
-            version   : [
+            compileSdk   : 31,
+            targetSdk    : 30,
+            minSdk       : 25, // TODO: Change to 26
+            version      : [
                     'major': 1,
                     'minor': 1,
                     'patch': 1,
@@ -34,11 +34,14 @@ buildscript { scriptHandler ->
         classpath deps.plugin.kotlin
         classpath deps.plugin.googleServices
         classpath deps.plugin.crashlytics
-        classpath deps.plugin.ktlint
         classpath deps.plugin.ossLicense
         classpath deps.plugin.navSafeArgs
         classpath deps.plugin.exhaustive
     }
+}
+
+plugins {
+    id 'com.diffplug.spotless' version '5.14.3'
 }
 
 allprojects {
@@ -53,8 +56,8 @@ subprojects {
         apply from: rootProject.file('repositories.gradle')
     }
 
-    apply plugin: 'org.jlleitschuh.gradle.ktlint'
     apply plugin: 'app.cash.exhaustive'
+    apply plugin: "com.diffplug.spotless"
 
     plugins.whenPluginAdded { plugin ->
         if (plugin instanceof BasePlugin) {
@@ -78,11 +81,16 @@ subprojects {
                 }
             }
 
-            ktlint {
-                version = "0.42.1"
-                android = true
-                filter {
-                    include("**/java/**")
+            spotless {
+                kotlin {
+                    target("**/*.kt")
+                    targetExclude("$buildDir/**/*.kt")
+                    targetExclude("**/generated/**/*.kt")
+                    ktlint(versions.ktlint)
+                            .userData([
+                                    "android"     : "true",
+                                    "experimental": "true"
+                            ])
                 }
             }
         }
@@ -105,8 +113,4 @@ subprojects {
             ]
         }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

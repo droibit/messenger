@@ -12,7 +12,9 @@ ext {
                     work      : '2.5.0'
             ],
             chopstick : '1.0.1',
-            stetho    : '1.6.0'
+            stetho    : '1.6.0',
+            spotless  : '5.14.3',
+            ktlint    : '0.42.1'
     ]
     deps = [
             plugin         : [
@@ -20,7 +22,6 @@ ext {
                     kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                     googleServices: 'com.google.gms:google-services:4.3.10',
                     crashlytics   : 'com.google.firebase:firebase-crashlytics-gradle:2.7.1',
-                    ktlint        : 'org.jlleitschuh.gradle:ktlint-gradle:10.1.0',
                     ossLicense    : 'com.google.android.gms:oss-licenses-plugin:0.10.4',
                     navSafeArgs   : "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidx.navigation}",
                     exhaustive    : 'app.cash.exhaustive:exhaustive-gradle:0.2.0'
