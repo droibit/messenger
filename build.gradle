@@ -7,7 +7,7 @@ buildscript { scriptHandler ->
 
     ext.buildConfig = [
             applicationId: "com.droibit.looking2",
-            compileSdk: 30,
+            compileSdk: 31,
             targetSdk : 30,
             minSdk    : 24,
             version   : [

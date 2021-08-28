@@ -13,7 +13,7 @@ dependencies {
     implementation deps.androidx.navigation.fragment
 
     implementation deps.firebase.analytics
-    implementation deps.androidx.wear
+    implementation deps.androidx.wear.core
     implementation deps.playServices.base
     implementation deps.playServices.wearable
     implementation deps.wearable.support
