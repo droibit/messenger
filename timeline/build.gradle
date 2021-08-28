@@ -32,6 +32,7 @@ dependencies {
 
     implementation deps.androidx.viewPager2
     implementation deps.androidx.work.runtime
+    implementation deps.androidx.wear.remoteInteractions
     kapt deps.androidx.lifecycle.compiler
 
     implementation deps.circleImageView

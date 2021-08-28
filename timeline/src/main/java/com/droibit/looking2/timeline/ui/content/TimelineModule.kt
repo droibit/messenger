@@ -1,10 +1,12 @@
 package com.droibit.looking2.timeline.ui.content
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
 import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ActionMenu
@@ -62,6 +64,11 @@ object TimelineModule {
             MenuInflater(context).inflate(R.menu.tweet_action, this)
         }
     }
+
+    @Provides
+    fun provideRemoteActivityHelper(
+        @Named("appContext") context: Context
+    ) = RemoteActivityHelper(context)
 
     @Module
     interface BindingModule {

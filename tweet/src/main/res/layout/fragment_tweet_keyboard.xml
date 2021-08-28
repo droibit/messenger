@@ -28,7 +28,7 @@
         <androidx.wear.widget.BoxInsetLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black"
+            android:background="@android:color/black"
             android:padding="@dimen/box_inset_layout_padding">
 
             <ScrollView
@@ -67,7 +67,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@{strings.replyUser}"
-                        android:textAppearance="@style/TextAppearance.Wearable.Small"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
                         app:goneUnless="@{strings.replyUser.isEmpty()}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

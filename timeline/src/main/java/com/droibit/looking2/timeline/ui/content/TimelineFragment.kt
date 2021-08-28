@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import androidx.wear.widget.SwipeDismissFrameLayout
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
@@ -25,16 +27,17 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
-import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
-import com.google.android.wearable.intent.RemoteIntent
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
-import timber.log.Timber
 
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
@@ -51,6 +54,9 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
+
+    @Inject
+    lateinit var remoteActivityHelper: RemoteActivityHelper
 
     private val timelineViewModel: TimelineViewModel by viewModels { viewModelFactory }
 
@@ -172,13 +178,12 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
         tweetActionViewModel.openTweetOnPhone.observeEvent(viewLifecycleOwner) { url ->
             startActivity(OpenOnPhoneIntent(requireContext()))
 
-            // ref. https://developer.android.com/reference/com/google/android/wearable/intent/RemoteIntent.html#startremoteactivity_1
-            RemoteIntent.startRemoteActivity(
-                requireContext(),
-                Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    .addCategory(Intent.CATEGORY_BROWSABLE),
-                null
-            )
+            lifecycleScope.launch {
+                remoteActivityHelper.startRemoteActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        .addCategory(Intent.CATEGORY_BROWSABLE)
+                ).await()
+            }
         }
     }
 
