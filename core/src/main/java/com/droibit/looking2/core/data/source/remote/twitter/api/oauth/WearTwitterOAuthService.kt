@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.annotation.UiThread
 import androidx.wear.phone.interactions.authentication.CodeChallenge
 import androidx.wear.phone.interactions.authentication.CodeVerifier
+import androidx.wear.phone.interactions.authentication.OAuthRequest as WearOAuthRequest
+import androidx.wear.phone.interactions.authentication.OAuthResponse as WearOAuthResponse
 import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
@@ -15,13 +17,11 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.internal.TwitterApi
 import com.twitter.sdk.android.core.internal.oauth.OAuth1aService
 import com.twitter.sdk.android.core.internal.oauth.OAuthResponse
-import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import androidx.wear.phone.interactions.authentication.OAuthRequest as WearOAuthRequest
-import androidx.wear.phone.interactions.authentication.OAuthResponse as WearOAuthResponse
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class WearTwitterOAuthService @Inject constructor(
     @Named("appContext") private val context: Context,
@@ -83,7 +83,9 @@ class WearTwitterOAuthService @Inject constructor(
                                     cont.resume(requireNotNull(response.responseUrl).toString())
                                 }
                                 else -> {
-                                    cont.resumeWithException(PhoneAuthenticationException(errorCode))
+                                    cont.resumeWithException(
+                                        PhoneAuthenticationException(errorCode)
+                                    )
                                 }
                             }
                         }
