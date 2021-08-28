@@ -10,9 +10,7 @@ import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.core.util.analytics.FirebaseAnalyticsHelper
 import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
-import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
-import com.google.android.gms.common.GoogleApiAvailability
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,9 +23,6 @@ object CoreModule {
     @Named("appContext")
     @Provides
     fun provideContext(application: Application): Context = application
-
-    @Provides
-    fun provideGoogleApiAvailability(): GoogleApiAvailability = GoogleApiAvailability.getInstance()
 
     @Provides
     fun provideWorkManager(@Named("appContext") context: Context): WorkManager =
@@ -62,8 +57,6 @@ object CoreModule {
         fun provideDebuggable(): Boolean
 
         fun provideAppVersion(): AppVersion
-
-        fun providePlayServicesChecker(): PlayServicesChecker
 
         fun provideTwitterBootstrap(): TwitterBootstrap
 

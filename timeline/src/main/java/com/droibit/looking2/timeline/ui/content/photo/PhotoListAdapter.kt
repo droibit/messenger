@@ -10,7 +10,7 @@ import coil.load
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import coil.size.Scale
-import com.droibit.looking2.R
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
 import javax.inject.Provider
 
@@ -40,7 +40,7 @@ class PhotoListAdapter(
 
         fun update(url: String) {
             binding.photo.load(url) {
-                error(R.drawable.ic_full_sad)
+                error(R.drawable.ic_cloud_off)
                 scale(Scale.FIT)
                 lifecycle(lifecycleOwner)
                 listener(this@ViewHolder)

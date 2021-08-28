@@ -5,7 +5,7 @@ import java.io.IOException
 
 sealed class AuthenticationError(message: String? = null) : Exception(message) {
     object Network : AuthenticationError()
-    data class PlayServices(val statusCode: Int) : AuthenticationError()
+    data class Phone(val errorCode: Int) : AuthenticationError()
     object UnExpected : AuthenticationError()
 
     companion object {

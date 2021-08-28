@@ -4,13 +4,11 @@ import android.content.DialogInterface.BUTTON_NEGATIVE
 import android.content.DialogInterface.BUTTON_POSITIVE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.droibit.looking2.account.R
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.ui.dialog.DialogButtonResult
 import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.jraska.livedata.test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
@@ -47,9 +45,6 @@ class TwitterSignInViewModelTest {
     @Mock
     private lateinit var accountRepository: AccountRepository
 
-    @Mock
-    private lateinit var playServicesChecker: PlayServicesChecker
-
     @Spy
     private var isProcessingSink = MutableLiveData<Boolean>()
 
@@ -67,7 +62,6 @@ class TwitterSignInViewModelTest {
 
         viewModel = TwitterSignInViewModel(
             accountRepository,
-            playServicesChecker,
             isProcessingSink,
             authenticationResultSink,
             authenticateOnPhoneTimingSink
@@ -120,48 +114,6 @@ class TwitterSignInViewModelTest {
         authenticationResultSink.value = Result.failure(error2)
 
         testObserver.assertValueHistory(Event(error1), Event(error2))
-    }
-
-    @Test
-    fun onPlayServicesErrorResolutionResult_available() {
-        val testObserver = authenticationResultSink.test()
-
-        val status = mock<PlayServicesChecker.Status>()
-        whenever(playServicesChecker.checkStatus()).thenReturn(status)
-
-        viewModel.onPlayServicesErrorResolutionResult(canceled = false)
-
-        testObserver.assertNoValue()
-        verify(playServicesChecker).checkStatus()
-    }
-
-    @Test
-    fun onPlayServicesErrorResolutionResult_unavailable() {
-        val testObserver = authenticationResultSink.test()
-
-        val status = mock<PlayServicesChecker.Status.Error>()
-        whenever(playServicesChecker.checkStatus()).thenReturn(status)
-
-        viewModel.onPlayServicesErrorResolutionResult(canceled = false)
-
-        val error = TwitterAuthenticationErrorMessage.FailureConfirmation(
-            R.string.account_sign_in_error_message_play_services
-        )
-        testObserver.assertValue(Result.failure(error))
-        verify(playServicesChecker).checkStatus()
-    }
-
-    @Test
-    fun onPlayServicesErrorResolutionResult_canceled() {
-        val testObserver = authenticationResultSink.test()
-
-        viewModel.onPlayServicesErrorResolutionResult(canceled = true)
-
-        val error = TwitterAuthenticationErrorMessage.FailureConfirmation(
-            R.string.account_sign_in_error_message_play_services
-        )
-        testObserver.assertValue(Result.failure(error))
-        verify(playServicesChecker, never()).checkStatus()
     }
 
     @Test

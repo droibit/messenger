@@ -1,6 +1,5 @@
 package com.droibit.looking2.account.ui.twitter.signin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
-import com.droibit.looking2.core.util.checker.PlayServicesChecker
 import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
@@ -29,16 +27,12 @@ import javax.inject.Inject
 import javax.inject.Named
 import timber.log.Timber
 
-private const val REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR = 1
 private const val REQUEST_KEY_SIGN_IN_CONFORMATION = "REQUEST_KEY_SIGN_IN_CONFORMATION"
 
 class TwitterSignInFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var playServicesChecker: PlayServicesChecker
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
@@ -125,30 +119,12 @@ class TwitterSignInFragment : DaggerFragment() {
         @Exhaustive
         when (error) {
             is TwitterAuthenticationErrorMessage.Toast -> showToast(error)
-            is TwitterAuthenticationErrorMessage.PlayServicesDialog -> {
-                playServicesChecker.showErrorResolutionDialog(
-                    requireActivity(),
-                    errorCode = error.statusCode,
-                    requestCode = REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR
-                ) {
-                    signInViewModel.onPlayServicesErrorResolutionResult(canceled = true)
-                }
-            }
             is TwitterAuthenticationErrorMessage.FailureConfirmation -> {
                 val intent = FailureIntent(
                     requireContext(),
                     messageResId = error.messageResId
                 )
                 startActivity(intent)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_RESOLVE_PLAY_SERVICES_ERROR -> {
-                signInViewModel.onPlayServicesErrorResolutionResult()
             }
         }
     }

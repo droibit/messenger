@@ -1,7 +1,7 @@
 package com.droibit.looking2.core.data.source.remote
 
 import android.content.Context
-import android.support.wearable.authentication.OAuthClient
+import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -10,13 +10,7 @@ import javax.inject.Named
 object WearOAuthModule {
 
     @Provides
-    fun provideOAuthClient(@Named("appContext") context: Context): OAuthClient {
-        return OAuthClient.create(context)
-    }
-
-    @Named("wearCallbackUrl")
-    @Provides
-    fun provideWearCallbackUrl(@Named("appContext") context: Context): String {
-        return OAuthClient.WEAR_REDIRECT_URL_PREFIX + context.packageName
+    fun provideWearRemoteAuthClient(@Named("appContext") context: Context): RemoteAuthClient {
+        return RemoteAuthClient.create(context)
     }
 }

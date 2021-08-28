@@ -1,10 +1,11 @@
 package com.droibit.looking2.core.data.source.remote.twitter.api.oauth
 
+import android.content.Context
 import android.net.Uri
-import android.support.wearable.authentication.OAuthClient
 import androidx.annotation.UiThread
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Status
+import androidx.wear.phone.interactions.authentication.CodeChallenge
+import androidx.wear.phone.interactions.authentication.CodeVerifier
+import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterAuthConfig
@@ -14,20 +15,22 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.internal.TwitterApi
 import com.twitter.sdk.android.core.internal.oauth.OAuth1aService
 import com.twitter.sdk.android.core.internal.oauth.OAuthResponse
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlinx.coroutines.suspendCancellableCoroutine
+import androidx.wear.phone.interactions.authentication.OAuthRequest as WearOAuthRequest
+import androidx.wear.phone.interactions.authentication.OAuthResponse as WearOAuthResponse
 
 class WearTwitterOAuthService @Inject constructor(
+    @Named("appContext") private val context: Context,
     twitterCore: TwitterCore,
     api: TwitterApi,
-    @Named("wearCallbackUrl") private val callbackUrl: String
 ) : OAuth1aService(twitterCore, api) {
 
     override fun buildCallbackUrl(authConfig: TwitterAuthConfig): String {
-        return callbackUrl
+        return WearOAuthRequest.WEAR_REDIRECT_URL_PREFIX + context.packageName
     }
 
     @Throws(TwitterException::class)
@@ -46,25 +49,44 @@ class WearTwitterOAuthService @Inject constructor(
     }
 
     @UiThread
-    @Throws(ApiException::class)
+    @Throws(PhoneAuthenticationException::class)
     suspend fun sendAuthorizationRequest(
-        client: OAuthClient,
+        client: RemoteAuthClient,
         requestToken: TwitterAuthToken
     ): String =
         suspendCancellableCoroutine { cont ->
-            val authorizeUrl = getAuthorizeUrl(requestToken)
+            val authorizeUrlString = getAuthorizeUrl(requestToken)
+            val request = WearOAuthRequest.Builder(context)
+                .setAuthProviderUrl(Uri.parse(authorizeUrlString))
+                // Specify only to bypass OAuthRequest validation.
+                .setCodeChallenge(CodeChallenge(CodeVerifier()))
+                // Specify only to bypass OAuthRequest validation.
+                .setClientId("")
+                .build()
             client.sendAuthorizationRequest(
-                Uri.parse(authorizeUrl),
-                object : OAuthClient.Callback() {
-                    override fun onAuthorizationError(errorCode: Int) {
-                        if (cont.isActive) cont.resumeWithException(ApiException(Status(errorCode)))
+                request = request,
+                executor = { command -> command?.run() },
+                clientCallback = object : RemoteAuthClient.Callback() {
+                    override fun onAuthorizationError(request: WearOAuthRequest, errorCode: Int) {
+                        if (cont.isActive) {
+                            cont.resumeWithException(PhoneAuthenticationException(errorCode))
+                        }
                     }
 
                     override fun onAuthorizationResponse(
-                        requestUrl: Uri,
-                        responseUrl: Uri
+                        request: WearOAuthRequest,
+                        response: WearOAuthResponse
                     ) {
-                        if (cont.isActive) cont.resume(responseUrl.toString())
+                        if (cont.isActive) {
+                            when (val errorCode = response.errorCode) {
+                                RemoteAuthClient.NO_ERROR -> {
+                                    cont.resume(requireNotNull(response.responseUrl).toString())
+                                }
+                                else -> {
+                                    cont.resumeWithException(PhoneAuthenticationException(errorCode))
+                                }
+                            }
+                        }
                     }
                 }
             )

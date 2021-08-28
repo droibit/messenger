@@ -6,11 +6,11 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply from: rootProject.file('dependencies_shared.gradle')
 
 android {
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
-        minSdkVersion buildConfig.minSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
         resConfigs "en", "ja"
         vectorDrawables.useSupportLibrary = true
     }
@@ -32,6 +32,7 @@ dependencies {
 
     implementation deps.androidx.viewPager2
     implementation deps.androidx.work.runtime
+    implementation deps.androidx.wear.remoteInteractions
     kapt deps.androidx.lifecycle.compiler
 
     implementation deps.circleImageView

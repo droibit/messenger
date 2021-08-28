@@ -1,6 +1,5 @@
 package com.droibit.looking2.account.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
@@ -58,16 +57,5 @@ class AccountHostActivity :
         arguments: Bundle?
     ) {
         analytics.sendScreenView(destination, this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentByTag(
-                getString(R.string.nav_host_fragment_tag_account)
-            )
-        requireNotNull(navHostFragment).childFragmentManager.fragments.firstOrNull()
-            ?.onActivityResult(requestCode, resultCode, data)
     }
 }
