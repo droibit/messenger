@@ -9,7 +9,7 @@ buildscript { scriptHandler ->
             applicationId: "com.droibit.looking2",
             compileSdk: 31,
             targetSdk : 30,
-            minSdk    : 24,
+            minSdk    : 25, // TODO: Change to 26
             version   : [
                     'major': 1,
                     'minor': 1,

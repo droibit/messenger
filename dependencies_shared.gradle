@@ -16,8 +16,6 @@ dependencies {
     implementation deps.androidx.wear.core
     implementation deps.playServices.base
     implementation deps.playServices.wearable
-    implementation deps.wearable.support
-    compileOnly deps.wearable.wearable
 
     implementation deps.dagger.runtime
     implementation deps.dagger.androidSupport

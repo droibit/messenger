@@ -7,24 +7,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cash.exhaustive.Exhaustive
-import com.droibit.looking2.account.R
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationResult
 import com.droibit.looking2.core.ui.dialog.DialogButtonResult
 import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.checker.PlayServicesChecker
-import com.droibit.looking2.core.util.checker.PlayServicesChecker.Status.Error as PlayServicesError
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessEventLiveData
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class TwitterSignInViewModel(
     private val accountRepository: AccountRepository,
-    private val playServicesChecker: PlayServicesChecker,
     private val isProcessingSink: MutableLiveData<Boolean>,
     private val authenticationResultSink: MutableLiveData<Result<Unit>>,
     private val authenticateOnPhoneTimingSink: MutableLiveData<Event<Unit>>
@@ -45,27 +41,13 @@ class TwitterSignInViewModel(
 
     @Inject
     constructor(
-        accountRepository: AccountRepository,
-        playServicesChecker: PlayServicesChecker
+        accountRepository: AccountRepository
     ) : this(
-        accountRepository,
-        playServicesChecker,
-        MutableLiveData(false),
-        MutableLiveData(),
-        MutableLiveData()
+        accountRepository = accountRepository,
+        isProcessingSink = MutableLiveData(false),
+        authenticationResultSink = MutableLiveData(),
+        authenticateOnPhoneTimingSink = MutableLiveData()
     )
-
-    @UiThread
-    fun onPlayServicesErrorResolutionResult(canceled: Boolean = false) {
-        if (canceled ||
-            playServicesChecker.checkStatus() is PlayServicesError
-        ) {
-            val error = TwitterAuthenticationErrorMessage.FailureConfirmation(
-                R.string.account_sign_in_error_message_play_services
-            )
-            authenticationResultSink.value = Result.failure(error)
-        }
-    }
 
     @UiThread
     fun onConfirmationDialogResult(dialogResult: DialogButtonResult) {
@@ -96,7 +78,6 @@ class TwitterSignInViewModel(
                             authenticationResultSink.value = Result.failure(
                                 TwitterAuthenticationErrorMessage(
                                     source = it.error,
-                                    playServicesChecker = playServicesChecker
                                 )
                             )
                         }

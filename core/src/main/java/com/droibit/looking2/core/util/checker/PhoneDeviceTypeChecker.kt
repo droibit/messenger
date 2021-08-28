@@ -1,7 +1,7 @@
 package com.droibit.looking2.core.util.checker
 
 import android.content.Context
-import android.support.wearable.phone.PhoneDeviceType
+import androidx.wear.phone.interactions.PhoneTypeHelper
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -11,7 +11,7 @@ class PhoneDeviceTypeChecker @Inject constructor(
     @Named("appContext") private val context: Context
 ) {
     fun checkPairedWithAndroidDevice(): Boolean {
-        val deviceType = PhoneDeviceType.getPhoneDeviceType(context)
-        return deviceType == PhoneDeviceType.DEVICE_TYPE_ANDROID
+        val deviceType = PhoneTypeHelper.getPhoneDeviceType(context)
+        return deviceType == PhoneTypeHelper.DEVICE_TYPE_ANDROID
     }
 }

@@ -62,10 +62,6 @@ ext {
                             junit: 'androidx.test.ext:junit-ktx:1.1.2',
                     ]
             ],
-            wearable       : [
-                    support : "com.google.android.support:wearable:${versions.wearable}",
-                    wearable: "com.google.android.wearable:wearable:${versions.wearable}"
-            ],
             playServices   : [
                     base    : "com.google.android.gms:play-services-base:17.6.0",
                     wearable: "com.google.android.gms:play-services-wearable:17.1.0"

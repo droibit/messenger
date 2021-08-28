@@ -36,11 +36,10 @@ dependencies {
     implementation deps.androidx.navigation.fragment
     implementation deps.androidx.work.runtime
     implementation deps.androidx.wear.core
+    implementation deps.androidx.wear.phoneInteractions
 
     implementation deps.playServices.base
     implementation deps.firebase.analytics
-    implementation(deps.wearable.support)
-    compileOnly deps.wearable.wearable
 
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler

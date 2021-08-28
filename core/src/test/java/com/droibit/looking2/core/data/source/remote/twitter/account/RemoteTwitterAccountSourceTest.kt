@@ -1,12 +1,11 @@
 package com.droibit.looking2.core.data.source.remote.twitter.account
 
-import android.support.wearable.authentication.OAuthClient
+import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.oauth.PhoneAuthenticationException
 import com.droibit.looking2.core.data.source.remote.twitter.api.oauth.WearTwitterOAuthService
 import com.droibit.looking2.core.model.account.AuthenticationError
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.common.truth.Truth.assertThat
 import com.twitter.sdk.android.core.TwitterAuthException
 import com.twitter.sdk.android.core.TwitterAuthToken
@@ -14,7 +13,6 @@ import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.internal.oauth.OAuthResponse
-import javax.inject.Provider
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.fail
@@ -26,10 +24,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import javax.inject.Provider
 
 class RemoteTwitterAccountSourceTest {
 
@@ -46,7 +44,7 @@ class RemoteTwitterAccountSourceTest {
     private lateinit var apiClientFactory: AppTwitterApiClient.Factory
 
     @Mock
-    private lateinit var oauthClientProvider: Provider<OAuthClient>
+    private lateinit var oauthClientProvider: Provider<RemoteAuthClient>
 
     @Mock
     private lateinit var dispatcherProvider: CoroutinesDispatcherProvider
@@ -96,7 +94,7 @@ class RemoteTwitterAccountSourceTest {
     fun sendAuthorizationRequest_success() = runBlockingTest {
         whenever(dispatcherProvider.main).thenReturn(TestCoroutineDispatcher())
 
-        val client = mock<OAuthClient>()
+        val client = mock<RemoteAuthClient>()
         whenever(oauthClientProvider.get()).thenReturn(client)
 
         val responseUrl = "url"
@@ -108,20 +106,18 @@ class RemoteTwitterAccountSourceTest {
         assertThat(actualResponseUrl).isEqualTo(responseUrl)
 
         verify(oAuthService).sendAuthorizationRequest(client, authToken)
-        verify(client).destroy()
+        verify(client).close()
     }
 
     @Test
     fun sendAuthorizationRequest_error() = runBlockingTest {
         whenever(dispatcherProvider.main).thenReturn(TestCoroutineDispatcher())
 
-        val client = mock<OAuthClient>()
+        val client = mock<RemoteAuthClient>()
         whenever(oauthClientProvider.get()).thenReturn(client)
 
-        val errorCode = CommonStatusCodes.ERROR
-        val error = mock<ApiException> {
-            on { statusCode } doReturn errorCode
-        }
+        val errorCode = RemoteAuthClient.ERROR_UNSUPPORTED
+        val error = PhoneAuthenticationException(errorCode)
         whenever(oAuthService.sendAuthorizationRequest(any(), any()))
             .thenThrow(error)
 
@@ -130,14 +126,14 @@ class RemoteTwitterAccountSourceTest {
             remoteSource.sendAuthorizationRequest(authToken)
             fail("error")
         } catch (e: AuthenticationError) {
-            assertThat(e).isInstanceOf(AuthenticationError.PlayServices::class.java)
+            assertThat(e).isInstanceOf(AuthenticationError.Phone::class.java)
 
-            val actualError = e as AuthenticationError.PlayServices
-            assertThat(actualError.statusCode).isEqualTo(errorCode)
+            val actualError = e as AuthenticationError.Phone
+            assertThat(actualError.errorCode).isEqualTo(errorCode)
         }
 
         verify(oAuthService).sendAuthorizationRequest(client, authToken)
-        verify(client).destroy()
+        verify(client).close()
     }
 
     @Test

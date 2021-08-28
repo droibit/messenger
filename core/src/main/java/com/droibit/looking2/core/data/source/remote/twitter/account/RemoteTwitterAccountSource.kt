@@ -1,11 +1,11 @@
 package com.droibit.looking2.core.data.source.remote.twitter.account
 
-import android.support.wearable.authentication.OAuthClient
+import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.droibit.looking2.core.data.CoroutinesDispatcherProvider
 import com.droibit.looking2.core.data.source.remote.twitter.api.AppTwitterApiClient
+import com.droibit.looking2.core.data.source.remote.twitter.api.oauth.PhoneAuthenticationException
 import com.droibit.looking2.core.data.source.remote.twitter.api.oauth.WearTwitterOAuthService
 import com.droibit.looking2.core.model.account.AuthenticationError
-import com.google.android.gms.common.api.ApiException
 import com.twitter.sdk.android.core.TwitterAuthToken
 import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
@@ -19,7 +19,7 @@ class RemoteTwitterAccountSource @Inject constructor(
     private val twitterCore: TwitterCore,
     private val oAuthService: WearTwitterOAuthService,
     private val apiClientFactory: AppTwitterApiClient.Factory,
-    private val oauthClientProvider: Provider<OAuthClient>,
+    private val oauthClientProvider: Provider<RemoteAuthClient>,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {
 
@@ -44,11 +44,11 @@ class RemoteTwitterAccountSource @Inject constructor(
             val client = oauthClientProvider.get()
             try {
                 oAuthService.sendAuthorizationRequest(client, requestToken)
-            } catch (e: ApiException) {
+            } catch (e: PhoneAuthenticationException) {
                 Timber.e(e)
-                throw AuthenticationError.PlayServices(statusCode = e.statusCode)
+                throw AuthenticationError.Phone(e.errorCode)
             } finally {
-                client.destroy()
+                client.close()
             }
         }
     }
