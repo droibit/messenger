@@ -10,10 +10,10 @@ import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentArgs
 import com.droibit.looking2.timeline.ui.content.TimelineSource
-import com.droibit.looking2.ui.Activities.Timeline.EXTRA_TIMELINE_SOURCE
-import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_HOME
-import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_LISTS
-import com.droibit.looking2.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
+import com.droibit.looking2.core.ui.Activities.Timeline.EXTRA_TIMELINE_SOURCE
+import com.droibit.looking2.core.ui.Activities.Timeline.TIMELINE_SOURCE_HOME
+import com.droibit.looking2.core.ui.Activities.Timeline.TIMELINE_SOURCE_LISTS
+import com.droibit.looking2.core.ui.Activities.Timeline.TIMELINE_SOURCE_MENTIONS
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector

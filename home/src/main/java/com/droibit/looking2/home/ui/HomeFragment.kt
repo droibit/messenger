@@ -14,7 +14,7 @@ import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
-import com.droibit.looking2.ui.Activities
+import com.droibit.looking2.core.ui.Activities
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {

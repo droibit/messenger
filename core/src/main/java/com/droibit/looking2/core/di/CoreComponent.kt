@@ -1,6 +1,8 @@
 package com.droibit.looking2.core.di
 
 import android.app.Application
+import android.content.Context
+import androidx.annotation.UiThread
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.repository.RepositoryModule
 import dagger.BindsInstance
@@ -26,3 +28,11 @@ interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
         ): CoreComponent
     }
 }
+
+// TOOD: Delete completely migrate to feature module
+interface CoreComponentProvider {
+    fun coreComponent(): CoreComponent
+}
+
+@UiThread
+fun Context.coreComponent() = (this.applicationContext as CoreComponentProvider).coreComponent()

@@ -10,9 +10,9 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
+import com.droibit.looking2.core.di.coreComponent
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.retryIfNeeded
-import com.droibit.looking2.coreComponent
 import com.droibit.looking2.timeline.ui.content.TweetActionCall.Companion.KEY_TWEET_ID
 import javax.inject.Inject
 import timber.log.Timber

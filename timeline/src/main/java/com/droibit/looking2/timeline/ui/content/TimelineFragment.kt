@@ -29,10 +29,10 @@ import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
-import com.droibit.looking2.ui.Activities.Confirmation.OpenOnPhoneIntent
-import com.droibit.looking2.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
-import com.droibit.looking2.ui.Activities.Tweet as TweetActivity
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.core.ui.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.core.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
+import com.droibit.looking2.core.ui.Activities.Tweet as TweetActivity
+import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import kotlinx.coroutines.guava.await

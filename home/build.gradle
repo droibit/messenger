@@ -1,4 +1,4 @@
-apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
@@ -17,6 +17,7 @@ android {
 
     buildFeatures {
         dataBinding true
+        buildConfig = false
     }
 
     buildTypes {
@@ -27,7 +28,6 @@ android {
 }
 
 dependencies {
-    implementation project(':app')
     implementation project(':core')
 
     kapt deps.androidx.lifecycle.compiler

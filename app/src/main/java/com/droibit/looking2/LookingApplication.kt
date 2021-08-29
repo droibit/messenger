@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import com.droibit.looking2.core.config.AppVersion
 import com.droibit.looking2.core.data.TwitterBootstrap
 import com.droibit.looking2.core.di.CoreComponent
+import com.droibit.looking2.core.di.CoreComponentProvider
 import com.droibit.looking2.core.di.DaggerCoreComponent
 import com.droibit.looking2.core.util.Stetho
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -15,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 import timber.log.Timber
 
-class LookingApplication : Application() {
+class LookingApplication : Application(), CoreComponentProvider {
 
     private val coreComponent: CoreComponent by lazy(LazyThreadSafetyMode.NONE) {
         DaggerCoreComponent.factory()
@@ -53,6 +54,10 @@ class LookingApplication : Application() {
         }
     }
 
+    override fun coreComponent(): CoreComponent {
+        return Companion.coreComponent(this)
+    }
+
     companion object {
         @UiThread
         fun coreComponent(context: Context) =
@@ -60,5 +65,5 @@ class LookingApplication : Application() {
     }
 }
 
-@UiThread
-fun Context.coreComponent() = LookingApplication.coreComponent(this)
+// @UiThread
+// fun Context.coreComponent() = LookingApplication.coreComponent(this)

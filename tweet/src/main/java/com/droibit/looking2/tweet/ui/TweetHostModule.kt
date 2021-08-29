@@ -8,8 +8,8 @@ import com.droibit.looking2.tweet.ui.input.ViewModelModule
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
 import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment
 import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetModule
-import com.droibit.looking2.ui.Activities.Tweet.EXTRA_REPLY_TWEET
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.core.ui.Activities.Tweet.EXTRA_REPLY_TWEET
+import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule

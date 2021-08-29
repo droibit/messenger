@@ -20,7 +20,7 @@ import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
-import com.droibit.looking2.ui.Activities.Account as AccountActivity
+import com.droibit.looking2.core.ui.Activities.Account as AccountActivity
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import timber.log.Timber

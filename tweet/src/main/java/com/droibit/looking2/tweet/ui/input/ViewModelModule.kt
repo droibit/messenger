@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkManager
 import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
