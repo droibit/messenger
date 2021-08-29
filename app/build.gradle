@@ -69,6 +69,8 @@ dependencies {
     implementation project(":timeline")
     implementation project(":tweet")
 
+    implementation deps.androidx.wear.phoneInteractions
+    implementation deps.androidx.wear.remoteInteractions
     implementation deps.androidx.work.runtime
     implementation deps.androidx.hilt.work
     kapt deps.androidx.hilt.compiler
