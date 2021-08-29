@@ -1,10 +1,9 @@
 package com.droibit.looking2.timeline.ui.content
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
@@ -17,37 +16,32 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Named
-import javax.inject.Provider
 
 @InstallIn(FragmentComponent::class)
 @Module
 object TimelineFragmentModule {
 
-    @Named("fragment")
     @Provides
-    fun provideFragmentLifecycleProvider(fragment: TimelineFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
-    }
+    fun provideOnTweetItemClickListener(fragment: Fragment) =
+        fragment as TweetListAdapter.OnItemClickListener
 
     @Provides
     fun provideTweetListAdapter(
-        fragment: TimelineFragment,
+        fragment: Fragment,
         contentPadding: ShapeAwareContentPadding,
-        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
-        tweetTextProcessor: TweetTextProcessor
+        tweetTextProcessor: TweetTextProcessor,
+        onItemClickListener: TweetListAdapter.OnItemClickListener
     ): TweetListAdapter {
         return TweetListAdapter(
-            LayoutInflater.from(fragment.requireContext()),
             contentPadding,
-            lifecycleOwner,
+            { fragment.viewLifecycleOwner },
             tweetTextProcessor,
-            fragment::onTweetClick
+            onItemClickListener
         )
     }
 
     @Provides
-    fun provideTweetActionMenu(fragment: TimelineFragment): Menu {
+    fun provideTweetActionMenu(fragment: Fragment): Menu {
         val context = fragment.requireContext()
         return ActionMenu(context).apply {
             MenuInflater(context).inflate(R.menu.tweet_action, this)

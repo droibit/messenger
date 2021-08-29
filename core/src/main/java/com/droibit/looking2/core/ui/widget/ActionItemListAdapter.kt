@@ -15,13 +15,15 @@ import com.droibit.looking2.core.ui.view.ActionMenu
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import java.util.Objects
 
-typealias ActionItemClickListener = (ActionItemListAdapter.ActionItem) -> Unit
+fun interface OnActionItemClickListener {
+    fun onActionItemClick(item: ActionItemListAdapter.ActionItem): Unit
+}
 
 class ActionItemListAdapter(
     context: Context,
     title: String? = null,
     private val items: MutableList<ActionItem>,
-    private val itemClickListener: ActionItemClickListener
+    private val itemClickListener: OnActionItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ActionItem(
@@ -47,8 +49,6 @@ class ActionItemListAdapter(
             }
         }
 
-    private val inflater = LayoutInflater.from(context)
-
     private val hasTitle get() = !title.isNullOrEmpty()
 
     private val itemPadding = ShapeAwareContentPadding(context)
@@ -57,7 +57,7 @@ class ActionItemListAdapter(
         context: Context,
         title: String? = null,
         @MenuRes menuRes: Int,
-        itemClickListener: ActionItemClickListener
+        itemClickListener: OnActionItemClickListener
     ) :
         this(context, title, inflateActionMenu(context, menuRes), itemClickListener)
 
@@ -95,8 +95,9 @@ class ActionItemListAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecyclerView.ViewHolder =
-        when (ViewType.of(viewType)) {
+    ): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (ViewType.of(viewType)) {
             ViewType.HEADER -> {
                 HeaderViewHolder(
                     binding = ListItemActionTitleBinding.inflate(inflater, parent, false)
@@ -108,11 +109,12 @@ class ActionItemListAdapter(
                 ).apply {
                     itemView.setOnClickListener {
                         val titleAwarePosition = bindingAdapterPosition - if (hasTitle) 1 else 0
-                        itemClickListener.invoke(items[titleAwarePosition])
+                        itemClickListener.onActionItemClick(items[titleAwarePosition])
                     }
                 }
             }
         }
+    }
 
     override fun getItemViewType(position: Int): Int =
         if (hasTitle && position == 0) ViewType.HEADER.id else ViewType.ACTION_ITEM.id

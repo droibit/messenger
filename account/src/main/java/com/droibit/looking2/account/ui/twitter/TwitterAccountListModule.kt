@@ -1,6 +1,6 @@
 package com.droibit.looking2.account.ui.twitter
 
-import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import dagger.Module
 import dagger.Provides
@@ -12,14 +12,15 @@ import dagger.hilt.android.components.FragmentComponent
 object TwitterAccountListModule {
 
     @Provides
+    fun provideOnTwitterAccountItemClickListener(fragment: Fragment) =
+        fragment as TwitterAccountListAdapter.OnItemClickListener
+
+    @Provides
     fun provideAccountListAdapter(
-        fragment: TwitterAccountListFragment,
-        itemPadding: ShapeAwareContentPadding
-    ): TwitterAccountListAdapter {
-        return TwitterAccountListAdapter(
-            LayoutInflater.from(fragment.requireContext()),
-            itemPadding,
-            fragment::onAccountItemClick
-        )
-    }
+        itemPadding: ShapeAwareContentPadding,
+        itemClickListener: TwitterAccountListAdapter.OnItemClickListener
+    ) = TwitterAccountListAdapter(
+        itemPadding,
+        itemClickListener
+    )
 }

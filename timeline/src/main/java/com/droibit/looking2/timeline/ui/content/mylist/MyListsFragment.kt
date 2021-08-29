@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
@@ -21,15 +20,12 @@ import javax.inject.Inject
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MyListsFragment : Fragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
 
     @Inject
     lateinit var myListAdapter: MyListAdapter
 
-    private val viewModel: MyListsViewModel by viewModels { viewModelFactory }
+    private val viewModel: MyListsViewModel by viewModels()
 
     private var _binding: FragmentMyListsBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -68,7 +64,7 @@ class MyListsFragment : Fragment() {
     }
 
     private fun showMyLists(myLists: List<UserList>) {
-        myListAdapter.setMyLists(myLists)
+        myListAdapter.submitList(myLists)
     }
 
     private fun showGetMyListsError(error: GetMyListsErrorMessage) {
@@ -84,7 +80,7 @@ class MyListsFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun onUserListClick(myList: UserList) {
+    override fun onUserListClick(myList: UserList) {
         Timber.d("onUserListClick(${myList.name})")
         findNavController().navigateSafely(
             toMyListTimeline(

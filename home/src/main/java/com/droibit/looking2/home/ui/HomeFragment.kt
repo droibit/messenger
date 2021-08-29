@@ -11,18 +11,21 @@ import com.droibit.looking2.core.R as coreR
 import com.droibit.looking2.core.ui.Activities
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
+import com.droibit.looking2.core.ui.widget.OnActionItemClickListener
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Named
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnActionItemClickListener {
 
     @Inject
     lateinit var analytics: AnalyticsHelper
 
+    @Named("home")
     @Inject
     lateinit var actionItemListAdapter: ActionItemListAdapter
 
@@ -70,7 +73,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun onActionItemClick(item: ActionItem) {
+    override fun onActionItemClick(item: ActionItem) {
         val intent = when (HomeNavigation(item.id)) {
             HomeNavigation.TWEET -> Activities.Tweet.createIntent()
             HomeNavigation.TIMELINE -> Activities.Timeline.createHomeIntent()

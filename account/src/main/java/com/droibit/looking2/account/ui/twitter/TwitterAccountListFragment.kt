@@ -28,7 +28,10 @@ import timber.log.Timber
 private const val REQUEST_KEY_SIGN_OUT_CONFORMATION = "REQUEST_KEY_SIGN_OUT_CONFORMATION"
 
 @AndroidEntryPoint
-class TwitterAccountListFragment : Fragment(), MenuItem.OnMenuItemClickListener {
+class TwitterAccountListFragment :
+    Fragment(),
+    TwitterAccountListAdapter.OnItemClickListener,
+    MenuItem.OnMenuItemClickListener {
 
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
@@ -81,7 +84,7 @@ class TwitterAccountListFragment : Fragment(), MenuItem.OnMenuItemClickListener 
 
     private fun observeTwitterAccounts() {
         viewModel.twitterAccounts.observe(viewLifecycleOwner) {
-            accountListAdapter.setAccounts(it)
+            accountListAdapter.submitList(it)
         }
     }
 
@@ -134,7 +137,7 @@ class TwitterAccountListFragment : Fragment(), MenuItem.OnMenuItemClickListener 
     }
 
     @UiThread
-    fun onAccountItemClick(account: TwitterAccount) {
+    override fun onAccountItemClick(account: TwitterAccount) {
         viewModel.onAccountItemClick(account)
         binding.accountActionDrawer.controller.openDrawer()
     }

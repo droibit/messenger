@@ -40,7 +40,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
+class TimelineFragment :
+    Fragment(),
+    TweetListAdapter.OnItemClickListener,
+    MenuItem.OnMenuItemClickListener {
 
     val args: TimelineFragmentArgs by navArgs()
 
@@ -118,7 +121,7 @@ class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
     }
 
     private fun showTimeline(timeline: List<Tweet>) {
-        tweetListAdapter.setTweets(timeline)
+        tweetListAdapter.submitList(timeline)
     }
 
     private fun showGetTimelineError(error: GetTimelineErrorMessage) {
@@ -198,7 +201,7 @@ class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
         return true
     }
 
-    fun onTweetClick(tweet: Tweet) {
+    override fun onTweetClick(tweet: Tweet) {
         Timber.d("onTweetClick(${tweet.tweetUrl})")
         tweetActionViewModel.onTweetClick(tweet)
     }

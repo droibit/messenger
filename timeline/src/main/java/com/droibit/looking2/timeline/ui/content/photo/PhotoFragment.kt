@@ -15,13 +15,13 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PhotoFragment : Fragment() {
 
-    val args: PhotoFragmentArgs by navArgs()
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
     @Inject
     lateinit var photoListAdapter: PhotoListAdapter
 
-    @Inject
-    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
+    private val args: PhotoFragmentArgs by navArgs()
 
     private var _binding: FragmentPhotoBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -39,8 +39,10 @@ class PhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewPager.apply {
-            this.adapter = photoListAdapter
             this.orientation = ViewPager2.ORIENTATION_VERTICAL
+            this.adapter = photoListAdapter.also {
+                it.submitList(args.urls.toList())
+            }
         }
         binding.swipeDismissLayout.addCallback(swipeDismissCallback)
     }
