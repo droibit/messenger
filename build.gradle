@@ -38,6 +38,7 @@ buildscript { scriptHandler ->
         classpath deps.plugin.ossLicense
         classpath deps.plugin.navSafeArgs
         classpath deps.plugin.exhaustive
+        classpath deps.plugin.daggerHilt
     }
 }
 
