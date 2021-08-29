@@ -15,12 +15,12 @@ import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirecti
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toTwitterSignIn
 import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
 import com.droibit.looking2.core.model.account.TwitterAccount
+import com.droibit.looking2.core.ui.Activities.Account as AccountActivity
 import com.droibit.looking2.core.ui.view.OnRotaryScrollListener
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
-import com.droibit.looking2.core.ui.Activities.Account as AccountActivity
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import timber.log.Timber
