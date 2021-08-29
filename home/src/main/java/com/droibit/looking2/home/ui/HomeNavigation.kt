@@ -3,7 +3,7 @@ package com.droibit.looking2.home.ui
 import androidx.annotation.IdRes
 import com.droibit.looking2.home.R
 
-enum class HomeNavigation(@IdRes private val idRes: Int) {
+internal enum class HomeNavigation(@IdRes private val idRes: Int) {
     TWEET(R.id.action_tweet),
     TIMELINE(R.id.action_timeline),
     MENTIONS(R.id.action_mentions),

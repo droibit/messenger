@@ -25,20 +25,12 @@ class HomeFragment : Fragment() {
     lateinit var analytics: AnalyticsHelper
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
     lateinit var actionItemListAdapter: ActionItemListAdapter
 
-    private val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    private val viewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = requireNotNull(_binding)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
