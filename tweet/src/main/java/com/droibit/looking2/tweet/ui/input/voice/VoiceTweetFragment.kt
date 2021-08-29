@@ -13,8 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.CircularProgressLayout
 import com.droibit.looking2.core.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
@@ -24,21 +24,17 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
-import dagger.android.support.DaggerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
 @AndroidEntryPoint
 class VoiceTweetFragment :
-    DaggerFragment(),
+    Fragment(),
     CircularProgressLayout.OnTimerFinishedListener {
 
     @Inject
     lateinit var layoutString: TweetLayoutString
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @field:[Inject Named("waitDurationMillis")]
     @JvmField
@@ -50,7 +46,7 @@ class VoiceTweetFragment :
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
 
-    private val viewModel: TweetViewModel by viewModels { viewModelFactory }
+    private val viewModel: TweetViewModel by viewModels()
 
     private var _binding: FragmentTweetVoiceBinding? = null
     private val binding get() = requireNotNull(_binding)

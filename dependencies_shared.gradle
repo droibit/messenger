@@ -18,9 +18,6 @@ dependencies {
     implementation deps.playServices.wearable
 
     implementation deps.dagger.hilt.runtime
-    // TODO: Should delete below.
-    implementation deps.dagger.runtime
-    implementation deps.dagger.androidSupport
 
     implementation deps.chopstick.resource
     implementation deps.timber

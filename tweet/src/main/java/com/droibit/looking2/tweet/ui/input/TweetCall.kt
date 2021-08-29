@@ -11,12 +11,13 @@ import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
-import com.droibit.looking2.core.di.coreComponent
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.retryIfNeeded
 import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_REPLY_TWEET_ID
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_TWEET
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import timber.log.Timber
 
 sealed class TweetCall(private val workManager: WorkManager) {
@@ -77,18 +78,11 @@ sealed class TweetCall(private val workManager: WorkManager) {
 }
 
 @HiltWorker
-class TweetWorker(
-    context: Context,
-    workerParams: WorkerParameters,
+class TweetWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
     private val tweetRepository: TweetRepository
 ) : CoroutineWorker(context, workerParams) {
-
-    @Suppress("unused")
-    constructor(context: Context, workerParams: WorkerParameters) : this(
-        context,
-        workerParams,
-        context.coreComponent().tweetRepository
-    )
 
     override suspend fun doWork(): Result {
         val text = requireNotNull(inputData.getString(KEY_TWEET))
@@ -104,17 +98,11 @@ class TweetWorker(
 }
 
 @HiltWorker
-class ReplyWorker(
-    context: Context,
-    workerParams: WorkerParameters,
+class ReplyWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
     private val tweetRepository: TweetRepository
 ) : CoroutineWorker(context, workerParams) {
-    @Suppress("unused")
-    constructor(context: Context, workerParams: WorkerParameters) : this(
-        context,
-        workerParams,
-        context.coreComponent().tweetRepository
-    )
 
     override suspend fun doWork(): Result {
         val text = requireNotNull(inputData.getString(KEY_TWEET))

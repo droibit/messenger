@@ -4,46 +4,35 @@ import com.droibit.looking2.core.ui.Activities.Tweet.EXTRA_REPLY_TWEET
 import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.tweet.R
-import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
-import com.droibit.looking2.tweet.ui.input.TweetViewModelModule
-import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
-import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment
-import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetModule
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjectionModule
-import dagger.android.ContributesAndroidInjector
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.android.scopes.ActivityScoped
 import java.util.Optional
 import javax.inject.Named
 
-@InstallIn(ViewModelComponent::class)
-@Module(
-    includes = [
-        AndroidInjectionModule::class,
-        TweetHostModule.FragmentBindingModule::class,
-        TweetViewModelModule::class
-    ]
-)
+@InstallIn(ActivityRetainedComponent::class)
+@Module
 object TweetHostModule {
 
-    @ActivityScoped
+    @ActivityRetainedScoped
     @Provides
     fun provideReplyTweet(activity: TweetHostActivity): Optional<ReplyTweet> {
         val replyTweet = activity.intent.extras?.getSerializable(EXTRA_REPLY_TWEET) as? ReplyTweet
         return Optional.ofNullable(replyTweet)
     }
 
-    @ActivityScoped
+    @ActivityRetainedScoped
     @Named("hasReplyTweet")
     @Provides
     fun provideHasReplyTweet(replyTweet: Optional<ReplyTweet>): Boolean {
         return replyTweet.isPresent
     }
 
-    @ActivityScoped
+    @ActivityRetainedScoped
     @Named("title")
     @Provides
     fun provideTitle(
@@ -68,30 +57,20 @@ object TweetHostModule {
             activity.getString(R.string.tweet_text_tweet_hint)
     }
 
-    @ActivityScoped
+    @ActivityRetainedScoped
     @Named("replyUser")
     @Provides
     fun provideReplyUser(replyTweet: Optional<ReplyTweet>): String {
         return if (replyTweet.isPresent) "@${replyTweet.get().user.screenName}" else ""
     }
+}
 
+@InstallIn(ActivityComponent::class)
+@Module
+object TweetHostActivityModule {
     @ActivityScoped
     @Provides
     fun provideContentPadding(activity: TweetHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
-    }
-
-    @Deprecated("Migrate to dagger hilt.")
-    @Module
-    interface FragmentBindingModule {
-
-        @ContributesAndroidInjector
-        fun contributeTweetChooserInjector(): TweetChooserFragment
-
-        @ContributesAndroidInjector
-        fun contributeKeyboardTweetInjector(): KeyboardTweetFragment
-
-        @ContributesAndroidInjector(modules = [VoiceTweetModule::class])
-        fun contributeVoiceTweetInjector(): VoiceTweetFragment
     }
 }

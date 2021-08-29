@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.droibit.looking2.core.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
@@ -13,18 +13,14 @@ import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.tweet.databinding.FragmentTweetKeyboardBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
-import dagger.android.support.DaggerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class KeyboardTweetFragment : DaggerFragment() {
+class KeyboardTweetFragment : Fragment() {
 
     @Inject
     lateinit var layoutString: TweetLayoutString
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
@@ -32,7 +28,7 @@ class KeyboardTweetFragment : DaggerFragment() {
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
 
-    private val viewModel: TweetViewModel by viewModels { viewModelFactory }
+    private val viewModel: TweetViewModel by viewModels()
 
     private var _binding: FragmentTweetKeyboardBinding? = null
     private val binding get() = requireNotNull(_binding)
