@@ -52,7 +52,7 @@ class MyListsViewModel(
     @Inject
     constructor(userListRepository: UserListRepository) : this(
         userListRepository,
-        MutableLiveData(false),
-        MutableLiveData()
+        isLoadingSink = MutableLiveData(false),
+        getMyListsResultSink = MutableLiveData()
     )
 }

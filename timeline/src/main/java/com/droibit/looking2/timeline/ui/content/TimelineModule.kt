@@ -5,26 +5,24 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
-import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ActionMenu
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.multibindings.IntoMap
 import javax.inject.Named
 import javax.inject.Provider
 
 @InstallIn(FragmentComponent::class)
-@Module(includes = [TimelineModule.BindingModule::class])
-object TimelineModule {
+@Module
+object TimelineFragmentModule {
 
     @Named("fragment")
     @Provides
@@ -49,19 +47,6 @@ object TimelineModule {
     }
 
     @Provides
-    fun provideTimelineSource(fragment: TimelineFragment): TimelineSource {
-        return fragment.args.source
-    }
-
-    @Provides
-    fun provideGetTimelineCall(
-        repository: TimelineRepository,
-        timelineSource: TimelineSource
-    ): TimelineSource.GetCall {
-        return TimelineSource.GetCall(timelineSource, repository)
-    }
-
-    @Provides
     fun provideTweetActionMenu(fragment: TimelineFragment): Menu {
         val context = fragment.requireContext()
         return ActionMenu(context).apply {
@@ -73,19 +58,22 @@ object TimelineModule {
     fun provideRemoteActivityHelper(
         @ApplicationContext context: Context
     ) = RemoteActivityHelper(context)
+}
 
-    @Deprecated("Migrate to dagger hilt.")
-    @Module
-    interface BindingModule {
+@InstallIn(ViewModelComponent::class)
+@Module
+object TimelineViewModelModule {
+    @Provides
+    fun provideTimelineSource(handle: SavedStateHandle): TimelineSource {
+        val args = TimelineFragmentArgs.fromSavedStateHandle(handle)
+        return args.source
+    }
 
-        @Binds
-        @IntoMap
-        @ViewModelKey(TimelineViewModel::class)
-        fun bindTimelineViewModel(viewModel: TimelineViewModel): ViewModel
-
-        @Binds
-        @IntoMap
-        @ViewModelKey(TweetActionViewModel::class)
-        fun bindTweetActionViewModel(viewModel: TweetActionViewModel): ViewModel
+    @Provides
+    fun provideGetTimelineCall(
+        repository: TimelineRepository,
+        timelineSource: TimelineSource
+    ): TimelineSource.GetCall {
+        return TimelineSource.GetCall(timelineSource, repository)
     }
 }

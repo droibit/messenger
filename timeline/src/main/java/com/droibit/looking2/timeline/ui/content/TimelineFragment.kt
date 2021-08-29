@@ -8,8 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -33,7 +33,6 @@ import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
-import dagger.android.support.DaggerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.guava.await
@@ -41,15 +40,12 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
+class TimelineFragment : Fragment(), MenuItem.OnMenuItemClickListener {
 
     val args: TimelineFragmentArgs by navArgs()
 
     @Inject
     lateinit var tweetListAdapter: TweetListAdapter
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var tweetActionMenu: Menu
@@ -60,9 +56,9 @@ class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
     @Inject
     lateinit var remoteActivityHelper: RemoteActivityHelper
 
-    private val timelineViewModel: TimelineViewModel by viewModels { viewModelFactory }
+    private val timelineViewModel: TimelineViewModel by viewModels()
 
-    private val tweetActionViewModel: TweetActionViewModel by viewModels { viewModelFactory }
+    private val tweetActionViewModel: TweetActionViewModel by viewModels()
 
     private var _binding: FragmentTimelineBinding? = null
     private val binding get() = requireNotNull(_binding)

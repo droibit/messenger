@@ -34,11 +34,13 @@ class AccountHostActivity :
         val navInflater = navController.navInflater
         navController.graph = navInflater.inflate(R.navigation.nav_graph_account)
             .apply {
-                this.startDestination = if (needTwitterSignIn) {
-                    R.id.navigationTwitterSignIn
-                } else {
-                    R.id.navigationTwitterAccountList
-                }
+                this.setStartDestination(
+                    if (needTwitterSignIn) {
+                        R.id.navigationTwitterSignIn
+                    } else {
+                        R.id.navigationTwitterAccountList
+                    }
+                )
             }
         navController.addOnDestinationChangedListener(this)
     }

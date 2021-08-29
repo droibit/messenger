@@ -2,20 +2,16 @@ package com.droibit.looking2.timeline.ui.content.mylist
 
 import android.view.LayoutInflater
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
-import dagger.multibindings.IntoMap
 import javax.inject.Named
 import javax.inject.Provider
 
 @InstallIn(FragmentComponent::class)
-@Module(includes = [MyListsModule.BindingModule::class])
+@Module
 object MyListsModule {
 
     @Named("fragment")
@@ -36,15 +32,5 @@ object MyListsModule {
             lifecycleOwner,
             itemClickListener = fragment::onUserListClick
         )
-    }
-
-    @Deprecated("Migrate to dagger hilt.")
-    @Module
-    interface BindingModule {
-
-        @Binds
-        @IntoMap
-        @ViewModelKey(MyListsViewModel::class)
-        fun bindMyListsViewModel(ViewModel: MyListsViewModel): ViewModel
     }
 }
