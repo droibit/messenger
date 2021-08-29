@@ -1,7 +1,7 @@
 package com.droibit.looking2.tweet.ui.input
 
 import androidx.work.WorkManager
-import com.droibit.looking2.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.google.common.truth.Truth.assertThat
 import org.junit.Ignore
 import org.junit.Rule

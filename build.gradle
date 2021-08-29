@@ -1,4 +1,5 @@
-import com.android.build.gradle.BasePlugin
+import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.LibraryPlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 buildscript { scriptHandler ->
@@ -60,7 +61,7 @@ subprojects {
     apply plugin: "com.diffplug.spotless"
 
     plugins.whenPluginAdded { plugin ->
-        if (plugin instanceof BasePlugin) {
+        if (plugin instanceof AppPlugin || plugin instanceof LibraryPlugin) {
             android {
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_1_8

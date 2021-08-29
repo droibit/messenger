@@ -5,10 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: set up JDK
+    - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
     - name: Prepare build
       run: ./.buildscript/prepare_build.sh
     - name: Build with Gradle

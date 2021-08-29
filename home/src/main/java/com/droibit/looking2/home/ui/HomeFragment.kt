@@ -9,12 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droibit.looking2.core.R as coreR
+import com.droibit.looking2.core.ui.Activities
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
-import com.droibit.looking2.ui.Activities
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {

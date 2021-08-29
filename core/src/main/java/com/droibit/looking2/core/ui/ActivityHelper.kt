@@ -15,7 +15,7 @@
  */
 @file:JvmName("ActivityHelper")
 
-package com.droibit.looking2.ui
+package com.droibit.looking2.core.ui
 
 import android.content.Context
 import android.content.Intent
@@ -26,16 +26,16 @@ import androidx.wear.activity.ConfirmationActivity.EXTRA_MESSAGE
 import androidx.wear.activity.ConfirmationActivity.FAILURE_ANIMATION
 import androidx.wear.activity.ConfirmationActivity.OPEN_ON_PHONE_ANIMATION
 import androidx.wear.activity.ConfirmationActivity.SUCCESS_ANIMATION
-import com.droibit.looking2.BuildConfig
 import com.droibit.looking2.core.model.tweet.User
 import java.io.Serializable
 
 /**
  * Create an Intent with [Intent.ACTION_VIEW] to an [AddressableActivity].
  */
+@Deprecated("Discontinue Dynamic Feature Module.")
 fun intentTo(addressableActivity: AddressableActivity): Intent {
     return Intent().setClassName(
-        BuildConfig.APPLICATION_ID,
+        "com.droibit.looking2.debug",
         addressableActivity.className
     )
 }
@@ -43,6 +43,7 @@ fun intentTo(addressableActivity: AddressableActivity): Intent {
 /**
  * An [android.app.Activity] that can be addressed by an intent.
  */
+@Deprecated("Discontinue Dynamic Feature Module.")
 interface AddressableActivity {
     /**
      * The activity class name.
@@ -55,8 +56,10 @@ interface AddressableActivity {
  *
  * Can contain intent extra names or functions associated with the activity creation.
  */
+@Deprecated("Discontinue Dynamic Feature Module.")
 object Activities {
 
+    @Deprecated("Discontinue Dynamic Feature Module.")
     @Suppress("FunctionName")
     object Confirmation {
 
@@ -90,8 +93,9 @@ object Activities {
     /**
      * AccountActivity
      */
+    @Deprecated("Discontinue Dynamic Feature Module.")
     object Account : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.account.ui.AccountHostActivity"
+        override val className = "com.droibit.looking2.account.ui.AccountHostActivity"
 
         const val EXTRA_NEED_TWITTER_SIGN_IN = "EXTRA_NEED_TWITTER_SIGN_IN"
 
@@ -110,8 +114,9 @@ object Activities {
     /**
      * HomeActivity
      */
+    @Deprecated("Discontinue Dynamic Feature Module.")
     object Home : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.home.ui.HomeActivity"
+        override val className = "com.droibit.looking2.home.ui.HomeActivity"
 
         fun createIntent(): Intent = intentTo(Home)
     }
@@ -119,8 +124,9 @@ object Activities {
     /**
      * TimelineActivity
      */
+    @Deprecated("Discontinue Dynamic Feature Module.")
     object Timeline : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.timeline.ui.TimelineHostActivity"
+        override val className = "com.droibit.looking2.timeline.ui.TimelineHostActivity"
 
         const val EXTRA_TIMELINE_SOURCE = "EXTRA_TIMELINE_SOURCE"
 
@@ -147,8 +153,9 @@ object Activities {
     /**
      * SettingsActivity
      */
+    @Deprecated("Discontinue Dynamic Feature Module.")
     object Settings : AddressableActivity {
-        override val className = "${BuildConfig.PACKAGE_NAME}.settings.ui.SettingsHostActivity"
+        override val className = "com.droibit.looking2.settings.ui.SettingsHostActivity"
 
         fun createIntent(): Intent {
             return intentTo(Settings)
@@ -158,10 +165,11 @@ object Activities {
     /**
      * TweetActivity
      */
+    @Deprecated("Discontinue Dynamic Feature Module.")
     object Tweet : AddressableActivity {
         const val EXTRA_REPLY_TWEET = "EXTRA_REPLY_TWEET"
 
-        override val className: String = "${BuildConfig.PACKAGE_NAME}.tweet.ui.TweetHostActivity"
+        override val className: String = "com.droibit.looking2.tweet.ui.TweetHostActivity"
 
         fun createIntent(replyTweet: ReplyTweet? = null): Intent {
             return intentTo(Tweet).putExtra(EXTRA_REPLY_TWEET, replyTweet)

@@ -6,9 +6,9 @@ import com.droibit.looking2.account.ui.twitter.TwitterAccountListModule
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInModule
 import com.droibit.looking2.core.di.scope.FeatureScope
+import com.droibit.looking2.core.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
-import com.droibit.looking2.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

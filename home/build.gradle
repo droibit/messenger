@@ -1,7 +1,7 @@
-apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 apply from: rootProject.file('dependencies_shared.gradle')
 
@@ -17,17 +17,11 @@ android {
 
     buildFeatures {
         dataBinding true
-    }
-
-    buildTypes {
-        release {
-            proguardFiles 'proguard-rules-dynamic-features.pro'
-        }
+        buildConfig = false
     }
 }
 
 dependencies {
-    implementation project(':app')
     implementation project(':core')
 
     kapt deps.androidx.lifecycle.compiler
