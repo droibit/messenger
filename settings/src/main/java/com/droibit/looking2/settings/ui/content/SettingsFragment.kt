@@ -9,25 +9,31 @@ import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.settings.R
 import com.github.droibit.chopstick.preference.bindPreference
 import com.github.droibit.oss_licenses.ui.wearable.WearableOssLicensesActivity
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dagger.hilt.android.EntryPointAccessors
 
-@AndroidEntryPoint
 class SettingsFragment : PreferenceFragment() {
 
-    @Inject
     lateinit var appVersion: AppVersion
 
-    @Inject
     lateinit var analytics: AnalyticsHelper
 
     private val appVersionPref: Preference by bindPreference(R.string.pref_app_version_key)
 
     private val ossLicensesPref: Preference by bindPreference(R.string.pref_app_oss_key)
 
+    private fun inject() {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context,
+            SettingsFragmentEntryPoint::class.java
+        )
+        appVersion = entryPoint.appVersion
+        analytics = entryPoint.analytics
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
+
         addPreferencesFromResource(R.xml.settings)
     }
 
