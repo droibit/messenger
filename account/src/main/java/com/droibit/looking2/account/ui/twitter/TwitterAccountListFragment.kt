@@ -6,9 +6,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.droibit.looking2.account.databinding.FragmentTwitterAccountListBinding
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toConfirmTwitterSignOut
@@ -21,7 +21,6 @@ import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
-import dagger.android.support.DaggerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber
@@ -29,7 +28,7 @@ import timber.log.Timber
 private const val REQUEST_KEY_SIGN_OUT_CONFORMATION = "REQUEST_KEY_SIGN_OUT_CONFORMATION"
 
 @AndroidEntryPoint
-class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
+class TwitterAccountListFragment : Fragment(), MenuItem.OnMenuItemClickListener {
 
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
@@ -37,10 +36,7 @@ class TwitterAccountListFragment : DaggerFragment(), MenuItem.OnMenuItemClickLis
     @Inject
     lateinit var accountListAdapter: TwitterAccountListAdapter
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: TwitterAccountListViewModel by viewModels { viewModelFactory }
+    private val viewModel: TwitterAccountListViewModel by viewModels()
 
     private var _binding: FragmentTwitterAccountListBinding? = null
     private val binding get() = requireNotNull(_binding)

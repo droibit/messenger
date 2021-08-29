@@ -8,9 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.core.util.analytics.sendScreenView
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
@@ -18,11 +15,7 @@ import javax.inject.Named
 @AndroidEntryPoint
 class AccountHostActivity :
     FragmentActivity(R.layout.activity_account_host),
-    HasAndroidInjector,
     NavController.OnDestinationChangedListener {
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var analytics: AnalyticsHelper
@@ -31,10 +24,7 @@ class AccountHostActivity :
     @JvmField
     var needTwitterSignIn: Boolean = false
 
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
 
         // ref https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller

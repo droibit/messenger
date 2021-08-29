@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.SwipeDismissFrameLayout
 import app.cash.exhaustive.Exhaustive
@@ -22,7 +22,6 @@ import com.droibit.looking2.core.util.ext.addCallback
 import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.core.util.ext.showToast
-import dagger.android.support.DaggerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
@@ -31,10 +30,7 @@ import timber.log.Timber
 private const val REQUEST_KEY_SIGN_IN_CONFORMATION = "REQUEST_KEY_SIGN_IN_CONFORMATION"
 
 @AndroidEntryPoint
-class TwitterSignInFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class TwitterSignInFragment : Fragment() {
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
@@ -46,7 +42,7 @@ class TwitterSignInFragment : DaggerFragment() {
     private var _binding: FragmentTwitterSigninBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val signInViewModel: TwitterSignInViewModel by viewModels { viewModelFactory }
+    private val signInViewModel: TwitterSignInViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
