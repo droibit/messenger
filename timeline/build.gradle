@@ -1,4 +1,4 @@
-apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
@@ -17,17 +17,11 @@ android {
 
     buildFeatures {
         dataBinding true
-    }
-
-    buildTypes {
-        release {
-            proguardFiles 'proguard-rules-dynamic-features.pro'
-        }
+        buildConfig = false
     }
 }
 
 dependencies {
-    implementation project(':app')
     implementation project(':core')
 
     implementation deps.androidx.viewPager2

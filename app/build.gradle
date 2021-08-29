@@ -55,12 +55,16 @@ android {
         exclude 'META-INF/*.kotlin_module'
         exclude 'META-INF/*.version'
     }
-
-    dynamicFeatures = [":account", ":home", ":timeline", ":settings", ":tweet"]
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(":account")
+    implementation project(":core")
+    implementation project(":home")
+    implementation project(":settings")
+    implementation project(":timeline")
+    implementation project(":tweet")
+
     implementation deps.androidx.work.runtime
     implementation deps.firebase.crashlytics
 
