@@ -8,6 +8,7 @@ import com.droibit.looking2.account.databinding.ListItemAccountBinding
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 
+// TODO: Introduce ListAdapter.
 class TwitterAccountListAdapter(
     private val inflater: LayoutInflater,
     private val itemPadding: ShapeAwareContentPadding,

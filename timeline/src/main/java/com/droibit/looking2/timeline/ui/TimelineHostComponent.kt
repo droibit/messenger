@@ -2,11 +2,11 @@ package com.droibit.looking2.timeline.ui
 
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.coreComponent
-import com.droibit.looking2.core.di.scope.FeatureScope
 import dagger.BindsInstance
 import dagger.Component
+import dagger.hilt.android.scopes.ActivityScoped
 
-@FeatureScope
+@ActivityScoped
 @Component(
     dependencies = [CoreComponent::class],
     modules = [TimelineHostModule::class]

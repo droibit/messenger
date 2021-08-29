@@ -8,8 +8,10 @@ import com.droibit.looking2.R
 import com.droibit.looking2.core.ui.Activities.Account as AccountActivity
 import com.droibit.looking2.core.ui.Activities.Home as HomeActivity
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LaunchFragment : Fragment() {
 
     @Inject

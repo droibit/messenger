@@ -8,6 +8,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
+// TODO: Should Delete.
+@Deprecated("Migrate to dagger hilt.")
 @Module(includes = [LaunchModule.BindingModule::class])
 internal object LaunchModule {
 

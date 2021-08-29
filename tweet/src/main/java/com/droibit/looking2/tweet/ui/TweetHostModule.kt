@@ -1,12 +1,11 @@
 package com.droibit.looking2.tweet.ui
 
-import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.Activities.Tweet.EXTRA_REPLY_TWEET
 import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment
-import com.droibit.looking2.tweet.ui.input.ViewModelModule
+import com.droibit.looking2.tweet.ui.input.TweetViewModelModule
 import com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment
 import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment
 import com.droibit.looking2.tweet.ui.input.voice.VoiceTweetModule
@@ -14,33 +13,37 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import java.util.Optional
 import javax.inject.Named
 
+@InstallIn(ViewModelComponent::class)
 @Module(
     includes = [
         AndroidInjectionModule::class,
         TweetHostModule.FragmentBindingModule::class,
-        ViewModelModule::class
+        TweetViewModelModule::class
     ]
 )
 object TweetHostModule {
 
-    @FeatureScope
+    @ActivityScoped
     @Provides
     fun provideReplyTweet(activity: TweetHostActivity): Optional<ReplyTweet> {
         val replyTweet = activity.intent.extras?.getSerializable(EXTRA_REPLY_TWEET) as? ReplyTweet
         return Optional.ofNullable(replyTweet)
     }
 
-    @FeatureScope
+    @ActivityScoped
     @Named("hasReplyTweet")
     @Provides
     fun provideHasReplyTweet(replyTweet: Optional<ReplyTweet>): Boolean {
         return replyTweet.isPresent
     }
 
-    @FeatureScope
+    @ActivityScoped
     @Named("title")
     @Provides
     fun provideTitle(
@@ -65,19 +68,20 @@ object TweetHostModule {
             activity.getString(R.string.tweet_text_tweet_hint)
     }
 
-    @FeatureScope
+    @ActivityScoped
     @Named("replyUser")
     @Provides
     fun provideReplyUser(replyTweet: Optional<ReplyTweet>): String {
         return if (replyTweet.isPresent) "@${replyTweet.get().user.screenName}" else ""
     }
 
-    @FeatureScope
+    @ActivityScoped
     @Provides
     fun provideContentPadding(activity: TweetHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface FragmentBindingModule {
 

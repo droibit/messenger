@@ -11,9 +11,11 @@ import com.droibit.looking2.core.util.analytics.sendScreenView
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
+@AndroidEntryPoint
 class AccountHostActivity :
     FragmentActivity(R.layout.activity_account_host),
     HasAndroidInjector,

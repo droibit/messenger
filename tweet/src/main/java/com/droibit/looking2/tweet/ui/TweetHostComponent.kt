@@ -2,11 +2,12 @@ package com.droibit.looking2.tweet.ui
 
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.coreComponent
-import com.droibit.looking2.core.di.scope.FeatureScope
 import dagger.BindsInstance
 import dagger.Component
+import dagger.hilt.android.scopes.ActivityScoped
 
-@FeatureScope
+@Deprecated("Migrate to dagger hilt.")
+@ActivityScoped
 @Component(
     dependencies = [CoreComponent::class],
     modules = [TweetHostModule::class]
@@ -27,6 +28,7 @@ interface TweetComponent {
     fun inject(activity: TweetHostActivity)
 }
 
+@Deprecated("Migrate to dagger hilt.")
 fun TweetHostActivity.inject() {
     DaggerTweetComponent.builder()
         .activity(this)

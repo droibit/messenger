@@ -11,8 +11,10 @@ import com.droibit.looking2.tweet.R
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class TweetHostActivity :
     FragmentActivity(R.layout.activity_tweet_host),
     HasAndroidInjector,

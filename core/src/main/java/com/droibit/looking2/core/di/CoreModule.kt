@@ -14,18 +14,23 @@ import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module(includes = [CoreModule.BindingModule::class])
 object CoreModule {
 
-    @Named("appContext")
+    @ApplicationContext
     @Provides
+    @Deprecated("Migrate to dagger hilt.")
     fun provideContext(application: Application): Context = application
 
     @Provides
-    fun provideWorkManager(@Named("appContext") context: Context): WorkManager =
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager =
         WorkManager.getInstance(context)
 
     @Singleton
@@ -37,6 +42,7 @@ object CoreModule {
     }
 
     @Module
+    @InstallIn(SingletonComponent::class)
     interface BindingModule {
 
         @Binds
@@ -46,11 +52,12 @@ object CoreModule {
         fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     interface Provider {
 
         fun provideApplication(): Application
 
-        @Named("appContext")
+        @ApplicationContext
         fun provideApplicationContext(): Context
 
         @Named("debuggable")

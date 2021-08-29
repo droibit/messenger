@@ -1,7 +1,6 @@
 package com.droibit.looking2.timeline.ui
 
 import androidx.lifecycle.ViewModelProvider
-import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import com.droibit.looking2.timeline.ui.content.TimelineFragment
@@ -15,6 +14,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import dagger.hilt.android.scopes.ActivityScoped
 
 @Module(
     includes = [
@@ -25,12 +25,13 @@ import dagger.android.support.AndroidSupportInjectionModule
 )
 object TimelineHostModule {
 
-    @FeatureScope
+    @ActivityScoped
     @Provides
     fun provideContentPadding(activity: TimelineHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface FragmentBindingModule {
 
@@ -44,6 +45,7 @@ object TimelineHostModule {
         fun contributeMyListsFragmentInjector(): MyListsFragment
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface BindingModule {
 

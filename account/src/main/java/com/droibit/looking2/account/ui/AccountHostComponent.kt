@@ -2,15 +2,16 @@ package com.droibit.looking2.account.ui
 
 import com.droibit.looking2.core.di.CoreComponent
 import com.droibit.looking2.core.di.coreComponent
-import com.droibit.looking2.core.di.scope.FeatureScope
 import dagger.BindsInstance
 import dagger.Component
+import dagger.hilt.android.scopes.ActivityScoped
 
-@FeatureScope
+@ActivityScoped
 @Component(
     dependencies = [CoreComponent::class],
     modules = [AccountHostModule::class]
 )
+@Deprecated("Migrate to dagger hilt.")
 interface AccountComponent {
 
     @Component.Builder
@@ -27,6 +28,7 @@ interface AccountComponent {
     fun inject(activity: AccountHostActivity)
 }
 
+@Deprecated("Migrate to dagger hilt.")
 fun AccountHostActivity.inject() {
     DaggerAccountComponent.builder()
         .core(coreComponent())

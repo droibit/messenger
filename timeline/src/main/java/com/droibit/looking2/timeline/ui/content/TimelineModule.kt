@@ -15,10 +15,14 @@ import com.droibit.looking2.timeline.R
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import javax.inject.Named
 import javax.inject.Provider
 
+@InstallIn(FragmentComponent::class)
 @Module(includes = [TimelineModule.BindingModule::class])
 object TimelineModule {
 
@@ -67,9 +71,10 @@ object TimelineModule {
 
     @Provides
     fun provideRemoteActivityHelper(
-        @Named("appContext") context: Context
+        @ApplicationContext context: Context
     ) = RemoteActivityHelper(context)
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface BindingModule {
 

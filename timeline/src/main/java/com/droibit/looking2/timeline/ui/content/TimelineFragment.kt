@@ -34,11 +34,13 @@ import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Compa
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@AndroidEntryPoint
 class TimelineFragment : DaggerFragment(), MenuItem.OnMenuItemClickListener {
 
     val args: TimelineFragmentArgs by navArgs()

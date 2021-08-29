@@ -16,12 +16,14 @@ import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@HiltViewModel
 class TwitterAccountListViewModel(
     private val accountRepository: AccountRepository,
     private val accountConfig: AccountConfiguration,

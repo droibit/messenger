@@ -1,6 +1,7 @@
 package com.droibit.looking2.timeline.ui.content
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy.KEEP
@@ -53,6 +54,7 @@ class TweetActionCall @Inject constructor(
     }
 }
 
+@HiltWorker
 class RetweetActionWorker(
     context: Context,
     workerParams: WorkerParameters,
@@ -81,6 +83,7 @@ class RetweetActionWorker(
     }
 }
 
+@HiltWorker
 class LikeTweetActionWorker(
     context: Context,
     workerParams: WorkerParameters,

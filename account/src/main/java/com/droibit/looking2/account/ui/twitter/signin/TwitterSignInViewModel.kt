@@ -14,11 +14,13 @@ import com.droibit.looking2.core.ui.dialog.isPositive
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessEventLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class TwitterSignInViewModel(
     private val accountRepository: AccountRepository,
     private val isProcessingSink: MutableLiveData<Boolean>,

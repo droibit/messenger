@@ -1,6 +1,7 @@
 package com.droibit.looking2.tweet.ui.input
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
@@ -75,6 +76,7 @@ sealed class TweetCall(private val workManager: WorkManager) {
     }
 }
 
+@HiltWorker
 class TweetWorker(
     context: Context,
     workerParams: WorkerParameters,
@@ -101,6 +103,7 @@ class TweetWorker(
     }
 }
 
+@HiltWorker
 class ReplyWorker(
     context: Context,
     workerParams: WorkerParameters,

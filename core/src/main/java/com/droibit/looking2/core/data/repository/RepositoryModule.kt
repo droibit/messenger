@@ -7,7 +7,10 @@ import com.droibit.looking2.core.data.repository.userlist.UserListRepository
 import com.droibit.looking2.core.data.repository.usersettings.UserSettingsRepository
 import com.droibit.looking2.core.data.source.SourceModule
 import dagger.Module
+import dagger.hilt.migration.DisableInstallInCheck
 
+// TODO: Should delete.
+@DisableInstallInCheck
 @Module(
     includes = [
         SourceModule::class
@@ -15,6 +18,7 @@ import dagger.Module
 )
 object RepositoryModule {
 
+    @Deprecated("Migrate to dagger hilt.")
     interface Provider {
 
         val accountRepository: AccountRepository

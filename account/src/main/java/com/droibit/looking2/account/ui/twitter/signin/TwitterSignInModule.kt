@@ -6,6 +6,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
+// TODO: Should delete.
+@Deprecated("Migrate to dagger hilt.")
 @Module(includes = [TwitterSignInModule.BindingModule::class])
 object TwitterSignInModule {
 

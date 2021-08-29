@@ -17,12 +17,14 @@ import com.droibit.looking2.timeline.ui.content.TimelineSource
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import timber.log.Timber
 
 private const val INVALID_SOURCE_ID = Int.MIN_VALUE
 
+@AndroidEntryPoint
 class TimelineHostActivity :
     FragmentActivity(R.layout.activity_timeline_host),
     HasAndroidInjector,

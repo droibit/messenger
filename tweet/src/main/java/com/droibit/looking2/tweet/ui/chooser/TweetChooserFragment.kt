@@ -11,9 +11,11 @@ import com.droibit.looking2.tweet.databinding.FragmentTweetChooserBinding
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toKeyboardTweet
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toVoiceTweet
 import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
+@AndroidEntryPoint
 class TweetChooserFragment : DaggerFragment() {
 
     @Inject

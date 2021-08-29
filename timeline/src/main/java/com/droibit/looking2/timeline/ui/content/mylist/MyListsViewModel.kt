@@ -11,12 +11,14 @@ import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import kotlinx.coroutines.launch
 
 private typealias UserLists = List<UserList>
 
+@HiltViewModel
 class MyListsViewModel(
     private val userListRepository: UserListRepository,
     private val isLoadingSink: MutableLiveData<Boolean>,

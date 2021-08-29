@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.requireValue
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber
 
+@HiltViewModel
 class TweetViewModel(
     val tweetText: MutableLiveData<String>,
     private val tweetCall: TweetCall,

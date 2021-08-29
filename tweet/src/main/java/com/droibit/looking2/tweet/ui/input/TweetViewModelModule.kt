@@ -9,11 +9,14 @@ import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.multibindings.IntoMap
 import java.util.Optional
 
-@Module(includes = [ViewModelModule.BindingModule::class])
-object ViewModelModule {
+@InstallIn(ViewModelComponent::class)
+@Module(includes = [TweetViewModelModule.BindingModule::class])
+object TweetViewModelModule {
 
     @Provides
     fun provideTweetCall(
@@ -23,6 +26,7 @@ object ViewModelModule {
         return TweetCall(workManager, replyTweet.orElse(null))
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface BindingModule {
 

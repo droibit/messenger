@@ -26,6 +26,7 @@ dependencies {
 
     implementation deps.androidx.viewPager2
     implementation deps.androidx.work.runtime
+    implementation deps.androidx.hilt.work
     implementation deps.androidx.wear.remoteInteractions
     kapt deps.androidx.lifecycle.compiler
 

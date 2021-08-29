@@ -9,8 +9,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.timeline.databinding.FragmentPhotoBinding
 import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class PhotoFragment : DaggerFragment() {
 
     val args: PhotoFragmentArgs by navArgs()

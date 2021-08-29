@@ -17,6 +17,7 @@ import javax.inject.Singleton
         RepositoryModule::class
     ]
 )
+@Deprecated("Migrate to dagger hilt.")
 interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
 
     @Component.Factory
@@ -30,9 +31,11 @@ interface CoreComponent : CoreModule.Provider, RepositoryModule.Provider {
 }
 
 // TOOD: Delete completely migrate to feature module
+@Deprecated("Migrate to dagger hilt.")
 interface CoreComponentProvider {
     fun coreComponent(): CoreComponent
 }
 
+@Deprecated("Migrate to dagger hilt.")
 @UiThread
 fun Context.coreComponent() = (this.applicationContext as CoreComponentProvider).coreComponent()

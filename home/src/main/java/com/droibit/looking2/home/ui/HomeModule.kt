@@ -9,8 +9,11 @@ import com.droibit.looking2.home.R
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 import dagger.multibindings.IntoMap
 
+@InstallIn(FragmentComponent::class)
 @Module(includes = [HomeModule.BindingModule::class])
 object HomeModule {
 
@@ -23,6 +26,7 @@ object HomeModule {
         )
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface BindingModule {
 

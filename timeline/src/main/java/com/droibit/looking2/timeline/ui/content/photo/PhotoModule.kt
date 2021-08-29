@@ -4,9 +4,12 @@ import android.view.LayoutInflater
 import androidx.lifecycle.LifecycleOwner
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 import javax.inject.Named
 import javax.inject.Provider
 
+@InstallIn(FragmentComponent::class)
 @Module
 object PhotoModule {
 

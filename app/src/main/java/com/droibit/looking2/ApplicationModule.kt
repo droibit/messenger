@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.work.Configuration as WorkConfiguration
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import timber.log.Timber
 
+@InstallIn(SingletonComponent::class)
 @Module
 object ApplicationModule {
 

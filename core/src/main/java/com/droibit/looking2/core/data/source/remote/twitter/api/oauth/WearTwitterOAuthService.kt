@@ -17,14 +17,14 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.internal.TwitterApi
 import com.twitter.sdk.android.core.internal.oauth.OAuth1aService
 import com.twitter.sdk.android.core.internal.oauth.OAuthResponse
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 class WearTwitterOAuthService @Inject constructor(
-    @Named("appContext") private val context: Context,
+    @ApplicationContext private val context: Context,
     twitterCore: TwitterCore,
     api: TwitterApi,
 ) : OAuth1aService(twitterCore, api) {

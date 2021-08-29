@@ -5,7 +5,6 @@ import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragment
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListModule
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragment
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInModule
-import com.droibit.looking2.core.di.scope.FeatureScope
 import com.droibit.looking2.core.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.core.util.lifecycle.DaggerViewModelFactory
@@ -14,8 +13,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Named
 
+@InstallIn(ActivityComponent::class)
 @Module(
     includes = [
         AndroidSupportInjectionModule::class,
@@ -32,12 +35,13 @@ object AccountHostModule {
         return intent.getBooleanExtra(EXTRA_NEED_TWITTER_SIGN_IN, false)
     }
 
-    @FeatureScope
+    @ActivityScoped
     @Provides
     fun provideContentPadding(activity: AccountHostActivity): ShapeAwareContentPadding {
         return ShapeAwareContentPadding(activity)
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface FragmentBindingModule {
 
@@ -48,6 +52,7 @@ object AccountHostModule {
         fun contributeAccountListFragmentInjector(): TwitterAccountListFragment
     }
 
+    @Deprecated("Migrate to dagger hilt.")
     @Module
     interface BindingModule {
 

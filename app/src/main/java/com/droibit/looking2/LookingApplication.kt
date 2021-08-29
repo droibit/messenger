@@ -59,6 +59,7 @@ class LookingApplication : Application(), CoreComponentProvider {
     }
 
     companion object {
+        @Deprecated("Migrate to dagger hilt.")
         @UiThread
         fun coreComponent(context: Context) =
             (context.applicationContext as LookingApplication).coreComponent

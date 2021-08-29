@@ -42,6 +42,7 @@ dependencies {
     implementation deps.playServices.base
     implementation deps.firebase.analytics
 
+    implementation deps.dagger.hilt.runtime
     implementation deps.dagger.runtime
     kapt deps.dagger.compiler
 

@@ -9,8 +9,10 @@ import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.settings.R
 import com.github.droibit.chopstick.preference.bindPreference
 import com.github.droibit.oss_licenses.ui.wearable.WearableOssLicensesActivity
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsFragment : PreferenceFragment() {
 
     @Inject
