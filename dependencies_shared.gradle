@@ -17,8 +17,7 @@ dependencies {
     implementation deps.playServices.base
     implementation deps.playServices.wearable
 
-    implementation deps.dagger.runtime
-    implementation deps.dagger.androidSupport
+    implementation deps.dagger.hilt.runtime
 
     implementation deps.chopstick.resource
     implementation deps.timber

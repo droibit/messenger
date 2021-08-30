@@ -3,8 +3,9 @@ package com.droibit.looking2.timeline.ui.content.photo
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.ImageRequest
@@ -15,14 +16,11 @@ import com.droibit.looking2.timeline.databinding.ListItemPhotoBinding
 import javax.inject.Provider
 
 class PhotoListAdapter(
-    private val inflater: LayoutInflater,
     private val lifecycleOwner: Provider<LifecycleOwner>,
-    private val photoUrls: List<String>
-) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>(), LifecycleObserver {
-
-    override fun getItemCount(): Int = photoUrls.size
+) : ListAdapter<String, PhotoListAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
             lifecycleOwner.get(),
             binding = ListItemPhotoBinding.inflate(inflater, parent, false)
@@ -30,7 +28,7 @@ class PhotoListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.update(photoUrls[position])
+        holder.update(url = getItem(position))
     }
 
     class ViewHolder(
@@ -58,6 +56,18 @@ class PhotoListAdapter(
 
         override fun onSuccess(request: ImageRequest, metadata: ImageResult.Metadata) {
             binding.loadingInProgress = false
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

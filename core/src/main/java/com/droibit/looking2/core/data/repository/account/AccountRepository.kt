@@ -47,7 +47,6 @@ class AccountRepository(
         dispatchTwitterAccountsUpdated()
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun twitterAccounts(): Flow<List<TwitterAccount>> {
         return twitterAccountsSink
     }

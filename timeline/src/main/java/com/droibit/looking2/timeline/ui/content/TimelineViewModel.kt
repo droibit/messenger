@@ -10,12 +10,14 @@ import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.ext.toErrorEventLiveData
 import com.droibit.looking2.core.util.ext.toSuccessLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import kotlinx.coroutines.launch
 
 private typealias Timeline = List<Tweet>
 
+@HiltViewModel
 class TimelineViewModel(
     private val getTimelineCall: TimelineSource.GetCall,
     private val isLoadingSink: MutableLiveData<Boolean>,

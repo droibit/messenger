@@ -11,6 +11,9 @@ import com.twitter.sdk.android.core.TwitterSession
 import com.twitter.sdk.android.core.internal.TwitterApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -18,6 +21,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 
+@InstallIn(SingletonComponent::class)
 @Module
 object TwitterApiModule {
 
@@ -27,7 +31,7 @@ object TwitterApiModule {
 
     @Provides
     fun provideTwitterConfig(
-        @Named("appContext") context: Context,
+        @ApplicationContext context: Context,
         logger: Logger,
         @Named("debuggable") debug: Boolean
     ): TwitterConfig =

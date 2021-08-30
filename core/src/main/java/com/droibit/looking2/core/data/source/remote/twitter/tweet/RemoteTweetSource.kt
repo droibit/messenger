@@ -8,11 +8,13 @@ import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import javax.inject.Inject
+import javax.inject.Singleton
 import timber.log.Timber
 
 private const val ERROR_CODE_ALREADY_FAVORITE = 139
 private const val ERROR_CODE_ALREADY_RETWEET = 327
 
+@Singleton
 class RemoteTweetSource @Inject constructor(
     private val twitterCore: TwitterCore
 ) : AppTwitterApiClient.Factory by AppTwitterApiClientFactoryDelegate(twitterCore) {

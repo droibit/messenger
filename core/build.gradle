@@ -1,6 +1,9 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "dagger.hilt.android.plugin"
+}
 
 android {
     compileSdk buildConfig.compileSdk
@@ -42,8 +45,8 @@ dependencies {
     implementation deps.playServices.base
     implementation deps.firebase.analytics
 
-    implementation deps.dagger.runtime
-    kapt deps.dagger.compiler
+    implementation deps.dagger.hilt.runtime
+    kapt deps.dagger.hilt.compiler
 
     api(deps.twitter.kit) {
         transitive = true

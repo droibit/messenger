@@ -1,9 +1,10 @@
 package com.droibit.looking2.core.data.source.remote
 
-import com.droibit.looking2.core.data.source.remote.twitter.api.TwitterApiModule
 import com.droibit.looking2.core.util.Stetho
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import java.util.Optional
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -13,12 +14,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 
-@Module(
-    includes = [
-        TwitterApiModule::class,
-        WearOAuthModule::class
-    ]
-)
+@InstallIn(SingletonComponent::class)
+@Module
 object RemoteSourceModule {
 
     @Named("httpLogging")

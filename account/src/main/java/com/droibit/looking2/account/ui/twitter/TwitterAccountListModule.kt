@@ -1,35 +1,26 @@
 package com.droibit.looking2.account.ui.twitter
 
-import android.view.LayoutInflater
-import androidx.lifecycle.ViewModel
-import com.droibit.looking2.core.di.key.ViewModelKey
+import androidx.fragment.app.Fragment
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.multibindings.IntoMap
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 
-@Module(includes = [TwitterAccountListModule.BindingModule::class])
+@InstallIn(FragmentComponent::class)
+@Module
 object TwitterAccountListModule {
 
     @Provides
+    fun provideOnTwitterAccountItemClickListener(fragment: Fragment) =
+        fragment as TwitterAccountListAdapter.OnItemClickListener
+
+    @Provides
     fun provideAccountListAdapter(
-        fragment: TwitterAccountListFragment,
-        itemPadding: ShapeAwareContentPadding
-    ): TwitterAccountListAdapter {
-        return TwitterAccountListAdapter(
-            LayoutInflater.from(fragment.requireContext()),
-            itemPadding,
-            fragment::onAccountItemClick
-        )
-    }
-
-    @Module
-    interface BindingModule {
-
-        @Binds
-        @IntoMap
-        @ViewModelKey(TwitterAccountListViewModel::class)
-        fun bindTwitterAccountListViewModel(viewModel: TwitterAccountListViewModel): ViewModel
-    }
+        itemPadding: ShapeAwareContentPadding,
+        itemClickListener: TwitterAccountListAdapter.OnItemClickListener
+    ) = TwitterAccountListAdapter(
+        itemPadding,
+        itemClickListener
+    )
 }

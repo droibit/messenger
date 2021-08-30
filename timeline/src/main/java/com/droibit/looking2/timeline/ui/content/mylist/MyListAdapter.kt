@@ -3,6 +3,8 @@ package com.droibit.looking2.timeline.ui.content.mylist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
@@ -13,23 +15,19 @@ import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
 import javax.inject.Provider
 
 class MyListAdapter(
-    private val inflater: LayoutInflater,
     private val itemPadding: ShapeAwareContentPadding,
     private val lifecycleOwner: Provider<LifecycleOwner>,
-    private val itemClickListener: (UserList) -> Unit
-) : RecyclerView.Adapter<MyListAdapter.ViewHolder>() {
-
-    private val myLists = mutableListOf<UserList>()
-
-    override fun getItemCount(): Int = myLists.size
+    private val itemClickListener: OnItemClickListener
+) : ListAdapter<UserList, MyListAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
             lifecycleOwner.get(),
             binding = ListItemMyListBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnClickListener {
-                itemClickListener.invoke(myLists[bindingAdapterPosition])
+                itemClickListener.onUserListClick(getItem(bindingAdapterPosition))
             }
         }
     }
@@ -41,13 +39,7 @@ class MyListAdapter(
             itemPadding.rightPx,
             if (position == itemCount - 1) itemPadding.lastItemBottomPx else 0
         )
-        holder.bind(myLists[position])
-    }
-
-    fun setMyLists(myLists: List<UserList>) {
-        this.myLists.clear()
-        this.myLists.addAll(myLists)
-        this.notifyDataSetChanged()
+        holder.bind(getItem(position))
     }
 
     class ViewHolder(
@@ -64,6 +56,22 @@ class MyListAdapter(
                 lifecycle(lifecycleOwner)
             }
             binding.userList = myList
+        }
+    }
+
+    fun interface OnItemClickListener {
+        fun onUserListClick(myList: UserList)
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<UserList>() {
+            override fun areItemsTheSame(oldItem: UserList, newItem: UserList): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: UserList, newItem: UserList): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

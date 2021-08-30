@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
@@ -15,19 +15,17 @@ import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber
 
-class MyListsFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+@AndroidEntryPoint
+class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
 
     @Inject
     lateinit var myListAdapter: MyListAdapter
 
-    private val viewModel: MyListsViewModel by viewModels { viewModelFactory }
+    private val viewModel: MyListsViewModel by viewModels()
 
     private var _binding: FragmentMyListsBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -66,7 +64,7 @@ class MyListsFragment : DaggerFragment() {
     }
 
     private fun showMyLists(myLists: List<UserList>) {
-        myListAdapter.setMyLists(myLists)
+        myListAdapter.submitList(myLists)
     }
 
     private fun showGetMyListsError(error: GetMyListsErrorMessage) {
@@ -82,7 +80,7 @@ class MyListsFragment : DaggerFragment() {
         super.onDestroyView()
     }
 
-    fun onUserListClick(myList: UserList) {
+    override fun onUserListClick(myList: UserList) {
         Timber.d("onUserListClick(${myList.name})")
         findNavController().navigateSafely(
             toMyListTimeline(

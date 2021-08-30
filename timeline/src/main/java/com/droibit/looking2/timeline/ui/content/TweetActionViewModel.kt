@@ -10,9 +10,11 @@ import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
 import com.droibit.looking2.core.util.ext.requireValue
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber
 
+@HiltViewModel
 class TweetActionViewModel(
     private val tweetActionCall: TweetActionCall,
     private val phoneDeviceTypeChecker: PhoneDeviceTypeChecker,

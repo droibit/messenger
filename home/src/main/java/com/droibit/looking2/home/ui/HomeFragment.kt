@@ -6,37 +6,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droibit.looking2.core.R as coreR
 import com.droibit.looking2.core.ui.Activities
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
 import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
+import com.droibit.looking2.core.ui.widget.OnActionItemClickListener
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Named
 
-class HomeFragment : Fragment() {
+@AndroidEntryPoint
+class HomeFragment : Fragment(), OnActionItemClickListener {
 
     @Inject
     lateinit var analytics: AnalyticsHelper
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
+    @Named("home")
     @Inject
     lateinit var actionItemListAdapter: ActionItemListAdapter
 
-    private val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    private val viewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = requireNotNull(_binding)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +73,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun onActionItemClick(item: ActionItem) {
+    override fun onActionItemClick(item: ActionItem) {
         val intent = when (HomeNavigation(item.id)) {
             HomeNavigation.TWEET -> Activities.Tweet.createIntent()
             HomeNavigation.TIMELINE -> Activities.Timeline.createHomeIntent()

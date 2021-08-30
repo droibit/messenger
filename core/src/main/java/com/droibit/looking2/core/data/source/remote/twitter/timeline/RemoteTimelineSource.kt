@@ -9,8 +9,10 @@ import com.twitter.sdk.android.core.TwitterCore
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import javax.inject.Inject
+import javax.inject.Singleton
 import timber.log.Timber
 
+@Singleton
 class RemoteTimelineSource @Inject constructor(
     twitterCore: TwitterCore,
     private val timelineMapper: TimelineMapper

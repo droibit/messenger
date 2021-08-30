@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
@@ -15,32 +17,28 @@ import com.droibit.looking2.timeline.databinding.ListItemTweetBinding
 import javax.inject.Provider
 
 class TweetListAdapter(
-    private val inflater: LayoutInflater,
     private val itemPadding: ShapeAwareContentPadding,
     private val lifecycleOwner: Provider<LifecycleOwner>,
     private val tweetTextProcessor: TweetTextProcessor,
-    private val itemClickListener: (Tweet) -> Unit
-) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
+    private val itemClickListener: OnItemClickListener
+) : ListAdapter<Tweet, TweetListAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    private val tweets = mutableListOf<Tweet>()
-
-    operator fun get(index: Int) = tweets[index]
+    operator fun get(index: Int): Tweet = getItem(index)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
             lifecycleOwner.get(),
             binding = ListItemTweetBinding.inflate(inflater, parent, false)
         ).apply {
             itemView.setOnLongClickListener {
-                itemClickListener.invoke(tweets[bindingAdapterPosition]); true
+                itemClickListener.onTweetClick(getItem(bindingAdapterPosition)); true
             }
         }
     }
-
-    override fun getItemCount() = tweets.size
 
     override fun onBindViewHolder(
         holder: ViewHolder,
@@ -52,13 +50,7 @@ class TweetListAdapter(
             itemPadding.rightPx,
             if (position == itemCount - 1) itemPadding.lastItemBottomPx else 0
         )
-        holder.bind(tweetTextProcessor, tweets[position])
-    }
-
-    fun setTweets(tweets: List<Tweet>) {
-        this.tweets.clear()
-        this.tweets.addAll(tweets)
-        this.notifyDataSetChanged()
+        holder.bind(tweetTextProcessor, srcTweet = getItem(position))
     }
 
     class ViewHolder(
@@ -106,6 +98,22 @@ class TweetListAdapter(
                 System.currentTimeMillis(),
                 DateUtils.SECOND_IN_MILLIS
             )
+        }
+    }
+
+    fun interface OnItemClickListener {
+        fun onTweetClick(tweet: Tweet)
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Tweet>() {
+            override fun areItemsTheSame(oldItem: Tweet, newItem: Tweet): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

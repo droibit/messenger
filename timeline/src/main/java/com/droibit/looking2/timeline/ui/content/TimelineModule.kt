@@ -1,64 +1,47 @@
 package com.droibit.looking2.timeline.ui.content
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.SavedStateHandle
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
-import com.droibit.looking2.core.di.key.ViewModelKey
 import com.droibit.looking2.core.ui.view.ActionMenu
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.multibindings.IntoMap
-import javax.inject.Named
-import javax.inject.Provider
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 
-@Module(includes = [TimelineModule.BindingModule::class])
-object TimelineModule {
+@InstallIn(FragmentComponent::class)
+@Module
+object TimelineFragmentModule {
 
-    @Named("fragment")
     @Provides
-    fun provideFragmentLifecycleProvider(fragment: TimelineFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
-    }
+    fun provideOnTweetItemClickListener(fragment: Fragment) =
+        fragment as TweetListAdapter.OnItemClickListener
 
     @Provides
     fun provideTweetListAdapter(
-        fragment: TimelineFragment,
+        fragment: Fragment,
         contentPadding: ShapeAwareContentPadding,
-        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>,
-        tweetTextProcessor: TweetTextProcessor
+        tweetTextProcessor: TweetTextProcessor,
+        onItemClickListener: TweetListAdapter.OnItemClickListener
     ): TweetListAdapter {
         return TweetListAdapter(
-            LayoutInflater.from(fragment.requireContext()),
             contentPadding,
-            lifecycleOwner,
+            { fragment.viewLifecycleOwner },
             tweetTextProcessor,
-            fragment::onTweetClick
+            onItemClickListener
         )
     }
 
     @Provides
-    fun provideTimelineSource(fragment: TimelineFragment): TimelineSource {
-        return fragment.args.source
-    }
-
-    @Provides
-    fun provideGetTimelineCall(
-        repository: TimelineRepository,
-        timelineSource: TimelineSource
-    ): TimelineSource.GetCall {
-        return TimelineSource.GetCall(timelineSource, repository)
-    }
-
-    @Provides
-    fun provideTweetActionMenu(fragment: TimelineFragment): Menu {
+    fun provideTweetActionMenu(fragment: Fragment): Menu {
         val context = fragment.requireContext()
         return ActionMenu(context).apply {
             MenuInflater(context).inflate(R.menu.tweet_action, this)
@@ -67,20 +50,24 @@ object TimelineModule {
 
     @Provides
     fun provideRemoteActivityHelper(
-        @Named("appContext") context: Context
+        @ApplicationContext context: Context
     ) = RemoteActivityHelper(context)
+}
 
-    @Module
-    interface BindingModule {
+@InstallIn(ViewModelComponent::class)
+@Module
+object TimelineViewModelModule {
+    @Provides
+    fun provideTimelineSource(handle: SavedStateHandle): TimelineSource {
+        val args = TimelineFragmentArgs.fromSavedStateHandle(handle)
+        return args.source
+    }
 
-        @Binds
-        @IntoMap
-        @ViewModelKey(TimelineViewModel::class)
-        fun bindTimelineViewModel(viewModel: TimelineViewModel): ViewModel
-
-        @Binds
-        @IntoMap
-        @ViewModelKey(TweetActionViewModel::class)
-        fun bindTweetActionViewModel(viewModel: TweetActionViewModel): ViewModel
+    @Provides
+    fun provideGetTimelineCall(
+        repository: TimelineRepository,
+        timelineSource: TimelineSource
+    ): TimelineSource.GetCall {
+        return TimelineSource.GetCall(timelineSource, repository)
     }
 }

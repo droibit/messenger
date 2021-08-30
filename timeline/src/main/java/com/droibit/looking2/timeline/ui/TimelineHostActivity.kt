@@ -14,22 +14,17 @@ import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentArgs
 import com.droibit.looking2.timeline.ui.content.TimelineSource
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 import timber.log.Timber
 
 private const val INVALID_SOURCE_ID = Int.MIN_VALUE
 
+@AndroidEntryPoint
 class TimelineHostActivity :
     FragmentActivity(R.layout.activity_timeline_host),
-    HasAndroidInjector,
     NavController.OnDestinationChangedListener {
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var analytics: AnalyticsHelper
@@ -42,10 +37,7 @@ class TimelineHostActivity :
         DestinationSource(sourceId)
     }
 
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
         Timber.d("Start dest: $destinationSource")
 
@@ -55,10 +47,12 @@ class TimelineHostActivity :
         val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_timeline)
             .apply {
-                this.startDestination = if (destinationSource == DestinationSource.LISTS)
-                    R.id.myListsFragment
-                else
-                    R.id.timelineFragment
+                this.setStartDestination(
+                    if (destinationSource == DestinationSource.LISTS)
+                        R.id.myListsFragment
+                    else
+                        R.id.timelineFragment
+                )
             }
         navController.setGraph(navGraph, destinationSource.toArgs())
         navController.addOnDestinationChangedListener(this)

@@ -5,8 +5,14 @@ import android.content.res.Resources
 import android.util.Size
 import androidx.annotation.FractionRes
 import com.droibit.looking2.core.R
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.FragmentScoped
+import javax.inject.Inject
 
-class ShapeAwareContentPadding(context: Context) {
+@FragmentScoped
+class ShapeAwareContentPadding @Inject constructor(
+    @ApplicationContext context: Context
+) {
 
     val firstItemTopPx: Int
     val lastItemBottomPx: Int

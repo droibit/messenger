@@ -1,7 +1,10 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "androidx.navigation.safeargs.kotlin"
+    id "dagger.hilt.android.plugin"
+}
 
 apply from: rootProject.file('dependencies_shared.gradle')
 
@@ -27,10 +30,9 @@ dependencies {
     implementation(deps.chopstick.preference) {
         exclude group: 'androidx.preference', module: 'preference'
     }
-
-    kapt deps.dagger.compiler
-
     implementation deps.ossLicenseUi
+
+    kapt deps.dagger.hilt.compiler
 }
 
 kapt {

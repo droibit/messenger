@@ -3,25 +3,22 @@ package com.droibit.looking2.ui.launch
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.droibit.looking2.R
 import com.droibit.looking2.core.ui.Activities.Account as AccountActivity
 import com.droibit.looking2.core.ui.Activities.Home as HomeActivity
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LaunchFragment : Fragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var analytics: AnalyticsHelper
 
-    private val viewModel: LaunchViewModel by viewModels { viewModelFactory }
+    private val viewModel: LaunchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
 
         viewModel.launchDestination.observe(this) {

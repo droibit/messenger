@@ -1,46 +1,28 @@
 package com.droibit.looking2.timeline.ui.content.mylist
 
-import android.view.LayoutInflater
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import com.droibit.looking2.core.di.key.ViewModelKey
+import androidx.fragment.app.Fragment
 import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.multibindings.IntoMap
-import javax.inject.Named
-import javax.inject.Provider
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 
-@Module(includes = [MyListsModule.BindingModule::class])
+@InstallIn(FragmentComponent::class)
+@Module
 object MyListsModule {
 
-    @Named("fragment")
     @Provides
-    fun provideLifecycleOwner(fragment: MyListsFragment): LifecycleOwner {
-        return fragment.viewLifecycleOwner
-    }
+    fun provideUserListItemClickListener(fragment: Fragment) =
+        fragment as MyListAdapter.OnItemClickListener
 
     @Provides
     fun provideMyListAdapter(
-        fragment: MyListsFragment,
         contentPadding: ShapeAwareContentPadding,
-        @Named("fragment") lifecycleOwner: Provider<LifecycleOwner>
-    ): MyListAdapter {
-        return MyListAdapter(
-            LayoutInflater.from(fragment.requireContext()),
-            contentPadding,
-            lifecycleOwner,
-            itemClickListener = fragment::onUserListClick
-        )
-    }
-
-    @Module
-    interface BindingModule {
-
-        @Binds
-        @IntoMap
-        @ViewModelKey(MyListsViewModel::class)
-        fun bindMyListsViewModel(ViewModel: MyListsViewModel): ViewModel
-    }
+        fragment: Fragment,
+        itemCLickListener: MyListAdapter.OnItemClickListener
+    ) = MyListAdapter(
+        contentPadding,
+        lifecycleOwner = { fragment.viewLifecycleOwner },
+        itemClickListener = itemCLickListener
+    )
 }
