@@ -1,4 +1,4 @@
-package com.droibit.looking2.ui.launch
+package com.droibit.looking2.launch.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.droibit.looking2.core.data.repository.account.AccountRepository
@@ -31,12 +31,12 @@ class LaunchViewModelTest {
     @Mock
     private lateinit var accountRepository: AccountRepository
 
-    private lateinit var viewModel: LaunchViewModel
+    private lateinit var viewModel: com.droibit.looking2.launch.ui.LaunchViewModel
 
     @Before
     fun setUp() {
         Dispatchers.setMain(TestCoroutineDispatcher())
-        viewModel = LaunchViewModel(accountRepository)
+        viewModel = com.droibit.looking2.launch.ui.LaunchViewModel(accountRepository)
     }
 
     @After
@@ -54,7 +54,7 @@ class LaunchViewModelTest {
 
         viewModel.launchDestination
             .test()
-            .assertValue(LaunchDestination.LOGIN_TWITTER)
+            .assertValue(com.droibit.looking2.launch.ui.LaunchDestination.LOGIN_TWITTER)
     }
 
     @Test
@@ -67,6 +67,6 @@ class LaunchViewModelTest {
 
         viewModel.launchDestination
             .test()
-            .assertValue(LaunchDestination.HOME)
+            .assertValue(com.droibit.looking2.launch.ui.LaunchDestination.HOME)
     }
 }

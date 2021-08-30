@@ -1,11 +1,11 @@
-package com.droibit.looking2.ui.launch
+package com.droibit.looking2.launch.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.droibit.looking2.core.data.repository.account.AccountRepository
-import com.droibit.looking2.ui.launch.LaunchDestination.HOME
-import com.droibit.looking2.ui.launch.LaunchDestination.LOGIN_TWITTER
+import com.droibit.looking2.launch.ui.LaunchDestination.HOME
+import com.droibit.looking2.launch.ui.LaunchDestination.LOGIN_TWITTER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
