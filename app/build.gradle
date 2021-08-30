@@ -65,6 +65,7 @@ dependencies {
     implementation project(":account")
     implementation project(":core")
     implementation project(":home")
+    implementation project(":launch")
     implementation project(":settings")
     implementation project(":timeline")
     implementation project(":tweet")

@@ -1,7 +1,7 @@
-package com.droibit.looking2.ui.launch
+package com.droibit.looking2.launch.ui
 
 import androidx.fragment.app.FragmentActivity
-import com.droibit.looking2.R
+import com.droibit.looking2.launch.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="feature_name_app" translatable="false">app</string>
-    <string name="feature_name_home" translatable="false">home</string>
-    <string name="feature_name_account" translatable="false">account</string>
-    <string name="feature_name_timeline" translatable="false">timeline</string>
-    <string name="feature_name_settings" translatable="false">settings</string>
-    <string name="feature_name_tweet" translatable="false">tweet</string>
-</resources>
