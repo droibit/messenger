@@ -3,8 +3,8 @@ package com.droibit.looking2.account.ui.twitter.signin
 import androidx.annotation.StringRes
 import com.droibit.looking2.account.R
 import com.droibit.looking2.core.model.account.AuthenticationError
-import com.droibit.looking2.core.ui.StringResourceToast
-import com.droibit.looking2.core.ui.ToastConvertible
+import com.droibit.looking2.ui.common.StringResourceToast
+import com.droibit.looking2.ui.common.ToastConvertible
 
 sealed class TwitterAuthenticationErrorMessage : Throwable() {
     data class Toast(

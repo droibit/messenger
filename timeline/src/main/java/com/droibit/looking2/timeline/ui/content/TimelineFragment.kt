@@ -19,20 +19,20 @@ import androidx.wear.remote.interactions.RemoteActivityHelper
 import androidx.wear.widget.SwipeDismissFrameLayout
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
-import com.droibit.looking2.core.ui.Activities.Confirmation.OpenOnPhoneIntent
-import com.droibit.looking2.core.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
-import com.droibit.looking2.core.ui.Activities.Tweet as TweetActivity
-import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
-import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.core.util.ext.add
-import com.droibit.looking2.core.util.ext.addCallback
-import com.droibit.looking2.core.util.ext.navigateSafely
-import com.droibit.looking2.core.util.ext.observeEvent
-import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
+import com.droibit.looking2.ui.common.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
+import com.droibit.looking2.ui.common.Activities.Tweet as TweetActivity
+import com.droibit.looking2.ui.common.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.ui.common.ext.addCallback
+import com.droibit.looking2.ui.common.ext.navigateSafely
+import com.droibit.looking2.ui.common.ext.observeEvent
+import com.droibit.looking2.ui.common.ext.showToast
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.guava.await

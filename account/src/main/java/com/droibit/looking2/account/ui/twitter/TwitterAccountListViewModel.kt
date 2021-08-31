@@ -13,9 +13,9 @@ import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialog
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
-import com.droibit.looking2.core.ui.dialog.isPositive
-import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.ext.requireValue
+import com.droibit.looking2.ui.common.Event
+import com.droibit.looking2.ui.common.dialog.isPositive
+import com.droibit.looking2.ui.common.ext.requireValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE

@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationError
 import com.droibit.looking2.core.model.account.AuthenticationResult
-import com.droibit.looking2.core.ui.dialog.DialogButtonResult
-import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.ui.common.Event
+import com.droibit.looking2.ui.common.dialog.DialogButtonResult
 import com.jraska.livedata.test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf

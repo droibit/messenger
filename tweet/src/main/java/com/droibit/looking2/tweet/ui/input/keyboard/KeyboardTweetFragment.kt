@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.droibit.looking2.core.ui.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
-import com.droibit.looking2.core.util.ext.observeEvent
 import com.droibit.looking2.tweet.databinding.FragmentTweetKeyboardBinding
 import com.droibit.looking2.tweet.ui.input.TweetLayoutString
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
+import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
+import com.droibit.looking2.ui.common.ext.observeEvent
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

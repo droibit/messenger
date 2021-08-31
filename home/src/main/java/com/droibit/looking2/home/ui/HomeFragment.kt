@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.droibit.looking2.core.R as coreR
-import com.droibit.looking2.core.ui.Activities
-import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
-import com.droibit.looking2.core.ui.widget.ActionItemListAdapter.ActionItem
-import com.droibit.looking2.core.ui.widget.OnActionItemClickListener
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
+import com.droibit.looking2.ui.common.Activities
+import com.droibit.looking2.ui.common.R as commonR
+import com.droibit.looking2.ui.common.widget.ActionItemListAdapter
+import com.droibit.looking2.ui.common.widget.ActionItemListAdapter.ActionItem
+import com.droibit.looking2.ui.common.widget.OnActionItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
@@ -51,7 +51,7 @@ class HomeFragment : Fragment(), OnActionItemClickListener {
         }
 
         viewModel.activeAccountName.observe(viewLifecycleOwner) {
-            actionItemListAdapter.title = getString(coreR.string.twitter_account_name_with_at, it)
+            actionItemListAdapter.title = getString(commonR.string.twitter_account_name_with_at, it)
 
             binding.navigationList.apply {
                 (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)

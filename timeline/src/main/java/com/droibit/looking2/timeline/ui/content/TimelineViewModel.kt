@@ -7,9 +7,9 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.model.tweet.TwitterError
-import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.ext.toErrorEventLiveData
-import com.droibit.looking2.core.util.ext.toSuccessLiveData
+import com.droibit.looking2.ui.common.Event
+import com.droibit.looking2.ui.common.ext.toErrorEventLiveData
+import com.droibit.looking2.ui.common.ext.toSuccessLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE

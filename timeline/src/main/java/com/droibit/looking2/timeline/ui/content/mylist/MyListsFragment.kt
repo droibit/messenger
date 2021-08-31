@@ -9,12 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.util.ext.navigateSafely
-import com.droibit.looking2.core.util.ext.showToast
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
+import com.droibit.looking2.ui.common.ext.navigateSafely
+import com.droibit.looking2.ui.common.ext.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber

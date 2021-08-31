@@ -33,11 +33,6 @@ dependencies {
     implementation deps.kotlin.coroutines.core
 
     implementation deps.androidx.core
-    implementation deps.androidx.recyclerview
-    implementation deps.androidx.lifecycle.livedata
-    implementation deps.androidx.lifecycle.viewmodel
-    implementation deps.androidx.navigation.runtime
-    implementation deps.androidx.navigation.fragment
     implementation deps.androidx.work.runtime
     implementation deps.androidx.wear.core
     implementation deps.androidx.wear.phoneInteractions

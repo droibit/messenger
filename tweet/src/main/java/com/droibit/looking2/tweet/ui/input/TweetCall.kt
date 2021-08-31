@@ -13,9 +13,9 @@ import androidx.work.workDataOf
 import com.droibit.looking2.core.data.repository.tweet.TweetRepository
 import com.droibit.looking2.core.model.tweet.TwitterError
 import com.droibit.looking2.core.model.tweet.retryIfNeeded
-import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_REPLY_TWEET_ID
 import com.droibit.looking2.tweet.ui.input.TweetCall.Companion.KEY_TWEET
+import com.droibit.looking2.ui.common.Activities.Tweet.ReplyTweet
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber

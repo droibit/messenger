@@ -1,7 +1,7 @@
 package com.droibit.looking2.account.ui
 
 import android.app.Activity
-import com.droibit.looking2.core.ui.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
+import com.droibit.looking2.ui.common.Activities.Account.EXTRA_NEED_TWITTER_SIGN_IN
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,2 +1,3 @@
 include ':app', ':account', ':home', ':timeline', ':settings', ':tweet', ':launch'
 include ':core', ':support-wearable-backport'
+include ':ui-common'

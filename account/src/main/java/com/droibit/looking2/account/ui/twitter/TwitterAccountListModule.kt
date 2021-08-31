@@ -1,7 +1,7 @@
 package com.droibit.looking2.account.ui.twitter
 
 import androidx.fragment.app.Fragment
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

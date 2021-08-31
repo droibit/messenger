@@ -1,4 +1,6 @@
 dependencies {
+    implementation project(":ui-common")
+
     implementation deps.kotlin.coroutines.core
     implementation deps.kotlin.coroutines.android
 

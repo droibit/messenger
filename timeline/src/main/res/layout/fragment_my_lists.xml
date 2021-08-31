@@ -39,7 +39,7 @@
 
         </FrameLayout>
 
-        <com.droibit.looking2.core.ui.widget.ProgressView
+        <com.droibit.looking2.ui.common.widget.ProgressView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/progress_loading_content"

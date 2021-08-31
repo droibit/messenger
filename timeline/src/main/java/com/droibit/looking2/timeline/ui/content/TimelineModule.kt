@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.droibit.looking2.core.data.repository.timeline.TimelineRepository
-import com.droibit.looking2.core.ui.view.ActionMenu
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
+import com.droibit.looking2.ui.common.view.ActionMenu
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -14,14 +14,14 @@ import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.account.R
 import com.droibit.looking2.account.databinding.FragmentTwitterSigninBinding
 import com.droibit.looking2.account.ui.twitter.signin.TwitterSignInFragmentDirections.Companion.toConfirmTwitterSignIn
-import com.droibit.looking2.core.ui.Activities.Confirmation.FailureIntent
-import com.droibit.looking2.core.ui.Activities.Confirmation.OpenOnPhoneIntent
-import com.droibit.looking2.core.ui.Activities.Home as HomeActivity
-import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
-import com.droibit.looking2.core.util.ext.addCallback
-import com.droibit.looking2.core.util.ext.navigateSafely
-import com.droibit.looking2.core.util.ext.observeEvent
-import com.droibit.looking2.core.util.ext.showToast
+import com.droibit.looking2.ui.common.Activities.Confirmation.FailureIntent
+import com.droibit.looking2.ui.common.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.common.Activities.Home as HomeActivity
+import com.droibit.looking2.ui.common.ext.addCallback
+import com.droibit.looking2.ui.common.ext.navigateSafely
+import com.droibit.looking2.ui.common.ext.observeEvent
+import com.droibit.looking2.ui.common.ext.showToast
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named

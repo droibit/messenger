@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
-import com.droibit.looking2.core.util.ext.navigateSafely
 import com.droibit.looking2.tweet.databinding.FragmentTweetChooserBinding
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toKeyboardTweet
 import com.droibit.looking2.tweet.ui.chooser.TweetChooserFragmentDirections.Companion.toVoiceTweet
+import com.droibit.looking2.ui.common.ext.navigateSafely
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named

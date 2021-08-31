@@ -2,7 +2,7 @@ package com.droibit.looking2.tweet.ui.input
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.ui.common.Event
 import com.jraska.livedata.test
 import org.junit.Before
 import org.junit.Rule

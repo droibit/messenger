@@ -1,9 +1,9 @@
 package com.droibit.looking2.timeline.ui.content.mylist
 
 import com.droibit.looking2.core.model.tweet.TwitterError
-import com.droibit.looking2.core.ui.StringResourceToast
-import com.droibit.looking2.core.ui.ToastConvertible
 import com.droibit.looking2.timeline.R
+import com.droibit.looking2.ui.common.StringResourceToast
+import com.droibit.looking2.ui.common.ToastConvertible
 
 // TODO: Add UnauthorizedErrorDialog
 sealed class GetMyListsErrorMessage : Throwable() {

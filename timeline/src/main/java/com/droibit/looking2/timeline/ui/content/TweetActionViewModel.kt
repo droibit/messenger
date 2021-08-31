@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
-import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
-import com.droibit.looking2.core.util.ext.requireValue
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
+import com.droibit.looking2.ui.common.Event
+import com.droibit.looking2.ui.common.ext.requireValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber

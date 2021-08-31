@@ -2,9 +2,9 @@ package com.droibit.looking2.tweet.ui
 
 import android.app.Activity
 import android.content.Context
-import com.droibit.looking2.core.ui.Activities.Tweet.EXTRA_REPLY_TWEET
-import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.tweet.R
+import com.droibit.looking2.ui.common.Activities.Tweet.EXTRA_REPLY_TWEET
+import com.droibit.looking2.ui.common.Activities.Tweet.ReplyTweet
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

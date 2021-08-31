@@ -6,8 +6,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import com.droibit.looking2.core.util.analytics.sendScreenView
 import com.droibit.looking2.tweet.R
+import com.droibit.looking2.ui.common.ext.sendScreenView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

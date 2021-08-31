@@ -2,8 +2,8 @@ package com.droibit.looking2.tweet.ui.input
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.work.WorkManager
-import com.droibit.looking2.core.ui.Activities.Tweet.EXTRA_REPLY_TWEET
-import com.droibit.looking2.core.ui.Activities.Tweet.ReplyTweet
+import com.droibit.looking2.ui.common.Activities.Tweet.EXTRA_REPLY_TWEET
+import com.droibit.looking2.ui.common.Activities.Tweet.ReplyTweet
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

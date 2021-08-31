@@ -10,7 +10,7 @@ import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialog
 import com.droibit.looking2.core.config.AccountConfiguration
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.TwitterAccount
-import com.droibit.looking2.core.util.Event
+import com.droibit.looking2.ui.common.Event
 import com.jraska.livedata.test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf

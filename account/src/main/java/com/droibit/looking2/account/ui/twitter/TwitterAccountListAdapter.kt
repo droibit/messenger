@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.droibit.looking2.account.databinding.ListItemAccountBinding
 import com.droibit.looking2.core.model.account.TwitterAccount
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 
 class TwitterAccountListAdapter(
     private val itemPadding: ShapeAwareContentPadding,

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import com.droibit.looking2.core.ui.widget.PopBackSwipeDismissCallback
 import com.droibit.looking2.timeline.databinding.FragmentPhotoBinding
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -11,7 +11,7 @@
 
         <variable
             name="contentPadding"
-            type="com.droibit.looking2.core.ui.view.ShapeAwareContentPadding" />
+            type="com.droibit.looking2.ui.common.view.ShapeAwareContentPadding" />
 
         <variable
             name="viewModel"

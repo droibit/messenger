@@ -2,7 +2,7 @@ package com.droibit.looking2.account.ui.twitter
 
 import android.content.Context
 import com.droibit.looking2.account.R
-import com.droibit.looking2.core.ui.ToastConvertible
+import com.droibit.looking2.ui.common.ToastConvertible
 
 data class LimitSignInErrorMessage(
     private val maxNumOfAccounts: Int

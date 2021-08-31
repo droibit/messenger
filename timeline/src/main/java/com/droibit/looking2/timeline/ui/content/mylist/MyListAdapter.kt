@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
 import com.droibit.looking2.core.model.tweet.UserList
-import com.droibit.looking2.core.ui.view.ShapeAwareContentPadding
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.ListItemMyListBinding
+import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 import javax.inject.Provider
 
 class MyListAdapter(

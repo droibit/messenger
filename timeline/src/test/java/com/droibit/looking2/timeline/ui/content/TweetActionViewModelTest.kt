@@ -4,13 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.droibit.looking2.core.model.tweet.ShorteningUrl
 import com.droibit.looking2.core.model.tweet.Tweet
-import com.droibit.looking2.core.util.Event
 import com.droibit.looking2.core.util.checker.PhoneDeviceTypeChecker
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.LIKES
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.OPEN_ON_PHONE
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.PHOTO
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.REPLY
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item.RETWEET
+import com.droibit.looking2.ui.common.Event
 import com.jraska.livedata.test
 import org.junit.Before
 import org.junit.Ignore

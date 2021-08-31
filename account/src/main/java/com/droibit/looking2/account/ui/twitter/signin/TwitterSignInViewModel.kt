@@ -9,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.core.model.account.AuthenticationResult
-import com.droibit.looking2.core.ui.dialog.DialogButtonResult
-import com.droibit.looking2.core.ui.dialog.isPositive
-import com.droibit.looking2.core.util.Event
-import com.droibit.looking2.core.util.ext.toErrorEventLiveData
-import com.droibit.looking2.core.util.ext.toSuccessEventLiveData
+import com.droibit.looking2.ui.common.Event
+import com.droibit.looking2.ui.common.dialog.DialogButtonResult
+import com.droibit.looking2.ui.common.dialog.isPositive
+import com.droibit.looking2.ui.common.ext.toErrorEventLiveData
+import com.droibit.looking2.ui.common.ext.toSuccessEventLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Job

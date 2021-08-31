@@ -1,9 +1,9 @@
 package com.droibit.looking2.home.ui
 
 import androidx.fragment.app.Fragment
-import com.droibit.looking2.core.ui.widget.ActionItemListAdapter
-import com.droibit.looking2.core.ui.widget.OnActionItemClickListener
 import com.droibit.looking2.home.R
+import com.droibit.looking2.ui.common.widget.ActionItemListAdapter
+import com.droibit.looking2.ui.common.widget.OnActionItemClickListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
