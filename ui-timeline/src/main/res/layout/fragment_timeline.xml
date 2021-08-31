@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droibit.looking2.timeline.ui.content.TimelineViewModel" />
+    </data>
+
+    <androidx.wear.widget.drawer.WearableDrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/box_inset_layout_padding"
+        tools:context=".ui.TimelineHostActivity"
+        tools:deviceIds="wear">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/contentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:goneUnless="@{viewModel.isLoading}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:requestFocusOnVisible="@{true}"
+                    app:visibleUnless="@{viewModel.isNotEmptyTimeline}"
+                    tools:listitem="@layout/list_item_tweet"
+                    tools:visibility="visible" />
+
+                <com.droibit.looking2.timeline.ui.widget.EmptyContentView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/timeline_empty_content"
+                    app:goneUnless="@{viewModel.isNotEmptyTimeline}"
+                    tools:visibility="gone" />
+
+            </FrameLayout>
+
+            <com.droibit.looking2.ui.common.widget.ProgressView
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/progress_loading_content"
+                app:visibleUnless="@{viewModel.isLoading}"
+                tools:visibility="gone" />
+
+        </FrameLayout>
+
+        <androidx.wear.widget.drawer.WearableActionDrawerView
+            style="@style/Widget.Looking.WearableDrawerView.Action"
+            android:id="@+id/tweetActionDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:actionMenu="@menu/tweet_action"
+            app:peekView="@+id/action_peek_view">
+
+            <!-- For disable peek -->
+            <View
+                android:id="@+id/action_peek_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </androidx.wear.widget.drawer.WearableActionDrawerView>
+
+    </androidx.wear.widget.drawer.WearableDrawerLayout>
+</layout>

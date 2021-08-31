@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="strings"
+            type="com.droibit.looking2.tweet.ui.input.TweetLayoutString" />
+
+        <variable
+            name="contentPadding"
+            type="com.droibit.looking2.ui.common.view.ShapeAwareContentPadding" />
+
+        <variable
+            name="viewModel"
+            type="com.droibit.looking2.tweet.ui.input.TweetViewModel" />
+    </data>
+
+    <androidx.wear.widget.SwipeDismissFrameLayout
+        android:id="@+id/swipeDismissLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.TweetHostActivity"
+        tools:deviceIds="wear">
+
+        <androidx.wear.widget.BoxInsetLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:padding="@dimen/box_inset_layout_padding">
+
+            <ScrollView
+                android:id="@+id/tweetContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/inner_frame_layout_padding"
+                android:paddingEnd="@dimen/inner_frame_layout_padding"
+                android:scrollbars="none"
+                app:boxedEdges="left|right"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@{contentPadding.firstItemTopPx}"
+                    android:paddingBottom="@{contentPadding.lastItemBottomPx}"
+                    tools:paddingTop="32dp"
+                    tools:paddingBottom="32dp" >
+
+                    <TextView
+                        android:id="@+id/title"
+                        style="@style/Widget.Looking.TextView.MainTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{strings.title}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/tweet_title_reply" />
+
+                    <TextView
+                        android:id="@+id/replyUserText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{strings.replyUser}"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
+                        app:goneUnless="@{strings.replyUser.isEmpty()}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/title"
+                        tools:text="\@droibit"
+                        tools:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/tweetText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@{strings.tweetTextHint}"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:minLines="2"
+                        android:text="@={viewModel.tweetText}"
+                        android:textAppearance="@style/TextAppearance.Looking.Body2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/replyUserText"
+                        tools:hint="@string/tweet_text_reply_hint"
+                        tools:text="Hello, world!">
+
+                        <requestFocus />
+                    </EditText>
+
+                    <ImageButton
+                        android:id="@+id/sendButton"
+                        style="@style/Widget.Looking.ImageButton.Circle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:onClick="@{() -> viewModel.tweet()}"
+                        android:src="@drawable/ic_send"
+                        app:enabled="@{!viewModel.tweetText.isEmpty()}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tweetText"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </androidx.wear.widget.BoxInsetLayout>
+
+    </androidx.wear.widget.SwipeDismissFrameLayout>
+</layout>

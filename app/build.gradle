@@ -62,13 +62,13 @@ android {
 }
 
 dependencies {
-    implementation project(":account")
+    implementation project(':ui-account')
     implementation project(":core")
-    implementation project(":home")
-    implementation project(":launch")
-    implementation project(":settings")
-    implementation project(":timeline")
-    implementation project(":tweet")
+    implementation project(':ui-home')
+    implementation project(':ui-launch')
+    implementation project(':ui-settings')
+    implementation project(':ui-timeline')
+    implementation project(':ui-tweet')
 
     implementation deps.androidx.wear.phoneInteractions
     implementation deps.androidx.wear.remoteInteractions

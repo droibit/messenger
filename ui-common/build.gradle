@@ -1,0 +1,51 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "dagger.hilt.android.plugin"
+}
+
+android {
+    compileSdk buildConfig.compileSdk
+
+    defaultConfig {
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+        vectorDrawables.useSupportLibrary = true
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildFeatures {
+        dataBinding true
+        buildConfig = false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/core_debug.kotlin_module'
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation deps.androidx.core
+    implementation deps.androidx.recyclerview
+    implementation deps.androidx.lifecycle.livedata
+    implementation deps.androidx.lifecycle.viewmodel
+    implementation deps.androidx.navigation.runtime
+    implementation deps.androidx.wear.core
+
+    implementation deps.dagger.hilt.runtime
+    kapt deps.dagger.hilt.compiler
+
+    implementation deps.timber
+}
+
+kapt {
+    useBuildCache = true
+}

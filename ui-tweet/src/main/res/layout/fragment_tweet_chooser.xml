@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="screenTitle"
+            type="java.lang.String" />
+
+        <variable
+            name="contentPadding"
+            type="com.droibit.looking2.ui.common.view.ShapeAwareContentPadding" />
+
+        <variable
+            name="fragment"
+            type="com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment" />
+    </data>
+
+    <androidx.wear.widget.BoxInsetLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:padding="@dimen/box_inset_layout_padding"
+        tools:context=".ui.TweetHostActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/inner_frame_layout_padding"
+            android:paddingTop="@{contentPadding.firstItemTopPx}"
+            android:paddingEnd="@dimen/inner_frame_layout_padding"
+            android:paddingBottom="@dimen/inner_frame_layout_padding"
+            app:boxedEdges="left|right|bottom">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/Widget.Looking.TextView.MainTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{screenTitle}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:paddingTop="32dp"
+                tools:text="Tweet" />
+
+            <ImageButton
+                android:id="@+id/voiceTweetButton"
+                style="@style/Widget.Looking.ImageButton.Circle"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:onClick="@{fragment::onVoiceTweetButtonClick}"
+                android:src="@drawable/ic_tweet_voice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/keyboardTweetButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/keyboardTweetButton"
+                style="@style/Widget.Looking.ImageButton.Circle"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:onClick="@{fragment::onKeyboardTweetButtonClick}"
+                android:src="@drawable/ic_tweet_keyboard"
+                app:layout_constraintBottom_toBottomOf="@+id/voiceTweetButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/voiceTweetButton"
+                app:layout_constraintTop_toTopOf="@+id/voiceTweetButton"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.wear.widget.BoxInsetLayout>
+</layout>
