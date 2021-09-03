@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="launch_nav_label" translatable="false">Launch</string>
+    <string name="launch_nav_label_launch" translatable="false">Launch</string>
 </resources>

@@ -54,7 +54,7 @@ class LaunchViewModelTest {
 
         viewModel.launchDestination
             .test()
-            .assertValue(com.droibit.looking2.launch.ui.LaunchDestination.LOGIN_TWITTER)
+            .assertValue(com.droibit.looking2.launch.ui.LaunchDestination.SIGN_IN_TWITTER)
     }
 
     @Test

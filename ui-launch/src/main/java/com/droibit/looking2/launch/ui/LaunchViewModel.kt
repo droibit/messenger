@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.droibit.looking2.core.data.repository.account.AccountRepository
 import com.droibit.looking2.launch.ui.LaunchDestination.HOME
-import com.droibit.looking2.launch.ui.LaunchDestination.LOGIN_TWITTER
+import com.droibit.looking2.launch.ui.LaunchDestination.SIGN_IN_TWITTER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
@@ -18,7 +18,7 @@ class LaunchViewModel @Inject constructor(
     val launchDestination: LiveData<LaunchDestination> = liveData {
         accountRepository.twitterAccounts()
             .collect {
-                emit(if (it.isEmpty()) LOGIN_TWITTER else HOME)
+                emit(if (it.isEmpty()) SIGN_IN_TWITTER else HOME)
             }
     }
 }
