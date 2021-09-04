@@ -10,10 +10,12 @@ internal enum class TimelineDestination(val id: String, val label: String) {
     MENTIONS(id = "mentions", label = "Mentions"),
     LISTS(id = "mylists", label = "Lists");
 
+    val overrideLabel: String get() = "Timeline: $label"
+
     fun toDirections(): NavDirections {
         return when (this) {
-            HOME -> toTimeline(TimelineSource.Home)
-            MENTIONS -> toTimeline(TimelineSource.Mentions)
+            HOME -> toTimeline(TimelineSource.Home, overrideLabel)
+            MENTIONS -> toTimeline(TimelineSource.Mentions, overrideLabel)
             LISTS -> toMyLists()
         }
     }
