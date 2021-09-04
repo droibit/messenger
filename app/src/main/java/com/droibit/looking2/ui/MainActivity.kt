@@ -1,19 +1,19 @@
-package com.droibit.looking2.tweet.ui
+package com.droibit.looking2.ui
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import com.droibit.looking2.R
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
-import com.droibit.looking2.tweet.R
-import com.droibit.looking2.ui.common.ext.sendScreenView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import timber.log.Timber
 
 @AndroidEntryPoint
-class TweetHostActivity :
-    FragmentActivity(R.layout.activity_tweet_host),
+class MainActivity :
+    FragmentActivity(R.layout.activity_main),
     NavController.OnDestinationChangedListener {
 
     @Inject
@@ -22,10 +22,10 @@ class TweetHostActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ref https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.tweetNavHostFragment) as NavHostFragment
-        navHostFragment.navController.addOnDestinationChangedListener(this)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener(this)
     }
 
     override fun onDestinationChanged(
@@ -33,6 +33,8 @@ class TweetHostActivity :
         destination: NavDestination,
         arguments: Bundle?
     ) {
-        analytics.sendScreenView(destination, this)
+        Timber.d("#onDestinationChanged: $destination, args=$arguments")
+        // TODO:
+        // analytics.sendScreenView(destination, null)
     }
 }

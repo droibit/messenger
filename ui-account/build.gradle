@@ -31,6 +31,9 @@ dependencies {
     implementation deps.chopstick.resource
 
     kapt deps.dagger.hilt.compiler
+
+    testImplementation deps.androidx.test.junit
+    testImplementation deps.robolectric
 }
 
 kapt {

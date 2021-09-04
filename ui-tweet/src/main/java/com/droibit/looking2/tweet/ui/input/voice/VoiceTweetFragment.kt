@@ -15,10 +15,12 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.wear.widget.CircularProgressLayout
+import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.databinding.FragmentTweetVoiceBinding
-import com.droibit.looking2.tweet.ui.input.TweetLayoutString
+import com.droibit.looking2.tweet.ui.TweetHostViewModel
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
 import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.common.ext.observeEvent
@@ -33,9 +35,6 @@ class VoiceTweetFragment :
     Fragment(),
     CircularProgressLayout.OnTimerFinishedListener {
 
-    @Inject
-    lateinit var layoutString: TweetLayoutString
-
     @field:[Inject Named("waitDurationMillis")]
     @JvmField
     var waitDurationMillis: Long = 0
@@ -47,6 +46,8 @@ class VoiceTweetFragment :
     lateinit var contentPadding: ShapeAwareContentPadding
 
     private val viewModel: TweetViewModel by viewModels()
+
+    private val hostViewModel: TweetHostViewModel by hiltNavGraphViewModels(R.id.navGraphTweet)
 
     private var _binding: FragmentTweetVoiceBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -64,7 +65,7 @@ class VoiceTweetFragment :
             it.lifecycleOwner = viewLifecycleOwner
             it.fragment = this
             it.viewModel = this.viewModel
-            it.strings = layoutString
+            it.strings = hostViewModel.layoutString
             it.contentPadding = contentPadding
         }
         return binding.root
@@ -100,7 +101,8 @@ class VoiceTweetFragment :
         viewModel.tweetCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
-            requireActivity().finish()
+
+            findNavController().popBackStack(R.id.navGraphTweet, inclusive = true)
         }
     }
 
@@ -108,7 +110,7 @@ class VoiceTweetFragment :
         try {
             val intent = Intent(ACTION_RECOGNIZE_SPEECH)
                 .putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
-                .putExtra(EXTRA_PROMPT, layoutString.title)
+                .putExtra(EXTRA_PROMPT, hostViewModel.layoutString.title)
             recognizeSpeech.launch(intent)
         } catch (e: ActivityNotFoundException) {
             findNavController().popBackStack()

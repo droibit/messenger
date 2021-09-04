@@ -6,12 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.droibit.looking2.core.util.analytics.AnalyticsHelper
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
-import com.droibit.looking2.ui.common.Activities
 import com.droibit.looking2.ui.common.R as commonR
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toAccounts
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toHomeTimeline
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toMentionsTimeline
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toMyLists
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toSettings
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toTweet
+import com.droibit.looking2.ui.common.navigation.default
 import com.droibit.looking2.ui.common.widget.ActionItemListAdapter
 import com.droibit.looking2.ui.common.widget.ActionItemListAdapter.ActionItem
 import com.droibit.looking2.ui.common.widget.OnActionItemClickListener
@@ -21,9 +28,6 @@ import javax.inject.Named
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnActionItemClickListener {
-
-    @Inject
-    lateinit var analytics: AnalyticsHelper
 
     @Named("home")
     @Inject
@@ -60,28 +64,30 @@ class HomeFragment : Fragment(), OnActionItemClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        analytics.sendScreenView(
-            screenName = getString(R.string.home_nav_label_home),
-            screenClass = null
-        )
-    }
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
 
     override fun onActionItemClick(item: ActionItem) {
-        val intent = when (HomeNavigation(item.id)) {
-            HomeNavigation.TWEET -> Activities.Tweet.createIntent()
-            HomeNavigation.TIMELINE -> Activities.Timeline.createHomeIntent()
-            HomeNavigation.MENTIONS -> Activities.Timeline.createMentionsIntent()
-            HomeNavigation.LISTS -> Activities.Timeline.createListsIntent()
-            HomeNavigation.ACCOUNTS -> Activities.Account.createIntent(needTwitterSignIn = false)
-            HomeNavigation.SETTINGS -> Activities.Settings.createIntent()
+        val toNext = when (HomeNavigation(item.id)) {
+            HomeNavigation.TWEET -> toTweet()
+            HomeNavigation.TIMELINE -> toHomeTimeline()
+            HomeNavigation.MENTIONS -> toMentionsTimeline()
+            HomeNavigation.LISTS -> toMyLists()
+            HomeNavigation.ACCOUNTS -> toAccounts()
+            HomeNavigation.SETTINGS -> toSettings()
         }
-        startActivity(intent)
+
+        with(findNavController()) {
+            if (currentBackStackEntry?.destination?.id == R.id.homeFragment) {
+                navigate(
+                    toNext,
+                    navOptions {
+                        anim { default() }
+                    }
+                )
+            }
+        }
     }
 }

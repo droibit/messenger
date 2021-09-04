@@ -3,9 +3,10 @@ package com.droibit.looking2.ui.common.ext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import timber.log.Timber
 
-fun NavController.navigateSafely(directions: NavDirections) {
+fun NavController.navigateSafely(directions: NavDirections, navOptions: NavOptions? = null) {
     if (currentDestination?.getAction(directions.actionId) == null) {
         Timber.w("Action corresponding to Directions($directions) could not be found.")
         return

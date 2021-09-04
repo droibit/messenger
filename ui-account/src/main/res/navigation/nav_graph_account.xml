@@ -3,7 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navGraphAccount"
+    app:startDestination="@id/accountTrampolineFragment"
     tools:ignore="InvalidNavigation,UnusedNavigation">
+
+    <fragment
+        android:id="@+id/accountTrampolineFragment"
+        android:name="com.droibit.looking2.account.ui.AccountTrampolineFragment">
+
+        <deepLink app:uri="looking://account/{id}?mustSignIn={mustSignIn}" />
+
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="mustSignIn"
+            app:argType="boolean"
+            android:defaultValue="false" />
+
+        <action
+            android:id="@+id/toTwitterAccountList"
+            app:destination="@id/navigationTwitterAccountList"
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit"
+            app:popUpTo="@id/navGraphAccount" />
+
+        <action
+            android:id="@+id/toTwitterSignIn"
+            app:destination="@id/navigationTwitterSignIn"
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit"
+            app:popUpTo="@id/navGraphAccount" />
+    </fragment>
 
     <navigation
         android:id="@+id/navigationTwitterSignIn"
@@ -17,6 +51,10 @@
             <action
                 android:id="@+id/toConfirmTwitterSignIn"
                 app:destination="@id/twitterSignInConfirmationDialogFragment" />
+            <argument
+                android:name="mustSignIn"
+                app:argType="boolean"
+                android:defaultValue="false" />
         </fragment>
         <dialog
             android:id="@+id/twitterSignInConfirmationDialogFragment"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navGraphSettings"
+    app:startDestination="@id/settingsHostActivity">
+
+    <activity
+        android:id="@+id/settingsHostActivity"
+        android:name="com.droibit.looking2.settings.ui.SettingsHostActivity">
+        <deepLink app:uri="looking://settings" />
+    </activity>
+</navigation>

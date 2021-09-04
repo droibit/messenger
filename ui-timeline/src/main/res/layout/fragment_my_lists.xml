@@ -10,7 +10,8 @@
             type="com.droibit.looking2.timeline.ui.content.mylist.MyListsViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.wear.widget.SwipeDismissFrameLayout
+        android:id="@+id/swipeDismissLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -46,5 +47,5 @@
             app:visibleUnless="@{viewModel.isLoading}"
             tools:visibility="gone" />
 
-    </FrameLayout>
+    </androidx.wear.widget.SwipeDismissFrameLayout>
 </layout>

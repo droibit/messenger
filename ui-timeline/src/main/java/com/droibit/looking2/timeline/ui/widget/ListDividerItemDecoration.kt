@@ -5,7 +5,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.droibit.looking2.timeline.R
 
-class ListDividerItemDecoration(context: Context) :
+internal class ListDividerItemDecoration(context: Context) :
     DividerItemDecoration(context, VERTICAL) {
 
     init {

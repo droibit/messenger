@@ -1,11 +1,2 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.droibit.looking2.tweet">
-
-    <application tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.TweetHostActivity"
-            android:exported="false" />
-    </application>
-</manifest>
+<manifest package="com.droibit.looking2.tweet" />
 

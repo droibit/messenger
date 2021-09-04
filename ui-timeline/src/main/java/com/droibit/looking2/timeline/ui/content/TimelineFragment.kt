@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.wear.remote.interactions.RemoteActivityHelper
@@ -20,18 +21,19 @@ import androidx.wear.widget.SwipeDismissFrameLayout
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.Tweet
 import com.droibit.looking2.core.util.ext.add
+import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
 import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.common.Activities.Confirmation.OpenOnPhoneIntent
 import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
-import com.droibit.looking2.ui.common.Activities.Tweet as TweetActivity
-import com.droibit.looking2.ui.common.Activities.Tweet.ReplyTweet
 import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.ext.navigateSafely
 import com.droibit.looking2.ui.common.ext.observeEvent
 import com.droibit.looking2.ui.common.ext.showToast
+import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toTweet
+import com.droibit.looking2.ui.common.navigation.default
 import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -129,7 +131,7 @@ class TimelineFragment :
         when (error) {
             is GetTimelineErrorMessage.Toast -> showToast(error)
         }
-        requireActivity().finish()
+        findNavController().popBackStack()
     }
 
     private fun observeTweetActionItemList() {
@@ -156,8 +158,16 @@ class TimelineFragment :
 
     private fun observeReply() {
         tweetActionViewModel.reply.observeEvent(viewLifecycleOwner) {
-            val intent = TweetActivity.createIntent(ReplyTweet(it.id, it.user))
-            startActivity(intent)
+            with(findNavController()) {
+                if (currentBackStackEntry?.destination?.id == R.id.timelineFragment) {
+                    navigate(
+                        toTweet(replyTweet = it),
+                        navOptions {
+                            anim { default() }
+                        }
+                    )
+                }
+            }
         }
     }
 
