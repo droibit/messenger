@@ -26,7 +26,7 @@ object HomeModule {
         @Named("home") itemClickListener: OnActionItemClickListener
     ) = ActionItemListAdapter(
         fragment.requireContext(),
-        menuRes = R.menu.navigation,
+        menuRes = R.menu.home,
         itemClickListener = itemClickListener
     )
 }
