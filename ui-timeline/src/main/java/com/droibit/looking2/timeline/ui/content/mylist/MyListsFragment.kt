@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import app.cash.exhaustive.Exhaustive
 import com.droibit.looking2.core.model.tweet.UserList
 import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
+import com.droibit.looking2.timeline.ui.TimelineDestination
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
@@ -90,7 +91,8 @@ class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
         Timber.d("onUserListClick(${myList.name})")
         findNavController().navigateSafely(
             toMyListTimeline(
-                TimelineSource.MyLists(myList.id)
+                TimelineSource.MyLists(myList.id),
+                overrideLabel = TimelineDestination.LISTS.overrideLabel
             )
         )
     }

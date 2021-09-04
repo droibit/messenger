@@ -42,6 +42,10 @@
         <argument
             android:name="source"
             app:argType="com.droibit.looking2.timeline.ui.content.TimelineSource" />
+
+        <argument
+            android:name="overrideLabel"
+            app:argType="string" />
         <action
             android:id="@+id/toPhotos"
             app:destination="@id/photoFragment"

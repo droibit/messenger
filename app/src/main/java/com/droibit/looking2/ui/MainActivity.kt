@@ -7,6 +7,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.droibit.looking2.R
 import com.droibit.looking2.core.util.analytics.AnalyticsHelper
+import com.droibit.looking2.core.util.analytics.AnalyticsHelper.Companion.KEY_OVERRIDE_LABEL
+import com.droibit.looking2.ui.common.ext.sendScreenView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber
@@ -33,8 +35,12 @@ class MainActivity :
         destination: NavDestination,
         arguments: Bundle?
     ) {
+        val overrideLabel = arguments?.getString(KEY_OVERRIDE_LABEL)
+        if (overrideLabel != null) {
+            destination.label = overrideLabel
+        }
         Timber.d("#onDestinationChanged: $destination, args=$arguments")
-        // TODO:
-        // analytics.sendScreenView(destination, null)
+
+        analytics.sendScreenView(destination, this)
     }
 }

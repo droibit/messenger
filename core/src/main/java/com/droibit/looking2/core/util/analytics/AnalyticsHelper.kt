@@ -11,4 +11,8 @@ interface AnalyticsHelper {
     fun setNumOfTwitterAccounts(value: Int)
 
     fun setNumOfGetTweets(value: Int)
+
+    companion object {
+        const val KEY_OVERRIDE_LABEL = "overrideLabel"
+    }
 }
