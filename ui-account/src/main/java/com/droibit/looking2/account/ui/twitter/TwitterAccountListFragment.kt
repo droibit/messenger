@@ -15,12 +15,14 @@ import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirecti
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toTwitterSignIn
 import com.droibit.looking2.account.ui.twitter.signout.SignOutConfirmationDialogResult
 import com.droibit.looking2.core.model.account.TwitterAccount
-import com.droibit.looking2.ui.common.Activities.Account as AccountActivity
+import com.droibit.looking2.ui.common.Activities.createRestartIntent
+import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.ext.navigateSafely
 import com.droibit.looking2.ui.common.ext.observeEvent
 import com.droibit.looking2.ui.common.ext.showToast
 import com.droibit.looking2.ui.common.view.OnRotaryScrollListener
 import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber
@@ -38,6 +40,9 @@ class TwitterAccountListFragment :
 
     @Inject
     lateinit var accountListAdapter: TwitterAccountListAdapter
+
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
     private val viewModel: TwitterAccountListViewModel by viewModels()
 
@@ -75,6 +80,7 @@ class TwitterAccountListFragment :
             this.setHasFixedSize(true)
             this.adapter = accountListAdapter
         }
+        binding.swipeDismissLayout.addCallback(viewLifecycleOwner, swipeDismissCallback)
 
         observeTwitterAccounts()
         observeShowSignOutConfirmation()
@@ -109,8 +115,8 @@ class TwitterAccountListFragment :
 
     private fun observeRestartApp() {
         viewModel.restartApp.observeEvent(viewLifecycleOwner) {
-            val intent = AccountActivity.createRestartIntent()
-            requireActivity().startActivity(intent)
+            val intent = createRestartIntent(requireContext())
+            startActivity(intent)
         }
     }
 
