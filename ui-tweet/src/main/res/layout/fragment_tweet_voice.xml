@@ -7,7 +7,7 @@
 
         <variable
             name="strings"
-            type="com.droibit.looking2.tweet.ui.input.TweetLayoutString" />
+            type="com.droibit.looking2.tweet.ui.TweetLayoutString" />
 
         <variable
             name="contentPadding"

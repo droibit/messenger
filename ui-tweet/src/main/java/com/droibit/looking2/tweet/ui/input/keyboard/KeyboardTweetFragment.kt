@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
+import com.droibit.looking2.tweet.R
 import com.droibit.looking2.tweet.databinding.FragmentTweetKeyboardBinding
-import com.droibit.looking2.tweet.ui.input.TweetLayoutString
+import com.droibit.looking2.tweet.ui.TweetHostViewModel
 import com.droibit.looking2.tweet.ui.input.TweetViewModel
 import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.common.ext.observeEvent
@@ -20,15 +23,14 @@ import javax.inject.Inject
 class KeyboardTweetFragment : Fragment() {
 
     @Inject
-    lateinit var layoutString: TweetLayoutString
-
-    @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
     @Inject
     lateinit var contentPadding: ShapeAwareContentPadding
 
     private val viewModel: TweetViewModel by viewModels()
+
+    private val hostViewModel: TweetHostViewModel by hiltNavGraphViewModels(R.id.navGraphTweet)
 
     private var _binding: FragmentTweetKeyboardBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -40,7 +42,7 @@ class KeyboardTweetFragment : Fragment() {
     ): View? {
         _binding = FragmentTweetKeyboardBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
-            it.strings = layoutString
+            it.strings = hostViewModel.layoutString
             it.contentPadding = contentPadding
             it.viewModel = viewModel
         }
@@ -58,7 +60,7 @@ class KeyboardTweetFragment : Fragment() {
         viewModel.tweetCompleted.observeEvent(viewLifecycleOwner) {
             val intent = SuccessConfirmationIntent(requireContext(), messageResId = null)
             startActivity(intent)
-            requireActivity().finish()
+            findNavController().popBackStack(R.id.navGraphTweet, inclusive = true)
         }
     }
 

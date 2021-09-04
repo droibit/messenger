@@ -61,8 +61,10 @@ ext {
                     ],
                     viewPager2      : 'androidx.viewpager2:viewpager2:1.0.0',
                     hilt            : [
-                            compiler: "androidx.hilt:hilt-compiler:${versions.androidx.hilt}",
-                            work    : "androidx.hilt:hilt-work:${versions.androidx.hilt}",
+                            compiler          : "androidx.hilt:hilt-compiler:${versions.androidx.hilt}",
+                            navigationFragment: "androidx.hilt:hilt-navigation-fragment:${versions.androidx.hilt}",
+                            navigation        : "androidx.hilt:hilt-navigation:${versions.androidx.hilt}",
+                            work              : "androidx.hilt:hilt-work:${versions.androidx.hilt}",
                     ],
                     archTesting     : "androidx.arch.core:core-testing:2.1.0",
                     test            : [

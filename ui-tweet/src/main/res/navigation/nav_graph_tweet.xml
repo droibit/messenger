@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navGraphTweet"
-    app:startDestination="@id/tweetChooserFragment"
-    tools:ignore="UnusedNavigation">
+    app:startDestination="@id/tweetChooserFragment">
 
     <fragment
         android:id="@+id/tweetChooserFragment"
         android:name="com.droibit.looking2.tweet.ui.chooser.TweetChooserFragment"
         android:label="@string/tweet_nav_label_tweet_chooser"
         tools:layout="@layout/fragment_tweet_chooser">
+
+        <deepLink app:uri="looking://tweet?tweetReplyTo={tweetReplyTo}&amp;screenNameReplyTo={screenNameReplyTo}" />
+
         <action
             android:id="@+id/toKeyboardTweet"
             app:destination="@id/keyboardTweetFragment"
@@ -30,10 +32,20 @@
         android:id="@+id/keyboardTweetFragment"
         android:name="com.droibit.looking2.tweet.ui.input.keyboard.KeyboardTweetFragment"
         android:label="@string/tweet_nav_label_tweet_keyboard"
-        tools:layout="@layout/fragment_tweet_keyboard" />
+        tools:layout="@layout/fragment_tweet_keyboard" >
+        <argument
+            android:name="replyTweet"
+            app:argType="com.droibit.looking2.tweet.ui.ReplyTweet"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/voiceTweetFragment"
         android:name="com.droibit.looking2.tweet.ui.input.voice.VoiceTweetFragment"
         android:label="@string/tweet_nav_label_tweet_voice_input"
-        tools:layout="@layout/fragment_tweet_voice" />
+        tools:layout="@layout/fragment_tweet_voice">
+        <argument
+            android:name="replyTweet"
+            app:argType="com.droibit.looking2.tweet.ui.ReplyTweet"
+            app:nullable="true" />
+    </fragment>
 </navigation>

@@ -29,6 +29,8 @@ dependencies {
 
     implementation deps.androidx.work.runtime
     implementation deps.androidx.hilt.work
+    implementation deps.androidx.hilt.navigation
+    implementation deps.androidx.hilt.navigationFragment
     kapt deps.androidx.hilt.compiler
     kapt deps.androidx.lifecycle.compiler
 
