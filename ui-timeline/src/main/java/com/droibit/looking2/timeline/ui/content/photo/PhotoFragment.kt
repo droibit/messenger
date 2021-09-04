@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.droibit.looking2.timeline.databinding.FragmentPhotoBinding
+import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class PhotoFragment : Fragment() {
                 it.submitList(args.urls.toList())
             }
         }
-        binding.swipeDismissLayout.addCallback(swipeDismissCallback)
+        binding.swipeDismissLayout.addCallback(viewLifecycleOwner, swipeDismissCallback)
     }
 
     override fun onDestroyView() {

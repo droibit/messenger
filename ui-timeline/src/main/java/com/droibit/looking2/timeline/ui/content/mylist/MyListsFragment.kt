@@ -13,8 +13,10 @@ import com.droibit.looking2.timeline.databinding.FragmentMyListsBinding
 import com.droibit.looking2.timeline.ui.content.TimelineSource
 import com.droibit.looking2.timeline.ui.content.mylist.MyListsFragmentDirections.Companion.toMyListTimeline
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
+import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.ext.navigateSafely
 import com.droibit.looking2.ui.common.ext.showToast
+import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import timber.log.Timber
@@ -24,6 +26,9 @@ class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
 
     @Inject
     lateinit var myListAdapter: MyListAdapter
+
+    @Inject
+    lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
 
     private val viewModel: MyListsViewModel by viewModels()
 
@@ -49,6 +54,7 @@ class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
             this.addItemDecoration(ListDividerItemDecoration(requireContext()))
             this.adapter = myListAdapter
         }
+        binding.swipeDismissLayout.addCallback(viewLifecycleOwner, swipeDismissCallback)
 
         observeGetMyListsResult()
     }
@@ -72,7 +78,7 @@ class MyListsFragment : Fragment(), MyListAdapter.OnItemClickListener {
         when (error) {
             is GetMyListsErrorMessage.Toast -> showToast(error)
         }
-        requireActivity().finish()
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {

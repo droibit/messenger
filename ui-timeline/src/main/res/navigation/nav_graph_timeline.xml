@@ -3,7 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navGraphTimeline"
-    tools:ignore="InvalidNavigation,UnusedNavigation">
+    tools:ignore="InvalidNavigation,UnusedNavigation"
+    app:startDestination="@id/timelineTrampolineFragment">
+
+    <fragment
+        android:id="@+id/timelineTrampolineFragment"
+        android:name="com.droibit.looking2.timeline.ui.TimelineTrampolineFragment">
+
+        <deepLink app:uri="looking://timeline/{id}" />
+
+        <argument
+            android:name="id"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/toTimeline"
+            app:destination="@id/timelineFragment"
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit"
+            app:popUpTo="@id/navGraphTimeline" />
+        <action
+            android:id="@+id/toMyLists"
+            app:destination="@id/myListsFragment"
+            app:enterAnim="@animator/fragment_open_enter"
+            app:exitAnim="@animator/fragment_open_exit"
+            app:popEnterAnim="@animator/fragment_fade_enter"
+            app:popExitAnim="@animator/fragment_fade_exit"
+            app:popUpTo="@id/navGraphTimeline" />
+    </fragment>
 
     <fragment
         android:id="@+id/timelineFragment"
@@ -21,6 +50,7 @@
             app:popEnterAnim="@animator/fragment_fade_enter"
             app:popExitAnim="@animator/fragment_fade_exit" />
     </fragment>
+
     <fragment
         android:id="@+id/photoFragment"
         android:name="com.droibit.looking2.timeline.ui.content.photo.PhotoFragment"
@@ -30,6 +60,7 @@
             android:name="urls"
             app:argType="string[]" />
     </fragment>
+
     <fragment
         android:id="@+id/myListsFragment"
         android:name="com.droibit.looking2.timeline.ui.content.mylist.MyListsFragment"
@@ -43,4 +74,5 @@
             app:popEnterAnim="@animator/fragment_fade_enter"
             app:popExitAnim="@animator/fragment_fade_exit" />
     </fragment>
+
 </navigation>
