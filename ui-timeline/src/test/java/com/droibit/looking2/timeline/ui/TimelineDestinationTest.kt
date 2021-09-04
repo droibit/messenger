@@ -12,15 +12,22 @@ import org.junit.Test
 class TimelineDestinationTest {
 
     @Test
+    fun overrideLabel() {
+        assertThat(HOME.overrideLabel).isEqualTo("Timeline: ${HOME.label}")
+        assertThat(MENTIONS.overrideLabel).isEqualTo("Timeline: ${MENTIONS.label}")
+        assertThat(LISTS.overrideLabel).isEqualTo("Timeline: ${LISTS.label}")
+    }
+
+    @Test
     fun toDirections_toHomeDirections() {
         val home = HOME.toDirections()
-        assertThat(home).isEqualTo(toTimeline(TimelineSource.Home))
+        assertThat(home).isEqualTo(toTimeline(TimelineSource.Home, HOME.overrideLabel))
     }
 
     @Test
     fun toDirections_toMentionsDirections() {
         val mentions = MENTIONS.toDirections()
-        assertThat(mentions).isEqualTo(toTimeline(TimelineSource.Mentions))
+        assertThat(mentions).isEqualTo(toTimeline(TimelineSource.Mentions, MENTIONS.overrideLabel))
     }
 
     @Test
