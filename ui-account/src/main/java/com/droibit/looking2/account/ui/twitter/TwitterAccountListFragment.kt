@@ -79,6 +79,7 @@ class TwitterAccountListFragment :
         binding.list.apply {
             this.setHasFixedSize(true)
             this.adapter = accountListAdapter
+            this.isNestedScrollingEnabled = false
         }
         binding.swipeDismissLayout.addCallback(viewLifecycleOwner, swipeDismissCallback)
 
