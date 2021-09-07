@@ -11,7 +11,6 @@ import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
-import com.droibit.looking2.ui.common.R as commonR
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toAccounts
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toHomeTimeline
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toMentionsTimeline
@@ -25,6 +24,7 @@ import com.droibit.looking2.ui.common.widget.OnActionItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
+import com.droibit.looking2.ui.common.R as commonR
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnActionItemClickListener {
@@ -55,10 +55,14 @@ class HomeFragment : Fragment(), OnActionItemClickListener {
         }
 
         viewModel.activeAccountName.observe(viewLifecycleOwner) {
-            actionItemListAdapter.title = getString(commonR.string.twitter_account_name_with_at, it)
+            val accountName = getString(commonR.string.twitter_account_name_with_at, it)
+            val accountNameUpdated = accountName != actionItemListAdapter.title
+            actionItemListAdapter.title = accountName
 
             binding.navigationList.apply {
-                (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                if (accountNameUpdated) {
+                    (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                }
                 requestFocus()
             }
         }
