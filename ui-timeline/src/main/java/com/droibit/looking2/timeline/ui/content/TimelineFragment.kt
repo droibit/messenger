@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -69,7 +70,10 @@ class TimelineFragment :
     private val binding get() = requireNotNull(_binding)
 
     private val tweetActionList: RecyclerView?
-        get() = binding.tweetActionDrawer.getChildAt(0) as? RecyclerView
+        get() {
+            return binding.tweetActionDrawer.children
+                .firstOrNull { it is RecyclerView } as? RecyclerView
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
