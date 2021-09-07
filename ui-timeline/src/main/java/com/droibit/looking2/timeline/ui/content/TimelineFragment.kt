@@ -25,8 +25,10 @@ import com.droibit.looking2.core.util.ext.add
 import com.droibit.looking2.timeline.R
 import com.droibit.looking2.timeline.databinding.FragmentTimelineBinding
 import com.droibit.looking2.timeline.ui.content.TimelineFragmentDirections.Companion.toPhotos
+import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
 import com.droibit.looking2.timeline.ui.widget.ListDividerItemDecoration
 import com.droibit.looking2.ui.common.Activities.Confirmation.OpenOnPhoneIntent
+import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.ext.navigateSafely
 import com.droibit.looking2.ui.common.ext.observeEvent
@@ -35,12 +37,10 @@ import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toTweet
 import com.droibit.looking2.ui.common.navigation.default
 import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import com.droibit.looking2.timeline.ui.content.TweetActionItemList.Item as TweetActionItem
-import com.droibit.looking2.ui.common.Activities.Confirmation.SuccessIntent as SuccessConfirmationIntent
 
 @AndroidEntryPoint
 class TimelineFragment :

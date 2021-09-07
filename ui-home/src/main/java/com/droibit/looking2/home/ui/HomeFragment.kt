@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droibit.looking2.home.R
 import com.droibit.looking2.home.databinding.FragmentHomeBinding
+import com.droibit.looking2.ui.common.R as commonR
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toAccounts
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toHomeTimeline
 import com.droibit.looking2.ui.common.navigation.DeepLinkDirections.toMentionsTimeline
@@ -24,7 +25,6 @@ import com.droibit.looking2.ui.common.widget.OnActionItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
-import com.droibit.looking2.ui.common.R as commonR
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnActionItemClickListener {
