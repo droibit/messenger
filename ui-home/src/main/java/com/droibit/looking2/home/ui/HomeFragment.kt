@@ -55,10 +55,14 @@ class HomeFragment : Fragment(), OnActionItemClickListener {
         }
 
         viewModel.activeAccountName.observe(viewLifecycleOwner) {
-            actionItemListAdapter.title = getString(commonR.string.twitter_account_name_with_at, it)
+            val accountName = getString(commonR.string.twitter_account_name_with_at, it)
+            val accountNameUpdated = accountName != actionItemListAdapter.title
+            actionItemListAdapter.title = accountName
 
             binding.navigationList.apply {
-                (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                if (accountNameUpdated) {
+                    (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                }
                 requestFocus()
             }
         }
