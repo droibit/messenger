@@ -16,10 +16,28 @@ object TwitterAccountListModule {
         fragment as TwitterAccountListAdapter.OnItemClickListener
 
     @Provides
+    fun provideOnTwitterAccountFooterClickListener(fragment: Fragment) =
+        fragment as TwitterAccountListFooterAdapter.OnItemClickListener
+
+    @Provides
     fun provideAccountListAdapter(
         itemPadding: ShapeAwareContentPadding,
         itemClickListener: TwitterAccountListAdapter.OnItemClickListener
     ) = TwitterAccountListAdapter(
+        itemPadding,
+        itemClickListener
+    )
+
+    @Provides
+    fun provideAccountListHeaderAdapter(
+        itemPadding: ShapeAwareContentPadding,
+    ) = TwitterAccountListHeaderAdapter(itemPadding)
+
+    @Provides
+    fun provideAccountListFooterAdapter(
+        itemPadding: ShapeAwareContentPadding,
+        itemClickListener: TwitterAccountListFooterAdapter.OnItemClickListener
+    ) = TwitterAccountListFooterAdapter(
         itemPadding,
         itemClickListener
     )

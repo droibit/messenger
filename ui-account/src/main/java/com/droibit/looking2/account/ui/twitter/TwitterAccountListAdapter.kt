@@ -2,11 +2,14 @@ package com.droibit.looking2.account.ui.twitter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.droibit.looking2.account.databinding.ListItemAccountBinding
+import com.droibit.looking2.account.databinding.ListItemAccountFooterBinding
+import com.droibit.looking2.account.databinding.ListItemAccountHeaderBinding
 import com.droibit.looking2.core.model.account.TwitterAccount
 import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 
@@ -44,6 +47,7 @@ class TwitterAccountListAdapter(
     }
 
     fun interface OnItemClickListener {
+        @UiThread
         fun onAccountItemClick(account: TwitterAccount)
     }
 
@@ -64,4 +68,53 @@ class TwitterAccountListAdapter(
             }
         }
     }
+}
+
+class TwitterAccountListHeaderAdapter(
+    private val itemPadding: ShapeAwareContentPadding,
+) : RecyclerView.Adapter<TwitterAccountListHeaderAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return ViewHolder(
+            binding = ListItemAccountHeaderBinding.inflate(inflater, parent, false).apply {
+                this.contentPadding = itemPadding
+            }
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
+
+    override fun getItemCount(): Int = 1
+
+    class ViewHolder(binding: ListItemAccountHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+}
+
+class TwitterAccountListFooterAdapter(
+    private val itemPadding: ShapeAwareContentPadding,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<TwitterAccountListFooterAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return ViewHolder(
+            binding = ListItemAccountFooterBinding.inflate(inflater, parent, false).apply {
+                this.contentPadding = itemPadding
+            }
+        ).apply {
+            itemView.setOnClickListener {
+                itemClickListener.onAccountAddClick()
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
+
+    override fun getItemCount(): Int = 1
+
+    fun interface OnItemClickListener {
+        @UiThread
+        fun onAccountAddClick()
+    }
+
+    class ViewHolder(binding: ListItemAccountFooterBinding) : RecyclerView.ViewHolder(binding.root)
 }
