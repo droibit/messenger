@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import com.droibit.looking2.account.databinding.FragmentTwitterAccountListBinding
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toConfirmTwitterSignOut
 import com.droibit.looking2.account.ui.twitter.TwitterAccountListFragmentDirections.Companion.toTwitterSignIn
@@ -20,7 +21,6 @@ import com.droibit.looking2.ui.common.ext.addCallback
 import com.droibit.looking2.ui.common.ext.navigateSafely
 import com.droibit.looking2.ui.common.ext.observeEvent
 import com.droibit.looking2.ui.common.ext.showToast
-import com.droibit.looking2.ui.common.view.OnRotaryScrollListener
 import com.droibit.looking2.ui.common.view.ShapeAwareContentPadding
 import com.droibit.looking2.ui.common.widget.PopBackSwipeDismissCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +33,7 @@ private const val REQUEST_KEY_SIGN_OUT_CONFORMATION = "REQUEST_KEY_SIGN_OUT_CONF
 class TwitterAccountListFragment :
     Fragment(),
     TwitterAccountListAdapter.OnItemClickListener,
+    TwitterAccountListFooterAdapter.OnItemClickListener,
     MenuItem.OnMenuItemClickListener {
 
     @Inject
@@ -40,6 +41,12 @@ class TwitterAccountListFragment :
 
     @Inject
     lateinit var accountListAdapter: TwitterAccountListAdapter
+
+    @Inject
+    lateinit var accountListHeader: TwitterAccountListHeaderAdapter
+
+    @Inject
+    lateinit var accountListFooter: TwitterAccountListFooterAdapter
 
     @Inject
     lateinit var swipeDismissCallback: PopBackSwipeDismissCallback
@@ -74,12 +81,15 @@ class TwitterAccountListFragment :
         binding.accountActionDrawer.also {
             it.setOnMenuItemClickListener(this)
         }
-        binding.accountContainer.setOnGenericMotionListener(OnRotaryScrollListener())
 
         binding.list.apply {
             this.setHasFixedSize(true)
-            this.adapter = accountListAdapter
-            this.isNestedScrollingEnabled = false
+            this.adapter = ConcatAdapter(
+                accountListHeader,
+                accountListAdapter,
+                accountListFooter
+            )
+            this.requestFocus()
         }
         binding.swipeDismissLayout.addCallback(viewLifecycleOwner, swipeDismissCallback)
 
@@ -147,5 +157,10 @@ class TwitterAccountListFragment :
     override fun onAccountItemClick(account: TwitterAccount) {
         viewModel.onAccountItemClick(account)
         binding.accountActionDrawer.controller.openDrawer()
+    }
+
+    @UiThread
+    override fun onAccountAddClick() {
+        viewModel.onAddAccountButtonClick()
     }
 }
