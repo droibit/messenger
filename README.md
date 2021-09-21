@@ -1,6 +1,6 @@
 ## Messenger
 
-[![Build Status](https://travis-ci.org/droibit/messenger.svg?branch=develop)](https://travis-ci.org/droibit/messenger) [![](https://jitpack.io/v/droibit/messenger.svg)](https://jitpack.io/#droibit/messenger) [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/droibit/messenger/blob/develop/LICENSE.txt)
+[![](https://jitpack.io/v/droibit/messenger.svg)](https://jitpack.io/#droibit/messenger) [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/droibit/messenger/blob/develop/LICENSE.txt)
 
 Library for easy use of the Message API of Android. Especially when using multiple paths, it is freed from many of the branch.
 
