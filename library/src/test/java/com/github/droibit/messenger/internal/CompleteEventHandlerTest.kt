@@ -4,13 +4,13 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.tasks.Task
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.isA
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.isA
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import kotlinx.coroutines.CancellableContinuation
 
 import org.assertj.core.api.Assertions.assertThat
@@ -75,7 +75,7 @@ class CompleteEventHandlerTest {
 
     val actualException = captor.firstValue.exceptionOrNull()
     assertThat(actualException)
-        .isNotNull()
+        .isNotNull
         .isInstanceOf(ApiException::class.java)
 
     assertThat((actualException as ApiException).statusCode)

@@ -34,15 +34,13 @@ android {
 dependencies {
   implementation project(':library')
 
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-  implementation 'androidx.activity:activity:1.1.0-alpha02'
-  implementation 'androidx.recyclerview:recyclerview:1.0.0'
+  implementation 'androidx.activity:activity-ktx:1.4.0-alpha02'
+  implementation 'androidx.recyclerview:recyclerview:1.2.1'
   implementation 'androidx.percentlayout:percentlayout:1.0.0'
+  implementation 'androidx.wear:wear:1.2.0'
 
-  compileOnly "com.google.android.wearable:wearable:2.4.0"
-  implementation 'com.google.android.support:wearable:2.4.0'
   implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
   implementation "com.jakewharton.timber:timber:$timberVersion"
 }

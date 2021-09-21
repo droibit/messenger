@@ -2,11 +2,11 @@ package com.github.droibit.messenger.sample.model
 
 import android.app.Activity
 import android.content.Intent
-import android.support.wearable.activity.ConfirmationActivity
-import android.support.wearable.activity.ConfirmationActivity.EXTRA_ANIMATION_TYPE
-import android.support.wearable.activity.ConfirmationActivity.EXTRA_MESSAGE
-import android.support.wearable.activity.ConfirmationActivity.FAILURE_ANIMATION
-import android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION
+import androidx.wear.activity.ConfirmationActivity
+import androidx.wear.activity.ConfirmationActivity.EXTRA_ANIMATION_TYPE
+import androidx.wear.activity.ConfirmationActivity.EXTRA_MESSAGE
+import androidx.wear.activity.ConfirmationActivity.FAILURE_ANIMATION
+import androidx.wear.activity.ConfirmationActivity.SUCCESS_ANIMATION
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
 import timber.log.Timber

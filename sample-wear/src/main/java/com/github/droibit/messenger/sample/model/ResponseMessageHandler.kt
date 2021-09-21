@@ -2,17 +2,19 @@ package com.github.droibit.messenger.sample.model
 
 import com.github.droibit.messenger.Messenger
 import com.google.android.gms.wearable.MessageEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ResponseMessageHandler : MessageHandler {
+class ResponseMessageHandler : MessageHandler, CoroutineScope by MainScope() {
 
   override fun onMessageReceived(
     messenger: Messenger,
     event: MessageEvent
   ) {
-    GlobalScope.launch {
+    launch {
       val data = event.data.toString(Charsets.UTF_8)
       Timber.d("#onMessageReceived(path=$PATH_REQUEST_MESSAGE, data=$data")
 

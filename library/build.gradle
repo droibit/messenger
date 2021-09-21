@@ -1,6 +1,7 @@
 plugins {
   id "com.android.library"
   id "kotlin-android"
+  id 'maven-publish'
 }
 
 android {
@@ -32,36 +33,30 @@ android {
 }
 
 dependencies {
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
-  implementation 'androidx.annotation:annotation:1.1.0'
+  implementation 'androidx.annotation:annotation:1.2.0'
   implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 
-  testImplementation 'junit:junit:4.12'
-  testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
-  testImplementation "org.mockito:mockito-core:2.28.2"
+  testImplementation 'junit:junit:4.13.2'
+  testImplementation 'org.mockito.kotlin:mockito-kotlin:3.2.0'
+  testImplementation "org.mockito:mockito-core:3.12.4"
   testImplementation 'org.assertj:assertj-core:3.11.1'
 }
 
-// build a jar with source files
-task sourcesJar(type: Jar) {
-  from android.sourceSets.main.java.srcDirs
-  classifier = 'sources'
-}
-artifacts {
-  archives sourcesJar
-}
+afterEvaluate {
+  publishing {
+    publications {
+      release(MavenPublication) {
+        from components.release
 
-// To specify a license in the pom:
-install {
-  repositories.mavenInstaller {
-    pom.project {
-      licenses {
-        license {
-          name 'The Apache Software License, Version 2.0'
-          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          distribution 'repo'
+        pom {
+          licenses {
+            license {
+              name = "The Apache License, Version 2.0"
+              url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+          }
         }
       }
     }
