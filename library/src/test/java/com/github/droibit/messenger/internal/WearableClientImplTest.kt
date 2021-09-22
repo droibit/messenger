@@ -9,17 +9,13 @@ import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.NodeClient
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.Rule
@@ -29,27 +25,33 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.nullable
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
-private typealias Nodes = List<Node>
+private typealias NodeList = List<Node>
 
+@ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 class WearableClientImplTest {
 
   @get:Rule
-  val rule = MockitoJUnit.rule()
+  val rule: MockitoRule = MockitoJUnit.rule()
 
   @Mock
   private lateinit var clientProvider: ClientProvider
 
   @Test
   fun getConnectedNodes_completed() = runBlocking<Unit> {
-    val expectedNodes = mock<Nodes>()
-    val mockTask = mock<Task<Nodes>> {
+    val expectedNodes = mock<NodeList>()
+    val mockTask = mock<Task<NodeList>> {
       on { isSuccessful } doReturn true
       on { result } doReturn expectedNodes
     }
     whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
-      (it.arguments[0] as OnCompleteListener<Nodes>).apply {
+      (it.arguments[0] as OnCompleteListener<NodeList>).apply {
         onComplete(mockTask)
       }
       mockTask
@@ -65,14 +67,14 @@ class WearableClientImplTest {
     assertThat(actualNodes).isSameAs(expectedNodes)
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun getConnectedNodes_error() = runBlocking<Unit> {
-    val mockTask = mock<Task<Nodes>> {
+    val mockTask = mock<Task<NodeList>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()
     }
     whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
-      (it.arguments[0] as OnCompleteListener<Nodes>).apply {
+      (it.arguments[0] as OnCompleteListener<NodeList>).apply {
         onComplete(mockTask)
       }
       mockTask
@@ -83,36 +85,27 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.nodeClient).thenReturn(mockNodeClient)
 
-    try {
-      newClient(getNodesTimeout = 100L).getConnectedNodes()
-      fail("error!")
-    } catch (e: Exception) {
-      assertThat(e).isExactlyInstanceOf(ApiException::class.java)
-    }
+    newClient(getNodesTimeout = 100L).getConnectedNodes()
+    fail("error!")
   }
 
-  @Test
+  @Test(expected = CancellationException::class)
   fun getConnectedNodes_cancel() = runBlocking<Unit> {
-    val mockTask = mock<Task<Nodes>>()
+    val mockTask = mock<Task<NodeList>>() {
+      on { isCanceled } doReturn true
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<NodeList>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
     val mockNodeClient = mock<NodeClient> {
       on { connectedNodes } doReturn mockTask
     }
     whenever(clientProvider.nodeClient).thenReturn(mockNodeClient)
 
-    val job = launch {
-      try {
-        newClient(getNodesTimeout = 100L).getConnectedNodes()
-        fail("error!")
-      } catch (e: Exception) {
-        assertThat(e).isInstanceOf(CancellationException::class.java)
-      }
-    }
-    delay(50L)
-    job.cancelAndJoin()
-
-    val captor = argumentCaptor<CompleteEventHandler<Nodes>>()
-    verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.callback.get()).isNull()
+    newClient(getNodesTimeout = 100L).getConnectedNodes()
   }
 
   @Test
@@ -139,7 +132,7 @@ class WearableClientImplTest {
     assertThat(actualCapabilityInfo).isSameAs(expectedCapabilityInfo)
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun getCapability_error() = runBlocking<Unit> {
     val mockTask = mock<Task<CapabilityInfo>> {
       on { isSuccessful } doReturn false
@@ -157,37 +150,27 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.capabilityClient).thenReturn(mockCapabilityClient)
 
-    try {
-      newClient(getNodesTimeout = 100L).getCapability("test", CapabilityClient.FILTER_REACHABLE)
-      fail("error!")
-    } catch (e: Exception) {
-      assertThat(e).isExactlyInstanceOf(ApiException::class.java)
-    }
+    newClient(getNodesTimeout = 100L).getCapability("test", CapabilityClient.FILTER_REACHABLE)
   }
 
-  @Test
+  @Test(expected = CancellationException::class)
   fun getCapability_cancel() = runBlocking<Unit> {
-    val mockTask = mock<Task<CapabilityInfo>>()
+    val mockTask = mock<Task<CapabilityInfo>> {
+      on { isCanceled } doReturn true
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<CapabilityInfo>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
+
     val mockCapabilityClient = mock<CapabilityClient> {
       on { getCapability(anyString(), anyInt()) } doReturn mockTask
     }
     whenever(clientProvider.capabilityClient).thenReturn(mockCapabilityClient)
 
-    val job = launch {
-      try {
-        newClient(getNodesTimeout = 100L)
-            .getCapability("test", CapabilityClient.FILTER_REACHABLE)
-        fail("error!")
-      } catch (e: Exception) {
-        assertThat(e).isInstanceOf(CancellationException::class.java)
-      }
-    }
-    delay(50L)
-    job.cancelAndJoin()
-
-    val captor = argumentCaptor<CompleteEventHandler<CapabilityInfo>>()
-    verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.callback.get()).isNull()
+    newClient(getNodesTimeout = 100L).getCapability("test", CapabilityClient.FILTER_REACHABLE)
   }
 
   @Test
@@ -207,7 +190,7 @@ class WearableClientImplTest {
     val mockMessageClient = mock<MessageClient> {
       on {
         sendMessage(
-            anyString(), anyString(), nullable(ByteArray::class.java)
+          anyString(), anyString(), nullable(ByteArray::class.java)
         )
       } doReturn mockTask
     }
@@ -218,7 +201,7 @@ class WearableClientImplTest {
     assertThat(actualRequestId).isEqualTo(expectedRequestId)
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun sendMessage_error() = runBlocking<Unit> {
     val mockTask = mock<Task<Int>> {
       on { isSuccessful } doReturn false
@@ -234,44 +217,37 @@ class WearableClientImplTest {
     val mockMessageClient = mock<MessageClient> {
       on {
         sendMessage(
-            anyString(), anyString(), nullable(ByteArray::class.java)
+          anyString(), anyString(), nullable(ByteArray::class.java)
         )
       } doReturn mockTask
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    try {
-      newClient(sendMessageTimeout = 100L).sendMessage("node1", "/path", null)
-      fail("error!")
-    } catch (e: Exception) {
-      assertThat(e).isExactlyInstanceOf(ApiException::class.java)
-    }
+    newClient(sendMessageTimeout = 100L).sendMessage("node1", "/path", null)
   }
 
-  @Test
+  @Test(expected = CancellationException::class)
   fun sendMessage_cancel() = runBlocking<Unit> {
-    val mockTask = mock<Task<Int>>()
+    val mockTask = mock<Task<Int>> {
+      on { isCanceled } doReturn true
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<Int>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
+
     val mockMessageClient = mock<MessageClient> {
       on {
-        sendMessage(anyString(), anyString(), nullable(ByteArray::class.java))
+        sendMessage(
+          anyString(), anyString(), nullable(ByteArray::class.java)
+        )
       } doReturn mockTask
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    val job = launch {
-      try {
-        newClient(sendMessageTimeout = 100L).sendMessage("node1", "/path", null)
-        fail("error!")
-      } catch (e: Exception) {
-        assertThat(e).isInstanceOf(CancellationException::class.java)
-      }
-    }
-    delay(50L)
-    job.cancelAndJoin()
-
-    val captor = argumentCaptor<CompleteEventHandler<Int>>()
-    verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.callback.get()).isNull()
+    newClient(sendMessageTimeout = 100L).sendMessage("node1", "/path", null)
   }
 
   @Test
@@ -291,12 +267,10 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    newClient(addListenerTimeout = 100L)
-        .addListener(MessageClient.OnMessageReceivedListener {
-        })
+    newClient().addListener {}
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun addListener_error() = runBlocking<Unit> {
     val mockTask = mock<Task<Void>> {
       on { isSuccessful } doReturn false
@@ -314,36 +288,27 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    try {
-      newClient(addListenerTimeout = 100L).addListener(MessageClient.OnMessageReceivedListener {})
-      fail("error!")
-    } catch (e: Exception) {
-      assertThat(e).isExactlyInstanceOf(ApiException::class.java)
-    }
+    newClient().addListener {}
   }
 
-  @Test
+  @Test(expected = CancellationException::class)
   fun addListener_cancel() = runBlocking<Unit> {
-    val mockTask = mock<Task<Void>>()
+    val mockTask = mock<Task<Void>>() {
+      on { isCanceled } doReturn true
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<Void>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
+
     val mockMessageClient = mock<MessageClient> {
       on { addListener(any()) } doReturn mockTask
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    val job = launch {
-      try {
-        newClient(addListenerTimeout = 100L).addListener(MessageClient.OnMessageReceivedListener {})
-        fail("error!")
-      } catch (e: Exception) {
-        assertThat(e).isInstanceOf(CancellationException::class.java)
-      }
-    }
-    delay(50L)
-    job.cancelAndJoin()
-
-    val captor = argumentCaptor<VoidCompleteEventHandler>()
-    verify(mockTask).addOnCompleteListener(captor.capture())
-    assertThat(captor.firstValue.callback.get()).isNull()
+    newClient().addListener {}
   }
 
   @Test
@@ -364,13 +329,12 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    val actualResult = newClient(addListenerTimeout = 100L)
-        .removeListener(MessageClient.OnMessageReceivedListener {
-        })
+    val actualResult = newClient()
+      .removeListener {}
     assertThat(actualResult).isTrue()
   }
 
-  @Test
+  @Test(expected = ApiException::class)
   fun removeListener_error() = runBlocking<Unit> {
     val mockTask = mock<Task<Boolean>> {
       on { isSuccessful } doReturn false
@@ -388,23 +352,15 @@ class WearableClientImplTest {
     }
     whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
 
-    try {
-      newClient(addListenerTimeout = 100L)
-          .removeListener(MessageClient.OnMessageReceivedListener {})
-      fail("error!")
-    } catch (e: Exception) {
-      assertThat(e).isExactlyInstanceOf(ApiException::class.java)
-    }
+    newClient().removeListener {}
   }
 
   private fun newClient(
     getNodesTimeout: Long = 0,
     sendMessageTimeout: Long = 0,
-    addListenerTimeout: Long = 0
   ) = WearableClientImpl(
-      clientProvider,
-      getNodesTimeout,
-      sendMessageTimeout,
-      addListenerTimeout
+    clientProvider,
+    getNodesTimeout,
+    sendMessageTimeout
   )
 }

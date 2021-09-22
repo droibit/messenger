@@ -33,10 +33,11 @@ android {
 }
 
 dependencies {
-  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
-
   implementation 'androidx.annotation:annotation:1.2.0'
-  implementation "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
+
+  api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+  api "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$kotlinxCoroutinesVersion"
+  api "com.google.android.gms:play-services-wearable:$googlePlayServicesVersion"
 
   testImplementation 'junit:junit:4.13.2'
   testImplementation 'org.mockito.kotlin:mockito-kotlin:3.2.0'

@@ -12,9 +12,25 @@ internal class MessageEventHandler internal constructor(
   private val waitMessageMillis: Long,
   private val dispatcher: Dispatcher
 ) : MessageClient.OnMessageReceivedListener {
+  override fun onMessageReceived(messageEvent: MessageEvent) {
+    if (messageEvent.path !in expectedPaths) {
+      return
+    }
+    dispatcher.dispatchMessageEvent(messageEvent)
+  }
+
+  suspend fun obtain(): MessageEvent {
+    return withTimeout(waitMessageMillis) {
+      suspendCancellableCoroutine { cont ->
+        dispatcher.continuation = cont
+        cont.invokeOnCancellation {
+          dispatcher.continuation = null
+        }
+      }
+    }
+  }
 
   internal class Dispatcher {
-
     private var messageEvent: MessageEvent? = null
 
     var continuation: Continuation<MessageEvent>? = null
@@ -33,24 +49,6 @@ internal class MessageEventHandler internal constructor(
 
     fun create(expectedPaths: Set<String>): MessageEventHandler {
       return MessageEventHandler(expectedPaths, waitMessageMillis, Dispatcher())
-    }
-  }
-
-  override fun onMessageReceived(messageEvent: MessageEvent) {
-    if (messageEvent.path !in expectedPaths) {
-      return
-    }
-    dispatcher.dispatchMessageEvent(messageEvent)
-  }
-
-  suspend fun obtain(): MessageEvent {
-    return withTimeout(waitMessageMillis) {
-      suspendCancellableCoroutine<MessageEvent> { cont ->
-        dispatcher.continuation = cont
-        cont.invokeOnCancellation {
-          dispatcher.continuation = null
-        }
-      }
     }
   }
 }

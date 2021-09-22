@@ -3,7 +3,6 @@ package com.github.droibit.messenger
 import android.content.Context
 import androidx.annotation.Size
 import androidx.annotation.VisibleForTesting
-import com.github.droibit.messenger.Messenger.Builder.Companion.ADD_LISTENER_TIMEOUT_MILLIS
 import com.github.droibit.messenger.internal.MessageEventHandler
 import com.github.droibit.messenger.internal.WearableClient
 import com.github.droibit.messenger.internal.WearableClient.ClientProvider
@@ -27,8 +26,7 @@ class Messenger @VisibleForTesting internal constructor(
       WearableClientImpl(
           ClientProvider(builder.context),
           builder.getNodesMillis,
-          builder.sendMessageMillis,
-          ADD_LISTENER_TIMEOUT_MILLIS
+          builder.sendMessageMillis
       ),
       builder.listenerFactory,
       builder.excludeNode
@@ -145,7 +143,7 @@ class Messenger @VisibleForTesting internal constructor(
   suspend fun getConnectedNodes(useExcludeNode: Boolean = true): List<Node> {
     val connectedNodes = client.getConnectedNodes()
     if (useExcludeNode) {
-      return connectedNodes.filter { !excludeNode.invoke(it) }
+      return connectedNodes.filterNot(excludeNode)
     }
     return connectedNodes
   }
@@ -209,9 +207,5 @@ class Messenger @VisibleForTesting internal constructor(
      * Get a new instance of the Messenger.
      */
     fun build() = Messenger(this)
-
-    companion object {
-      internal const val ADD_LISTENER_TIMEOUT_MILLIS = 1_000L
-    }
   }
 }

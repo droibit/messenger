@@ -34,8 +34,6 @@ android {
 dependencies {
   implementation project(':library')
 
-  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
-
   implementation 'androidx.activity:activity-ktx:1.4.0-alpha02'
   implementation 'androidx.recyclerview:recyclerview:1.2.1'
   implementation 'androidx.percentlayout:percentlayout:1.0.0'

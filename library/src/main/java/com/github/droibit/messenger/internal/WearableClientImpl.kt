@@ -5,15 +5,13 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
 import com.google.android.gms.wearable.Node
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
-import kotlin.coroutines.suspendCoroutine
 
 internal class WearableClientImpl(
   private val clientProvider: ClientProvider,
   private val getNodesTimeoutMillis: Long,
-  private val sendMessageTimeoutMillis: Long,
-  private val addListenerTimeoutMills: Long
+  private val sendMessageTimeoutMillis: Long
 ) : WearableClient {
 
   private val nodeClient get() = clientProvider.nodeClient
@@ -25,16 +23,7 @@ internal class WearableClientImpl(
   @Throws(ApiException::class)
   override suspend fun getConnectedNodes(): List<Node> {
     return withTimeout(getNodesTimeoutMillis) {
-      @Suppress("RemoveExplicitTypeArguments")
-      suspendCancellableCoroutine<List<Node>> { cont ->
-        val listener = CompleteEventHandler(cont)
-            .also {
-              nodeClient.connectedNodes.addOnCompleteListener(it)
-            }
-        cont.invokeOnCancellation {
-          listener.cancel()
-        }
-      }
+      nodeClient.connectedNodes.await()
     }
   }
 
@@ -44,17 +33,7 @@ internal class WearableClientImpl(
     nodeFilter: Int
   ): CapabilityInfo {
     return withTimeout(getNodesTimeoutMillis) {
-      @Suppress("RemoveExplicitTypeArguments")
-      suspendCancellableCoroutine<CapabilityInfo> { cont ->
-        val listener = CompleteEventHandler(cont)
-            .apply {
-              capabilityClient.getCapability(capability, nodeFilter)
-                  .addOnCompleteListener(this)
-            }
-        cont.invokeOnCancellation {
-          listener.cancel()
-        }
-      }
+      capabilityClient.getCapability(capability, nodeFilter).await()
     }
   }
 
@@ -65,42 +44,18 @@ internal class WearableClientImpl(
     data: ByteArray?
   ): Int {
     return withTimeout(sendMessageTimeoutMillis) {
-      @Suppress("RemoveExplicitTypeArguments")
-      suspendCancellableCoroutine<Int> { cont ->
-        val listener = CompleteEventHandler(cont)
-            .apply {
-              messageClient.sendMessage(nodeId, path, data)
-                  .addOnCompleteListener(this)
-            }
-        cont.invokeOnCancellation {
-          listener.cancel()
-        }
-      }
+      messageClient.sendMessage(nodeId, path, data).await()
     }
   }
 
   @Throws(ApiException::class)
   override suspend fun addListener(listener: OnMessageReceivedListener) {
-    return withTimeout(addListenerTimeoutMills) {
-      suspendCancellableCoroutine<Unit> { cont ->
-        val l = VoidCompleteEventHandler(cont)
-            .apply {
-              messageClient.addListener(listener)
-                  .addOnCompleteListener(this)
-            }
-        cont.invokeOnCancellation {
-          l.cancel()
-        }
-      }
-    }
+    messageClient.addListener(listener).await()
   }
 
   @Throws(ApiException::class)
   override suspend fun removeListener(listener: OnMessageReceivedListener): Boolean {
-    return suspendCoroutine { cont ->
-      messageClient.removeListener(listener)
-          .addOnCompleteListener(CompleteEventHandler(cont))
-    }
+    return messageClient.removeListener(listener).await()
   }
 }
 
