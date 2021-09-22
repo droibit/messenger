@@ -12,6 +12,7 @@ android {
     targetSdk rootProject.ext.targetSdk
     versionCode 1
     versionName "1.0.0"
+    wearAppUnbundled true
   }
   buildTypes {
     release {
@@ -31,7 +32,6 @@ android {
 }
 
 dependencies {
-  wearApp project(':sample-wear')
   implementation project(':library')
 
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxCoroutinesVersion"
