@@ -1,13 +1,6 @@
 package com.github.droibit.messenger.internal
 
 import com.google.android.gms.wearable.MessageEvent
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
@@ -21,6 +14,13 @@ import org.junit.Test
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class MessageEventHandlerTest {
 
@@ -33,7 +33,7 @@ class MessageEventHandlerTest {
   @Test
   fun onMessageReceived_messageEventIncludeExpectedPath() {
     doNothing().whenever(dispatcher)
-        .dispatchMessageEvent(any())
+      .dispatchMessageEvent(any())
 
     val handler = MessageEventHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
     val expMessageEvent = mock<MessageEvent> {
@@ -47,7 +47,7 @@ class MessageEventHandlerTest {
   @Test
   fun onMessageReceived_messageEventNotIncludeExpectedPath() {
     doNothing().whenever(dispatcher)
-        .dispatchMessageEvent(any())
+      .dispatchMessageEvent(any())
 
     val handler = MessageEventHandler(setOf("test1", "test2"), Long.MAX_VALUE, dispatcher)
     val expMessageEvent = mock<MessageEvent> {
@@ -69,7 +69,7 @@ class MessageEventHandlerTest {
       }
       val actualMessageEvent = messenger.obtain()
       Java6Assertions.assertThat(actualMessageEvent)
-          .isSameAs(expMessageEvent)
+        .isSameAs(expMessageEvent)
     } catch (e: CancellationException) {
       Assertions.fail(e.message)
     }
@@ -83,9 +83,9 @@ class MessageEventHandlerTest {
       fail<Unit>("error")
     } catch (e: Exception) {
       Java6Assertions.assertThat(e)
-          .isExactlyInstanceOf(TimeoutCancellationException::class.java)
+        .isExactlyInstanceOf(TimeoutCancellationException::class.java)
     }
     Java6Assertions.assertThat(dispatcher.continuation)
-        .isNull()
+      .isNull()
   }
 }

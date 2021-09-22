@@ -23,13 +23,13 @@ class Messenger @VisibleForTesting internal constructor(
 ) {
 
   constructor(builder: Builder) : this(
-      WearableClientImpl(
-          ClientProvider(builder.context),
-          builder.getNodesMillis,
-          builder.sendMessageMillis
-      ),
-      builder.listenerFactory,
-      builder.excludeNode
+    WearableClientImpl(
+      ClientProvider(builder.context),
+      builder.getNodesMillis,
+      builder.sendMessageMillis
+    ),
+    builder.listenerFactory,
+    builder.excludeNode
   )
 
   /**
@@ -48,7 +48,7 @@ class Messenger @VisibleForTesting internal constructor(
     strictSend: Boolean = false
   ) {
     val filteredNodes = client.getConnectedNodes()
-        .filter { !excludeNode.invoke(it) }
+      .filter { !excludeNode.invoke(it) }
     if (strictSend && filteredNodes.isEmpty()) {
       throw ApiException(Status(WearableStatusCodes.TARGET_NODE_NOT_CONNECTED))
     }
@@ -88,7 +88,7 @@ class Messenger @VisibleForTesting internal constructor(
     @Size(min = 1L) expectedPaths: Set<String>
   ): MessageEvent {
     val nodes = client.getConnectedNodes()
-        .filter { !excludeNode.invoke(it) }
+      .filter { !excludeNode.invoke(it) }
     if (nodes.isEmpty()) {
       throw ApiException(Status(WearableStatusCodes.TARGET_NODE_NOT_CONNECTED))
     }
