@@ -6,9 +6,12 @@ import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 
 internal interface WearableClient {
 
@@ -20,6 +23,9 @@ internal interface WearableClient {
 
     val capabilityClient: CapabilityClient by lazy { Wearable.getCapabilityClient(context) }
   }
+
+  @ExperimentalCoroutinesApi
+  val messageEvents: Flow<MessageEvent>
 
   @Throws(ApiException::class)
   suspend fun getConnectedNodes(): List<Node>

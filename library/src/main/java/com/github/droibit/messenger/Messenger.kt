@@ -9,10 +9,18 @@ import com.github.droibit.messenger.internal.WearableClient.ClientProvider
 import com.github.droibit.messenger.internal.WearableClientImpl
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.WearableStatusCodes
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 
 typealias ExcludeNode = (Node) -> Boolean
 
@@ -31,6 +39,12 @@ class Messenger @VisibleForTesting internal constructor(
     builder.listenerFactory,
     builder.excludeNode
   )
+
+  /**
+   * Notifies the message events sent to the calling device.
+   */
+  @ExperimentalCoroutinesApi
+  val messageEvents: Flow<MessageEvent> get() = client.messageEvents
 
   /**
    * Send payload to path.

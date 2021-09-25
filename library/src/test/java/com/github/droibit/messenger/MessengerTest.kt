@@ -17,7 +17,10 @@ import org.mockito.kotlin.same
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.Rule
@@ -30,6 +33,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 
+@ExperimentalCoroutinesApi
 class MessengerTest {
 
   @get:Rule
@@ -47,7 +51,16 @@ class MessengerTest {
   @InjectMocks
   private lateinit var messenger: Messenger
 
-  @Test fun sendMessage_success() = runBlocking<Unit> {
+  @Test
+  fun messageEvents_notifyEvents() = runBlockingTest {
+    val events = arrayOf<MessageEvent>(mock(), mock())
+    whenever(wearableClient.messageEvents).thenReturn(flowOf(*events))
+
+    val actualEvents = messenger.messageEvents.toList()
+    assertThat(actualEvents).isEqualTo(events.toList())
+  }
+
+  @Test fun sendMessage_success() = runBlockingTest {
     whenever(excludeNode.invoke(any()))
         .thenReturn(true)
         .thenReturn(false)
@@ -62,7 +75,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun sendMessage_failedToGetConnectedNodes() = runBlocking<Unit> {
+  fun sendMessage_failedToGetConnectedNodes() = runBlockingTest {
     whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
 
     messenger.sendMessage("/path", byteArrayOf())
@@ -70,7 +83,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun sendMessage_failedToSendMessage() = runBlocking<Unit> {
+  fun sendMessage_failedToSendMessage() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
     val node1 = mock<Node> { on { id } doReturn "id" }
@@ -83,7 +96,7 @@ class MessengerTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun sendMessage_canceled() = runBlocking<Unit> {
+  fun sendMessage_canceled() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
     val node1 = mock<Node> { on { id } doReturn "id" }
@@ -96,7 +109,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun sendMessage_strictSend() = runBlocking<Unit> {
+  fun sendMessage_strictSend() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(true)
 
     val node1 = mock<Node> { on { id } doReturn "id1" }
@@ -108,7 +121,7 @@ class MessengerTest {
   }
 
   @Test
-  fun sendMessage_hasNodeId() = runBlocking<Unit> {
+  fun sendMessage_hasNodeId() = runBlockingTest {
     val expectedNodeId = "nodeId"
     val expectedPath = "/path"
     val expectedData = byteArrayOf()
@@ -118,7 +131,7 @@ class MessengerTest {
   }
 
   @Test
-  fun obtainMessage_success() = runBlocking<Unit> {
+  fun obtainMessage_success() = runBlockingTest {
     whenever(excludeNode.invoke(any()))
         .thenReturn(true)
         .thenReturn(false)
@@ -145,7 +158,7 @@ class MessengerTest {
   }
 
   @Test
-  fun obtainMessage_hasNodeId_success() = runBlocking<Unit> {
+  fun obtainMessage_hasNodeId_success() = runBlockingTest {
     val expectedMessageEvent = mock<MessageEvent>()
     val expectedMessageHandler = whenever(mock<MessageEventHandler>().obtain())
         .thenReturn(expectedMessageEvent)
@@ -166,7 +179,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun obtainMessage_failedToGetConnectedNodes() = runBlocking<Unit> {
+  fun obtainMessage_failedToGetConnectedNodes() = runBlockingTest {
     whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
 
     messenger.obtainMessage("/path", byteArrayOf(), setOf("/path"))
@@ -174,7 +187,7 @@ class MessengerTest {
   }
 
   @Test
-  fun obtainMessage_excludeNode() = runBlocking<Unit> {
+  fun obtainMessage_excludeNode() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(true)
 
     val node1 = mock<Node>()
@@ -189,7 +202,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun obtainMessage_failedToAddListener() = runBlocking<Unit> {
+  fun obtainMessage_failedToAddListener() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
     val node1 = mock<Node> { on { id } doReturn "id" }
@@ -206,7 +219,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun obtainMessage_failedToSendMessage() = runBlocking<Unit> {
+  fun obtainMessage_failedToSendMessage() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(false)
 
     val node1 = mock<Node>() { on { id } doReturn "node" }
@@ -226,7 +239,7 @@ class MessengerTest {
   }
 
   @Test
-  fun getCapability_success() = runBlocking<Unit> {
+  fun getCapability_success() = runBlockingTest {
     val expectedCapabilityInfo = mock<CapabilityInfo>()
     whenever(wearableClient.getCapability(anyString(), anyInt())).thenReturn(expectedCapabilityInfo)
 
@@ -235,7 +248,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun getCapability_error() = runBlocking<Unit> {
+  fun getCapability_error() = runBlockingTest {
     whenever(wearableClient.getCapability(anyString(), anyInt()))
         .thenThrow(ApiException::class.java)
 
@@ -243,7 +256,7 @@ class MessengerTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun getCapability_cancel() = runBlocking<Unit> {
+  fun getCapability_cancel() = runBlockingTest {
     whenever(wearableClient.getCapability(anyString(), anyInt()))
         .thenThrow(CancellationException::class.java)
 
@@ -251,7 +264,7 @@ class MessengerTest {
   }
 
   @Test
-  fun getConnectedNodes_excludeNode() = runBlocking<Unit> {
+  fun getConnectedNodes_excludeNode() = runBlockingTest {
     whenever(excludeNode.invoke(any()))
         .thenReturn(true)
         .thenReturn(false)
@@ -265,7 +278,7 @@ class MessengerTest {
   }
 
   @Test
-  fun getConnectedNodes_allNodes() = runBlocking<Unit> {
+  fun getConnectedNodes_allNodes() = runBlockingTest {
     whenever(excludeNode.invoke(any())).thenReturn(true)
 
     val node1 = mock<Node>()
@@ -277,7 +290,7 @@ class MessengerTest {
   }
 
   @Test(expected = ApiException::class)
-  fun getConnectedNodes_error() = runBlocking<Unit> {
+  fun getConnectedNodes_error() = runBlockingTest {
     whenever(wearableClient.getConnectedNodes()).thenThrow(ApiException::class.java)
 
     messenger.getConnectedNodes()
@@ -285,7 +298,7 @@ class MessengerTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun getConnectedNodes_cancel() = runBlocking<Unit> {
+  fun getConnectedNodes_cancel() = runBlockingTest {
     whenever(wearableClient.getConnectedNodes()).thenThrow(CancellationException::class.java)
 
     messenger.getConnectedNodes()

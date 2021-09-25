@@ -7,11 +7,16 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.NodeClient
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.Rule
@@ -25,6 +30,8 @@ import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 private typealias NodeList = List<Node>
@@ -40,7 +47,77 @@ class WearableClientImplTest {
   private lateinit var clientProvider: ClientProvider
 
   @Test
-  fun getConnectedNodes_completed() = runBlocking<Unit> {
+  fun messageEvents_notifyEvents() = runBlockingTest {
+    val mockTask = mock<Task<Void>> {
+      on { isSuccessful } doReturn true
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<Void>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
+
+    val event1 = mock<MessageEvent>()
+    val event2 = mock<MessageEvent>()
+    val mockMessageClient = mock<MessageClient>()
+    var listener: OnMessageReceivedListener? = null
+    whenever(mockMessageClient.addListener(any())).thenAnswer {
+      listener = (it.arguments[0] as OnMessageReceivedListener).apply {
+        onMessageReceived(event1)
+        onMessageReceived(event2)
+      }
+      mockTask
+    }
+    whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
+
+    val recordedEvents = mutableListOf<MessageEvent>()
+    val job = launch {
+      newClient().messageEvents.collect(recordedEvents::add)
+    }
+    assertThat(recordedEvents).isEqualTo(listOf(event1, event2))
+
+    job.cancel()
+
+    verify(mockMessageClient).removeListener(listener!!)
+  }
+
+  @Test
+  fun messageEvents_notifyError() = runBlockingTest {
+    val error = mock<ApiException>()
+    val mockTask = mock<Task<Void>> {
+      on { isSuccessful } doReturn false
+      on { exception } doReturn error
+    }
+    whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+      (it.arguments[0] as OnCompleteListener<Void>).apply {
+        onComplete(mockTask)
+      }
+      mockTask
+    }
+
+    val mockMessageClient = mock<MessageClient> {
+      on { addListener(any()) } doReturn mockTask
+    }
+    whenever(clientProvider.messageClient).thenReturn(mockMessageClient)
+
+    val recordedEvents = mutableListOf<Throwable>()
+    val job = launch {
+      newClient().messageEvents
+        .catch { recordedEvents.add(it) }
+        .collect {  }
+    }
+    assertThat(recordedEvents).hasSize(1)
+    val actualError = recordedEvents.first()
+    assertThat(actualError).isEqualTo(error)
+
+    job.cancel()
+
+    verify(mockMessageClient , never()).removeListener(any())
+  }
+
+  @Test
+  fun getConnectedNodes_completed() = runBlockingTest {
     val expectedNodes = mock<NodeList>()
     val mockTask = mock<Task<NodeList>> {
       on { isSuccessful } doReturn true
@@ -64,7 +141,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = ApiException::class)
-  fun getConnectedNodes_error() = runBlocking<Unit> {
+  fun getConnectedNodes_error() = runBlockingTest {
     val mockTask = mock<Task<NodeList>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()
@@ -86,7 +163,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun getConnectedNodes_cancel() = runBlocking<Unit> {
+  fun getConnectedNodes_cancel() = runBlockingTest {
     val mockTask = mock<Task<NodeList>>() {
       on { isCanceled } doReturn true
     }
@@ -105,7 +182,7 @@ class WearableClientImplTest {
   }
 
   @Test
-  fun getCapability_completed() = runBlocking<Unit> {
+  fun getCapability_completed() = runBlockingTest {
     val expectedCapabilityInfo = mock<CapabilityInfo>()
     val mockTask = mock<Task<CapabilityInfo>> {
       on { isSuccessful } doReturn true
@@ -129,7 +206,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = ApiException::class)
-  fun getCapability_error() = runBlocking<Unit> {
+  fun getCapability_error() = runBlockingTest {
     val mockTask = mock<Task<CapabilityInfo>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()
@@ -150,7 +227,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun getCapability_cancel() = runBlocking<Unit> {
+  fun getCapability_cancel() = runBlockingTest {
     val mockTask = mock<Task<CapabilityInfo>> {
       on { isCanceled } doReturn true
     }
@@ -170,7 +247,7 @@ class WearableClientImplTest {
   }
 
   @Test
-  fun sendMessage_completed() = runBlocking<Unit> {
+  fun sendMessage_completed() = runBlockingTest {
     val expectedRequestId = 1
     val mockTask = mock<Task<Int>> {
       on { isSuccessful } doReturn true
@@ -198,7 +275,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = ApiException::class)
-  fun sendMessage_error() = runBlocking<Unit> {
+  fun sendMessage_error() = runBlockingTest {
     val mockTask = mock<Task<Int>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()
@@ -223,7 +300,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun sendMessage_cancel() = runBlocking<Unit> {
+  fun sendMessage_cancel() = runBlockingTest {
     val mockTask = mock<Task<Int>> {
       on { isCanceled } doReturn true
     }
@@ -247,7 +324,7 @@ class WearableClientImplTest {
   }
 
   @Test
-  fun addListener_completed() = runBlocking<Unit> {
+  fun addListener_completed() = runBlockingTest {
     val mockTask = mock<Task<Void>> {
       on { isSuccessful } doReturn true
     }
@@ -267,7 +344,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = ApiException::class)
-  fun addListener_error() = runBlocking<Unit> {
+  fun addListener_error() = runBlockingTest {
     val mockTask = mock<Task<Void>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()
@@ -288,7 +365,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = CancellationException::class)
-  fun addListener_cancel() = runBlocking<Unit> {
+  fun addListener_cancel() = runBlockingTest {
     val mockTask = mock<Task<Void>>() {
       on { isCanceled } doReturn true
     }
@@ -308,7 +385,7 @@ class WearableClientImplTest {
   }
 
   @Test
-  fun removeListener_completed() = runBlocking<Unit> {
+  fun removeListener_completed() = runBlockingTest {
     val mockTask = mock<Task<Boolean>> {
       on { isSuccessful } doReturn true
       on { result } doReturn true
@@ -331,7 +408,7 @@ class WearableClientImplTest {
   }
 
   @Test(expected = ApiException::class)
-  fun removeListener_error() = runBlocking<Unit> {
+  fun removeListener_error() = runBlockingTest {
     val mockTask = mock<Task<Boolean>> {
       on { isSuccessful } doReturn false
       on { exception } doReturn mock<ApiException>()

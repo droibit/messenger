@@ -4,7 +4,12 @@ import com.github.droibit.messenger.internal.WearableClient.ClientProvider
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 
@@ -19,6 +24,28 @@ internal class WearableClientImpl(
   private val messageClient get() = clientProvider.messageClient
 
   private val capabilityClient get() = clientProvider.capabilityClient
+
+  @ExperimentalCoroutinesApi
+  override val messageEvents: Flow<MessageEvent>
+    get() {
+      return callbackFlow<MessageEvent> {
+        var listener: OnMessageReceivedListener? = OnMessageReceivedListener {
+          trySend(it)
+        }
+        try {
+          messageClient.addListener(requireNotNull(listener)).await()
+        } catch (e: ApiException) {
+          listener = null
+          close(e)
+        }
+
+        awaitClose {
+          if (listener != null) {
+            messageClient.removeListener(listener)
+          }
+        }
+      }
+    }
 
   @Throws(ApiException::class)
   override suspend fun getConnectedNodes(): List<Node> {

@@ -43,6 +43,7 @@ dependencies {
   testImplementation 'org.mockito.kotlin:mockito-kotlin:3.2.0'
   testImplementation "org.mockito:mockito-core:3.12.4"
   testImplementation 'org.assertj:assertj-core:3.11.1'
+  api "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion"
 }
 
 afterEvaluate {

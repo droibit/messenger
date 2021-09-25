@@ -1,6 +1,9 @@
 package com.github.droibit.messenger.sample
 
+import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.github.droibit.messenger.Messenger
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler
 import com.github.droibit.messenger.sample.model.ConfirmMessageHandler.Companion.PATH_ERROR_MESSAGE
@@ -9,16 +12,12 @@ import com.github.droibit.messenger.sample.model.ResponseMessageHandler
 import com.github.droibit.messenger.sample.model.ResponseMessageHandler.Companion.PATH_REQUEST_MESSAGE
 import com.github.droibit.messenger.sample.model.StandardMessageHandler
 import com.github.droibit.messenger.sample.model.StandardMessageHandler.Companion.PATH_DEFAULT_MESSAGE
-import com.google.android.gms.wearable.MessageClient
-import com.google.android.gms.wearable.MessageEvent
-import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity(R.layout.activity_main),
-  MessageClient.OnMessageReceivedListener {
-
-  private val messageClient: MessageClient by lazy {
-    Wearable.getMessageClient(this)
-  }
+@ExperimentalCoroutinesApi
+class MainActivity : ComponentActivity(R.layout.activity_main) {
 
   private val messenger: Messenger by lazy {
     Messenger.Builder(this)
@@ -34,18 +33,16 @@ class MainActivity : ComponentActivity(R.layout.activity_main),
     PATH_REQUEST_MESSAGE to ResponseMessageHandler()
   )
 
-  override fun onResume() {
-    super.onResume()
-    messageClient.addListener(this)
-  }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-  override fun onPause() {
-    messageClient.removeListener(this)
-    super.onPause()
-  }
-
-  override fun onMessageReceived(messageEvent: MessageEvent) {
-    val handler = handlers.getValue(messageEvent.path)
-    handler.onMessageReceived(messenger, messageEvent)
+    lifecycleScope.launch {
+      messenger.messageEvents
+        .flowWithLifecycle(lifecycle)
+        .collect {
+          val handler = handlers.getValue(it.path)
+          handler.onMessageReceived(messenger, it)
+        }
+    }
   }
 }
