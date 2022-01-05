@@ -27,5 +27,5 @@ allprojects {
 project.ext {
   compileSdk = 31
   minSdk = 24
-  targetSdk = 28
+  targetSdk = 31
 }
