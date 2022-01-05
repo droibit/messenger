@@ -28,7 +28,7 @@ internal class WearableClientImpl(
   @ExperimentalCoroutinesApi
   override val messageEvents: Flow<MessageEvent>
     get() {
-      return callbackFlow<MessageEvent> {
+      return callbackFlow {
         var listener: OnMessageReceivedListener? = OnMessageReceivedListener {
           trySend(it)
         }
