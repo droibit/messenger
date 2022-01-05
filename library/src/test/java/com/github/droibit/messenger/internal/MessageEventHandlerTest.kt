@@ -2,13 +2,14 @@ package com.github.droibit.messenger.internal
 
 import com.google.android.gms.wearable.MessageEvent
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.assertj.core.api.Assertions
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.assertj.core.api.Java6Assertions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Spy
@@ -22,6 +23,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 class MessageEventHandlerTest {
 
   @get:Rule
@@ -68,24 +70,22 @@ class MessageEventHandlerTest {
         dispatcher.dispatchMessageEvent(expMessageEvent)
       }
       val actualMessageEvent = messenger.obtain()
-      Java6Assertions.assertThat(actualMessageEvent)
-        .isSameAs(expMessageEvent)
+      assertThat(actualMessageEvent).isSameAs(expMessageEvent)
     } catch (e: CancellationException) {
-      Assertions.fail(e.message)
+      fail(e.message)
     }
   }
 
   @Test
-  fun obtain_timeout() = runBlocking<Unit> {
+  fun obtain_timeout() = runTest {
     try {
       val messenger = MessageEventHandler(setOf(), 100L, dispatcher)
       messenger.obtain()
       fail<Unit>("error")
     } catch (e: Exception) {
-      Java6Assertions.assertThat(e)
+      assertThat(e)
         .isExactlyInstanceOf(TimeoutCancellationException::class.java)
     }
-    Java6Assertions.assertThat(dispatcher.continuation)
-      .isNull()
+    assertThat(dispatcher.continuation).isNull()
   }
 }

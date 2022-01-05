@@ -3,7 +3,7 @@
 buildscript {
   ext {
     kotlinVersion = '1.6.0'
-    kotlinxCoroutinesVersion = '1.5.2'
+    kotlinxCoroutinesVersion = '1.6.0'
     googlePlayServicesVersion = '17.1.0'
     timberVersion = '5.0.1'
   }
